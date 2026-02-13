@@ -1,7 +1,8 @@
 #include "CCollisionDetection.h"
 
 CCollisionDetection::CCollisionDetection()
-	//: m_pCamera(nullptr)
+	: m_pPlayer(nullptr)
+	, m_pEnemy(nullptr)
 {
 }
 

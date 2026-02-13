@@ -8,7 +8,7 @@ CGameObject::CGameObject()
 {
 }
 
-VECTOR2_f CGameObject::GetPosition()
+VECTOR2_f CGameObject::GetCenterPosition()
 {
 	VECTOR2_f CenterPos;
 
