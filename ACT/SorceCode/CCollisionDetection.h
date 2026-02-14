@@ -1,6 +1,7 @@
 #pragma once
 #include <math.h>
-#include "CGameObject.h"	//オブジェクトクラス
+#include "CPlayer.h"	//プレイヤークラス
+#include "CEnemy.h"		//エネミークラス
 
 /****************************************************************************
 *		当たり判定クラス
@@ -21,6 +22,13 @@ public:
 	~CCollisionDetection();
 
 	void Update();
+
+	//各クラスをセット
+	void SetCharacter(CPlayer* pPlayer, CEnemy* pEnemy)
+	{
+		m_pPlayer = pPlayer;
+		m_pEnemy = pEnemy;
+	}
 
 public:
 
@@ -64,7 +72,12 @@ public:
 	}
 
 private:
-	//各クラスをセット
-	void SetClass(CGameObject* pGameObject);
+	//キャラクター同士の当たり判定
+	void CharacterCollision();
+
+	//キャラクターの位置情報をセットする
+	ObjectInfo SetCharacterInfo(CCharacter* pCharacter);
 private:
+	CPlayer* m_pPlayer;
+	CEnemy* m_pEnemy;
 };

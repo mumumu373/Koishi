@@ -10,9 +10,14 @@ CEnemy::~CEnemy()
 
 void CEnemy::StartSetting()
 {
+	m_State = enState::Living;
+
 	m_FrameSize = { 32,32 };
 	m_Framesplit = { 0,0,80,80 };	
 	m_Position = { 1000,200 };
+
+	//ÀÛ‚Ì“–‚½‚è”»’è
+	m_RealFrameSplit = { m_Framesplit.w,m_Framesplit.h };
 
 	m_Speed = { 0,0 };
 

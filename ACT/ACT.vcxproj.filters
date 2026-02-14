@@ -43,10 +43,7 @@
     <Filter Include="SorceCode\CImageManager\CImage">
       <UniqueIdentifier>{66f97e51-dcef-4190-92e0-fdf92872d5bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SorceCode\CGameObject\CCharacter\CEnemyManager">
-      <UniqueIdentifier>{56177eee-c5d9-4805-a3e1-a94a00f06162}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SorceCode\CGameObject\CCharacter\CEnemyManager\CEnemy">
+    <Filter Include="SorceCode\CGameObject\CCharacter\CEnemy">
       <UniqueIdentifier>{0de9ba8a-d3b6-4ea0-a928-ef8f5e6b277d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -94,13 +91,10 @@
       <Filter>SorceCode\CGameObject\CCharacter\CPlayer</Filter>
     </ClCompile>
     <ClCompile Include="SorceCode\CEnemy.cpp">
-      <Filter>SorceCode\CGameObject\CCharacter\CEnemyManager\CEnemy</Filter>
+      <Filter>SorceCode\CGameObject\CCharacter\CEnemy</Filter>
     </ClCompile>
     <ClCompile Include="SorceCode\CImageManager.cpp">
       <Filter>SorceCode\CImageManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SorceCode\CEnemyManager.cpp">
-      <Filter>SorceCode\CGameObject\CCharacter\CEnemyManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,13 +144,10 @@
       <Filter>SorceCode\CGameObject\CCharacter\CPlayer</Filter>
     </ClInclude>
     <ClInclude Include="SorceCode\CEnemy.h">
-      <Filter>SorceCode\CGameObject\CCharacter\CEnemyManager\CEnemy</Filter>
+      <Filter>SorceCode\CGameObject\CCharacter\CEnemy</Filter>
     </ClInclude>
     <ClInclude Include="SorceCode\CImageManager.h">
       <Filter>SorceCode\CImageManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SorceCode\CEnemyManager.h">
-      <Filter>SorceCode\CGameObject\CCharacter\CEnemyManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
