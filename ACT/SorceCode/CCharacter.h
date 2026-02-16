@@ -40,6 +40,12 @@ public:
 	};
 
 	int m_MoveState = enMoveState::Wait;
+
+	bool m_NoDamageTime;		//無敵時間中
+
+	VECTOR2_f m_Speed;			//移動速度
+
+	VECTOR2 m_RealFrameSplit;	//実際の当たり判定
 public:
 	CCharacter();
 	virtual ~CCharacter(){}
@@ -56,9 +62,6 @@ protected:
 	double m_Delection;			//角度
 
 	int m_NoDamageCo;			//無敵時間をはかる
-	bool m_NoDamageTime;		//無敵時間中
-
-	VECTOR2_f m_Speed;			//移動速度
 
 	VECTOR2_f m_OldPosition;	//移動前の位置
 

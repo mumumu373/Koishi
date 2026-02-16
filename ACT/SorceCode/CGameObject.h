@@ -18,8 +18,10 @@ public:
 
 	void SetImage(CImage* pImg) { m_pImg = pImg; }
 
+	//ポジションを渡す
+	VECTOR2_f GetPosition() { return m_Position; }
 	//ポジションを渡す(真ん中から)
-	VECTOR2_f GetPosition();
+	VECTOR2_f GetCenterPosition();
 	//ポジションのアドレスを渡す
 	VECTOR2_f* GetPositionadd() { return &m_Position; }
 	//フレームを渡す

@@ -6,6 +6,7 @@ CCharacter::CCharacter()
 	, m_NoDamageCo(0)
 	, m_NoDamageTime(false)
 	, m_Speed(0, 0)
+	, m_RealFrameSplit(0,0)
 	, m_OldPosition(0, 0)
 	, m_FrameSize(0, 0)
 {

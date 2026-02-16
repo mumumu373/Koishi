@@ -103,6 +103,8 @@ bool CGame::Create()
 		m_pCamera->SetStageSize(m_pStage->GetWidth(), m_pStage->GetHeight());
 	}
 
+	//エネミーをポリモーで動かそうとすると、ここのセットクラスはいらないかも
+	SetClass();
 
 	return true;
 }
@@ -182,6 +184,7 @@ void CGame::Draw()
 
 void CGame::SetClass()
 {
+	m_pCollisionDetection->SetCharacter(m_pPlayer, m_pEnemy);
 }
 
 void CGame::DeleteInstance()

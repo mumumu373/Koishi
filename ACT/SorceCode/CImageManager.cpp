@@ -21,7 +21,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_StageMain,"Data\\MapImage\\StageMain.bmp","MainStage"} ,
 		{enImgList::IMG_BuckGround1,"Data\\MapImage\\BackGround_1.bmp","BackGround_1"} ,
 		{enImgList::IMG_BuckGround2,"Data\\MapImage\\BackGround_1.bmp","BackGround_2"} ,
-		{enImgList::IMG_Player,"Data\\Image\\Player.bmp","Player"} ,
+		{enImgList::IMG_Player,"Data\\Image\\PlayerKoishiDebug.bmp","Player"} ,
 		{enImgList::IMG_Enemy,"Data\\Image\\Enemy.bmp","Enemy"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);

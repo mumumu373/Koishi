@@ -33,6 +33,11 @@ public:
 
 private:
 	void Animation() override;
+public://パブリック
+	//エネミーに触れたなら
+	void EnemyHit(int Damage);
+
+private:
 
 	void KyeInput();
 	//プレイヤーの動きの制御

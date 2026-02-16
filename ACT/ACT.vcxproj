@@ -127,7 +127,6 @@
     <ClCompile Include="SorceCode\CCharacter.cpp" />
     <ClCompile Include="SorceCode\CCollisionDetection.cpp" />
     <ClCompile Include="SorceCode\CEnemy.cpp" />
-    <ClCompile Include="SorceCode\CEnemyManager.cpp" />
     <ClCompile Include="SorceCode\CGame.cpp" />
     <ClCompile Include="SorceCode\CGameObject.cpp" />
     <ClCompile Include="SorceCode\CGameScene.cpp" />
@@ -146,7 +145,6 @@
     <ClInclude Include="SorceCode\CCharacter.h" />
     <ClInclude Include="SorceCode\CCollisionDetection.h" />
     <ClInclude Include="SorceCode\CEnemy.h" />
-    <ClInclude Include="SorceCode\CEnemyManager.h" />
     <ClInclude Include="SorceCode\CGame.h" />
     <ClInclude Include="SorceCode\CGameObject.h" />
     <ClInclude Include="SorceCode\CGameScene.h" />

@@ -17,6 +17,8 @@ public:
 
 private:
 	void Animation() override;
+public://パブリック
+
 private:
 
 };

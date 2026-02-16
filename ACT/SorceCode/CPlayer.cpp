@@ -18,9 +18,14 @@ CPlayer::~CPlayer()
 
 void CPlayer::StartSetting()
 {
-	m_FrameSize = { 32,64 };
-	m_Framesplit = { 0,0,80,144 };	//少し上をデカくする(プレイヤーのサイズ感は多分変えない)
+	m_State = enState::Living;
+
+	m_FrameSize = { 64,64 };
+	m_Framesplit = { 0,0,144,144 };
 	m_Position = { 0,0 };
+
+	//実際の当たり判定
+	m_RealFrameSplit = { 104,104 };
 
 	m_Speed = { 10,10 };
 
@@ -81,6 +86,11 @@ void CPlayer::Draw(CCamera* pCamera)
 
 void CPlayer::Animation()
 {
+}
+
+void CPlayer::EnemyHit(int Damage)
+{
+	m_Position = { 0,0 };
 }
 
 void CPlayer::KyeInput()
