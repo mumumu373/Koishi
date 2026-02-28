@@ -1,5 +1,5 @@
 #pragma once
-#include "CCharacter.h"
+#include "CGameObject/CCharacter/CCharacter.h"
 
 /*****************************************************************************************************
 *		プレイヤークラス
@@ -7,6 +7,9 @@
 class CPlayer
 	:public CCharacter
 {
+public:
+	//最大落下速度
+	static constexpr double MAX_FALLING_SPEAD = 25;
 public:
 	//アクション状態
 	enum enActionState
@@ -29,7 +32,7 @@ public:
 	void StartSetting() override;
 
 	void Update() override;
-	void Draw(CCamera* pCamera) override;
+	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 private:
 	void Animation() override;

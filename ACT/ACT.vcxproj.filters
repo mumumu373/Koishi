@@ -31,9 +31,6 @@
     <Filter Include="SorceCode\CGame\CCollisionDetection">
       <UniqueIdentifier>{3454e863-2f01-4b26-83b6-4170c6a36362}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SorceCode\CGameScene">
-      <UniqueIdentifier>{8c27e678-0b43-4165-95f7-41690a145572}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SorceCode\CGameObject\CCharacter\CPlayer">
       <UniqueIdentifier>{2262cd77-269e-4adc-bc3a-a6b2beab1f44}</UniqueIdentifier>
     </Filter>
@@ -51,66 +48,64 @@
     <ClCompile Include="SorceCode\Main.cpp">
       <Filter>SorceCode</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CGame.cpp">
+    <ClCompile Include="SorceCode\CGame\CGame.cpp">
       <Filter>SorceCode\CGame</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CSound.cpp">
+    <ClCompile Include="SorceCode\CSound\CSound.cpp">
       <Filter>SorceCode\CSoundManager\CSound</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CWinInit.cpp">
+    <ClCompile Include="SorceCode\CWinlnit\CWinInit.cpp">
       <Filter>SorceCode\CWinInit</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CImage.cpp">
+    <ClCompile Include="SorceCode\CImage\CImage.cpp">
       <Filter>SorceCode\CImageManager\CImage</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CStage.cpp">
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStage.cpp">
       <Filter>SorceCode\CGameObject\CStage</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CCamera.cpp">
+    <ClCompile Include="SorceCode\CCamera\CCamera.cpp">
       <Filter>SorceCode\CCamera</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CCharacter.cpp">
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CCharacter.cpp">
       <Filter>SorceCode\CGameObject\CCharacter</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CGameObject.cpp">
+    <ClCompile Include="SorceCode\CGameObject\CGameObject.cpp">
       <Filter>SorceCode\CGameObject</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CSoundManager.cpp">
+    <ClCompile Include="SorceCode\CSound\CSoundManager.cpp">
       <Filter>SorceCode\CSoundManager</Filter>
     </ClCompile>
     <ClCompile Include="SorceCode\Global.cpp">
       <Filter>SorceCode</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CCollisionDetection.cpp">
+    <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp">
       <Filter>SorceCode\CGame\CCollisionDetection</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CGameScene.cpp">
-      <Filter>SorceCode\CGameScene</Filter>
-    </ClCompile>
-    <ClCompile Include="SorceCode\CPlayer.cpp">
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CPlayer\CPlayer.cpp">
       <Filter>SorceCode\CGameObject\CCharacter\CPlayer</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CEnemy.cpp">
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.cpp">
       <Filter>SorceCode\CGameObject\CCharacter\CEnemy</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CImageManager.cpp">
+    <ClCompile Include="SorceCode\CImage\CImageManager.cpp">
       <Filter>SorceCode\CImageManager</Filter>
     </ClCompile>
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
       <Filter>SorceCode</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CGame.h">
+    <ClInclude Include="SorceCode\CGame\CGame.h">
       <Filter>SorceCode\CGame</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CSound.h">
+    <ClInclude Include="SorceCode\CSound\CSound.h">
       <Filter>SorceCode\CSoundManager\CSound</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CWinInit.h">
+    <ClInclude Include="SorceCode\CWinlnit\CWinInit.h">
       <Filter>SorceCode\CWinInit</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CImage.h">
+    <ClInclude Include="SorceCode\CImage\CImage.h">
       <Filter>SorceCode\CImageManager\CImage</Filter>
     </ClInclude>
     <ClInclude Include="SorceCode\MyMath.h">
@@ -119,35 +114,33 @@
     <ClInclude Include="SorceCode\MyMacro.h">
       <Filter>SorceCode</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CStage.h">
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStage.h">
       <Filter>SorceCode\CGameObject\CStage</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CCamera.h">
+    <ClInclude Include="SorceCode\CCamera\CCamera.h">
       <Filter>SorceCode\CCamera</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CCharacter.h">
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CCharacter.h">
       <Filter>SorceCode\CGameObject\CCharacter</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CGameObject.h">
+    <ClInclude Include="SorceCode\CGameObject\CGameObject.h">
       <Filter>SorceCode\CGameObject</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CSoundManager.h">
+    <ClInclude Include="SorceCode\CSound\CSoundManager.h">
       <Filter>SorceCode\CSoundManager</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CCollisionDetection.h">
+    <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h">
       <Filter>SorceCode\CGame\CCollisionDetection</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CGameScene.h">
-      <Filter>SorceCode\CGameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="SorceCode\CPlayer.h">
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CPlayer\CPlayer.h">
       <Filter>SorceCode\CGameObject\CCharacter\CPlayer</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CEnemy.h">
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.h">
       <Filter>SorceCode\CGameObject\CCharacter\CEnemy</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CImageManager.h">
+    <ClInclude Include="SorceCode\CImage\CImageManager.h">
       <Filter>SorceCode\CImageManager</Filter>
     </ClInclude>
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
   </ItemGroup>
 </Project>

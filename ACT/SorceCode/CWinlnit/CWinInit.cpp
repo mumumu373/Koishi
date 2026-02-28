@@ -1,5 +1,5 @@
 #include "CWinInit.h"
-#include "CGame.h"	//ゲームクラス
+#include "CGame/CGame.h"	//ゲームクラス
 
 //-------------------------------------------------
 //定数宣言

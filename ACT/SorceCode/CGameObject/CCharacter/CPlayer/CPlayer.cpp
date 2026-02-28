@@ -7,9 +7,14 @@ CPlayer::CPlayer()
 	, m_JumpRemove(false)
 	, m_JumpRemoveCo(0)
 {
-	//重力はグローバルに、Characterクラスを結構変えた
-	//ウィンドウのサイズも変わってるでー
-	//VECTOR3は 2_f この形にした
+	//初期設定でデフォルトにする
+	m_Color = enColor::NoColor;
+	//自分はプレイヤーです
+	m_MyCharacter = enMyCharacter::Player;
+	//プレイヤー陣営です
+	m_MyCamp = enMyCamp::PlayerCamp;
+
+	StartSetting();
 }
 
 CPlayer::~CPlayer()
@@ -47,24 +52,10 @@ void CPlayer::Update()
 		m_Position.y += m_Speed.y;
 	}
 
-	//仮の地面
-	//if (m_Position.y >= WND_H - m_Framesplit.h) {
-	//	m_Position.y = WND_H - m_Framesplit.h;
-	//	GroundStand = true;
-	//	//地面に着いたらまたジャンプできるように
-	//	m_JumpRemove = false;
-	//	m_Jumping = false;
-	//	m_JumpAcc = 0;
-	//}
-	////空中にいるなら(仮)
-	//else {
-	//	GroundStand = false;
-	//}
-	
 	KyeInput();
 }
 
-void CPlayer::Draw(CCamera* pCamera)
+void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	//アニメーション処理
 	Animation();

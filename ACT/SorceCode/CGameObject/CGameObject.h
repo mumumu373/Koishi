@@ -1,6 +1,6 @@
 #pragma once
 #include "Global.h"		//なんでも屋さん
-#include "CCamera.h"	//カメラクラス
+#include "CCamera/CCamera.h"	//カメラクラス
 
 /*************************************************************
 *		ゲームオブジェクトクラス
@@ -14,7 +14,8 @@ public:
 
 	virtual void Update() = 0;
 
-	virtual void Draw(CCamera* pCamera) = 0;
+	//参照でなければエラーとなる
+	virtual void Draw(std::unique_ptr<CCamera>& pCamera) = 0;
 
 	void SetImage(CImage* pImg) { m_pImg = pImg; }
 

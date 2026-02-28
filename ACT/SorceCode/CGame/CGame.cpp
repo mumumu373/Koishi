@@ -21,12 +21,14 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hWorkDC2(nullptr)
 , m_hWorkBmp2(nullptr)
 , m_hFont(nullptr)
-, m_pCollisionDetection(nullptr)
-, m_pPlayer(nullptr)
-, m_pEnemy(nullptr)
-, m_pStage(nullptr)
-, m_pCamera(nullptr)
+, m_upCollisionDetection(nullptr)
+, m_upPlayer(nullptr)
+, m_upStage(nullptr)
+, m_upCamera(nullptr)
 {
+	for (int i = 0; i < m_upEnemy.size(); i++) {
+		m_upEnemy[i] = nullptr;
+	}
 }
 
 
@@ -78,29 +80,28 @@ bool CGame::Create()
 	}
 
 	//当たり判定のインスタンス生成
-	m_pCollisionDetection = new CCollisionDetection();
+	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
 	//当たり判定はインスタンス生成だけで良い
 
 	//-------------------------動的に作って消したい者達-----------------------------
 	//プレイヤーのインスタンス生成		プレイヤーはゲームが始まった時に作りたい
-	m_pPlayer = new CPlayer();
-	m_pPlayer->StartSetting();
+	m_upPlayer = std::make_unique<CPlayer>();
 
-	//エネミーのインスタンス生成		ステージごとに配置するようにしたい
-	m_pEnemy = new CEnemy();
-	m_pEnemy->StartSetting();
+	//エネミーのインスタンス生成
+	//エネミーを作るタイミングで良い
+	
 	//----------------------------------------------------------------------------
 
 	//ステージのインスタンス生成
-	m_pStage = new CStage();
+	m_upStage = std::make_unique<CStage>();
 	//マップデータの読み込み
-	if (m_pStage->LoadData("Data\\MapData\\Map01.csv") == false)return false;
+	if (m_upStage->LoadData("Data\\MapData\\Map01.csv") == false)return false;
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
-		m_pCamera = new CCamera();
+		m_upCamera = std::make_unique<CCamera>();
 		//ステージの幅と高さをセットする
-		m_pCamera->SetStageSize(m_pStage->GetWidth(), m_pStage->GetHeight());
+		m_upCamera->SetStageSize(m_upStage->GetWidth(), m_upStage->GetHeight());
 	}
 
 	//エネミーをポリモーで動かそうとすると、ここのセットクラスはいらないかも
@@ -112,18 +113,8 @@ bool CGame::Create()
 //破棄関数
 void CGame::Destroy()
 {
-	//カメラ
-	if (NoDeleteInstance != true) {
-		SAFE_DELETE(m_pCamera);
-	}
 
-	SAFE_DELETE(m_pPlayer);
-
-	SAFE_DELETE(m_pEnemy);
-
-	SAFE_DELETE(m_pStage);
-
-	SAFE_DELETE(m_pCollisionDetection);
+	//stdの破棄用の関数をまた追加する
 
 	//BITMAPの解放.--------------------------------------------------重要---------------------------
 
@@ -151,19 +142,22 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	m_pCollisionDetection->Update();
+	m_upCollisionDetection->Update();
 
 	//プレイヤーの動作
-	m_pPlayer->Update();
+	m_upPlayer->Update();
 
 	//エネミーの動作
-	m_pEnemy->Update();
+	//ある分回す
+	for (int i = 0; i < m_upEnemy.size(); i++) {
+		m_upEnemy[i]->Update();
+	}
 
-	m_pStage->Update();
+	m_upStage->Update();
 
 	//プレイヤーにカメラが付くようにする
-	m_pCamera->SetPosition(m_pPlayer->GetCenterPosition());
-	m_pCamera->Update();
+	m_upCamera->SetPosition(m_upPlayer->GetCenterPosition());
+	m_upCamera->Update();
 
 	//インスタンスを破棄する関数
 	DeleteInstance();
@@ -173,18 +167,19 @@ void CGame::Update()
 void CGame::Draw()
 {
 	//ステージの描画
-	m_pStage->Draw(m_pCamera);
+	m_upStage->Draw(m_upCamera);
 
 	//プレイヤーの描画
-	m_pPlayer->Draw(m_pCamera);
+	m_upPlayer->Draw(m_upCamera);
 
 	//エネミー描画
-	m_pEnemy->Draw(m_pCamera);
+	for (int i = 0; i < m_upEnemy.size(); i++) {
+		m_upEnemy[i]->Draw(m_upCamera);
+	}
 }
 
 void CGame::SetClass()
 {
-	m_pCollisionDetection->SetCharacter(m_pPlayer, m_pEnemy);
 }
 
 void CGame::DeleteInstance()

@@ -1,5 +1,5 @@
 #pragma once
-#include "CGameObject.h"	//ゲームオブジェクトクラス
+#include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
 
 /***********************************************
 *			キャラクタークラス
@@ -19,8 +19,29 @@ public:
 
 	int m_State = enState::Set;
 
-	//キャラの属性状態
-	enum enColorState
+	//自分が何のキャラクターなのか
+	enum enMyCharacter
+	{
+		Player = 0,	//プレイヤー
+		Kedama,		//毛玉
+		Fairy,		//妖精
+		//以降敵の名前
+		Galleria,		//ボス
+	};
+
+	int m_MyCharacter = enMyCharacter::Player;
+
+	//自分が何の陣営なのか
+	enum enMyCamp
+	{
+		PlayerCamp = 0,	//プレイヤー
+		EnemyCamp,		//エネミー
+	};
+
+	int m_MyCamp = enMyCamp::PlayerCamp;
+
+	//キャラの属性
+	enum enColor
 	{
 		NoColor = 0,//無属性
 		Red,		//赤
@@ -29,7 +50,7 @@ public:
 		Blue,		//青
 	};
 
-	int m_ColorState = enColorState::NoColor;
+	int m_Color = enColor::NoColor;
 
 	//キャラの動きの状態
 	enum enMoveState
@@ -54,7 +75,7 @@ public:
 
 	virtual void Update() override{}		// {}←定義
 
-	virtual void Draw(CCamera* pCamera) override {}
+	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {}
 protected:
 	virtual void Animation() = 0;			//アニメーション関数
 protected:

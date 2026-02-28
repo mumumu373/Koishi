@@ -1,5 +1,5 @@
 #pragma once
-#include "CGameObject.h"	//ゲームオブジェクトクラス
+#include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
 #include "Global.h"		//ウィンドウサイズで必要
 
 /**************************************************
@@ -16,7 +16,7 @@ public:
 	void Update() override;
 
 	//描画関数
-	void Draw(CCamera* pCamera) override;
+	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 	//ステージは複数のImgを持つようにする
 	void SetImage(CImage* pStageMainImg,

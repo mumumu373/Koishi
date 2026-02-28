@@ -1,6 +1,6 @@
 #pragma once			
 #include "MyMath.h"			//VECTOR2用
-#include "CImageManager.h"
+#include "CImage/CImageManager.h"
 
 /************************************************************
 *		カメラクラス

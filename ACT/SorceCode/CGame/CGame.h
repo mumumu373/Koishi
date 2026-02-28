@@ -1,14 +1,13 @@
 #pragma once
 #include <Windows.h>
 #include "Global.h"
-#include "CSound.h"		//サウンドクラス
-#include "CImageManager.h"		//イメージクラス
-#include "CStage.h"		//ステージクラス
-#include "CCamera.h"	//カメラクラス
-#include "CSoundManager.h"		//サウンドマネージャークラス
-#include "CCollisionDetection.h"//当たり判定クラス
-#include "CPlayer.h"	//プレイヤークラス
-#include "CEnemy.h"		//エネミーマネージャークラス
+#include "CImage/CImageManager.h"		//イメージクラス
+#include "CCamera/CCamera.h"	//カメラクラス
+#include "CSound/CSoundManager.h"		//サウンドマネージャークラス
+#include "CGame/CCollisionDetection/CCollisionDetection.h"//当たり判定クラス
+#include "CGameObject/CStage/CStage.h"		//ステージクラス
+#include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
+#include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミーマネージャークラス
 
 /************************************************************
 *			ゲームクラス
@@ -95,7 +94,7 @@ private:
 
 	//														-ゲームシステム面のもの-
 	//----------------------当たり判定----------------------
-	CCollisionDetection* m_pCollisionDetection;	//当たり判定クラス
+	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
 
 	//														-ゲームシーン系-
 	//----------------------ブラックフェード-------------
@@ -115,16 +114,16 @@ private:
 
 	//														-ゲームオブジェクト系-
 	//----------------------プレイヤー-------------------
-	CPlayer* m_pPlayer;
+	std::unique_ptr<CPlayer> m_upPlayer;
 
 	//----------------------エネミー---------------------
-	CEnemy* m_pEnemy;	//後でマネージャーを呼び出す
+	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく
 
 	//----------------------バレット---------------------
 
 	//----------------------ステージ--------------------
-	CStage* m_pStage;
+	std::unique_ptr<CStage> m_upStage;
 
 	//----------------------カメラ-----------------------
-	CCamera* m_pCamera;
+	std::unique_ptr<CCamera> m_upCamera;
 };

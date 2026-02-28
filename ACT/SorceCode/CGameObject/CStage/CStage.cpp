@@ -30,7 +30,7 @@ void CStage::Update()
 {
 }
 
-void CStage::Draw(CCamera* pCamera)
+void CStage::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	//アニメーション処理
 	Animation();
