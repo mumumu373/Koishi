@@ -162,7 +162,7 @@ void CGame::Update()
 	m_pStage->Update();
 
 	//プレイヤーにカメラが付くようにする
-	m_pCamera->SetPosition(m_pPlayer->GetPosition());
+	m_pCamera->SetPosition(m_pPlayer->GetCenterPosition());
 	m_pCamera->Update();
 
 	//インスタンスを破棄する関数
