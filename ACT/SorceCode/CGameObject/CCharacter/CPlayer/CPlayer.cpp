@@ -79,9 +79,23 @@ void CPlayer::Animation()
 {
 }
 
-void CPlayer::EnemyHit(int Damage)
+void CPlayer::EnemyHit(int Enemy, int Color)
 {
-	m_Position = { 0,0 };
+	//当たったエネミーが誰か
+	switch (Enemy) {
+		//-------------------------毛玉--------------------------
+	case enMyCharacter::Kedama:
+		switch (Color) {
+		case enColor::NoColor:
+		case enColor::Red:
+		case enColor::Yellow:
+		case enColor::Green:
+		case enColor::Blue:
+			m_Position = { 0,0 };
+			break;
+		}
+		break;
+	}
 }
 
 void CPlayer::KyeInput()

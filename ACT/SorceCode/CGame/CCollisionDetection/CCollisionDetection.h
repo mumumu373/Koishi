@@ -23,6 +23,9 @@ public:
 
 	void Update();
 
+	//プレイヤーとエネミーの当たり判定
+	void PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
+
 public:
 
 	//円どうしの当たり判定
@@ -65,6 +68,9 @@ public:
 	}
 
 private:
-
+	//プレイヤーの位置情報+当たり判定かキャラクターサイズかを見る
+	ObjectInfo SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize);
+	//エネミーの位置情報
+	ObjectInfo SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize);
 private:
 };

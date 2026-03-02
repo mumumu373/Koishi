@@ -38,7 +38,7 @@ private:
 	void Animation() override;
 public://パブリック
 	//エネミーに触れたなら
-	void EnemyHit(int Damage);
+	void EnemyHit(int Enemy, int Color);
 
 private:
 

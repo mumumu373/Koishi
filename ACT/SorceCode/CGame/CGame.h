@@ -1,13 +1,14 @@
 #pragma once
 #include <Windows.h>
 #include "Global.h"
-#include "CImage/CImageManager.h"		//イメージクラス
-#include "CCamera/CCamera.h"	//カメラクラス
-#include "CSound/CSoundManager.h"		//サウンドマネージャークラス
-#include "CGame/CCollisionDetection/CCollisionDetection.h"//当たり判定クラス
-#include "CGameObject/CStage/CStage.h"		//ステージクラス
-#include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
-#include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミーマネージャークラス
+#include "CImage/CImageManager.h"							//イメージクラス
+#include "CCamera/CCamera.h"								//カメラクラス
+#include "CSound/CSoundManager.h"							//サウンドマネージャークラス
+#include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
+#include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
+#include "CGameObject/CStage/CStage.h"						//ステージクラス
+#include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
+#include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミーマネージャークラス
 
 /************************************************************
 *			ゲームクラス

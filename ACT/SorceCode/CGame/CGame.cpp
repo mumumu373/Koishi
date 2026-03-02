@@ -89,6 +89,10 @@ bool CGame::Create()
 
 	//エネミーのインスタンス生成
 	//エネミーを作るタイミングで良い
+
+	//エネミーを作っている
+	VECTOR2_f SetEnemy = { 200,200 };
+	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy));
 	
 	//----------------------------------------------------------------------------
 
@@ -142,8 +146,6 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	m_upCollisionDetection->Update();
-
 	//プレイヤーの動作
 	m_upPlayer->Update();
 
@@ -152,6 +154,9 @@ void CGame::Update()
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Update();
 	}
+
+	//プレイヤーとエネミーの当たり判定処理
+	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
 	m_upStage->Update();
 

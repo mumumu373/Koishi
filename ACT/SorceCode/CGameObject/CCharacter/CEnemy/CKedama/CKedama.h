@@ -12,7 +12,7 @@ public:
 	static constexpr double MAX_FALLING_SPEAD = 25;
 public:
 	//ŒÄ‚Ño‚·‚Æ‚«‚Éí—Ş‚ğŒˆ‚ß‚é
-	CKedama(int Kinds, VECTOR2_f StagePos);
+	CKedama(int Kinds, VECTOR2_f SetPos);
 	~CKedama();
 
 	void StartSetting() override;

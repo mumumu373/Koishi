@@ -91,6 +91,7 @@
       <Filter>SorceCode\CImageManager</Filter>
     </ClCompile>
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
+    <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -142,5 +143,6 @@
       <Filter>SorceCode\CImageManager</Filter>
     </ClInclude>
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
+    <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
   </ItemGroup>
 </Project>
