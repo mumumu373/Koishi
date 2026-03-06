@@ -125,6 +125,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CCharacter.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
     <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp" />
@@ -144,6 +146,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CCharacter.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
     <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h" />

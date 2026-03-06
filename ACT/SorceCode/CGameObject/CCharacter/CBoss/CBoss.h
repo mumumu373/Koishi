@@ -1,15 +1,15 @@
 #pragma once
-#include "CGameObject/CCharacter/CCharacter.h"
+#include "CGameObject/CCharacter/CCharacter.h"	//キャラクタークラス
 
-/************************************************************************************
-*		エネミークラス(親)
+/*************************************************************************************************
+*		ボスクラス(親)
 */
-class CEnemy
+class CBoss
 	:public CCharacter
 {
 public:
-	CEnemy() {};
-	virtual ~CEnemy() {};
+	CBoss() {};
+	virtual ~CBoss() {};
 
 	virtual void StartSetting() override {};
 	virtual void Update() override {};
@@ -17,5 +17,4 @@ public:
 
 protected:
 	void Animation() override {};
-
 };

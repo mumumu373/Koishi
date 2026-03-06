@@ -92,6 +92,8 @@
     </ClCompile>
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -144,5 +146,7 @@
     </ClInclude>
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
   </ItemGroup>
 </Project>
