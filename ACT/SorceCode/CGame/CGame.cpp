@@ -23,6 +23,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hFont(nullptr)
 , m_upCollisionDetection(nullptr)
 , m_upPlayer(nullptr)
+, m_upBoss(nullptr)
 , m_upStage(nullptr)
 , m_upCamera(nullptr)
 {
@@ -86,6 +87,9 @@ bool CGame::Create()
 	//-------------------------動的に作って消したい者達-----------------------------
 	//プレイヤーのインスタンス生成		プレイヤーはゲームが始まった時に作りたい
 	m_upPlayer = std::make_unique<CPlayer>();
+
+	//ボスを作る
+	m_upBoss = CBossFactory::CreateNazrin();
 
 	//エネミーのインスタンス生成
 	//エネミーを作るタイミングで良い
@@ -155,6 +159,11 @@ void CGame::Update()
 		m_upEnemy[i]->Update();
 	}
 
+	//ボスの動作
+	if (m_upBoss != nullptr) {
+		m_upBoss->Update();
+	}
+
 	//プレイヤーとエネミーの当たり判定処理
 	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
@@ -180,6 +189,11 @@ void CGame::Draw()
 	//エネミー描画
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Draw(m_upCamera);
+	}
+
+	//ボスの描画
+	if (m_upBoss != nullptr) {
+		m_upBoss->Draw(m_upCamera);
 	}
 }
 

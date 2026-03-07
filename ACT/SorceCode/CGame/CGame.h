@@ -6,9 +6,11 @@
 #include "CSound/CSoundManager.h"							//サウンドマネージャークラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
 #include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
+#include "CGame/CBossFactory/CBossFactory.h"				//ボスを作るクラス
 #include "CGameObject/CStage/CStage.h"						//ステージクラス
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
-#include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミーマネージャークラス
+#include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミークラス
+#include "CGameObject/CCharacter/CBoss/CBoss.h"				//ボスクラス
 
 /************************************************************
 *			ゲームクラス
@@ -119,6 +121,9 @@ private:
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく
+
+	//----------------------ボス------------------------
+	std::unique_ptr<CBoss> m_upBoss;
 
 	//----------------------バレット---------------------
 

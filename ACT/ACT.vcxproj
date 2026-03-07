@@ -129,6 +129,7 @@
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CCharacter.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
+    <ClCompile Include="SorceCode\CGame\CBossFactory\CBossFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.cpp" />
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CCharacter.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
+    <ClInclude Include="SorceCode\CGame\CBossFactory\CBossFactory.h" />
     <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.h" />
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />

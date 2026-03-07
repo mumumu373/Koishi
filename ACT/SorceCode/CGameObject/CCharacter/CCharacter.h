@@ -26,7 +26,7 @@ public:
 		Kedama,		//毛玉
 		Fairy,		//妖精
 		//以降敵の名前
-		Galleria,		//ボス
+		Nazrin,		//ボス
 	};
 
 	int m_MyCharacter = enMyCharacter::Player;
@@ -87,4 +87,6 @@ protected:
 	VECTOR2_f m_OldPosition;	//移動前の位置
 
 	VECTOR2 m_FrameSize;		//切り抜く画像のサイズ
+
+	int m_AnimetionCo;			//アニメーション切り替えのカウンター
 };

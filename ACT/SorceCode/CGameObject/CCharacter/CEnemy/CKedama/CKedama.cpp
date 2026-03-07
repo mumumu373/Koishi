@@ -2,15 +2,17 @@
 
 CKedama::CKedama(int Kinds, VECTOR2_f SetPos)
 {
+	//ステージに配置する
+	m_Position = SetPos;
+
 	//色の種類
 	m_Color = Kinds;
 	//自分は毛玉キャラクターです
 	m_MyCharacter = enMyCharacter::Kedama;
 	//左に進みます
 	m_MoveState = enMoveState::MoveLeft;
-
-	//ステージに配置する
-	m_Position = SetPos;
+	//エネミー陣営です
+	m_MyCamp = enMyCamp::EnemyCamp;
 
 	StartSetting();
 }
@@ -42,9 +44,6 @@ void CKedama::StartSetting()
 
 	//当たり判定
 	m_RealFrameSplit = { m_Framesplit.w,m_Framesplit.h };
-
-	//エネミー陣営です
-	m_MyCamp = enMyCamp::EnemyCamp;
 
 	m_OldPosition = m_Position;
 }
