@@ -35,50 +35,6 @@ CSoundManager::~CSoundManager()
 //サウンドデータ読込関数
 bool CSoundManager::Load(HWND hWnd)
 {
-#if 0
-	//MIDIまたはmp3ファイルのオープン.
-	if (m_pSound[enList::BGM_Title]->Open(
-		"Data\\Sound\\BGM\\Title.mp3", "BGM_Title",
-		hWnd) == false)
-	{
-		return false;
-	}
-
-	if (m_pSound[enList::SE_Shot]->Open(
-		"Data\\Sound\\SE\\Shot.mp3", "SE_Shot",
-		hWnd) == false)
-	{
-		return false;
-	}
-
-	if (m_pSound[enList::BGM_Result]->Open(
-		"Data\\Sound\\BGM\\Result.mp3", "BGM_Result",
-		hWnd) == false)
-	{
-		return false;
-	}
-
-	if (m_pSound[enList::BGM_Bonus]->Open(
-		"Data\\Sound\\BGM\\BonusGameHouse.mp3", "BGM_Bonus",
-		hWnd) == false) 
-	{
-		return false;
-	}
-
-	if (m_pSound[enList::SE_Jump]->Open(
-		"Data\\Sound\\SE\\Jump.wav", "SE_Jump",
-		hWnd) == false)
-	{
-		return false;
-	}
-
-	if (m_pSound[enList::SE_Clear]->Open(
-		"Data\\Sound\\SE\\Clear.wav", "SE_Clear",
-		hWnd) == false)
-	{
-		return false;
-	}
-#else
 	struct MultiSoundList
 	{
 		int listNo;		//enList列挙型を設定
@@ -145,6 +101,9 @@ bool CSoundManager::Load(HWND hWnd)
 
 		{enSingleSoundList::BGM_Result,"Data\\Sound\\BGM\\BGM_Result.mp3", "BGM_Result",},
 		{enSingleSoundList::SE_WinPlayer,"Data\\Sound\\SE\\SE_WinPlayer.mp3", "SE_WinPlayer",},
+
+		{enSingleSoundList::BGM_Boss5_Intro,"Data\\Sound\\BGM\\BGM_Boss5_Intro.mp3", "BGM_Boss5_Intro",},
+		{enSingleSoundList::BGM_Boss5,"Data\\Sound\\BGM\\BGM_Boss5.mp3", "BGM_Boss5",},
 	};
 
 	//配列の最大要素数を算出(配列全体のサイズ/配列１つ分のサイズ)
@@ -159,7 +118,6 @@ bool CSoundManager::Load(HWND hWnd)
 		}
 	}
 	return true;
-#endif
 }
 
 //サウンドデータ開放処理

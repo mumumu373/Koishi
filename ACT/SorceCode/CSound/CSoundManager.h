@@ -36,6 +36,9 @@ public:
 		BGM_Result,			//リザルト
 		SE_WinPlayer,		//勝利SE
 
+		BGM_Boss5_Intro,	//ボス5のイントロ
+		BGM_Boss5,			//ボス5BGM
+
 		//音が増えたら「ここ」に追加
 		SingleSound_MAX,						//最大数
 	};

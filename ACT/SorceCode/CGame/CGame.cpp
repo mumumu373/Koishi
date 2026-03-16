@@ -150,6 +150,8 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss5);
+
 	//プレイヤーの動作
 	m_upPlayer->Update();
 
