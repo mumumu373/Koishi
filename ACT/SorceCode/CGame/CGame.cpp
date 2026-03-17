@@ -111,6 +111,11 @@ bool CGame::Create()
 	//エネミーをポリモーで動かそうとすると、ここのセットクラスはいらないかも
 	SetClass();
 
+
+	//初期設定
+	CMouseInput::InitialSettings(m_pGameWnd->hWnd);
+
+
 	return true;
 }
 
@@ -146,6 +151,14 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
+	//仮置き
+	CMouseInput::Update();
+	if (CMouseInput::GetMouseLeft(true, false)) {
+		CMouseInput::ColorChange();
+	}
+
+
+
 	//プレイヤーの動作
 	m_upPlayer->Update();
 
@@ -171,6 +184,7 @@ void CGame::Update()
 //描画関数(画像の表示処理を行う)
 void CGame::Draw()
 {
+
 	//ステージの描画
 	m_upStage->Draw(m_upCamera);
 
@@ -181,6 +195,9 @@ void CGame::Draw()
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Draw(m_upCamera);
 	}
+
+	//仮置き
+	CMouseInput::Draw();
 }
 
 void CGame::SetClass()

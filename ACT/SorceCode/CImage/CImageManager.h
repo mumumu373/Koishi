@@ -18,6 +18,7 @@ public:
 		IMG_BuckGround2,	//背景2
 		IMG_Player,			//プレイヤー
 		IMG_Enemy,			//エネミー
+		IMG_Mouse,			//マウス
 	};
 public:
 	static CImageManager* GetInstance()
