@@ -17,4 +17,6 @@ public:
 
 protected:
 	void Animation() override {};
+protected:
+	bool m_BulletShot = false;	//ƒoƒŒƒbƒg‚ðŒ‚‚Á‚½
 };

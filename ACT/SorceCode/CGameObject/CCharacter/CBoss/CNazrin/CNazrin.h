@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject/CCharacter/CBoss/CBoss.h"	//ボスクラス(継承)
+#include "CGame/CBulletFactory/CBulletFactory.h"//バレットを作るクラス
 
 /**********************************************************************************************************
 *		ナズーリン(1面ボス)

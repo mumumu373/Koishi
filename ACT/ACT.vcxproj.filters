@@ -95,6 +95,9 @@
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
     <ClCompile Include="SorceCode\CGame\CBossFactory\CBossFactory.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CBullet.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.cpp" />
+    <ClCompile Include="SorceCode\CGame\CBulletFactory\CBulletFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -150,5 +153,8 @@
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
     <ClInclude Include="SorceCode\CGame\CBossFactory\CBossFactory.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CBullet.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.h" />
+    <ClInclude Include="SorceCode\CGame\CBulletFactory\CBulletFactory.h" />
   </ItemGroup>
 </Project>

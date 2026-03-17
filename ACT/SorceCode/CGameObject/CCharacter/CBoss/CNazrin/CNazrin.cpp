@@ -36,6 +36,9 @@ void CNazrin::StartSetting()
 
 void CNazrin::Update()
 {
+	if (m_BulletShot == false) {
+		m_BulletShot = true;
+	}
 }
 
 void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)

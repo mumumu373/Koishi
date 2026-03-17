@@ -30,6 +30,9 @@ CGame::CGame(GameWindow* pGameWnd)
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
 	}
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i] = nullptr;
+	}
 }
 
 
@@ -121,7 +124,6 @@ bool CGame::Create()
 //破棄関数
 void CGame::Destroy()
 {
-
 	//stdの破棄用の関数をまた追加する
 
 	//BITMAPの解放.--------------------------------------------------重要---------------------------
@@ -166,6 +168,11 @@ void CGame::Update()
 		m_upBoss->Update();
 	}
 
+	//バレットの動作
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i]->Update();
+	}
+
 	//プレイヤーとエネミーの当たり判定処理
 	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
@@ -196,6 +203,11 @@ void CGame::Draw()
 	//ボスの描画
 	if (m_upBoss != nullptr) {
 		m_upBoss->Draw(m_upCamera);
+	}
+
+	//バレットの描画
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i]->Update();
 	}
 }
 
