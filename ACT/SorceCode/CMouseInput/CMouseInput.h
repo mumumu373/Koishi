@@ -17,25 +17,25 @@ public:
 
 	//マウスの入力を記録
 	static void Update() { GetInstance()->update(); };
-	void update();
+	
 	//マウスの左を取得,Pushは押したか離しているか Momentは押し続けているか押した瞬間か（trueは押した瞬間）
 	static bool GetMouseLeft(bool Push,bool Moment) { return GetInstance()->getMouseLeft(Push,Moment); };
-	bool getMouseLeft(bool Push, bool Moment);
+
 
 	//マウスの右を取得,Pushは押したか離しているか Momentは押し続けているか押した瞬間か（trueは押した瞬間）
 	static bool GetMouseRight(bool Push, bool Moment) { return GetInstance()->getMouseRight(Push, Moment); };
-	bool getMouseRight(bool Push, bool Moment);
+
 
 	//マウスの真ん中の押込みを取得,Pushは押したか離しているか Momentは押し続けているか押した瞬間か（trueは押した瞬間）
 	static bool GetMouseWheel(bool Push, bool Moment) { return GetInstance()->getMouseWheel(Push, Moment); };//マウスホイール
-	bool getMouseWheel(bool Push, bool Moment);
+	
 
 	//マウス画像描画
-	static void Draw(){ GetInstance()->draw(); }
-	void draw();
+	static void Draw() { GetInstance()->draw(); };
 
-	static ObjectInfo GetcollisionMouse() {
-		ObjectInfo i;
+
+	static CCollisionDetection::ObjectInfo GetcollisionMouse() {
+		CCollisionDetection::ObjectInfo i;
 			i.x = GetInstance()->MousePos.x - GetInstance()->Size / 2;
 		i.y = GetInstance()->MousePos.y - GetInstance()->Size / 2;
 		i.xw= GetInstance()->Size;
@@ -60,6 +60,14 @@ public:
 	static VECTOR2_f GetMousePos();
 
 private:
+
+	//そのまま関数を呼び出すと全てにゲットインスタンスを描く必要があるので中継する
+	void update();
+	bool getMouseLeft(bool Push, bool Moment);
+	bool getMouseRight(bool Push, bool Moment);
+	bool getMouseWheel(bool Push, bool Moment);
+	void draw();
+
 	//外部からコンストラクタへのアクセスを禁止する
 	CMouseInput();
 

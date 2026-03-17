@@ -10,6 +10,8 @@
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミーマネージャークラス
 
+#include "CMouseInput//CMouseInput.h"
+
 /************************************************************
 *			ゲームクラス
 */
