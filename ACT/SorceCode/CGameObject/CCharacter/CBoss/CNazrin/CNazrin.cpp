@@ -36,9 +36,6 @@ void CNazrin::StartSetting()
 
 void CNazrin::Update()
 {
-	if (m_BulletShot == false) {
-		m_BulletShot = true;
-	}
 }
 
 void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
@@ -59,6 +56,14 @@ void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, m_Delection);					//透明度、角度
+}
+
+void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+	if (m_BulletShot == false) {
+		m_BulletShot = true;
+		upBullet.push_back(CBulletFactory::CreateRotateBullet(m_MyCamp, GetCenterPosition(), 6, 6));
+	}
 }
 
 void CNazrin::Animation()

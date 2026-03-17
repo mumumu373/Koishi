@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
+#include "CGame/CBulletFactory/CBulletFactory.h"	//バレットを作るクラス
 
 /***********************************************
 *			キャラクタークラス
@@ -76,6 +77,9 @@ public:
 	virtual void Update() override{}		// {}←定義
 
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {}
+
+	//オーバーロードさせる
+	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) = 0;
 protected:
 	virtual void Animation() = 0;			//アニメーション関数
 protected:

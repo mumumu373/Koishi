@@ -93,6 +93,10 @@ void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Alpha, m_Delection);	//ìßñæìxÅAäpìx
 }
 
+void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+}
+
 void CKedama::Animation()
 {
 }

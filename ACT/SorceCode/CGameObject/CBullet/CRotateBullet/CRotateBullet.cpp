@@ -15,6 +15,10 @@ CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, double X_Speed, double Y_S
 
 	m_FrameSize = { 32,32 };
 	m_Framesplit = { 0,0,64,64 };
+
+	//‚»‚ÌƒLƒƒƒ‰‚Ì^‚ñ’†‚©‚ço‚é‚æ‚¤‚É‚·‚é
+	m_Position.x -= (m_Framesplit.w / 2);
+	m_Position.y -= (m_Framesplit.h / 2);
 }
 
 CRotateBullet::~CRotateBullet()

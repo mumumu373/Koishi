@@ -19,6 +19,7 @@ public:
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
+	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
 private:
 	void Animation() override;
 };

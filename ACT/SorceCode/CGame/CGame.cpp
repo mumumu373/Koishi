@@ -155,17 +155,17 @@ void CGame::Update()
 	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss5);
 
 	//プレイヤーの動作
-	m_upPlayer->Update();
+	m_upPlayer->Update(m_upBullet);
 
 	//エネミーの動作
 	//ある分回す
 	for (int i = 0; i < m_upEnemy.size(); i++) {
-		m_upEnemy[i]->Update();
+		m_upEnemy[i]->Update(m_upBullet);
 	}
 
 	//ボスの動作
 	if (m_upBoss != nullptr) {
-		m_upBoss->Update();
+		m_upBoss->Update(m_upBullet);
 	}
 
 	//バレットの動作
@@ -207,7 +207,7 @@ void CGame::Draw()
 
 	//バレットの描画
 	for (int i = 0; i < m_upBullet.size(); i++) {
-		m_upBullet[i]->Update();
+		m_upBullet[i]->Draw(m_upCamera);
 	}
 }
 
