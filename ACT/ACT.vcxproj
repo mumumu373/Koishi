@@ -135,6 +135,7 @@
     <ClCompile Include="SorceCode\CImage\CImage.cpp" />
     <ClCompile Include="SorceCode\CImage\CImageManager.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CPlayer\CPlayer.cpp" />
+    <ClCompile Include="SorceCode\CMouseInput\CMouseInput.cpp" />
     <ClCompile Include="SorceCode\CSound\CSound.cpp" />
     <ClCompile Include="SorceCode\CSound\CSoundManager.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStage.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="SorceCode\CImage\CImage.h" />
     <ClInclude Include="SorceCode\CImage\CImageManager.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CPlayer\CPlayer.h" />
+    <ClInclude Include="SorceCode\CMouseInput\CMouseInput.h" />
     <ClInclude Include="SorceCode\CSound\CSound.h" />
     <ClInclude Include="SorceCode\CSound\CSoundManager.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStage.h" />

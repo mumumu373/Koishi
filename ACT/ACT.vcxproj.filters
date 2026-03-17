@@ -43,6 +43,9 @@
     <Filter Include="SorceCode\CGameObject\CCharacter\CEnemy">
       <UniqueIdentifier>{0de9ba8a-d3b6-4ea0-a928-ef8f5e6b277d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SorceCode\CMouseInput">
+      <UniqueIdentifier>{771ef1a5-d38f-479c-a33f-d8d8bb4339f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\Main.cpp">
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
+    <ClCompile Include="SorceCode\CMouseInput\CMouseInput.cpp">
+      <Filter>SorceCode\CMouseInput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -144,5 +150,8 @@
     </ClInclude>
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
+    <ClInclude Include="SorceCode\CMouseInput\CMouseInput.h">
+      <Filter>SorceCode\CMouseInput</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
