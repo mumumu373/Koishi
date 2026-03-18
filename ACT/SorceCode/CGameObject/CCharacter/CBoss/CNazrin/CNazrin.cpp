@@ -1,6 +1,8 @@
 #include "CNazrin.h"
 
 CNazrin::CNazrin()
+	: m_BulletShot(false)
+	, m_BulletShotCo(0)
 {
 	//m_Position = SetPos;
 	m_Position = { 400,400 };
@@ -34,10 +36,6 @@ void CNazrin::StartSetting()
 	m_OldPosition = m_Position;
 }
 
-void CNazrin::Update()
-{
-}
-
 void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	//アニメーション処理
@@ -62,8 +60,14 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (m_BulletShot == false) {
 		m_BulletShot = true;
-		upBullet.push_back(CBulletFactory::CreateRotateBullet(m_MyCamp, GetCenterPosition(), 6, 6));
+		m_BulletShotCo = 0;
+		//周りをまわる弾を生成
+		upBullet.push_back(CBulletFactory::CreateRotateBullet(m_MyCamp, GetCenterPosition(), 3, 3, 100, 200));
 	}
+	else if (m_BulletShotCo >= 60) {
+		m_BulletShot = false;
+	}
+	m_BulletShotCo++;
 }
 
 void CNazrin::Animation()
