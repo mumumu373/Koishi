@@ -33,7 +33,7 @@ public:
 	//マウス画像描画
 	static void Draw() { GetInstance()->draw(); };
 
-
+	//マウスの当たり判定を取得
 	static CCollisionDetection::ObjectInfo GetcollisionMouse() {
 		CCollisionDetection::ObjectInfo i;
 			i.x = GetInstance()->MousePos.x - GetInstance()->Size / 2;
@@ -56,8 +56,14 @@ public:
 
 		return s_Instance;
 	};
+	//初期設定
 	static void InitialSettings(HWND hWnd);
+
+	//マウスの座標を取得
 	static VECTOR2_f GetMousePos();
+	static VECTOR2_f GetMousePosCamera(std::unique_ptr<CCamera>& m_pCamera) {
+		return m_pCamera->CalcToPositionInStage(&GetInstance()->MousePos);
+	}
 
 private:
 
@@ -78,7 +84,6 @@ private:
 	//代入演算子によるコピーを禁止する
 	//operator(オペレーター);演算子のオーバーロードで演算の中身を拡張できる
 	CMouseInput& operator=(CMouseInput& rhs) = delete;
-
 
 	bool MouseColorChange;
 	 HWND m_hWnd;

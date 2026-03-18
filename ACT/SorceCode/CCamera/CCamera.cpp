@@ -34,6 +34,14 @@ VECTOR2_f CCamera::CalcToPositionInCamera(
 	return pos;
 }
 
+VECTOR2_f CCamera::CalcToPositionInStage(const VECTOR2_f* Pos)
+{
+	VECTOR2_f pos(0, 0);
+	pos.x = Pos->x - m_Center.x+ m_Position.x;
+	pos.y = Pos->y - m_Center.y+ m_Position.y;
+	return  pos;
+}
+
 VECTOR2_f CCamera::CalcToStagePosition()
 {
 	VECTOR2_f pos(0, 0);

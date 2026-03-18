@@ -163,10 +163,7 @@ void CMouseInput::InitialSettings(HWND hWnd)
 }
 VECTOR2_f CMouseInput::GetMousePos()
 {
-	
-	
 		return 	GetInstance()->MousePos;
-	
 }
 ;
 void CMouseInput::draw() {

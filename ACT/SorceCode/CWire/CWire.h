@@ -3,17 +3,39 @@
 #include "CGameObject//CCharacter/CPlayer/CPlayer.h"	//プレイヤー
 
 //ワイヤーの先端
+class CPlayer;
 class CWire
 	:public CGameObject
 {
+private:
+	static constexpr int size = 60;//ワイヤーの長さ
+	static constexpr int IMGSize = 32;//ワイヤーの最大の長さ
+	static constexpr int Speed = 5;//ワイヤーの速さ
 public:
-	CWire(double rad, std::unique_ptr<CPlayer>&& Player);//ラジアンの角度とプレイヤーのポインタを渡す
+	enum ShotSteto{
+		no,
+		forward,
+		back,
+	};
+
+	CWire();//プレイヤーのダブルポインタと目標地点を渡す
 	~CWire();
+	void Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint) ;
 	void Update()override;
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
 
+	bool canShot() {
+		if (m_ShotState == ShotSteto::no) {
+			return true;
+		}
+	}
+
 
 private:
-	std::unique_ptr<CPlayer>*m_DpPlayer;
+	int m_ShotState = ShotSteto::no;//ワイヤーの状態
 
+	CPlayer* m_DpPlayer;//プレイヤーのポインタ
+	double m_Radian;//ワイヤーの角度
+	VECTOR2_f m_Toptpoint;//ワイヤーの先端の座標
+	VECTOR2_f m_Targetpoint;//ワイヤーの目標地点
 };

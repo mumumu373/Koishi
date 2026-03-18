@@ -117,7 +117,8 @@ private:
 
 	//														-ゲームオブジェクト系-
 	//----------------------プレイヤー-------------------
-	std::unique_ptr<CPlayer> m_upPlayer;
+	std::unique_ptr<CPlayer> m_upPlayer; 
+	std::unique_ptr<CWire>m_pWire;
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく

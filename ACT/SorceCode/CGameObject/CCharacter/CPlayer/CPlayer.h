@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject/CCharacter/CCharacter.h"
 
+#include "CWire/CWire.h"
 /*****************************************************************************************************
 *		プレイヤークラス
 */
@@ -31,9 +32,15 @@ public:
 
 	void StartSetting() override;
 
+
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
-
+	//ワイヤーを撃てるかセット
+	void SetWireShotCan(bool can) { m_WireShotCan = can; };
+	//trueならワイヤーを撃てる
+	bool GetWireShot() { return m_WireShot; };
+	void ShotWire() { enActionState = enActionState::WireShot; };
+	
 private:
 	void Animation() override;
 public://パブリック
@@ -53,4 +60,6 @@ private:
 	double m_JumpAcc;		//ジャンプ力を加算させる
 	bool m_JumpRemove;		//ジャンプボタンを離したぞ！
 	int m_JumpRemoveCo;		//ジャンプボタンを押した時間を図る
+	bool m_WireShot;		//ワイヤーを撃つぞ！
+	bool m_WireShotCan;		//ワイヤーを撃てるか
 };

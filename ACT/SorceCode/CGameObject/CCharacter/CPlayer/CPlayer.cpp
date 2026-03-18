@@ -1,11 +1,14 @@
 #include "CPlayer.h"
 
+
+#include "CMouseInput//CMouseInput.h"
 CPlayer::CPlayer()
 	: m_Jumping(false)
 	, m_JumpPower(12.0)
 	, m_JumpAcc(0)
 	, m_JumpRemove(false)
 	, m_JumpRemoveCo(0)
+	, m_WireShot(false)
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -39,6 +42,9 @@ void CPlayer::StartSetting()
 
 void CPlayer::Update()
 {
+
+	m_WireShot = false;
+
 	//過去の自分
 	m_OldPosition = m_Position;
 	//プレイヤーの動きの制御
@@ -122,6 +128,11 @@ void CPlayer::KyeInput()
 	else {
 		m_MoveState = enMoveState::Wait;
 	}
+	//ワイヤー発射指示
+	if (CMouseInput::GetMouseRight(true, false)&& m_WireShotCan) {
+		m_WireShot = true;
+	}
+
 }
 
 void CPlayer::MovePlayer()

@@ -87,6 +87,9 @@ bool CGame::Create()
 	//プレイヤーのインスタンス生成		プレイヤーはゲームが始まった時に作りたい
 	m_upPlayer = std::make_unique<CPlayer>();
 
+	m_pWire = std::make_unique<CWire>();
+
+
 	//エネミーのインスタンス生成
 	//エネミーを作るタイミングで良い
 
@@ -157,9 +160,11 @@ void CGame::Update()
 		CMouseInput::ColorChange();
 	}
 
-
+	m_pWire->Update();
 
 	//プレイヤーの動作
+	//ワイヤーを撃てるかセット
+	m_upPlayer->SetWireShotCan(m_pWire->canShot());
 	m_upPlayer->Update();
 
 	//エネミーの動作
@@ -173,9 +178,16 @@ void CGame::Update()
 
 	m_upStage->Update();
 
+	
+
+
 	//プレイヤーにカメラが付くようにする
 	m_upCamera->SetPosition(m_upPlayer->GetCenterPosition());
 	m_upCamera->Update();
+	//ワイヤーを撃つ処理
+	if (m_upPlayer->GetWireShot()) {
+		m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera));
+	}
 
 	//インスタンスを破棄する関数
 	DeleteInstance();
@@ -195,7 +207,7 @@ void CGame::Draw()
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Draw(m_upCamera);
 	}
-
+	m_pWire->Draw(m_upCamera);
 	//仮置き
 	CMouseInput::Draw();
 }
