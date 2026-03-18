@@ -140,6 +140,7 @@
     <ClCompile Include="SorceCode\CSound\CSoundManager.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStage.cpp" />
     <ClCompile Include="SorceCode\CWinlnit\CWinInit.cpp" />
+    <ClCompile Include="SorceCode\CWire\CWire.cpp" />
     <ClCompile Include="SorceCode\Global.cpp" />
     <ClCompile Include="SorceCode\Main.cpp" />
   </ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="SorceCode\CSound\CSoundManager.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStage.h" />
     <ClInclude Include="SorceCode\CWinlnit\CWinInit.h" />
+    <ClInclude Include="SorceCode\CWire\CWire.h" />
     <ClInclude Include="SorceCode\Global.h" />
     <ClInclude Include="SorceCode\MyMacro.h" />
     <ClInclude Include="SorceCode\MyMath.h" />

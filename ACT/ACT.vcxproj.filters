@@ -46,6 +46,9 @@
     <Filter Include="SorceCode\CMouseInput">
       <UniqueIdentifier>{771ef1a5-d38f-479c-a33f-d8d8bb4339f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SorceCode\CWire">
+      <UniqueIdentifier>{78df9c84-1c3c-4af6-89d2-8971ac68546a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\Main.cpp">
@@ -97,6 +100,9 @@
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
     <ClCompile Include="SorceCode\CMouseInput\CMouseInput.cpp">
       <Filter>SorceCode\CMouseInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CWire\CWire.cpp">
+      <Filter>SorceCode\CWire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +158,9 @@
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
     <ClInclude Include="SorceCode\CMouseInput\CMouseInput.h">
       <Filter>SorceCode\CMouseInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CWire\CWire.h">
+      <Filter>SorceCode\CWire</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
