@@ -10,7 +10,9 @@
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミーマネージャークラス
 
-#include "CMouseInput//CMouseInput.h"
+#include "CMouseInput//CMouseInput.h"//マウス入力クラス
+#include"CWire/CWire.h"	///ワイヤークラス
+#include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"	///ワイヤーポイントクラス
 
 /************************************************************
 *			ゲームクラス
@@ -119,6 +121,7 @@ private:
 	//----------------------プレイヤー-------------------
 	std::unique_ptr<CPlayer> m_upPlayer; 
 	std::unique_ptr<CWire>m_pWire;
+	std::vector<std::unique_ptr<CWirepoint>>m_pCWirepoint;
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく

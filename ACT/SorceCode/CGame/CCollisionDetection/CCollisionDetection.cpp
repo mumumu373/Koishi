@@ -1,5 +1,6 @@
 #include "CCollisionDetection.h"
 
+#include <CMouseInput/CMouseInput.h>
 CCollisionDetection::CCollisionDetection()
 {
 }
@@ -33,6 +34,29 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 		}
 	}
 }
+
+void CCollisionDetection::MouseToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CCamera>& Camera)
+{
+	//エネミー
+	for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+		if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
+			//当たり判定のセット
+			ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
+
+			//当たったら
+			if (CircleDetection({ CMouseInput::GetMousePosCamera(Camera).x,CMouseInput::GetMousePosCamera(Camera).y,1,1 }, EnemyPos) == true) {
+				VECTOR2_f i;
+				i = Camera->CalcToPositionInCamera(upEnemy[EnemyNo]->GetCenterPosition());
+				CMouseInput::SetMousePos(i);
+				CMouseInput::ColorChange();
+			}
+		}
+	}
+
+}
+
+
+
 
 CCollisionDetection::ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
 {

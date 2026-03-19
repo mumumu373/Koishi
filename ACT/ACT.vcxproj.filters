@@ -49,6 +49,12 @@
     <Filter Include="SorceCode\CWire">
       <UniqueIdentifier>{78df9c84-1c3c-4af6-89d2-8971ac68546a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SorceCode\CGameObject\CCharacter\Wirepoint">
+      <UniqueIdentifier>{c0232701-4324-4712-b6ef-0336c883b7b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SorceCode\WireActionSupporter">
+      <UniqueIdentifier>{f745517d-64b4-4006-8255-284c6456db6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\Main.cpp">
@@ -103,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="SorceCode\CWire\CWire.cpp">
       <Filter>SorceCode\CWire</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.cpp">
+      <Filter>SorceCode\CGameObject\CCharacter\Wirepoint</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp">
+      <Filter>SorceCode\WireActionSupporter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +173,12 @@
     </ClInclude>
     <ClInclude Include="SorceCode\CWire\CWire.h">
       <Filter>SorceCode\CWire</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.h">
+      <Filter>SorceCode\CGameObject\CCharacter\Wirepoint</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h">
+      <Filter>SorceCode\WireActionSupporter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

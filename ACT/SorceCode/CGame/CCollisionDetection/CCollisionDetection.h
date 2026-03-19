@@ -2,10 +2,12 @@
 #include <math.h>
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミークラス
-
+#include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"//ワイヤーポイントクラス
+#include "CCamera/CCamera.h"								//カメラクラス
 /****************************************************************************
 *		当たり判定クラス
 */
+
 class CCollisionDetection
 {
 public:
@@ -26,6 +28,7 @@ public:
 	//プレイヤーとエネミーの当たり判定
 	void PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
 
+	void MouseToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CCamera>& Camera);
 public:
 
 	//円どうしの当たり判定

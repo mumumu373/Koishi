@@ -34,6 +34,19 @@ VECTOR2_f CCamera::CalcToPositionInCamera(
 	return pos;
 }
 
+VECTOR2_f CCamera::CalcToPositionInCamera(const VECTOR2_f Pos)
+{
+	VECTOR2_f pos(0, 0);
+
+	//カメラ内(ウィンドウ内)でのプレイヤー位置
+	//カメラの場所が動けばすべての物が動くようにする
+	pos.x = Pos.x + m_Center.x - m_Position.x;
+	pos.y = Pos.y + m_Center.y - m_Position.y;
+
+
+	return pos;
+}
+
 VECTOR2_f CCamera::CalcToPositionInStage(const VECTOR2_f* Pos)
 {
 	VECTOR2_f pos(0, 0);

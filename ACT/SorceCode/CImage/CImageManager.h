@@ -19,6 +19,8 @@ public:
 		IMG_Player,			//プレイヤー
 		IMG_Enemy,			//エネミー
 		IMG_Mouse,			//マウス
+		IMG_String,			//ワイヤー	
+		IMG_Wirepoint,		//ワイヤーポイント
 	};
 public:
 	static CImageManager* GetInstance()

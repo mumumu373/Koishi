@@ -172,7 +172,7 @@ void CMouseInput::draw() {
 			MousePos.x - Size / 2,
 			MousePos.y - Size / 2,
 			Size, Size,
-			IMGSize, 0,
+			0, IMGSize,
 			IMGSize, IMGSize
 		);
 	}

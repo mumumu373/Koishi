@@ -9,12 +9,14 @@ class CWire
 {
 private:
 	static constexpr int size = 60;//ワイヤーの長さ
-	static constexpr int IMGSize = 32;//ワイヤーの最大の長さ
-	static constexpr int Speed = 5;//ワイヤーの速さ
+	static constexpr int IMGSize = 96;//ワイヤーの最大の長さ
+	static constexpr int GoSpeed = 5;//ワイヤーの速さ
+	static constexpr int ComebackSpeed = 20;//ワイヤーの速さ
 public:
 	enum ShotSteto{
 		no,
 		forward,
+		Rock,
 		back,
 	};
 
@@ -23,7 +25,7 @@ public:
 	void Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint) ;
 	void Update()override;
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
-
+	void StatoWire(VECTOR2_f pos);
 	bool canShot() {
 		if (m_ShotState == ShotSteto::no) {
 			return true;

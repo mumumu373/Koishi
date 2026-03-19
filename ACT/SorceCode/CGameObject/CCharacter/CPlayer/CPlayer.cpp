@@ -2,6 +2,7 @@
 
 
 #include "CMouseInput//CMouseInput.h"
+
 CPlayer::CPlayer()
 	: m_Jumping(false)
 	, m_JumpPower(12.0)
