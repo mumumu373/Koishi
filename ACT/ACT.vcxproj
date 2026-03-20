@@ -145,6 +145,7 @@
     <ClCompile Include="SorceCode\CWire\CWire.cpp" />
     <ClCompile Include="SorceCode\Global.cpp" />
     <ClCompile Include="SorceCode\Main.cpp" />
+    <ClCompile Include="SorceCode\NEGA\NEGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="SorceCode\Global.h" />
     <ClInclude Include="SorceCode\MyMacro.h" />
     <ClInclude Include="SorceCode\MyMath.h" />
+    <ClInclude Include="SorceCode\NEGA\NEGA.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

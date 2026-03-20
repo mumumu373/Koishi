@@ -119,6 +119,8 @@ bool CGame::Create()
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
 	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 100, 400 }));
 
+
+	Nega = new NEGA();
 	return true;
 }
 
@@ -217,7 +219,10 @@ void CGame::Draw()
 	for (int i = 0; i < m_pCWirepoint.size(); i++) {
 		m_pCWirepoint[i]->Draw(m_upCamera);
 	}
-
+	if (CMouseInput::GetMouseLeft(true,false)) {
+		Nega->DrawCH1(m_pGameWnd->hScreenDC);
+	
+	}
 	
 	//‰¼’u‚«
 	CMouseInput::Draw();

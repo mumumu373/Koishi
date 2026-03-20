@@ -55,6 +55,9 @@
     <Filter Include="SorceCode\WireActionSupporter">
       <UniqueIdentifier>{f745517d-64b4-4006-8255-284c6456db6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SorceCode\遊び">
+      <UniqueIdentifier>{713e145c-fd06-4084-98a5-e19bcef17005}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\Main.cpp">
@@ -115,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp">
       <Filter>SorceCode\WireActionSupporter</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\NEGA\NEGA.cpp">
+      <Filter>SorceCode\遊び</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h">
       <Filter>SorceCode\WireActionSupporter</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\NEGA\NEGA.h">
+      <Filter>SorceCode\遊び</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -14,7 +14,8 @@ CWire::~CWire()
 void CWire::Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint)
 {
 	if (m_ShotState == ShotSteto::no) {
-		m_Targetpoint = Targetpoint;
+		m_Targetpoint=Targetpoint;
+		
 		m_DpPlayer = Player.get();
 		m_Toptpoint.x = m_DpPlayer->GetCenterPosition().x-size/2;
 		m_Toptpoint.y= m_DpPlayer->GetCenterPosition().y-size/2;
@@ -28,11 +29,13 @@ void CWire::Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint)
 void CWire::Update()
 {
 	if (m_ShotState == ShotSteto::forward) {
+		double Radian = GetDelectionVect(m_Targetpoint, { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
+
 		m_Toptpoint.x += cos(m_Radian) * GoSpeed;
 		m_Toptpoint.y += sin(m_Radian) * GoSpeed;
 		
 		//ワイヤーの先端がプレイヤーから目標地点より遠くなったら引き返す
-		if ((GetHowToLong(m_DpPlayer->GetPosition(), m_Targetpoint) < GetHowToLong(m_DpPlayer->GetPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }))|| CMouseInput::GetMouseRight(false,true)) {
+		if ((GetHowToLong(m_DpPlayer->GetCenterPosition(), m_Targetpoint) < GetHowToLong(m_DpPlayer->GetCenterPosition(), {m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2})) || CMouseInput::GetMouseRight(false, true)) {
 		
 			m_ShotState = ShotSteto::back;
 		}
@@ -55,7 +58,9 @@ void CWire::Update()
 void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	if (m_ShotState != ShotSteto::no) {
-		int pieces = GetHowToLong({ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }, m_DpPlayer->GetCenterPosition()) / size;
+		//ワイヤーの先端とプレイヤーの距離を測る
+		int pieces = GetHowToLong(m_DpPlayer->GetCenterPosition(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size);
+		//ワイヤーの先端とプレイヤーの角度を測る
 		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
 		for (int i = 0; i < pieces; i++)
 		{
@@ -65,10 +70,11 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 			else {
 				m_Framesplit.x = 0;
 			}
-			double x = (m_Toptpoint.x )+ cos(-Radian)* size* i;
-			double y = (m_Toptpoint.y )- sin(-Radian) * size * i;
-			VECTOR2_f pos = { x,y };
-			VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&pos);
+			VECTOR2_f pos;
+			pos .x= (m_Toptpoint.x )+( cos(Radian)* (size)* i);
+			pos.y = (m_Toptpoint.y )+( sin(Radian) * (size ) * i);
+			
+			VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
 			CImageManager::SelectImg(CImageManager::enImgList::IMG_String)->TransAlBlendRotation(
 				DispPos.x,				//表示位置x座標
 				DispPos.y,				//表示位置y座標
