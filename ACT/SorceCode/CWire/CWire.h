@@ -2,8 +2,11 @@
 #include "CGameObject/CGameObject.h"	
 #include "CGameObject//CCharacter/CPlayer/CPlayer.h"	//プレイヤー
 
-//ワイヤーの先端
+
+class CWirepoint;
 class CPlayer;
+
+//ワイヤークラス
 class CWire
 	:public CGameObject
 {
@@ -26,16 +29,22 @@ public:
 	void Update()override;
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
 	void StatoWire(VECTOR2_f pos);
-	bool canShot() {
-		if (m_ShotState == ShotSteto::no) {
+	bool Getcatch();
+	void Startcatch(CWirepoint** point);
+	int GetSize() { return size; }
+	bool GetRock() { 
+		if ( m_ShotState == ShotSteto::Rock) {
 			return true;
 		}
-	}
+		 }
+	CWirepoint** GetCatchPoint() { return m_CatchWirepoint; }
+	bool canShot();
+	VECTOR2_f GetTopPoint() { return m_Toptpoint; };
 
 
 private:
 	int m_ShotState = ShotSteto::no;//ワイヤーの状態
-
+	CWirepoint** m_CatchWirepoint;//掴んだワイヤーポイントのポインタ
 	CPlayer* m_DpPlayer;//プレイヤーのポインタ
 	double m_Radian;//ワイヤーの角度
 	VECTOR2_f m_Toptpoint;//ワイヤーの先端の座標

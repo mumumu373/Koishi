@@ -81,6 +81,7 @@ public:
 	HWND GetWnd() const { return m_pGameWnd->hWnd; }
 
 private:
+	void Collision();
 	//クラスをセットする関数
 	void SetClass();
 

@@ -15,7 +15,7 @@ public:
 	 void StartSetting() override ;
 	 void Update() override ;
 	 void Draw(std::unique_ptr<CCamera>& pCamera) override ;
-
+	 int GetSize() { return size; }
 protected:
 	void Animation() override {};
 };

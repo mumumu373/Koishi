@@ -4,6 +4,7 @@
 #include <vector>
 #include <thread>
 #include <threads.h>
+#include <atomic>
 NEGA::NEGA()
 {
 }
@@ -71,7 +72,7 @@ void NEGA::DrawSepia(HDC Scre)
 {
 	int Size = WND_W * WND_H;
 	std::vector<DWORD> pixels(Size);
-	HBITMAP bmp = (HBITMAP)GetCurrentObject(Scre, OBJ_BITMAP);//現在のビットマップを取得
+
 	BITMAPINFO bmi = { 0 };
 
 	//ビットマップの情報を設定
@@ -81,6 +82,8 @@ void NEGA::DrawSepia(HDC Scre)
 	bmi.bmiHeader.biPlanes = 1;//プレーン数は常に1
 	bmi.bmiHeader.biBitCount = 32;   // 32bitを指定
 	bmi.bmiHeader.biCompression = BI_RGB;//圧縮形式はBI_RGB(非圧縮)を指定
+
+	HBITMAP bmp = (HBITMAP)GetCurrentObject(Scre, OBJ_BITMAP);//現在のビットマップを取得
 
 
 	GetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
@@ -130,9 +133,14 @@ void NEGA::DrawCH(HDC Scre)
 void NEGA::DrawCH1(HDC Scre)
 {
 
+	// 準備段階（初期化時やサイズ変更時に1回だけ行うのが理想）
+	void* pPixels = nullptr; // ピクセルデータへの直接ポインタ
+
 	int Size = WND_W * WND_H;
 	std::vector<DWORD> pixels(Size);
-	HBITMAP bmp = (HBITMAP)GetCurrentObject(Scre, OBJ_BITMAP);//現在のビットマップを取得
+	//HBITMAP bmp = (HBITMAP)GetCurrentObject(Scre, OBJ_BITMAP);//現在のビットマップを取得
+	
+
 	BITMAPINFO bmi = { 0 };
 
 	//ビットマップの情報を設定
@@ -143,10 +151,13 @@ void NEGA::DrawCH1(HDC Scre)
 	bmi.bmiHeader.biBitCount = 32;   // 32bitを指定
 	bmi.bmiHeader.biCompression = BI_RGB;//圧縮形式はBI_RGB(非圧縮)を指定
 
+	HBITMAP bmp = CreateDIBSection(NULL, &bmi, DIB_RGB_COLORS, &pPixels, NULL, 0);
+	DWORD* pData = static_cast<DWORD*>(pPixels);
 
-	GetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
-
+	//GetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
+	
 	int numThreads = std::thread::hardware_concurrency(); // CPUのコア数を取得
+	
 	int totalPixels = Size;
 	int grainSize = totalPixels / numThreads;
 
@@ -162,25 +173,30 @@ void NEGA::DrawCH1(HDC Scre)
 		if (i == numThreads - 1) {
 			end = totalPixels;
 		}
-		workers.emplace_back(&NEGA::iiii, this, start, end, std::ref(pixels));
+		workers.emplace_back(&NEGA::iiii, this, start, end, pixels
+		);
 	}
 	// 全員の仕事が終わるまで待つ
 	for (auto& t : workers) {
 		t.join();
 	}
-	SetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
+	//SetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
 
 }
-void NEGA::iiii(int start, int end, std::vector<DWORD>& c)
+void NEGA::iiii(int start, int end, std::vector<DWORD> c)
 {
+	// ここでstartからendまでのピクセルを処理する
+	std::vector<DWORD> v = c;
 	for (int i = start; i < end; ++i) {
-		BYTE r = GetRValue(c[i]);//赤の値を取得
-		BYTE g = GetGValue(c[i]);//緑の値を取得
-		BYTE b = GetBValue(c[i]);//青の値を取得
+		BYTE r = GetRValue(v[i]);//赤の値を取得
+		BYTE g = GetGValue(v[i]);//緑の値を取得
+		BYTE b = GetBValue(v[i]);//青の値を取得
 
-		c[i] = RotateHou(r, g, b, 180 * M_PI / 180);
+		v[i] = RotateHou(r, g, b, 180 * M_PI / 180);
 	}
-
+	for (int i = start; i < end; ++i) {
+		c[i]	 = v[i];
+	}
 
 }
 DWORD NEGA::RotateHou(BYTE r, BYTE g, BYTE b, float angle)

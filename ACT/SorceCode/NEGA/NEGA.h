@@ -18,7 +18,7 @@ public:
 	void DrawCH(HDC Scre);
 	void DrawCH1(HDC Scre);
 
-	void iiii(int start, int end, std::vector<DWORD>& pixels);
+	void iiii(int start, int end, std::vector<DWORD> pixels);
 
 	DWORD RotateHou(BYTE r, BYTE g, BYTE b, float angle);
 	int CLAMP(int& i);

@@ -7,6 +7,7 @@
 CWirepoint::CWirepoint(VECTOR2_f pos, int Size)
 	:CCharacter()
 {
+	m_State = enState::Living;
 	m_Position = pos;
 	m_Framesplit = { 0,IMGSize,size,size };
 	//元画像サイズ
@@ -43,5 +44,6 @@ void CWirepoint::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.y,			//元画像yサイズ
 		255, m_Delection);	//透明度、角度
 }
+
 
 

@@ -173,7 +173,7 @@ void CGame::Update()
 		m_upEnemy[i]->Update();
 	}
 
-	for(int i = 0; i < m_pCWirepoint.size(); i++) {
+	for (int i = 0; i < m_pCWirepoint.size(); i++) {
 		m_pCWirepoint[i]->Update();
 	}
 	//マウスとエネミーの当たり判定処理
@@ -182,9 +182,14 @@ void CGame::Update()
 	//プレイヤーとエネミーの当たり判定処理
 	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
+	//ワイヤーとワイヤーポイントの当たり判定処理
+	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
+
 	m_upStage->Update();
 
-	
+	//ワイヤーとワイヤーポイント
+	Collision();
+
 
 
 	//プレイヤーにカメラが付くようにする
@@ -220,12 +225,18 @@ void CGame::Draw()
 		m_pCWirepoint[i]->Draw(m_upCamera);
 	}
 	if (CMouseInput::GetMouseLeft(true,false)) {
-		Nega->DrawCH1(m_pGameWnd->hScreenDC);
+		//
+		Nega->Draw(m_pGameWnd->hScreenDC);
 	
 	}
 	
 	//仮置き
 	CMouseInput::Draw();
+}
+
+void CGame::Collision()
+{
+	
 }
 
 void CGame::SetClass()

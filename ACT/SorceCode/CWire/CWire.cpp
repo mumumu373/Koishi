@@ -95,3 +95,28 @@ void CWire::StatoWire(VECTOR2_f pos)
 	m_ShotState = ShotSteto::Rock;
 	m_Toptpoint = pos;
 }
+
+bool CWire::Getcatch()
+{
+	if (m_ShotState == ShotSteto::forward) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void CWire::Startcatch(CWirepoint** point)
+{
+	m_ShotState = ShotSteto::Rock;
+	m_CatchWirepoint = point;
+	m_Toptpoint.x = (*point)->GetCenterPosition().x-size/2;
+	m_Toptpoint.y= (*point)->GetCenterPosition().y-size/2;
+}
+
+bool CWire::canShot()
+{
+	if (m_ShotState == ShotSteto::no) {
+		return true;
+	}
+}
