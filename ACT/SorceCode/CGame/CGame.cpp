@@ -117,10 +117,11 @@ bool CGame::Create()
 
 	//初期設定
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 100, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 600, 400 }));
 
 
-	Nega = new NEGA();
+	Nega =std::make_unique<NEGA>(); 
+	m_upWireActionSupporter = std::make_unique<CWireActionSupporter>();
 	return true;
 }
 
@@ -176,6 +177,8 @@ void CGame::Update()
 	for (int i = 0; i < m_pCWirepoint.size(); i++) {
 		m_pCWirepoint[i]->Update();
 	}
+	m_upWireActionSupporter->Update();
+
 	//マウスとエネミーの当たり判定処理
 	m_upCollisionDetection->MouseToEnemyCollision(m_upEnemy, m_upCamera);
 
@@ -184,6 +187,10 @@ void CGame::Update()
 
 	//ワイヤーとワイヤーポイントの当たり判定処理
 	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
+
+	if (m_pWire->GetRock()) {
+		m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
+	}
 
 	m_upStage->Update();
 

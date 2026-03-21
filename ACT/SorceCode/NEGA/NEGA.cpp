@@ -7,18 +7,9 @@
 #include <atomic>
 NEGA::NEGA()
 {
-}
-
-NEGA::~NEGA()
-{
-}
-
-void NEGA::Draw(HDC Scre)
-{
-	int Size = WND_W * WND_H;
-	std::vector<DWORD> pixels(Size);
-	HBITMAP bmp = (HBITMAP)GetCurrentObject(Scre, OBJ_BITMAP);//現在のビットマップを取得
-	BITMAPINFO bmi = { 0 };
+	// 準備段階（初期化時やサイズ変更時に1回だけ行うのが理想）
+	pPixels = nullptr; // ピクセルデータへの直接
+	 bmi = { 0 };
 
 	//ビットマップの情報を設定
 	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);//構造体のサイズ
@@ -29,15 +20,33 @@ void NEGA::Draw(HDC Scre)
 	bmi.bmiHeader.biCompression = BI_RGB;//圧縮形式はBI_RGB(非圧縮)を指定
 
 
-	GetDIBits(Scre, bmp,0, WND_H,&pixels[0],&bmi, DIB_RGB_COLORS);
+}
+
+NEGA::~NEGA()
+{
+}
+
+void NEGA::Draw(HDC Scre)
+{
+	//
+	BitBlt(Scre, 0, 0, WND_W, WND_H, Scre, 0, 0, DSTINVERT);
+
+}
+/*
+{
+	int Size = WND_W * WND_H;
+	std::vector<DWORD> pixels(Size);
+	HBITMAP bmp = (HBITMAP)GetCurrentObject(Scre, OBJ_BITMAP);//現在のビットマップを取得
+
+	GetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
 
 	for (int i = 0; i < Size; i++) {
 		pixels[i] = pixels[i] xor 0x0FFFFFF;
 	}
 	SetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
 
-
 }
+*/
 void NEGA::DrawBH(HDC Scre)
 {
 	int Size = WND_W * WND_H;
@@ -180,6 +189,7 @@ void NEGA::DrawCH1(HDC Scre)
 	for (auto& t : workers) {
 		t.join();
 	}
+
 	//SetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
 
 }

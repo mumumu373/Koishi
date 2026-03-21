@@ -14,7 +14,8 @@
 #include"CWire/CWire.h"	///ワイヤークラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"	///ワイヤーポイントクラス
 
-#include "NEGA/NEGA.h"#include "NEGA/NEGA.h"
+#include "NEGA/NEGA.h"
+#include "CWireActionSupporter/CWireActionSupporter.h"
 
 /************************************************************
 *			ゲームクラス
@@ -137,5 +138,6 @@ private:
 	//----------------------カメラ-----------------------
 	std::unique_ptr<CCamera> m_upCamera;
 
-	NEGA* Nega;	//ネガポジ反転クラス
+	std::unique_ptr<NEGA> Nega;	//ネガポジ反転クラス
+	std::unique_ptr<CWireActionSupporter> m_upWireActionSupporter;	//ワイヤーアクションをサポートするクラス
 };

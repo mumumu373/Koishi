@@ -29,9 +29,11 @@ public:
 public:
 	CPlayer();
 	~CPlayer();
-
+	//ワイヤーポイントを掴む状態にする
+	void StartWirePointCatch();
 	void StartSetting() override;
 
+	int GetStete() { return m_State; }
 
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
@@ -40,7 +42,7 @@ public:
 	//trueならワイヤーを撃てる
 	bool GetWireShot() { return m_WireShot; };
 	void ShotWire() { enActionState = enActionState::WireShot; };
-	
+	void SetPosition(VECTOR2_f pos) { m_Position = pos; };
 private:
 	void Animation() override;
 public://パブリック

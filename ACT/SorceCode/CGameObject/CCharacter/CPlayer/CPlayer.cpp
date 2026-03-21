@@ -25,6 +25,11 @@ CPlayer::~CPlayer()
 {
 }
 
+void CPlayer::StartWirePointCatch()
+{
+	enActionState = enActionState::WirePointCatch;
+}
+
 void CPlayer::StartSetting()
 {
 	m_State = enState::Living;
@@ -43,7 +48,7 @@ void CPlayer::StartSetting()
 
 void CPlayer::Update()
 {
-
+	m_State = enState::Living;
 	m_WireShot = false;
 
 	//過去の自分
@@ -54,11 +59,14 @@ void CPlayer::Update()
 	//常にfalseにする
 	GroundStand = false;
 
-	//プレイヤーのジャンプの制御
-	JumpPlayer();
-	
+	if (enActionState !=enActionState::WirePointCatch) {
+		//プレイヤーのジャンプの制御
+		JumpPlayer();
 
-	KyeInput();
+
+		KyeInput();
+	}
+	
 
 	//仮置き地面
 	if (m_Position.y > 900 - m_Framesplit.h) {

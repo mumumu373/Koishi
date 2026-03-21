@@ -70,8 +70,8 @@ void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<C
 
 				//“–‚½‚Á‚½‚ç
 				if (CircleDetection({ pWire->GetTopPoint().x, pWire->GetTopPoint().y, pWire->GetSize(), pWire->GetSize() }, EnemyPos) == true) {
-					CWirepoint* p = m_pCWirepoint[EnemyNo].get();
-					pWire->Startcatch(&p);
+					 
+					pWire->Startcatch(m_pCWirepoint[EnemyNo].get());
 
 				}
 			}

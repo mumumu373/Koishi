@@ -23,5 +23,7 @@ public:
 	DWORD RotateHou(BYTE r, BYTE g, BYTE b, float angle);
 	int CLAMP(int& i);
 private:
-
+	void* pPixels;
+	BITMAPINFO bmi;
+		HBITMAP bmp;
 };

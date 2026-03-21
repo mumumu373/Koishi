@@ -30,21 +30,22 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
 	void StatoWire(VECTOR2_f pos);
 	bool Getcatch();
-	void Startcatch(CWirepoint** point);
+	void Startcatch(CWirepoint* point);
 	int GetSize() { return size; }
 	bool GetRock() { 
 		if ( m_ShotState == ShotSteto::Rock) {
 			return true;
 		}
+		return false;
 		 }
-	CWirepoint** GetCatchPoint() { return m_CatchWirepoint; }
+	CWirepoint* GetCatchPoint() { return m_CatchWirepoint; }
 	bool canShot();
 	VECTOR2_f GetTopPoint() { return m_Toptpoint; };
 
 
 private:
 	int m_ShotState = ShotSteto::no;//ワイヤーの状態
-	CWirepoint** m_CatchWirepoint;//掴んだワイヤーポイントのポインタ
+	CWirepoint* m_CatchWirepoint;//掴んだワイヤーポイントのポインタ
 	CPlayer* m_DpPlayer;//プレイヤーのポインタ
 	double m_Radian;//ワイヤーの角度
 	VECTOR2_f m_Toptpoint;//ワイヤーの先端の座標

@@ -106,12 +106,12 @@ bool CWire::Getcatch()
 	}
 }
 
-void CWire::Startcatch(CWirepoint** point)
+void CWire::Startcatch(CWirepoint* point)
 {
 	m_ShotState = ShotSteto::Rock;
 	m_CatchWirepoint = point;
-	m_Toptpoint.x = (*point)->GetCenterPosition().x-size/2;
-	m_Toptpoint.y= (*point)->GetCenterPosition().y-size/2;
+	m_Toptpoint.x = point->GetCenterPosition().x-size/2;
+	m_Toptpoint.y= point->GetCenterPosition().y-size/2;
 }
 
 bool CWire::canShot()

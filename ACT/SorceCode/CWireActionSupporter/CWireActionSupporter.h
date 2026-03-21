@@ -6,11 +6,12 @@ class CWireActionSupporter
 public:
 	CWireActionSupporter();
 	~CWireActionSupporter();
-	void StartWireAction(CPlayer**m_DPlayer, CWire** m_dpWire,CWirepoint** m_dpWirePoint);
+	void StartWireAction(CPlayer*m_DPlayer, CWire* m_DPWire,CWirepoint* m_DPWirePoint);
 	void Update() ;
 private:
-	CPlayer** m_dpPlayer;//プレイヤーのダブルポインタ
-	CWire** m_dpWire;//ワイヤーのポインタ
-	CWirepoint** m_dpWirePoint;//ワイヤーポイントのダブルポインタ
+	double NawSpeed;//-なら左、+なら右
+	CPlayer* m_dpPlayer;//プレイヤーのダブルポインタ
+	CWire* m_dpWire;//ワイヤーのポインタ
+	CWirepoint* m_dpWirePoint;//ワイヤーポイントのダブルポインタ
 };
 
