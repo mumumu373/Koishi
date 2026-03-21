@@ -14,7 +14,7 @@ CStage::CStage()
 	, m_ppData(nullptr)
 {
 	m_Position = { 0,0 };
-	m_Framesplit = { 0,0,800,600 };
+	m_Framesplit = { 0,0,1600,720 };	//画像のサイズを入れる
 }
 
 CStage::~CStage()
@@ -38,13 +38,22 @@ void CStage::Draw(std::unique_ptr<CCamera>& pCamera)
 	//ステージメインの描画
 	VECTOR2_f StagePos = pCamera->CalcToStagePosition();
 
-	//ステージ背景1の描画
-	//カメラは参照せずに動かすようにしたい
-
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_BuckGround1)->TransAlBlend(
+	//ステージ背景2の描画
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_BuckGround2)->AlBlend(
 		0,				//表示位置x座標
 		0,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
+		m_Framesplit.h,			//高さ	<-切り取り幅
+		m_Framesplit.x,			//元画像x座標
+		m_Framesplit.y,			//元画像y座標
+		255);					//透明度
+
+	//ステージ背景1の描画
+	//カメラは参照せずに動かすようにしたい
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_BuckGround1)->TransAlBlend(
+		0,				//表示位置x座標
+		0,				//表示位置y座標
+		1280,			//画像幅
 		m_Framesplit.h,			//高さ	<-切り取り幅
 		m_Framesplit.x,			//元画像x座標
 		m_Framesplit.y,			//元画像y座標
@@ -168,5 +177,5 @@ void CStage::ReleaseData()		//int**　関連
 
 void CStage::Animation()
 {
-	m_Framesplit = { 0,0,WND_W,WND_H };
+	//m_Framesplit = { 0,0,WND_W,WND_H };
 }
