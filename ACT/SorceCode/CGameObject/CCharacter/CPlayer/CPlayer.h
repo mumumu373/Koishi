@@ -43,6 +43,8 @@ public:
 	bool GetWireShot() { return m_WireShot; };
 	void ShotWire() { enActionState = enActionState::WireShot; };
 	void SetPosition(VECTOR2_f pos) { m_Position = pos; };
+	void WireEnd(VECTOR2_f Spead);
+	double GetWireStartSpeed();
 private:
 	void Animation() override;
 public://パブリック
@@ -54,6 +56,7 @@ private:
 	void KyeInput();
 	//プレイヤーの動きの制御
 	void MovePlayer();
+	void MovePlayerWireOutSped();
 	//プレイヤーのジャンプ制御
 	void JumpPlayer();
 private:
@@ -64,4 +67,5 @@ private:
 	int m_JumpRemoveCo;		//ジャンプボタンを押した時間を図る
 	bool m_WireShot;		//ワイヤーを撃つぞ！
 	bool m_WireShotCan;		//ワイヤーを撃てるか
+	VECTOR2_f m_WireOutSped;	//ワイヤーから脱出するスピード
 };

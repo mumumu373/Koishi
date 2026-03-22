@@ -117,7 +117,10 @@ bool CGame::Create()
 
 	//初期設定
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 600, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 100, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 500, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 1500, 100 }));
 
 
 	Nega =std::make_unique<NEGA>(); 
@@ -193,6 +196,7 @@ void CGame::Update()
 	}
 
 	m_upStage->Update();
+
 
 	//ワイヤーとワイヤーポイント
 	Collision();

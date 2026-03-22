@@ -10,6 +10,8 @@ CPlayer::CPlayer()
 	, m_JumpRemove(false)
 	, m_JumpRemoveCo(0)
 	, m_WireShot(false)
+	, m_WireShotCan(false)
+	, m_WireOutSped({ 0,0 })
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -28,6 +30,10 @@ CPlayer::~CPlayer()
 void CPlayer::StartWirePointCatch()
 {
 	enActionState = enActionState::WirePointCatch;
+	
+	m_JumpAcc = 0;
+	m_WireOutSped.y = 0;
+	m_MoveState = enActionState::None;
 }
 
 void CPlayer::StartSetting()
@@ -44,6 +50,7 @@ void CPlayer::StartSetting()
 	m_Speed = { 10,10 };
 
 	m_OldPosition = m_Position;
+
 }
 
 void CPlayer::Update()
@@ -65,6 +72,7 @@ void CPlayer::Update()
 
 
 		KyeInput();
+		MovePlayerWireOutSped();
 	}
 	
 
@@ -77,6 +85,7 @@ void CPlayer::Update()
 		m_JumpRemove = false;
 		m_Jumping = false;
 		m_JumpAcc = 0;
+		m_WireOutSped.y = 0;
 	}
 }
 
@@ -98,6 +107,22 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, m_Delection);					//透明度、角度
+}
+
+void CPlayer::WireEnd(VECTOR2_f Spead)
+{
+	enActionState = enActionState::WireShot;
+	m_WireOutSped = Spead;
+}
+
+double CPlayer::GetWireStartSpeed()
+{
+	double Speed = m_Position.y  - m_OldPosition.y;
+
+	if(Speed>0){
+		return Speed;
+	}
+	return 0;
 }
 
 void CPlayer::Animation()
@@ -156,6 +181,18 @@ void CPlayer::MovePlayer()
 		m_Position.x += m_Speed.x;
 		break;
 	}
+}
+
+void CPlayer::MovePlayerWireOutSped()
+{
+	m_Position.x += m_WireOutSped.x;
+	m_Position.y += m_WireOutSped.y;
+	m_WireOutSped.x *= 0.9;
+	
+	if (m_WireOutSped.x<1&& m_WireOutSped.x-1) {
+		m_WireOutSped.x = 0;
+	}
+
 }
 
 void CPlayer::JumpPlayer()

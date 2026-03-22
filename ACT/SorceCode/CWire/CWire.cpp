@@ -51,6 +51,8 @@ void CWire::Update()
 		int i = GetHowToLong(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
 		if (i < size) {
 			m_ShotState = ShotSteto::no;
+			m_Targetpoint = { 0,0 };
+			m_DpPlayer = nullptr;
 		}
 	}
 }
@@ -62,7 +64,7 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 		int pieces = GetHowToLong(m_DpPlayer->GetCenterPosition(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size);
 		//ワイヤーの先端とプレイヤーの角度を測る
 		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
-		for (int i = 0; i < pieces; i++)
+		for (int i = 0; i < pieces+1; i++)
 		{
 			if (i == 0) {
 				m_Framesplit.x = IMGSize;
