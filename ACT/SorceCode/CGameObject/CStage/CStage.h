@@ -1,14 +1,14 @@
 #pragma once
-#include <vector>  // STL: 動的配列
-#include <string>  // STL: 文字列
-#include <memory>  // unique_ptr用
-#include "CGameObject/CGameObject.h" // ゲームオブジェクトクラス
-#include "Global.h"                  // ウィンドウサイズ等
+#include <vector>  
+#include <string>  
+#include <memory>  
+#include "CGameObject/CGameObject.h"
+#include "Global.h"                 
 
 /***************************************************
 *   ステージクラス
 *   
-*   読み込みと描画を一緒に行うクラス。
+*   マップの読み込みと描画を一緒に行うクラス。
 * 
 *   ステージの描画とマップデータの管理は分けた方がいい。
 ***************************************************/
@@ -21,15 +21,26 @@ public:
     void Update() override;
     void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
-    void LoadData();
 
-    double GetWidth() { return m_Chip.w * m_MapMax.x; }
-    double GetHeight() { return m_Chip.h * m_MapMax.y; }
+/*****************************************************************************************
+* @brief    マップの大きさを取得する関数(縦・横)
+*****************************************************************************************/
+    float GetWidth() { return m_Chip.w * m_MapMax.x; }
+    float GetHeight() { return m_Chip.h * m_MapMax.y; }
 
-    // マップデータ読込
+
+/*****************************************************************************************
+* @brief    マップデータの読込
+* @param    読み込みたいマップデータのファイル名
+*****************************************************************************************/
     bool LoadMap(const std::string& fileName);
 
+
 private:
+
+/*****************************************************************************************
+* @brief    背景のスクロールなどのアニメーション処理を行う関数
+*****************************************************************************************/
     void Animation();
 
 private:
@@ -37,6 +48,6 @@ private:
 
     VECTOR2_f m_MapMax;         // マップデータの縦と横の最大数
 
-    // STLによる2次元配列。メモリ管理はすべてvectorが自動で行います。
+    // ステージ情報
     std::vector<std::vector<int>> m_mapData;
 };
