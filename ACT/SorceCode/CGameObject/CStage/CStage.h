@@ -1,53 +1,42 @@
 #pragma once
-#include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
-#include "Global.h"		//ウィンドウサイズで必要
+#include <vector>  // STL: 動的配列
+#include <string>  // STL: 文字列
+#include <memory>  // unique_ptr用
+#include "CGameObject/CGameObject.h" // ゲームオブジェクトクラス
+#include "Global.h"                  // ウィンドウサイズ等
 
-/**************************************************
-*			ステージクラス
-**/
-class CStage
-	:public CGameObject		//ゲームオブジェクトクラス継承
+/***************************************************
+*   ステージクラス
+*   
+*   読み込みと描画を一緒に行うクラス。
+* 
+*   ステージの描画とマップデータの管理は分けた方がいい。
+***************************************************/
+class CStage : public CGameObject
 {
 public:
-	CStage();
-	~CStage();
+    CStage();
+    ~CStage();
 
-	//動作関数
-	void Update() override;
+    void Update() override;
+    void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
-	//描画関数
-	void Draw(std::unique_ptr<CCamera>& pCamera) override;
+    void LoadData();
 
-	//ステージは複数のImgを持つようにする
-	void SetImage(CImage* pStageMainImg,
-		CImage* pStageBG_1Img,CImage* pStageBG_2Img) 
-	{ 
-		m_pStageMainImg = pStageMainImg;
-		m_pStageBG_1Img = pStageBG_1Img;
-		m_pStageBG_2Img = pStageBG_2Img;
-	}
+    double GetWidth() { return m_Chip.w * m_MapMax.x; }
+    double GetHeight() { return m_Chip.h * m_MapMax.y; }
 
-	//ステージ幅を取得.※データの読み込み完了後のみ取得可能
-	double GetWidth() { return m_Chip.w * m_MapMax.x; }
-	//ステージの高さを取得
-	double GetHeight() { return m_Chip.h * m_MapMax.y; }
-
-	//マップデータ読込
-	bool LoadData(const char* fileName);
-
-	//マップデータ開放
-	void ReleaseData();
+    // マップデータ読込
+    bool LoadMap(const std::string& fileName);
 
 private:
-	void Animation();
+    void Animation();
 
 private:
-	CImage* m_pStageMainImg;	//ステージメイン画像
-	CImage* m_pStageBG_1Img;	//ステージ背景1の画像
-	CImage* m_pStageBG_2Img;	//ステージ背景2の画像
+    CImage::FRAMESPLIT m_Chip;  // マップチップ1つあたりの幅、高さ
 
-	CImage::FRAMESPLIT m_Chip;	//マップチップ画像1つあたりの幅、高さ
+    VECTOR2_f m_MapMax;         // マップデータの縦と横の最大数
 
-	VECTOR2_f m_MapMax;			//マップデータの縦と横の最大数(int型で執り行う)
-	int** m_ppData;				//マップデータ(ポインタのポインタorダブルポインタ)
+    // STLによる2次元配列。メモリ管理はすべてvectorが自動で行います。
+    std::vector<std::vector<int>> m_mapData;
 };

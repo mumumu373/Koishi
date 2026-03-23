@@ -99,7 +99,7 @@ bool CGame::Create()
 	//ステージのインスタンス生成
 	m_upStage = std::make_unique<CStage>();
 	//マップデータの読み込み
-	if (m_upStage->LoadData("Data\\MapData\\Map01.csv") == false)return false;
+	if (m_upStage->LoadMap("Data\\MapData\\Map01.csv") == false)return false;
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
