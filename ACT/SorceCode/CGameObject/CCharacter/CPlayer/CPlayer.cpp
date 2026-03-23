@@ -39,20 +39,30 @@ void CPlayer::StartSetting()
 
 void CPlayer::Update()
 {
+	//過去の自分
+	m_OldPosition = m_Position;
 	//プレイヤーの動きの制御
 	MovePlayer();
 
+	//常にfalseにする
+	GroundStand = false;
+
 	//プレイヤーのジャンプの制御
-	//JumpPlayer();
-	//デバッグ用動作
-	if (GetAsyncKeyState('W') & 0x8000) {
-		m_Position.y -= m_Speed.y;
-	}
-	else if (GetAsyncKeyState('S') & 0x8000) {
-		m_Position.y += m_Speed.y;
-	}
+	JumpPlayer();
+	
 
 	KyeInput();
+
+	//仮置き地面
+	if (m_Position.y > 900 - m_Framesplit.h) {
+		m_Position.y = 900 - m_Framesplit.h;
+
+		GroundStand = true;
+		//地面に着いたらまたジャンプできるように
+		m_JumpRemove = false;
+		m_Jumping = false;
+		m_JumpAcc = 0;
+	}
 }
 
 void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
