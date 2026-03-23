@@ -32,7 +32,7 @@ void CPlayer::StartWirePointCatch()
 	enActionState = enActionState::WirePointCatch;
 	
 	m_JumpAcc = 0;
-	m_WireOutSped.y = 0;
+	m_WireOutSped = { 0,0 };
 	m_MoveState = enActionState::None;
 }
 
@@ -175,10 +175,10 @@ void CPlayer::MovePlayer()
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-		m_Position.x -= m_Speed.x;
+		m_WireOutSped.x -= m_Speed.x*0.3;
 		break;
 	case enMoveState::MoveRight:
-		m_Position.x += m_Speed.x;
+		m_WireOutSped.x += m_Speed.x*0.3;
 		break;
 	}
 }
@@ -189,7 +189,7 @@ void CPlayer::MovePlayerWireOutSped()
 	m_Position.y += m_WireOutSped.y;
 	m_WireOutSped.x *= 0.9;
 	
-	if (m_WireOutSped.x<1&& m_WireOutSped.x-1) {
+	if (m_WireOutSped.x<1&& m_WireOutSped.x>-1) {
 		m_WireOutSped.x = 0;
 	}
 
