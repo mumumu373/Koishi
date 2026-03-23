@@ -46,6 +46,18 @@
     <Filter Include="SorceCode\CMouseInput">
       <UniqueIdentifier>{771ef1a5-d38f-479c-a33f-d8d8bb4339f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SorceCode\CWire">
+      <UniqueIdentifier>{78df9c84-1c3c-4af6-89d2-8971ac68546a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SorceCode\CGameObject\CCharacter\Wirepoint">
+      <UniqueIdentifier>{c0232701-4324-4712-b6ef-0336c883b7b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SorceCode\WireActionSupporter">
+      <UniqueIdentifier>{f745517d-64b4-4006-8255-284c6456db6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SorceCode\遊び">
+      <UniqueIdentifier>{713e145c-fd06-4084-98a5-e19bcef17005}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\Main.cpp">
@@ -97,6 +109,18 @@
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
     <ClCompile Include="SorceCode\CMouseInput\CMouseInput.cpp">
       <Filter>SorceCode\CMouseInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CWire\CWire.cpp">
+      <Filter>SorceCode\CWire</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.cpp">
+      <Filter>SorceCode\CGameObject\CCharacter\Wirepoint</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp">
+      <Filter>SorceCode\WireActionSupporter</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\NEGA\NEGA.cpp">
+      <Filter>SorceCode\遊び</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +176,18 @@
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
     <ClInclude Include="SorceCode\CMouseInput\CMouseInput.h">
       <Filter>SorceCode\CMouseInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CWire\CWire.h">
+      <Filter>SorceCode\CWire</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.h">
+      <Filter>SorceCode\CGameObject\CCharacter\Wirepoint</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h">
+      <Filter>SorceCode\WireActionSupporter</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\NEGA\NEGA.h">
+      <Filter>SorceCode\遊び</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

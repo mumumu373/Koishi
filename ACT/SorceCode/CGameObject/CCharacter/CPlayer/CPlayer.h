@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject/CCharacter/CCharacter.h"
 
+#include "CWire/CWire.h"
 /*****************************************************************************************************
 *		プレイヤークラス
 */
@@ -28,12 +29,22 @@ public:
 public:
 	CPlayer();
 	~CPlayer();
-
+	//ワイヤーポイントを掴む状態にする
+	void StartWirePointCatch();
 	void StartSetting() override;
+
+	int GetStete() { return m_State; }
 
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
-
+	//ワイヤーを撃てるかセット
+	void SetWireShotCan(bool can) { m_WireShotCan = can; };
+	//trueならワイヤーを撃てる
+	bool GetWireShot() { return m_WireShot; };
+	void ShotWire() { enActionState = enActionState::WireShot; };
+	void SetPosition(VECTOR2_f pos) { m_Position = pos; };
+	void WireEnd(VECTOR2_f Spead);
+	double GetWireStartSpeed();
 private:
 	void Animation() override;
 public://パブリック
@@ -45,6 +56,7 @@ private:
 	void KyeInput();
 	//プレイヤーの動きの制御
 	void MovePlayer();
+	void MovePlayerWireOutSped();
 	//プレイヤーのジャンプ制御
 	void JumpPlayer();
 private:
@@ -53,4 +65,7 @@ private:
 	double m_JumpAcc;		//ジャンプ力を加算させる
 	bool m_JumpRemove;		//ジャンプボタンを離したぞ！
 	int m_JumpRemoveCo;		//ジャンプボタンを押した時間を図る
+	bool m_WireShot;		//ワイヤーを撃つぞ！
+	bool m_WireShotCan;		//ワイヤーを撃てるか
+	VECTOR2_f m_WireOutSped;	//ワイヤーから脱出するスピード
 };
