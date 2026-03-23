@@ -1,10 +1,10 @@
 #include "CStage.h"
-#include <fstream>   // ファイル入力ストリーム
-#include <sstream>   // 文字列ストリーム
-#include <crtdbg.h>   // ASSERTマクロ
+#include <fstream> 
+#include <sstream> 
+#include <crtdbg.h>
 
 CStage::CStage()
-    : m_Chip(0, 0, 48, 48) // 1チップ 48x48 想定
+    : m_Chip(0, 0, 48, 48)
     , m_MapMax()
 {
     m_Position = { 0, 0 };
