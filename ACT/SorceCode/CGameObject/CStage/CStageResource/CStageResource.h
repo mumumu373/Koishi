@@ -1,7 +1,7 @@
 #pragma once
 #include "CGameObject/CStage/CStageLoader/CStageLoader.h"
 #include "CGameObject/CStage/CStage.h"	
-#include "CGameObject/CStage/CStageCollisin/CStageCollision.h"	//ステージ当たり判定クラス
+#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 class CStageResource
 {

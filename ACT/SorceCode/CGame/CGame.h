@@ -6,7 +6,7 @@
 #include "CSound/CSoundManager.h"								//サウンドマネージャークラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"		//当たり判定クラス
 #include "CGameObject/CStage/CStage.h"							//ステージクラス
-#include "CGameObject/CStage/CStageCollisin/CStageCollision.h"	//ステージ当たり判定クラス
+#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 #include "CGameObject/CStage/CStageLoader/CStageLoader.h"		//ステージ読み込み定クラス
 #include "CGameObject/CStage/CStageResource/CStageResource.h"	//ステージ読み込み定クラス
 #include "CGame/CEnemyFactory/CEnemyFactory.h"					//エネミーを作るクラス
