@@ -3,6 +3,8 @@
 #include <sstream> 
 #include <crtdbg.h>
 
+#include "CGameObject/CStage/CStageCollisin/CStageCollision.h"	//ステージ当たり判定クラス
+
 CStage::CStage()
     : m_Chip(0, 0, 48, 48)
     , m_MapMax()
@@ -99,6 +101,7 @@ bool CStage::LoadMap(const std::string& fileName)
             }
         }
     }
+
 
     return true;
 }

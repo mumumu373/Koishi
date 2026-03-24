@@ -1,0 +1,1 @@
+#include "CStageResource.h"

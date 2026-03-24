@@ -124,6 +124,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollisin\CStageCollision.cpp" />
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CCharacter.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
@@ -144,6 +147,9 @@
     <ClCompile Include="SorceCode\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollisin\CStageCollision.h" />
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CCharacter.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />

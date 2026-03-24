@@ -1,4 +1,5 @@
 #include "CGame.h"
+
 #include <time.h>	//time関数を使うための宣言
 
 //コンストラクタ(引数なし)
@@ -81,6 +82,8 @@ bool CGame::Create()
 
 	//当たり判定のインスタンス生成
 	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
+	m_upStageCollision = std::make_unique<CStageCollision>();
+
 	//当たり判定はインスタンス生成だけで良い
 
 	//-------------------------動的に作って消したい者達-----------------------------

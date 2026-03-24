@@ -5,6 +5,7 @@
 #include "CCamera/CCamera.h"								//カメラクラス
 #include "CSound/CSoundManager.h"							//サウンドマネージャークラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
+#include "CGameObject/CStage/CStageCollisin/CStageCollision.h"	//ステージ当たり判定クラス
 #include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
 #include "CGameObject/CStage/CStage.h"						//ステージクラス
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
@@ -98,6 +99,7 @@ private:
 	//														-ゲームシステム面のもの-
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
+	std::unique_ptr<CStageCollision>	 m_upStageCollision;		//ステージ当たり判定クラス
 
 	//														-ゲームシーン系-
 	//----------------------ブラックフェード-------------
