@@ -5,6 +5,7 @@
 #include "CGameObject/CGameObject.h"
 #include "Global.h"                 
 
+
 /***************************************************
 *   ステージクラス
 *   
@@ -23,18 +24,14 @@ public:
 
 
 /*****************************************************************************************
-* @brief    マップの大きさを取得する関数(縦・横)
+* @brief    マップの大きさを設定する関数(縦・横)
 *****************************************************************************************/
-    float GetWidth() { return m_Chip.w * m_MapMax.x; }
-    float GetHeight() { return m_Chip.h * m_MapMax.y; }
+    void SetMapMax(float x, float y) { 
+        m_MapMax.x = x;
+        m_MapMax.y = y; 
+    }
 
-
-/*****************************************************************************************
-* @brief    マップデータの読込
-* 
-* @param    fileName : 読み込みたいマップデータのファイル名
-*****************************************************************************************/
-    bool LoadMap(const std::string& fileName);
+    void SetMapData(const std::vector<std::vector<int>>& MapData) { m_mapData = MapData; }
 
 
 private:
