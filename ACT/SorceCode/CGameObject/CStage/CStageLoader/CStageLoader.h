@@ -1,5 +1,42 @@
 #pragma once
+#include "Global.h"
+#include <string>
+#include "CGameObject/CGameObject.h"
+
 class CStageLoader
 {
-};
+public:
+	CStageLoader();
+	~CStageLoader();
 
+/*****************************************************************************************
+* @brief    マップの大きさを取得する関数(縦・横)
+*****************************************************************************************/
+	float GetWidth() { return m_Chip.w * m_MapMax.x; }
+	float GetHeight() { return m_Chip.h * m_MapMax.y; }
+
+/*****************************************************************************************
+* @brief    マップの大きさを取得する関数(縦・横)
+*****************************************************************************************/
+	float GetMapWidth() { return m_MapMax.x; }
+	float GetMapHeight() { return m_MapMax.y; }
+
+/*****************************************************************************************
+* @brief    マップデータの読込
+*
+* @param    fileName : 読み込みたいマップデータのファイル名
+*****************************************************************************************/
+	bool LoadMap(const std::string& fileName);
+
+/*****************************************************************************************
+* @brief    マップ情報を渡す関数
+*****************************************************************************************/
+	const std::vector<std::vector<int>>& GetMapData() const { return m_mapData; }
+
+private:
+
+	CImage::FRAMESPLIT m_Chip;  // マップチップ1つあたりの幅、高さ
+	VECTOR2_f m_MapMax;         // マップデータの縦と横の最大数
+	std::vector<std::vector<int>> m_mapData;
+
+};

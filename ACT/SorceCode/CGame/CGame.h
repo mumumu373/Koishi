@@ -1,15 +1,17 @@
 #pragma once
 #include <Windows.h>
 #include "Global.h"
-#include "CImage/CImageManager.h"							//イメージクラス
-#include "CCamera/CCamera.h"								//カメラクラス
-#include "CSound/CSoundManager.h"							//サウンドマネージャークラス
-#include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
+#include "CImage/CImageManager.h"								//イメージクラス
+#include "CCamera/CCamera.h"									//カメラクラス
+#include "CSound/CSoundManager.h"								//サウンドマネージャークラス
+#include "CGame/CCollisionDetection/CCollisionDetection.h"		//当たり判定クラス
+#include "CGameObject/CStage/CStage.h"							//ステージクラス
 #include "CGameObject/CStage/CStageCollisin/CStageCollision.h"	//ステージ当たり判定クラス
-#include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
-#include "CGameObject/CStage/CStage.h"						//ステージクラス
-#include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
-#include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミーマネージャークラス
+#include "CGameObject/CStage/CStageLoader/CStageLoader.h"		//ステージ読み込み定クラス
+#include "CGameObject/CStage/CStageResource/CStageResource.h"	//ステージ読み込み定クラス
+#include "CGame/CEnemyFactory/CEnemyFactory.h"					//エネミーを作るクラス
+#include "CGameObject/CCharacter/CPlayer/CPlayer.h"				//プレイヤークラス
+#include "CGameObject/CCharacter/CEnemy/CEnemy.h"				//エネミーマネージャークラス
 
 #include "CMouseInput//CMouseInput.h"
 
@@ -99,7 +101,6 @@ private:
 	//														-ゲームシステム面のもの-
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
-	std::unique_ptr<CStageCollision>	 m_upStageCollision;		//ステージ当たり判定クラス
 
 	//														-ゲームシーン系-
 	//----------------------ブラックフェード-------------
@@ -127,7 +128,11 @@ private:
 	//----------------------バレット---------------------
 
 	//----------------------ステージ--------------------
-	std::unique_ptr<CStage> m_upStage;
+	std::unique_ptr<CStage>			 m_upStage;
+	std::unique_ptr<CStageCollision> m_upStageCollision;
+	std::unique_ptr<CStageLoader>	 m_upStageLoader;
+	std::unique_ptr<CStageResource>  m_upStageResource;
+
 
 	//----------------------カメラ-----------------------
 	std::unique_ptr<CCamera> m_upCamera;
