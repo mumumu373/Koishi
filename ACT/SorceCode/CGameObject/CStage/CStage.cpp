@@ -22,21 +22,9 @@ void CStage::Update()
 
 void CStage::Draw(std::unique_ptr<CCamera>& pCamera)
 {
-    // アニメーション処理（切り取り範囲の更新）
-    Animation();
-
-    // カメラ位置から描画座標を計算
+	//背景の描画
     VECTOR2_f StagePos = pCamera->CalcToStagePosition();
-
-    // ステージ背景1の描画
-    CImageManager::SelectImg(CImageManager::enImgList::IMG_BuckGround1)->TransAlBlend(
-        0,              // 表示位置x
-        0,              // 表示位置y
-        m_Framesplit.w, // 画像幅
-        m_Framesplit.h, // 高さ
-        m_Framesplit.x, // 元画像x
-        m_Framesplit.y, // 元画像y
-        255);           // 透明度
+    BackGroundDraw(StagePos);
 
     // チップ描画
     for (int y = 0; y < m_MapMax.y; y++) 
@@ -115,8 +103,28 @@ bool CStage::LoadMap(const std::string& fileName)
     return true;
 }
 
-void CStage::Animation()
+void CStage::BackGroundDraw(VECTOR2_f NowStagePos)
 {
     // 背景の切り取り範囲設定（スクロール等の処理があればここで拡張）
     m_Framesplit = { 0, 0, WND_W, WND_H };
+
+    // ステージ背景1の描画
+    CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
+        0,              // 表示位置x
+        0,              // 表示位置y
+        m_Framesplit.w, // 画像幅
+        m_Framesplit.h, // 高さ
+        m_Framesplit.x, // 元画像x
+        m_Framesplit.y, // 元画像y
+        255);           // 透明度
+
+    // ステージ背景1の描画
+    CImageManager::SelectImg(CImageManager::enImgList::IMG_BackGround)->TransAlBlend(
+        0,              // 表示位置x
+        0,              // 表示位置y
+        m_Framesplit.w, // 画像幅
+        m_Framesplit.h, // 高さ
+        m_Framesplit.x, // 元画像x
+        m_Framesplit.y, // 元画像y
+        255);           // 透明度
 }

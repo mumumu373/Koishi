@@ -19,6 +19,8 @@ public:
 		IMG_Player,			//プレイヤー
 		IMG_Enemy,			//エネミー
 		IMG_Mouse,			//マウス
+		IMG_BackGround,		//背景地面
+		IMG_BackSky,		//背景空
 	};
 public:
 	static CImageManager* GetInstance()

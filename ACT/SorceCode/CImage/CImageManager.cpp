@@ -18,12 +18,14 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 	};
 	ImgList Img_List[]
 	{ 
-		{enImgList::IMG_StageMain,"Data\\MapImage\\StageMain.bmp","MainStage"} ,
-		{enImgList::IMG_BuckGround1,"Data\\MapImage\\BackGround_1.bmp","BackGround_1"} ,
-		{enImgList::IMG_BuckGround2,"Data\\MapImage\\BackGround_1.bmp","BackGround_2"} ,
-		{enImgList::IMG_Player,"Data\\Image\\PlayerKoishiDebug.bmp","Player"} ,
-		{enImgList::IMG_Enemy,"Data\\Image\\Enemy.bmp","Enemy"} ,
-		{enImgList::IMG_Mouse,"Data\\Image\\Mouse.bmp","IMG_Mouse"} ,
+		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMain.bmp"		,"MainStage"} ,
+		{enImgList::IMG_BuckGround1	,"Data\\MapImage\\BackGround_1.bmp"		,"BackGround_1"} ,
+		{enImgList::IMG_BuckGround2	,"Data\\MapImage\\BackGround_1.bmp"		,"BackGround_2"} ,
+		{enImgList::IMG_Player		,"Data\\Image\\PlayerKoishiDebug.bmp"	,"Player"} ,
+		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp"				,"Enemy"} ,
+		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"IMG_Mouse"} ,
+		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
+		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	
