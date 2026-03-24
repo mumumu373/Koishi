@@ -67,8 +67,6 @@ bool CStageLoader::LoadMap(const std::string& fileName)
             }
         }
     }
-
-
     return true;
 }
 

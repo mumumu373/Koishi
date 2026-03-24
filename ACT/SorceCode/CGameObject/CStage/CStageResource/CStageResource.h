@@ -1,7 +1,13 @@
 #pragma once
 #include "CGameObject/CStage/CStageLoader/CStageLoader.h"
 #include "CGameObject/CStage/CStage.h"	
-#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
+#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	
+
+/***************************************************
+*   ステージリソースクラス
+*
+*   マップに必要なデータの受け渡しを行うクラス
+***************************************************/
 
 class CStageResource
 {
