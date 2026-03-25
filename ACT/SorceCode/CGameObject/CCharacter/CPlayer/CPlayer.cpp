@@ -136,6 +136,17 @@ void CPlayer::MovePlayer()
 		m_Position.x += m_Speed.x;
 		break;
 	}
+
+	//----デバックコード----
+	if (GetAsyncKeyState('M'))
+	{
+		m_Position.x += 1;
+	}
+	if (GetAsyncKeyState('N'))
+	{
+		m_Position.x -= 1;
+	}
+
 }
 
 void CPlayer::JumpPlayer()

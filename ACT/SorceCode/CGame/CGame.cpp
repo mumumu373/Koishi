@@ -170,7 +170,12 @@ void CGame::Update()
 
 	//ƒvƒŒƒCƒ„[‚Ì“®ì
 	m_upPlayer->Update();
-	bool test = m_upStageCollision->IsHit(m_upPlayer->GetPosition(),64,64,m_upStageLoader->GetMapData(),48,48);
+
+	constexpr float playerW = 144;
+	constexpr float playerH = 144;
+	constexpr float ChipW = 48;
+	constexpr float ChipH = 48;
+	bool test = m_upStageCollision->IsHit(m_upPlayer->GetPosition(), playerW, playerH,m_upStageLoader->GetMapData(), ChipW, ChipH);
 
 	if (test)
 	{
