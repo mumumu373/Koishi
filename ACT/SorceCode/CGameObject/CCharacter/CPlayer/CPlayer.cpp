@@ -48,8 +48,14 @@ void CPlayer::Update()
 	GroundStand = false;
 
 	//プレイヤーのジャンプの制御
-	JumpPlayer();
-	
+	//JumpPlayer();
+	//デバッグ用動作
+	if (GetAsyncKeyState('W') & 0x8000) {
+		m_Position.y -= m_Speed.y;
+	}
+	else if (GetAsyncKeyState('S') & 0x8000) {
+		m_Position.y += m_Speed.y;
+	}
 
 	KyeInput();
 
