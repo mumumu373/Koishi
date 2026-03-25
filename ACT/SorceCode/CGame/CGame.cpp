@@ -1,6 +1,7 @@
 #include "CGame.h"
 
 #include <time.h>	//time関数を使うための宣言
+#include <iostream>	
 
 //コンストラクタ(引数なし)
 CGame::CGame()
@@ -169,6 +170,16 @@ void CGame::Update()
 
 	//プレイヤーの動作
 	m_upPlayer->Update();
+	bool test = m_upStageCollision->IsHit(m_upPlayer->GetPosition(),64,64,m_upStageLoader->GetMapData(),48,48);
+
+	if (test)
+	{
+		std::cout << "当たってるよ！" << std::endl;
+	}
+	else
+	{
+		std::cout << "当たってないよ！" << std::endl;
+	}
 
 	//エネミーの動作
 	//ある分回す
