@@ -10,17 +10,17 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
 
     for (float x : checkX) {
         for (float y : checkY) {
-            // 1. ピクセル座標をマップの配列番号に変換
+            // ピクセル座標をマップの配列番号に変換
             int mapX = (int)(x / chipW);
             int mapY = (int)(y / chipH);
 
-            // 2. 配列の範囲外チェック（画面外は壁とみなす例）
+            // 配列の範囲外チェック（画面外は壁とみなす例）
             if (mapY < 0 || mapY >= (int)mapData.size() ||
                 mapX < 0 || mapX >= (int)mapData[0].size()) {
                 return true;
             }
 
-            // 3. チップ番号の判定（0:空間, 15:背景、それ以外は壁とする）
+            // チップ番号の判定
             int tipID = mapData[mapY][mapX];
             if (tipID != 0 && tipID != 15) {
                 return true; // どこか1点でも壁に当たれば「ヒット」
