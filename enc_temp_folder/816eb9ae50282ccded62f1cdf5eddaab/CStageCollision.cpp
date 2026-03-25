@@ -4,7 +4,7 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     const std::vector<std::vector<int>>& mapData,
     float chipW, float chipH)
 {
-    // チェックする座標のリストを作成
+    // チェックする座標のリストを作成（左端、中央、右端 × 上端、中央、下端）
     float checkX[] = { pos.x, pos.x + w / 3.0f,pos.x + w / 1.5f, pos.x + w - 1.0f };
     float checkY[] = { pos.y, pos.y + h / 3.0f,pos.y + h / 1.5f, pos.y + h - 1.0f };
 
