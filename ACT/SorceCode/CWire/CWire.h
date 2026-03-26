@@ -15,6 +15,7 @@ private:
 	static constexpr int IMGSize = 96;//ワイヤーの最大の長さ
 	static constexpr int GoSpeed = 30;//ワイヤーの速さ
 	static constexpr int ComebackSpeed = 60;//ワイヤーの速さ
+	static constexpr int WireMaxRongr = 600;//ワイヤーの最大の長さ
 public:
 	enum ShotSteto{
 		no,
@@ -42,7 +43,7 @@ public:
 	bool canShot();
 	VECTOR2_f GetTopPoint() { return m_Toptpoint; };
 	void WireEnd() { m_ShotState = ShotSteto::back; }
-
+	int  GetWireMaxRongr() { return WireMaxRongr; }
 private:
 	int m_ShotState = ShotSteto::no;//ワイヤーの状態
 	CWirepoint* m_CatchWirepoint;//掴んだワイヤーポイントのポインタ

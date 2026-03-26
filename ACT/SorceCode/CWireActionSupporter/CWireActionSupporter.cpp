@@ -72,6 +72,9 @@ void CWireActionSupporter::Update()
 				else {
 					if (GetAsyncKeyState('S') & 0x8000) {
 						Long += 5;
+						if (Long> m_dpWire->GetWireMaxRongr()) {
+							Long = m_dpWire->GetWireMaxRongr();
+						}
 					}
 				}
 				if (Long <= 128) { Long = 128; }//0で割るのはエラーになるから

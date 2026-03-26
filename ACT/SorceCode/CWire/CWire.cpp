@@ -35,7 +35,9 @@ void CWire::Update()
 		m_Toptpoint.y += sin(m_Radian) * GoSpeed;
 		
 		//ワイヤーの先端がプレイヤーから目標地点より遠くなったら引き返す
-		if ((GetHowToLong(m_DpPlayer->GetCenterPosition(), m_Targetpoint) < GetHowToLong(m_DpPlayer->GetCenterPosition(), {m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2})) || CMouseInput::GetMouseRight(false, true)) {
+		if ((GetHowToLong(m_DpPlayer->GetCenterPosition(), m_Targetpoint) < GetHowToLong(m_DpPlayer->GetCenterPosition(), {m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2})) 
+			|| CMouseInput::GetMouseRight(false, true)
+			|| WireMaxRongr< GetHowToLong(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 })) {
 		
 			m_ShotState = ShotSteto::back;
 		}
