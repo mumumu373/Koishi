@@ -25,6 +25,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hFont					(nullptr)
 , m_upCollisionDetection	(nullptr)
 , m_upPlayer				(nullptr)
+, m_upBoss					(nullptr)
 , m_upStageLoader			(nullptr)
 , m_upStage					(nullptr)
 , m_upStageCollision		(nullptr)
@@ -173,8 +174,6 @@ void CGame::Update()
 	if (CMouseInput::GetMouseLeft(true, false)) {
 		CMouseInput::ColorChange();
 	}
-
-
 
 	//ƒvƒŒƒCƒ„[‚Ì“®ì
 	m_upPlayer->Update(m_upBullet);

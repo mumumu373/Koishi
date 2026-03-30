@@ -23,6 +23,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_BuckGround2	,"Data\\MapImage\\BackGround_1.bmp"		,"BackGround_2"} ,
 		{enImgList::IMG_Player		,"Data\\Image\\PlayerKoishiDebug.bmp"	,"Player"} ,
 		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp"				,"Enemy"} ,
+		{enImgList::IMG_Nazrin		,"Data\\Image\\Nazrin.bmp"		,"Nazrin"} ,
 		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"IMG_Mouse"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,

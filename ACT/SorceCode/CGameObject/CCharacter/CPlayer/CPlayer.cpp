@@ -37,7 +37,27 @@ void CPlayer::StartSetting()
 	m_OldPosition = m_Position;
 }
 
-void CPlayer::Update()
+void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
+{
+	//アニメーション処理
+	Animation();
+
+	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
+
+	//CImageManagerがシングルトン化しているので、サウンドのように使える
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
+		DispPos.x,				//表示位置x座標
+		DispPos.y,				//表示位置y座標
+		m_Framesplit.w,			//画像幅
+		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+		m_Framesplit.x,			//元画像x座標
+		m_Framesplit.y,			//元画像y座標
+		m_FrameSize.x,			//元画像xサイズ		
+		m_FrameSize.y,			//元画像yサイズ
+		m_Alpha, m_Delection);					//透明度、角度
+}
+
+void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	//過去の自分
 	m_OldPosition = m_Position;
@@ -69,44 +89,6 @@ void CPlayer::Update()
 		m_Jumping = false;
 		m_JumpAcc = 0;
 	}
-}
-
-void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
-{
-	//アニメーション処理
-	Animation();
-
-	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-
-	//CImageManagerがシングルトン化しているので、サウンドのように使える
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
-		DispPos.x,				//表示位置x座標
-		DispPos.y,				//表示位置y座標
-		m_Framesplit.w,			//画像幅
-		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-		m_Framesplit.x,			//元画像x座標
-		m_Framesplit.y,			//元画像y座標
-		m_FrameSize.x,			//元画像xサイズ		
-		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, m_Delection);					//透明度、角度
-}
-
-void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
-{
-	//プレイヤーの動きの制御
-	MovePlayer();
-
-	//プレイヤーのジャンプの制御
-	//JumpPlayer();
-	//デバッグ用動作
-	if (GetAsyncKeyState('W') & 0x8000) {
-		m_Position.y -= m_Speed.y;
-	}
-	else if (GetAsyncKeyState('S') & 0x8000) {
-		m_Position.y += m_Speed.y;
-	}
-
-	KyeInput();
 }
 
 void CPlayer::Animation()

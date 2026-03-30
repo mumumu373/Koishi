@@ -18,10 +18,10 @@ public:
 		IMG_BuckGround2,	//背景2
 		IMG_Player,			//プレイヤー
 		IMG_Enemy,			//エネミー
+		IMG_Nazrin,			//ナズーリン	1面ボス
 		IMG_Mouse,			//マウス
 		IMG_BackGround,		//背景地面
 		IMG_BackSky,		//背景空
-		IMG_Nazrin,			//ナズーリン	1面ボス
 	};
 public:
 	static CImageManager* GetInstance()
