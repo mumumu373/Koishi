@@ -9,5 +9,6 @@ CCharacter::CCharacter()
 	, m_RealFrameSplit(0,0)
 	, m_OldPosition(0, 0)
 	, m_FrameSize(0, 0)
+	, m_AnimetionCo(0)
 {
 }

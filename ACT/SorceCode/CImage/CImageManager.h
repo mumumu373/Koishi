@@ -21,6 +21,7 @@ public:
 		IMG_Mouse,			//マウス
 		IMG_BackGround,		//背景地面
 		IMG_BackSky,		//背景空
+		IMG_Nazrin,			//ナズーリン	1面ボス
 	};
 public:
 	static CImageManager* GetInstance()

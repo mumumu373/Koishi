@@ -15,26 +15,13 @@ public:
 	{
 		BGM_NoSound,		//無音
 
-		BGM_Title,			//タイトル
-		SE_BattleSelect,	//バトルorCPUバトル選択
-		SE_HowToPlaySelect,	//遊び方選択
+		BGM_Stage1,			//ステージ1、2のステージBGM
 
-		SE_StartFanfare,	//開始演出の音声
-		SE_CountGo,			//Go!
-		SE_Count1,			//カウントダウン1
-		SE_Count2,			//2
-		SE_Count3,			//3
-		SE_BattleStart,		//ゲームスタート合図
+		BGM_Boss1,			//ナズーリンのBGM
+		BGM_Boss2,			//正邪のBGM
 
-		BGM_GameMain,		//対戦中BGM
-		BGM_TimeUp,			//タイムアップBGM
-		SE_Revival,			//復活時
-		SE_PlayerBlowAway,	//バリアが割れてぶっ飛ばされた時
-		SE_TimeUpWarning,	//タイムアップ10秒前
-		SE_TimeUpDamage,	//タイムアップのダメージ
-
-		BGM_Result,			//リザルト
-		SE_WinPlayer,		//勝利SE
+		BGM_Boss5_Intro,	//ボス5のイントロ
+		BGM_Boss5,			//ボス5BGM
 
 		//音が増えたら「ここ」に追加
 		SingleSound_MAX,						//最大数
@@ -44,15 +31,6 @@ public:
 	enum enMultiSoundList
 	{
 		SE_Select,				//カーソル選択
-
-		SE_Shot,			//ショット
-		SE_ContactPlayer,	//プレイヤーに触れた
-		SE_TackleToPlayer,	//タックルでプレイヤーを吹っ飛ばした時
-		SE_WallHit,			//ウォールにぶつかった
-		SE_WallBreak,		//ウォールが割れた
-		SE_Step,			//ステップ
-		SE_Tackle,			//タックル
-		SE_BulletHit,		//弾にヒットしたら
 
 		//音が増えたら「ここ」に追加
 		MultiSound_MAX,		//最大数

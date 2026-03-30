@@ -14,6 +14,20 @@
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"				//エネミーマネージャークラス
 
 #include "CMouseInput//CMouseInput.h"
+#include "CImage/CImageManager.h"							//イメージクラス
+#include "CCamera/CCamera.h"								//カメラクラス
+#include "CSound/CSoundManager.h"							//サウンドマネージャークラス
+#include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
+//----------------------------------------------------------
+#include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
+#include "CGame/CBossFactory/CBossFactory.h"				//ボスを作るクラス
+#include "CGame/CBulletFactory/CBulletFactory.h"			//バレットを作るクラス
+//----------------------------------------------------------この3つはまた別のところで呼び出す
+#include "CGameObject/CStage/CStage.h"						//ステージクラス
+#include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
+#include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミークラス
+#include "CGameObject/CCharacter/CBoss/CBoss.h"				//ボスクラス
+#include "CGameObject/CBullet/CBullet.h"					//バレットクラス
 
 /************************************************************
 *			ゲームクラス
@@ -125,7 +139,11 @@ private:
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく
 
+	//----------------------ボス------------------------
+	std::unique_ptr<CBoss> m_upBoss;
+
 	//----------------------バレット---------------------
+	std::vector<::std::unique_ptr<CBullet>> m_upBullet;	
 
 	//----------------------ステージ--------------------
 	std::unique_ptr<CStage>			 m_upStage;

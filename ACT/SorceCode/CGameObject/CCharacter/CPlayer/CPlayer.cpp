@@ -91,6 +91,24 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Alpha, m_Delection);					//透明度、角度
 }
 
+void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+	//プレイヤーの動きの制御
+	MovePlayer();
+
+	//プレイヤーのジャンプの制御
+	//JumpPlayer();
+	//デバッグ用動作
+	if (GetAsyncKeyState('W') & 0x8000) {
+		m_Position.y -= m_Speed.y;
+	}
+	else if (GetAsyncKeyState('S') & 0x8000) {
+		m_Position.y += m_Speed.y;
+	}
+
+	KyeInput();
+}
+
 void CPlayer::Animation()
 {
 }

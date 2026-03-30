@@ -2,15 +2,17 @@
 
 CKedama::CKedama(int Kinds, VECTOR2_f SetPos)
 {
+	//ステージに配置する
+	m_Position = SetPos;
+
 	//色の種類
 	m_Color = Kinds;
 	//自分は毛玉キャラクターです
 	m_MyCharacter = enMyCharacter::Kedama;
 	//左に進みます
 	m_MoveState = enMoveState::MoveLeft;
-
-	//ステージに配置する
-	m_Position = SetPos;
+	//エネミー陣営です
+	m_MyCamp = enMyCamp::EnemyCamp;
 
 	StartSetting();
 }
@@ -43,13 +45,29 @@ void CKedama::StartSetting()
 	//当たり判定
 	m_RealFrameSplit = { m_Framesplit.w,m_Framesplit.h };
 
-	//エネミー陣営です
-	m_MyCamp = enMyCamp::EnemyCamp;
-
 	m_OldPosition = m_Position;
 }
 
-void CKedama::Update()
+void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
+{
+	//アニメーション処理
+	Animation();
+
+	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Enemy)->TransAlBlendRotation(
+		DispPos.x,				//表示位置x座標
+		DispPos.y,				//表示位置y座標
+		m_Framesplit.w,			//画像幅
+		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+		m_Framesplit.x,			//元画像x座標
+		m_Framesplit.y,			//元画像y座標
+		m_FrameSize.x,			//元画像xサイズ		
+		m_FrameSize.y,			//元画像yサイズ
+		m_Alpha, m_Delection);	//透明度、角度
+}
+
+void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
@@ -73,25 +91,6 @@ void CKedama::Update()
 		break;
 	}
 
-}
-
-void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
-{
-	//アニメーション処理
-	Animation();
-
-	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Enemy)->TransAlBlendRotation(
-		DispPos.x,				//表示位置x座標
-		DispPos.y,				//表示位置y座標
-		m_Framesplit.w,			//画像幅
-		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-		m_Framesplit.x,			//元画像x座標
-		m_Framesplit.y,			//元画像y座標
-		m_FrameSize.x,			//元画像xサイズ		
-		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, m_Delection);	//透明度、角度
 }
 
 void CKedama::Animation()

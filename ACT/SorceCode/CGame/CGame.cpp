@@ -34,6 +34,9 @@ CGame::CGame(GameWindow* pGameWnd)
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
 	}
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i] = nullptr;
+	}
 }
 
 
@@ -93,13 +96,17 @@ bool CGame::Create()
 	//プレイヤーのインスタンス生成		プレイヤーはゲームが始まった時に作りたい
 	m_upPlayer = std::make_unique<CPlayer>();
 
+	//ボスを作る
+	m_upBoss = CBossFactory::CreateNazrin();
+
 	//エネミーのインスタンス生成
 	//エネミーを作るタイミングで良い
 
 	//エネミーを作っている
-	VECTOR2_f SetEnemy = { 200,200 };
+	VECTOR2_f SetEnemy = { 200,400 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy));
-	
+	SetEnemy.y -= 200;
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy));
 	//----------------------------------------------------------------------------
 
 	//ステージのインスタンス生成
@@ -131,7 +138,6 @@ bool CGame::Create()
 //破棄関数
 void CGame::Destroy()
 {
-
 	//stdの破棄用の関数をまた追加する
 
 	//BITMAPの解放.--------------------------------------------------重要---------------------------
@@ -160,6 +166,8 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
+
 	//仮置き
 	CMouseInput::Update();
 	if (CMouseInput::GetMouseLeft(true, false)) {
@@ -169,7 +177,7 @@ void CGame::Update()
 
 
 	//プレイヤーの動作
-	m_upPlayer->Update();
+	m_upPlayer->Update(m_upBullet);
 
 	constexpr float playerW = 144;
 	constexpr float playerH = 144;
@@ -189,7 +197,17 @@ void CGame::Update()
 	//エネミーの動作
 	//ある分回す
 	for (int i = 0; i < m_upEnemy.size(); i++) {
-		m_upEnemy[i]->Update();
+		m_upEnemy[i]->Update(m_upBullet);
+	}
+
+	//ボスの動作
+	if (m_upBoss != nullptr) {
+		m_upBoss->Update(m_upBullet);
+	}
+
+	//バレットの動作
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i]->Update();
 	}
 
 	//プレイヤーとエネミーの当たり判定処理
@@ -218,6 +236,16 @@ void CGame::Draw()
 	//エネミー描画
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Draw(m_upCamera);
+	}
+
+	//ボスの描画
+	if (m_upBoss != nullptr) {
+		m_upBoss->Draw(m_upCamera);
+	}
+
+	//バレットの描画
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i]->Draw(m_upCamera);
 	}
 
 	//仮置き
