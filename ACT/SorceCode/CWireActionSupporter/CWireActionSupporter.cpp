@@ -62,7 +62,7 @@ void CWireActionSupporter::Update()
 			{
 
 				pos[1] = pos[0];
-					pos[0] = m_dpPlayer->GetCenterPosition();
+				pos[0] = m_dpPlayer->GetCenterPosition();
 
 				double Long = GetHowToLong(m_dpPlayer->GetCenterPosition(), m_dpWirePoint->GetCenterPosition());
 
@@ -139,8 +139,12 @@ void CWireActionSupporter::WireActionEnd()
 {
 	int janpPware = 10;
 		WireActioning = false;
-		double Radian = GetDelectionVect( pos[1], pos[0]);
+	
+		double Radian = GetDelectionVect( pos[0], pos[1]);//1つ前の自分の位置と今の自分の位置から角度を出す
 		m_dpWire->WireEnd();
+		if (NawSpeed<0) {
+			NawSpeed = -NawSpeed;
+		}
 		m_dpPlayer->WireEnd({ cos(Radian) * NawSpeed ,sin(Radian) * NawSpeed - janpPware });
 		m_dpPlayer = nullptr;
 		m_dpWire = nullptr;

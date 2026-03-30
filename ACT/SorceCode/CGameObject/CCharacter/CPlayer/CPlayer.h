@@ -11,11 +11,15 @@ class CPlayer
 public:
 	//最大落下速度
 	static constexpr double MAX_FALLING_SPEAD = 25;
+	static constexpr double JUMP_POWER = 12;
+	static constexpr int DashcountMAX = 30;
 public:
 	//アクション状態
 	enum enActionState
 	{
 		None,			//何の状態でもない
+		Avoidance,		//回避
+		Guard,			//ガード
 		Attack,			//攻撃
 		Damage,			//ダメージ
 		WireShot,		//ワイヤー発射
@@ -56,9 +60,12 @@ private:
 	void KyeInput();
 	//プレイヤーの動きの制御
 	void MovePlayer();
-	void MovePlayerWireOutSped();
+	void MovePlayerJump();
+	void MovePlayerGround();
 	//プレイヤーのジャンプ制御
 	void JumpPlayer();
+
+	void Dash();
 private:
 	bool m_Jumping;			//ジャンプしてます！
 	const double m_JumpPower;		//ジャンプ力
@@ -67,5 +74,11 @@ private:
 	int m_JumpRemoveCo;		//ジャンプボタンを押した時間を図る
 	bool m_WireShot;		//ワイヤーを撃つぞ！
 	bool m_WireShotCan;		//ワイヤーを撃てるか
-	VECTOR2_f m_WireOutSped;	//ワイヤーから脱出するスピード
+	VECTOR2_f m_Acceleration;	//ワイヤーから脱出するスピード(プレイヤーの加速度)
+	bool m_leftkey[2];	//左キーの入力を記録する配列
+	bool m_rightkey[2];	//右キーの入力を記録する配列
+	int m_Ldashcount;	
+	int m_Rdashcount;
+	bool m_Ldash;		//左ダッシュ中
+	bool m_Rdash;		//右ダッシュ中
 };

@@ -5,13 +5,13 @@
 
 CPlayer::CPlayer()
 	: m_Jumping(false)
-	, m_JumpPower(12.0)
+	, m_JumpPower(JUMP_POWER)
 	, m_JumpAcc(0)
 	, m_JumpRemove(false)
 	, m_JumpRemoveCo(0)
 	, m_WireShot(false)
 	, m_WireShotCan(false)
-	, m_WireOutSped({ 0,0 })
+	, m_Acceleration({ 0,0 })
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -21,6 +21,17 @@ CPlayer::CPlayer()
 	m_MyCamp = enMyCamp::PlayerCamp;
 
 	StartSetting();
+
+	{
+		m_leftkey[0] = false;
+		m_rightkey[0] = false;
+		m_leftkey[1] = false;
+		m_rightkey[1] = false;
+		m_Ldashcount = 0;
+		m_Rdashcount = 0;
+		m_Ldash = false;
+		m_Rdash = false;
+	}
 }
 
 CPlayer::~CPlayer()
@@ -32,7 +43,7 @@ void CPlayer::StartWirePointCatch()
 	enActionState = enActionState::WirePointCatch;
 	
 	m_JumpAcc = 0;
-	m_WireOutSped = { 0,0 };
+	m_Acceleration = { 0,0 };
 	m_MoveState = enActionState::None;
 }
 
@@ -60,19 +71,31 @@ void CPlayer::Update()
 
 	//過去の自分
 	m_OldPosition = m_Position;
-	//プレイヤーの動きの制御
-	MovePlayer();
+	
 
 	//常にfalseにする
 	GroundStand = false;
-
+	//ワイヤーポイントを掴んでいないなら
 	if (enActionState !=enActionState::WirePointCatch) {
 		//プレイヤーのジャンプの制御
 		JumpPlayer();
 
 
 		KyeInput();
-		MovePlayerWireOutSped();
+		Dash();
+		if (m_Jumping==false) {
+			m_Acceleration = { 0,0 };
+			//プレイヤーの動きの制御
+			MovePlayer();
+		}
+		if (m_Jumping) {
+			MovePlayerJump();
+		}
+		else {
+			MovePlayerGround();
+		}
+
+		
 	}
 	
 
@@ -85,7 +108,7 @@ void CPlayer::Update()
 		m_JumpRemove = false;
 		m_Jumping = false;
 		m_JumpAcc = 0;
-		m_WireOutSped.y = 0;
+		m_Acceleration.y = 0;
 	}
 }
 
@@ -112,7 +135,9 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 void CPlayer::WireEnd(VECTOR2_f Spead)
 {
 	enActionState = enActionState::WireShot;
-	m_WireOutSped = Spead;
+	m_Acceleration = Spead;
+	m_Jumping = true;
+
 }
 
 double CPlayer::GetWireStartSpeed()
@@ -150,13 +175,38 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 
 void CPlayer::KyeInput()
 {
-	if (GetAsyncKeyState('A') & 0x8000)
+	m_leftkey[1] = m_leftkey[0];
+	m_leftkey[0] = GetAsyncKeyState('A') & 0x8000;
+
+	m_rightkey[1] = m_rightkey[0];
+	m_rightkey[0] = GetAsyncKeyState('D') & 0x8000;
+
+
+	if (m_leftkey[0])
 	{
 		m_MoveState = enMoveState::MoveLeft;
+		if (m_leftkey[1] == false) {
+			if (m_Ldashcount>0) {
+				m_Ldash = true;
+			}
+			else {
+				m_Ldashcount = DashcountMAX;
+				
+			}
+		}
 	}
-	else if (GetAsyncKeyState('D') & 0x8000)
+	else if (m_rightkey[0])
 	{
 		m_MoveState = enMoveState::MoveRight;
+		if (m_rightkey[1] ==false) {
+			if (m_Rdashcount > 0) {
+				m_Rdash = true;
+			}
+			else {
+				m_Rdashcount = DashcountMAX;
+
+			}
+		}
 	}
 	//無操作状態
 	else {
@@ -175,24 +225,42 @@ void CPlayer::MovePlayer()
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-		m_WireOutSped.x -= m_Speed.x*0.3;
+
+		if (m_Ldash == true) {
+			m_Acceleration.x -= m_Speed.x*2;
+		}
+		else {
+			m_Acceleration.x -= m_Speed.x;
+		}
 		break;
 	case enMoveState::MoveRight:
-		m_WireOutSped.x += m_Speed.x*0.3;
+		if (m_Rdash == true) {
+			m_Acceleration.x += m_Speed.x*2;
+		}
+		else {
+			m_Acceleration.x += m_Speed.x;
+		}
+
 		break;
 	}
 }
 
-void CPlayer::MovePlayerWireOutSped()
+void CPlayer::MovePlayerJump()
 {
-	m_Position.x += m_WireOutSped.x;
-	m_Position.y += m_WireOutSped.y;
-	m_WireOutSped.x *= 0.9;
+	m_Position.x += m_Acceleration.x;
+	m_Position.y += m_Acceleration.y;
+	m_Acceleration.x *= 0.999;
 	
-	if (m_WireOutSped.x<1&& m_WireOutSped.x>-1) {
-		m_WireOutSped.x = 0;
+	if (m_Acceleration.x<1&& m_Acceleration.x>-1) {
+		m_Acceleration.x = 0;
 	}
 
+}
+
+void CPlayer::MovePlayerGround()
+{
+	m_Position.x += m_Acceleration.x;
+	m_Position.y += m_Acceleration.y;
 }
 
 void CPlayer::JumpPlayer()
@@ -223,5 +291,30 @@ void CPlayer::JumpPlayer()
 	else {
 		m_JumpAcc -= Gravity;
 		m_Position.y -= m_JumpAcc;
+	}
+}
+
+void CPlayer::Dash()
+{
+	//keyinputの次に動く
+	if (m_Ldashcount > 0) {
+		m_Ldashcount--;
+
+	}
+	if (m_Rdashcount > 0) {
+		m_Rdashcount--;
+
+	}
+	switch (m_MoveState) {
+	case enMoveState::Wait:
+		break;
+	case enMoveState::MoveLeft:
+		m_Rdashcount = 0;
+		m_Rdash = false;
+		break;
+	case enMoveState::MoveRight:
+		m_Ldashcount = 0;
+		m_Ldash = false;
+		break;
 	}
 }
