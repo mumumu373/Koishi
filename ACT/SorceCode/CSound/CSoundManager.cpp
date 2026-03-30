@@ -45,14 +45,6 @@ bool CSoundManager::Load(HWND hWnd)
 	MultiSoundList SE_List[] =
 	{
 		{enMultiSoundList::SE_Select,"Data\\Sound\\SE\\SE_Select.mp3", "SE_Select",},
-		{enMultiSoundList::SE_Shot,"Data\\Sound\\SE\\SE_Shot.mp3", "SE_Shot",},
-		{enMultiSoundList::SE_ContactPlayer,"Data\\Sound\\SE\\SE_ContactPlayer.mp3", "SE_ContactPlayer",},
-		{enMultiSoundList::SE_TackleToPlayer,"Data\\Sound\\SE\\SE_TackleToPlayer.mp3", "SE_TackleToPlayer",},
-		{enMultiSoundList::SE_WallHit,"Data\\Sound\\SE\\SE_WallHit.mp3", "SE_WallHit",},
-		{enMultiSoundList::SE_WallBreak,"Data\\Sound\\SE\\SE_WallBreak.mp3", "SE_WallBreak",},
-		{enMultiSoundList::SE_Step,"Data\\Sound\\SE\\SE_Step.mp3", "SE_Step",},
-		{enMultiSoundList::SE_Tackle,"Data\\Sound\\SE\\SE_Tackle.mp3", "SE_Tackle",},
-		{enMultiSoundList::SE_BulletHit,"Data\\Sound\\SE\\SE_BulletHit.mp3", "SE_BulletHit",},
 	};
 
 	//配列の最大要素数を算出(配列全体のサイズ/配列１つ分のサイズ)
@@ -81,26 +73,10 @@ bool CSoundManager::Load(HWND hWnd)
 	{
 		{enSingleSoundList::BGM_NoSound,"Data\\Sound\\BGM\\BGM_NoSound.mp3", "BGM_NoSound"},
 
-		{enSingleSoundList::BGM_Title,"Data\\Sound\\BGM\\BGM_Title.mp3", "BGM_Title"},
-		{enSingleSoundList::SE_BattleSelect,"Data\\Sound\\SE\\SE_BattleSelect.mp3", "SE_BattleSelect",},
-		{enSingleSoundList::SE_HowToPlaySelect,"Data\\Sound\\SE\\SE_HowToPlaySelect.mp3", "SE_HowToPlaySelect",},
+		{enSingleSoundList::BGM_Stage1,"Data\\Sound\\BGM\\BGM_Stage1.mp3", "BGM_Stage1",},
 
-		{enSingleSoundList::SE_StartFanfare,"Data\\Sound\\SE\\SE_StartFanfare.mp3", "SE_StartFanfare",},
-		{enSingleSoundList::SE_Count3,"Data\\Sound\\SE\\SE_Count3.mp3", "SE_Count3",},
-		{enSingleSoundList::SE_Count2,"Data\\Sound\\SE\\SE_Count2.mp3", "SE_Count2",},
-		{enSingleSoundList::SE_Count1,"Data\\Sound\\SE\\SE_Count1.mp3", "SE_Count1",},
-		{enSingleSoundList::SE_CountGo,"Data\\Sound\\SE\\SE_CountGo.mp3", "SE_CountGo",},
-		{enSingleSoundList::SE_BattleStart,"Data\\Sound\\SE\\SE_BattleStart.mp3", "SE_BattleStart",},
-
-		{enSingleSoundList::BGM_GameMain,"Data\\Sound\\BGM\\BGM_GameMain.mp3", "BGM_GameMain",},
-		{enSingleSoundList::BGM_TimeUp,"Data\\Sound\\BGM\\BGM_TimeUp.mp3", "BGM_TimeUp",},
-		{enSingleSoundList::SE_Revival,"Data\\Sound\\SE\\SE_Revival.mp3", "SE_Revival",},
-		{enSingleSoundList::SE_PlayerBlowAway,"Data\\Sound\\SE\\SE_PlayerBlowAway.mp3", "SE_PlayerBlowAway",},
-		{enSingleSoundList::SE_TimeUpWarning,"Data\\Sound\\SE\\SE_TimeUpWarning.mp3", "SE_TimeUpWarning",},
-		{enSingleSoundList::SE_TimeUpDamage,"Data\\Sound\\SE\\SE_TimeUpDamage.mp3", "SE_TimeUpDamage",},
-
-		{enSingleSoundList::BGM_Result,"Data\\Sound\\BGM\\BGM_Result.mp3", "BGM_Result",},
-		{enSingleSoundList::SE_WinPlayer,"Data\\Sound\\SE\\SE_WinPlayer.mp3", "SE_WinPlayer",},
+		{enSingleSoundList::BGM_Boss1,"Data\\Sound\\BGM\\BGM_Boss1.mp3", "BGM_Boss1",},
+		{enSingleSoundList::BGM_Boss2,"Data\\Sound\\BGM\\BGM_Boss2.mp3", "BGM_Boss2",},
 
 		{enSingleSoundList::BGM_Boss5_Intro,"Data\\Sound\\BGM\\BGM_Boss5_Intro.mp3", "BGM_Boss5_Intro",},
 		{enSingleSoundList::BGM_Boss5,"Data\\Sound\\BGM\\BGM_Boss5.mp3", "BGM_Boss5",},

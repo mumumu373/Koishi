@@ -16,7 +16,7 @@ public:
 	~CKedama();
 
 	void StartSetting() override;
-	void Update() override;
+	void Update() override {};
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;

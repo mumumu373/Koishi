@@ -98,9 +98,10 @@ bool CGame::Create()
 	//エネミーを作るタイミングで良い
 
 	//エネミーを作っている
-	VECTOR2_f SetEnemy = { 200,200 };
+	VECTOR2_f SetEnemy = { 200,400 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy));
-	
+	SetEnemy.y -= 200;
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy));
 	//----------------------------------------------------------------------------
 
 	//ステージのインスタンス生成
@@ -152,7 +153,7 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss5);
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
 
 	//プレイヤーの動作
 	m_upPlayer->Update(m_upBullet);

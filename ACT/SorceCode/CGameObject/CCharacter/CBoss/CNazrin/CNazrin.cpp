@@ -58,6 +58,7 @@ void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 
 void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
+	//ƒoƒŒƒbƒg‚ğŒ‚‚¿‚¾‚·“®ì
 	if (m_BulletShot == false) {
 		m_BulletShot = true;
 		m_BulletShotCo = 0;

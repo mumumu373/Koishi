@@ -15,6 +15,7 @@ public:
 	virtual void Update() override {};
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {};
 
+	//‚±‚Á‚¿‚Ì‚Ù‚¤‚ðŽg‚¤
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
 
 protected:
