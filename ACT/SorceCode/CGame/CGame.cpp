@@ -169,6 +169,7 @@ void CGame::Update()
 	//プレイヤーの動作
 	//ワイヤーを撃てるかセット
 	m_upPlayer->SetWireShotCan(m_pWire->canShot());
+	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
 
 	//エネミーの動作

@@ -31,6 +31,15 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
 	void StatoWire(VECTOR2_f pos);
 	bool Getcatch();
+	bool GetplayWire() {
+		if (m_ShotState == ShotSteto::forward) {
+			return true;
+		}
+		if (m_ShotState == ShotSteto::back) {
+			return true;
+		}
+		return false;
+	}
 	void Startcatch(CWirepoint* point);
 	int GetSize() { return size; }
 	bool GetRock() { 

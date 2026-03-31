@@ -10,15 +10,20 @@ class CPlayer
 {
 public:
 	//最大落下速度
-	static constexpr double MAX_FALLING_SPEAD = 25;
-	static constexpr double JUMP_POWER = 12;
-	static constexpr int DashcountMAX = 30;
+	static constexpr double MAX_FALLING_SPEAD = 25;//落下速度の最大値
+	static constexpr double JUMP_POWER = 12;//ジャンプ力
+	static constexpr int DashcountMAX = 30;//ダッシュの受付時間
+	static constexpr int TurnAroundSpeed = 10;//向きを変える速さ
+	static constexpr double AvoidanceDistance = 144;//回避の距離
+	static constexpr int AvoidanceTime = 6;//回避にかかる時間
+	static constexpr int AvoidancecoolTime = 90;//回避のクールタイム
 public:
 	//アクション状態
 	enum enActionState
 	{
 		None,			//何の状態でもない
 		Avoidance,		//回避
+		AirAvoidance,	//空中回避
 		Guard,			//ガード
 		Attack,			//攻撃
 		Damage,			//ダメージ
@@ -30,6 +35,7 @@ public:
 	int enActionState = enActionState::None;
 public:
 	bool GroundStand = false;		//地面に立っています
+	bool OldGroundStand = false;		//前フレームの地面に立っている状態
 public:
 	CPlayer();
 	~CPlayer();
@@ -43,6 +49,14 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 	//ワイヤーを撃てるかセット
 	void SetWireShotCan(bool can) { m_WireShotCan = can; };
+	void WireShotStato(bool tyu) {
+		if (tyu) {
+			enActionState = enActionState::WireShot;
+		}
+		else if (enActionState == enActionState::WireShot) {
+			enActionState = enActionState::None;
+		};
+	}
 	//trueならワイヤーを撃てる
 	bool GetWireShot() { return m_WireShot; };
 	void ShotWire() { enActionState = enActionState::WireShot; };
@@ -56,8 +70,9 @@ public://パブリック
 	void EnemyHit(int Enemy, int Color);
 
 private:
-
+	void AvoidanceEnd();
 	void KyeInput();
+	void AirKeyInput();
 	//プレイヤーの動きの制御
 	void MovePlayer();
 	void MovePlayerJump();
@@ -67,6 +82,8 @@ private:
 
 	void Dash();
 private:
+	void AirAvoidanceVECTSet();
+
 	bool m_Jumping;			//ジャンプしてます！
 	const double m_JumpPower;		//ジャンプ力
 	double m_JumpAcc;		//ジャンプ力を加算させる
@@ -81,4 +98,7 @@ private:
 	int m_Rdashcount;
 	bool m_Ldash;		//左ダッシュ中
 	bool m_Rdash;		//右ダッシュ中
+	int AvoidanceCount;	//回避にかかる時間を図る
+	int AvoidanceCoolCount;//回避のクールタイムを図る
+	VECTOR2_f AirAvoidanceVECT;	//空中回避のベクトル
 };
