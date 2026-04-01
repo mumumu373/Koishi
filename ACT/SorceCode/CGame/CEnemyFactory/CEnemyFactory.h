@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject/CCharacter/CEnemy/CKedama/CKedama.h"
 #include "CGameObject/CCharacter/CEnemy/CFairy/CFairy.h"
+#include "CGameObject/CCharacter/CEnemy/CYinYangBall/CYinYangBall.h"
 
 /***********************************************************************
 *	エネミーを作り出すクラス
@@ -28,6 +29,12 @@ public:
 	static inline std::unique_ptr<CEnemy> CreateFairy(int FairyColor, VECTOR2_f SetPos)
 	{
 		return std::make_unique<CFairy>(FairyColor, SetPos);
+	}
+
+	//陰陽玉クラスを作成する関数
+	static inline std::unique_ptr<CEnemy> CreateYinYangBall(int YinYangColor, VECTOR2_f SetPos)
+	{
+		return std::make_unique<CYinYangBall>(YinYangColor, SetPos);
 	}
 private:
 

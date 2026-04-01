@@ -63,7 +63,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		m_BulletShot = true;
 		m_BulletShotCo = 0;
 		//Žü‚è‚ð‚Ü‚í‚é’e‚ð¶¬
-		upBullet.push_back(CBulletFactory::CreateRotateBullet(m_MyCamp, GetCenterPosition(), 3, 3, 100, 200));
+		upBullet.push_back(CBulletFactory::CreateRotateBullet(m_MyCamp, GetCenterPosition(), 1, 1, 100, 100, 180));
 	}
 	else if (m_BulletShotCo >= 60) {
 		m_BulletShot = false;

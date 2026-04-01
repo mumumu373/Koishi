@@ -7,8 +7,8 @@ CFairy::CFairy(int Kinds, VECTOR2_f SetPos)
 
 	//色の種類
 	m_Color = Kinds;
-	//自分は毛玉キャラクターです
-	m_MyCharacter = enMyCharacter::Kedama;
+	//自分は妖精キャラクターです
+	m_MyCharacter = enMyCharacter::Fairy;
 	//左に進みます
 	m_MoveState = enMoveState::MoveLeft;
 	//エネミー陣営です
@@ -27,7 +27,7 @@ void CFairy::StartSetting()
 
 	switch (m_Color) {
 	case enColor::NoColor:
-		m_Framesplit = { 32,0,80,80 };
+		m_Framesplit = { 0,32,80,80 };
 		m_Speed = { 0,0 };
 		break;
 	case enColor::Red:
@@ -35,7 +35,7 @@ void CFairy::StartSetting()
 		m_Speed = { 1,0 };
 		break;
 	case enColor::Blue:
-		m_Framesplit = { 32,0,200,200 };
+		m_Framesplit = { 0,32,200,200 };
 		m_Speed = { 0,0 };
 		break;
 	}

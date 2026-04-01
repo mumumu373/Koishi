@@ -99,6 +99,30 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 			break;
 		}
 		break;
+		//-------------------------ódê∏-------------------------
+	case enMyCharacter::Fairy:
+		switch (Color) {
+		case enColor::NoColor:
+		case enColor::Red:
+		case enColor::Yellow:
+		case enColor::Green:
+		case enColor::Blue:
+			m_Position = { 0,0 };
+			break;
+		}
+		break;
+		//-------------------------âAózã -------------------------
+	case enMyCharacter::YinYangBall:
+		switch (Color) {
+		case enColor::NoColor:
+		case enColor::Red:
+		case enColor::Yellow:
+		case enColor::Green:
+		case enColor::Blue:
+			m_Position = { 0,0 };
+			break;
+		}
+		break;
 	}
 }
 

@@ -99,6 +99,8 @@
     <ClCompile Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.cpp" />
     <ClCompile Include="SorceCode\CGame\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -158,5 +160,7 @@
     <ClInclude Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.h" />
     <ClInclude Include="SorceCode\CGame\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.h" />
   </ItemGroup>
 </Project>

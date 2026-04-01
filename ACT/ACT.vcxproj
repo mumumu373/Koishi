@@ -132,6 +132,8 @@
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CCharacter.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.cpp" />
     <ClCompile Include="SorceCode\CGame\CBossFactory\CBossFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp" />
@@ -158,6 +160,8 @@
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CCharacter.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.h" />
     <ClInclude Include="SorceCode\CGame\CBossFactory\CBossFactory.h" />
     <ClInclude Include="SorceCode\CGame\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h" />

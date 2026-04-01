@@ -31,7 +31,7 @@ void CKedama::StartSetting()
 		m_Speed = { 0,0 };
 		break;
 	case enColor::Red:
-		m_Framesplit = { 0,32,100,100 };
+		m_Framesplit = { 32,0,100,100 };
 		m_Speed = { 1,0 };
 		break;
 	case enColor::Blue:

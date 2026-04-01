@@ -19,6 +19,8 @@ public:
 		IMG_Player,			//プレイヤー
 		IMG_Enemy,			//エネミー
 		IMG_Nazrin,			//ナズーリン	1面ボス
+
+		IMG_Bullet,			//全員のバレット
 	};
 public:
 	static CImageManager* GetInstance()

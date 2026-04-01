@@ -24,9 +24,11 @@ public:
 	enum enMyCharacter
 	{
 		Player = 0,	//ƒvƒŒƒCƒ„[
+
 		Kedama,		//–Ñ‹Ê
 		Fairy,		//—d¸
-		//ˆÈ~“G‚Ì–¼‘O
+		YinYangBall,//‰A—z‹Ê
+
 		Nazrin,		//ƒ{ƒX
 	};
 

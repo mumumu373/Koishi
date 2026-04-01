@@ -1,45 +1,45 @@
-#include "CRotateBullet.h"
+#include "CYinYangDeco.h"
 
-CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle)
+CYinYangDeco::CYinYangDeco(VECTOR2_f Pos, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle)
 {
-	//陣営セット
-	m_MyCamp = Camp;
-	
-	//位置をセット
-	m_Position = Pos;
-
-	//速さをセット
-	m_Speed = { X_Speed,Y_Speed };
-	//最大速度を記憶
-	m_MaxSpeed = m_Speed;
-
-	//中心からの位置セット
-	m_Range = { X_Range ,Y_Range };
-	//元の距離セット
-	m_MasterRange = m_Range;
+	//キャラの位置
+	m_NowPosition = Pos;
 
 	m_FrameSize = { 32,32 };
 	m_Framesplit = { 0,0,64,64 };
 
-	//そのキャラの真ん中から出るようにする
-	m_Position.x -= (m_Framesplit.w / 2);
-	m_Position.y -= (m_Framesplit.h / 2);
-	//元のポジションをセットする
-	m_MasterPosition = m_Position;
+	//真ん中から出るようにする
+	m_NowPosition.x -= (m_Framesplit.w / 2);
+	m_NowPosition.y -= (m_Framesplit.h / 2);
+	//キャラの位置を合わせる
+	m_Position = m_NowPosition;
+	m_MasterPosition = m_NowPosition;
+
+	//速さをセット
+	m_Speed = { X_Speed,Y_Speed };
+
+	m_Range = { X_Range / 1.5,Y_Range / 1.5};
 
 	//1.57 = 90度
 	//角度をわかりやすくした後処理
 	StartAngle /= 57.32484;
-
 	m_Angle = { StartAngle,StartAngle };
+
+	m_Alpha = 150;
+	m_Delection = 0;
 }
 
-CRotateBullet::~CRotateBullet()
+CYinYangDeco::~CYinYangDeco()
 {
 }
 
-void CRotateBullet::Update()
+void CYinYangDeco::Update(VECTOR2_f YinYangPos)
 {
+	m_NowPosition = YinYangPos;
+	//真ん中から出るようにする
+	m_NowPosition.x -= (m_Framesplit.w / 2);
+	m_NowPosition.y -= (m_Framesplit.h / 2);
+
 	//まわる速度を入れる	(/100は速度調整用)
 	m_Angle.x += m_Speed.x / 100;
 	m_Angle.y += m_Speed.y / 100;
@@ -48,14 +48,16 @@ void CRotateBullet::Update()
 	m_Position.x = m_MasterPosition.x + m_Range.x * cos(m_Angle.x);
 	m_Position.y = m_MasterPosition.y + m_Range.y * sin(m_Angle.y);
 
-	m_Delection = GetRadian(m_Position) * 180 / M_PI;
+	//動いたときに原点だけ動くようにする
+	m_Position.x -= m_MasterPosition.x - m_NowPosition.x;
+	m_Position.y -= m_MasterPosition.y - m_NowPosition.y;
+
+	//回転するように
+	m_Delection += 3;
 }
 
-void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
+void CYinYangDeco::Draw(std::unique_ptr<CCamera>& pCamera)
 {
-	//アニメーション処理
-	Animation();
-
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
 	//CImageManagerがシングルトン化しているので、サウンドのように使える
@@ -69,12 +71,4 @@ void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, m_Delection);					//透明度、角度
-}
-
-void CRotateBullet::Animation()
-{
-}
-
-void CRotateBullet::CharacterHit()
-{
 }
