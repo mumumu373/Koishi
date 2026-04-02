@@ -21,6 +21,8 @@ public:
 		IMG_Mouse,			//マウス
 		IMG_String,			//ワイヤー	
 		IMG_Wirepoint,		//ワイヤーポイント
+		IMG_BackGround,		//背景
+		IMG_BackSky,			//空
 	};
 public:
 	static CImageManager* GetInstance()
