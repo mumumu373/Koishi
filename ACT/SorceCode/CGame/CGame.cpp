@@ -1,5 +1,7 @@
 #include "CGame.h"
+
 #include <time.h>	//time関数を使うための宣言
+#include <iostream>	
 
 //コンストラクタ(引数なし)
 CGame::CGame()
@@ -13,18 +15,21 @@ CGame::CGame(GameWindow* pGameWnd)
 //↓	Class型の初期化リスト			※順番はCGame.hの順番
 : m_Scene(enScene::Title)
 , m_pGameWnd(pGameWnd)
-, m_hMemDC(nullptr)
-, m_MasterWorkDC(nullptr)
-, m_MasterWorkBmp(nullptr)
-, m_hWorkDC(nullptr)
-, m_hWorkBmp(nullptr)
-, m_hWorkDC2(nullptr)
-, m_hWorkBmp2(nullptr)
-, m_hFont(nullptr)
-, m_upCollisionDetection(nullptr)
-, m_upPlayer(nullptr)
-, m_upStage(nullptr)
-, m_upCamera(nullptr)
+, m_hMemDC					(nullptr)
+, m_MasterWorkDC			(nullptr)
+, m_MasterWorkBmp			(nullptr)
+, m_hWorkDC					(nullptr)
+, m_hWorkBmp				(nullptr)
+, m_hWorkDC2				(nullptr)
+, m_hWorkBmp2				(nullptr)
+, m_hFont					(nullptr)
+, m_upCollisionDetection	(nullptr)
+, m_upPlayer				(nullptr)
+, m_upStageLoader			(nullptr)
+, m_upStage					(nullptr)
+, m_upStageCollision		(nullptr)
+, m_upStageResource			(nullptr)
+, m_upCamera				(nullptr)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -81,6 +86,7 @@ bool CGame::Create()
 
 	//当たり判定のインスタンス生成
 	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
+
 	//当たり判定はインスタンス生成だけで良い
 
 	//-------------------------動的に作って消したい者達-----------------------------
@@ -100,15 +106,18 @@ bool CGame::Create()
 	//----------------------------------------------------------------------------
 
 	//ステージのインスタンス生成
-	m_upStage = std::make_unique<CStage>();
-	//マップデータの読み込み
-	if (m_upStage->LoadData("Data\\MapData\\Map01.csv") == false)return false;
+	m_upStage			= std::make_unique<CStage>();
+	m_upStageCollision	= std::make_unique<CStageCollision>();
+	m_upStageLoader		= std::make_unique<CStageLoader>();
+	m_upStageResource = std::make_unique<CStageResource>(m_upStage, m_upStageLoader, m_upStageCollision);
+
+	m_upStageResource->Create();
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
 		m_upCamera = std::make_unique<CCamera>();
 		//ステージの幅と高さをセットする
-		m_upCamera->SetStageSize(m_upStage->GetWidth(), m_upStage->GetHeight());
+		m_upCamera->SetStageSize(m_upStageLoader->GetWidth(), m_upStageLoader->GetHeight());
 	}
 
 	//エネミーをポリモーで動かそうとすると、ここのセットクラスはいらないかも
@@ -171,6 +180,21 @@ void CGame::Update()
 	m_upPlayer->SetWireShotCan(m_pWire->canShot());
 	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
+
+	constexpr float playerW = 144;
+	constexpr float playerH = 144;
+	constexpr float ChipW = 48;
+	constexpr float ChipH = 48;
+	bool test = m_upStageCollision->IsHit(m_upPlayer->GetPosition(), playerW, playerH,m_upStageLoader->GetMapData(), ChipW, ChipH);
+
+	if (test)
+	{
+		std::cout << "当たってるよ！" << std::endl;
+	}
+	else
+	{
+		std::cout << "当たってないよ！" << std::endl;
+	}
 
 	//エネミーの動作
 	//ある分回す

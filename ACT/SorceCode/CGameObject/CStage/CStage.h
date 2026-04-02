@@ -1,53 +1,51 @@
 #pragma once
-#include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
-#include "Global.h"		//ウィンドウサイズで必要
+#include <vector>  
+#include <string>  
+#include <memory>  
+#include "CGameObject/CGameObject.h"
+#include "Global.h"                 
 
-/**************************************************
-*			ステージクラス
-**/
-class CStage
-	:public CGameObject		//ゲームオブジェクトクラス継承
+
+/***************************************************
+*   ステージクラス
+*   
+*   マップの動作と描画を行うクラス
+***************************************************/
+class CStage : public CGameObject
 {
 public:
-	CStage();
-	~CStage();
+    CStage();
+    ~CStage();
 
-	//動作関数
-	void Update() override;
+    void Update() override;
+    void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
-	//描画関数
-	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
-	//ステージは複数のImgを持つようにする
-	void SetImage(CImage* pStageMainImg,
-		CImage* pStageBG_1Img,CImage* pStageBG_2Img) 
-	{ 
-		m_pStageMainImg = pStageMainImg;
-		m_pStageBG_1Img = pStageBG_1Img;
-		m_pStageBG_2Img = pStageBG_2Img;
-	}
+/*****************************************************************************************
+* @brief    マップの大きさを設定する関数(縦・横)
+*****************************************************************************************/
+    void SetMapMax(float x, float y) { 
+        m_MapMax.x = x;
+        m_MapMax.y = y; 
+    }
 
-	//ステージ幅を取得.※データの読み込み完了後のみ取得可能
-	double GetWidth() { return m_Chip.w * m_MapMax.x; }
-	//ステージの高さを取得
-	double GetHeight() { return m_Chip.h * m_MapMax.y; }
+    void SetMapData(const std::vector<std::vector<int>>& MapData) { m_mapData = MapData; }
 
-	//マップデータ読込
-	bool LoadData(const char* fileName);
-
-	//マップデータ開放
-	void ReleaseData();
 
 private:
-	void Animation();
+
+/*****************************************************************************************
+* @brief    背景のスクロールなどのアニメーション処理を行う関数
+* 
+* @param    CurrentStagePos : 現在のステージ位置座標(スクロールで使用予定)
+*****************************************************************************************/
+	void BackGroundDraw(VECTOR2_f CurrentStagePos);
 
 private:
-	CImage* m_pStageMainImg;	//ステージメイン画像
-	CImage* m_pStageBG_1Img;	//ステージ背景1の画像
-	CImage* m_pStageBG_2Img;	//ステージ背景2の画像
+    CImage::FRAMESPLIT m_Chip;  // マップチップ1つあたりの幅、高さ
 
-	CImage::FRAMESPLIT m_Chip;	//マップチップ画像1つあたりの幅、高さ
+    VECTOR2_f m_MapMax;         // マップデータの縦と横の最大数
 
-	VECTOR2_f m_MapMax;			//マップデータの縦と横の最大数(int型で執り行う)
-	int** m_ppData;				//マップデータ(ポインタのポインタorダブルポインタ)
+    // ステージ情報
+    std::vector<std::vector<int>> m_mapData;
 };
