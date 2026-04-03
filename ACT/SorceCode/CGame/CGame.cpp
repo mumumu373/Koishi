@@ -103,7 +103,7 @@ bool CGame::Create()
 	SetEnemy.y -= 200;
 	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy));
 	SetEnemy.x += 300;
-	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Red, SetEnemy));
+	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 	//----------------------------------------------------------------------------
 
 	//ステージのインスタンス生成

@@ -1,13 +1,13 @@
-#include "CRotateBullet.h"
+#include "CCircularBullet.h"
 
-CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle)
+CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Vector, double StartAngle, int X_Size, int Y_Size)
 {
 	//生存中に
 	m_State = enState::Living;
 
 	//陣営セット
 	m_MyCamp = Camp;
-	
+
 	//位置をセット
 	m_Position = Pos;
 
@@ -15,14 +15,7 @@ CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed,
 	m_Color = Color;
 
 	//速さをセット
-	m_Speed = { X_Speed,Y_Speed };
-	//最大速度を記憶
-	m_MaxSpeed = m_Speed;
-
-	//中心からの位置セット
-	m_Range = { X_Range ,Y_Range };
-	//元の距離セット
-	m_MasterRange = m_Range;
+	m_Speed = { Speed,Speed };
 
 	m_Framesplit = { 0,0,64,64 };
 	switch (m_Color) {
@@ -48,30 +41,22 @@ CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed,
 	//元のポジションをセットする
 	m_MasterPosition = m_Position;
 
-	//1.57 = 90度
-	//角度をわかりやすくした後処理
-	StartAngle /= 57.32484;
-	m_Angle = { StartAngle,StartAngle };
+	//バレットを撃ちだす角度を計算
+	m_Vector.x = cos((Vector + StartAngle) / 180 * M_PI) * Speed;
+	m_Vector.y = sin((Vector + StartAngle) / 180 * M_PI) * Speed;
 }
 
-CRotateBullet::~CRotateBullet()
+CCircularBullet::~CCircularBullet()
 {
 }
 
-void CRotateBullet::Update()
+void CCircularBullet::Update()
 {
-	//まわる速度を入れる	(/100は速度調整用)
-	m_Angle.x += m_Speed.x / 100;
-	m_Angle.y += m_Speed.y / 100;
-
-	//		元の位置からどれだけ離れて回るか
-	m_Position.x = m_MasterPosition.x + m_Range.x * cos(m_Angle.x);
-	m_Position.y = m_MasterPosition.y + m_Range.y * sin(m_Angle.y);
-
-	//m_Delection = GetRadian(m_Position) * 180 / M_PI;
+	m_Position.x += m_Vector.x;
+	m_Position.y += m_Vector.y;
 }
 
-void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
+void CCircularBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	//アニメーション処理
 	Animation();
@@ -91,10 +76,10 @@ void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Alpha, m_Delection);					//透明度、角度
 }
 
-void CRotateBullet::Animation()
+void CCircularBullet::CharacterHit()
 {
 }
 
-void CRotateBullet::CharacterHit()
+void CCircularBullet::Animation()
 {
 }

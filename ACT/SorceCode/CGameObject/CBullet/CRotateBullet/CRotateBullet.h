@@ -9,8 +9,8 @@ class CRotateBullet
 	:public CBullet
 {
 public:
-	//			どの陣営のバレットか	ポジション	X方向の速さ		Y方向の速さ	X方向の中心からの位置	Y方向の中心からの位置	開始角度
-	CRotateBullet(int Camp, VECTOR2_f Pos, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle);
+	//			どの陣営のバレットか	ポジション	属性		X方向の速さ		Y方向の速さ	X方向の中心からの位置	Y方向の中心からの位置	開始角度
+	CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle);
 	~CRotateBullet();
 
 	void Update() override;

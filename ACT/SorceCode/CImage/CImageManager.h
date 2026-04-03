@@ -21,6 +21,7 @@ public:
 		IMG_Nazrin,			//ナズーリン	1面ボス
 
 		IMG_Bullet,			//全員のバレット
+		IMG_Effect,			//エフェクト
 	};
 public:
 	static CImageManager* GetInstance()

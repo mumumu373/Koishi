@@ -14,6 +14,10 @@ CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos)
 	//エネミー陣営です
 	m_MyCamp = enMyCamp::EnemyCamp;
 
+	m_BulletShot = false;
+	m_BulletShotCo = 0;
+	m_ShotBulletAngle = 0;
+
 	StartSetting();
 
 	//装飾クラスを作る
@@ -41,24 +45,40 @@ void CYinYangBall::StartSetting()
 		m_Speed = { 0,0 };
 		//装飾の数
 		m_AmountDeco = 3;
+		//打ち出すバレットの量
+		m_AmountBullet = 5;
+		//打ち出すタイミングを設定
+		m_BulletShotTiming = 60;
 		break;
 	case enColor::Yellow:
 		m_Framesplit = { 64,64,100,100 };
 		m_Speed = { 0,0 };
 
 		m_AmountDeco = 7;
+
+		m_AmountBullet = 4;
+
+		m_BulletShotTiming = 60;
 		break;
 	case enColor::Green:
 		m_Framesplit = { 128,64,100,100 };
 		m_Speed = { 0,0 };
 
 		m_AmountDeco = 5;
+
+		m_AmountBullet = 3;
+
+		m_BulletShotTiming = 60;
 		break;
 	case enColor::Blue:
 		m_Framesplit = { 192,64,200,200 };
 		m_Speed = { 0,0 };
 
 		m_AmountDeco = 4;
+
+		m_AmountBullet = 7;
+
+		m_BulletShotTiming = 10;
 		break;
 	}
 	//元画像サイズ
@@ -99,15 +119,42 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	m_Position.x++;
-	m_Position.y++;
+	//バレットを撃ちだす動作
+	m_BulletShotCo++;
+	if (m_BulletShot == true) {
+		m_BulletShot = false;
+		m_BulletShotCo = 0;
+		for (int i = 0; i < m_AmountBullet; i++) {
+			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 6, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 64));
+		}
+	}
+	if (m_BulletShotCo >= m_BulletShotTiming) {
+		m_BulletShot = true;
+	}
 
 	switch (m_Color) {
 	case enColor::NoColor:
 		break;
 	case enColor::Red:
+		//撃つたびに角度を変える
+		if (m_BulletShot == true) {
+			m_ShotBulletAngle += 45;
+		}
+		break;
+	case enColor::Yellow:
+		if (m_BulletShot == true) {
+			m_ShotBulletAngle += 20;
+		}
+		break;
+	case enColor::Green:
+		if (m_BulletShot == true) {
+			m_ShotBulletAngle += 60;
+		}
 		break;
 	case enColor::Blue:
+		if (m_BulletShot == true) {
+			m_ShotBulletAngle += 10;
+		}
 		break;
 	}
 

@@ -26,6 +26,12 @@ private:
 private:
 	int m_AmountDeco;		//装飾の量
 
+	bool m_BulletShot;		//バレットを撃ったか
+	int m_BulletShotCo;		//バレットを撃つタイミングをカウント
+	int m_BulletShotTiming;	//バレットを撃ちだすタイミング	
+	int m_AmountBullet;		//打ち出すバレットの量
+	double m_ShotBulletAngle;	//打ち出すバレットの角度
+
 	//装飾クラスをここで作る(装飾含めての陰陽玉)
 	std::vector<std::unique_ptr<CYinYangDeco>> m_upYinYangDeco;
 };

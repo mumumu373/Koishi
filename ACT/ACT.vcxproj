@@ -126,6 +126,7 @@
   <ItemGroup>
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CBullet.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CCircularBullet\CCircularBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CBullet.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CCircularBullet\CCircularBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
