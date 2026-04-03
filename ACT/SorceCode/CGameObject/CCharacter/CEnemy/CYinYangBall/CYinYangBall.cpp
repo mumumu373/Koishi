@@ -25,7 +25,7 @@ CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos)
 	for (int i = 0; i < m_AmountDeco; i++) {
 		m_upYinYangDeco.push_back(std::make_unique<CYinYangDeco>(
 			//ポジション			スピード				距離					初期角度			
-			GetCenterPosition(), -4, -4, m_Framesplit.w, m_Framesplit.h, i*(360 / m_AmountDeco)));
+			GetCenterPosition(), -18, -18, m_Framesplit.w, m_Framesplit.h, i*(360 / m_AmountDeco)));
 	}
 }
 
