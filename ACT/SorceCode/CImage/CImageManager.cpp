@@ -21,7 +21,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_StageMain,"Data\\MapImage\\Otamesi.bmp","MainStage"} ,
 		{enImgList::IMG_BuckGround1,"Data\\MapImage\\BG1.bmp","BackGround_1"} ,
 		{enImgList::IMG_BuckGround2,"Data\\MapImage\\BG2.bmp","BackGround_2"} ,
-		{enImgList::IMG_Player,"Data\\Image\\PlayerKoishiDebug.bmp","Player"} ,
+		{enImgList::IMG_Koishi,"Data\\Image\\Koishi.bmp","Koishi"} ,
 		{enImgList::IMG_Enemy,"Data\\Image\\Enemy.bmp","Enemy"} ,
 		{enImgList::IMG_Nazrin,"Data\\Image\\Nazrin.bmp","Nazrin"} ,
 		{enImgList::IMG_Bullet,"Data\\Image\\Bullet.bmp","Bullet"} ,

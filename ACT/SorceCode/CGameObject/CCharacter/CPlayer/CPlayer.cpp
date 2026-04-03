@@ -49,7 +49,7 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
 	//CImageManagerがシングルトン化しているので、サウンドのように使える
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
