@@ -1,6 +1,6 @@
 #include "CCircularBullet.h"
 
-CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Vector, double StartAngle, int X_Size, int Y_Size)
+CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Vector, double StartAngle, int Size, int ReleaseTime)
 {
 	//生存中に
 	m_State = enState::Living;
@@ -44,6 +44,10 @@ CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Spee
 	//バレットを撃ちだす角度を計算
 	m_Vector.x = cos((Vector + StartAngle) / 180 * M_PI) * Speed;
 	m_Vector.y = sin((Vector + StartAngle) / 180 * M_PI) * Speed;
+
+	//バレットが消えるまでの時間をセット
+	m_ReleaseTime = ReleaseTime;
+	m_ReleaseTimeCo = 0;
 }
 
 CCircularBullet::~CCircularBullet()
@@ -52,8 +56,23 @@ CCircularBullet::~CCircularBullet()
 
 void CCircularBullet::Update()
 {
-	m_Position.x += m_Vector.x;
-	m_Position.y += m_Vector.y;
+	switch (m_State) {
+	case enState::Living:
+		//ベクトルを入れる
+		m_Position.x += m_Vector.x;
+		m_Position.y += m_Vector.y;
+
+		//決めた時間になったら消す
+		if (m_ReleaseTimeCo >= m_ReleaseTime) {
+			m_State = enState::Dead;
+		}
+		else {
+			m_ReleaseTimeCo++;
+		}
+		break;
+	case enState::Dead:
+		break;
+	}
 }
 
 void CCircularBullet::Draw(std::unique_ptr<CCamera>& pCamera)

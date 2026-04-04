@@ -49,6 +49,8 @@ void CYinYangBall::StartSetting()
 		m_AmountBullet = 5;
 		//打ち出すタイミングを設定
 		m_BulletShotTiming = 60;
+		//バレットの持続時間を設定
+		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Yellow:
 		m_Framesplit = { 64,64,100,100 };
@@ -59,6 +61,8 @@ void CYinYangBall::StartSetting()
 		m_AmountBullet = 4;
 
 		m_BulletShotTiming = 60;
+
+		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Green:
 		m_Framesplit = { 128,64,100,100 };
@@ -69,6 +73,8 @@ void CYinYangBall::StartSetting()
 		m_AmountBullet = 3;
 
 		m_BulletShotTiming = 60;
+
+		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Blue:
 		m_Framesplit = { 192,64,200,200 };
@@ -79,6 +85,8 @@ void CYinYangBall::StartSetting()
 		m_AmountBullet = 7;
 
 		m_BulletShotTiming = 10;
+
+		m_ShotReleaseTime = 60;
 		break;
 	}
 	//元画像サイズ
@@ -125,7 +133,7 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		m_BulletShot = false;
 		m_BulletShotCo = 0;
 		for (int i = 0; i < m_AmountBullet; i++) {
-			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 6, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 64));
+			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 6, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 60));
 		}
 	}
 	if (m_BulletShotCo >= m_BulletShotTiming) {

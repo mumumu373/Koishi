@@ -31,6 +31,7 @@ private:
 	int m_BulletShotTiming;	//バレットを撃ちだすタイミング	
 	int m_AmountBullet;		//打ち出すバレットの量
 	double m_ShotBulletAngle;	//打ち出すバレットの角度
+	int m_ShotReleaseTime;	//バレットの持続時間
 
 	//装飾クラスをここで作る(装飾含めての陰陽玉)
 	std::vector<std::unique_ptr<CYinYangDeco>> m_upYinYangDeco;

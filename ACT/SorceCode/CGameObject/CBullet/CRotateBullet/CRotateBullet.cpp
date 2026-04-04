@@ -1,6 +1,6 @@
 #include "CRotateBullet.h"
 
-CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle)
+CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime)
 {
 	//生存中に
 	m_State = enState::Living;
@@ -15,7 +15,7 @@ CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed,
 	m_Color = Color;
 
 	//速さをセット
-	m_Speed = { X_Speed,Y_Speed };
+	m_Speed = { Speed,Speed };
 	//最大速度を記憶
 	m_MaxSpeed = m_Speed;
 
@@ -51,7 +51,12 @@ CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed,
 	//1.57 = 90度
 	//角度をわかりやすくした後処理
 	StartAngle /= 57.32484;
+	//初期角度を決める
 	m_Angle = { StartAngle,StartAngle };
+
+	//バレットが消えるまでの時間をセット
+	m_ReleaseTime = ReleaseTime;
+	m_ReleaseTimeCo = 0;
 }
 
 CRotateBullet::~CRotateBullet()
@@ -60,13 +65,27 @@ CRotateBullet::~CRotateBullet()
 
 void CRotateBullet::Update()
 {
-	//まわる速度を入れる	(/100は速度調整用)
-	m_Angle.x += m_Speed.x / 100;
-	m_Angle.y += m_Speed.y / 100;
+	switch (m_State) {
+	case enState::Living:
+		//まわる速度を入れる	(/100は速度調整用)
+		m_Angle.x += m_Speed.x / 100;
+		m_Angle.y += m_Speed.y / 100;
 
-	//		元の位置からどれだけ離れて回るか
-	m_Position.x = m_MasterPosition.x + m_Range.x * cos(m_Angle.x);
-	m_Position.y = m_MasterPosition.y + m_Range.y * sin(m_Angle.y);
+		//		元の位置からどれだけ離れて回るか
+		m_Position.x = m_MasterPosition.x + m_Range.x * cos(m_Angle.x);
+		m_Position.y = m_MasterPosition.y + m_Range.y * sin(m_Angle.y);
+
+		//決めた時間になったら消す
+		if (m_ReleaseTimeCo >= m_ReleaseTime) {
+			m_State = enState::Dead;
+		}
+		else {
+			m_ReleaseTimeCo++;
+		}
+		break;
+	case enState::Dead:
+		break;
+	}
 
 	//m_Delection = GetRadian(m_Position) * 180 / M_PI;
 }

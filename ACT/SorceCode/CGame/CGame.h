@@ -87,6 +87,10 @@ private:
 	//インスタンスを破棄する関数
 	void DeleteInstance();
 
+	//バレットを削除する関数
+	void DeleteBullet();
+
+private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 
 	HDC m_hMemDC;  //メモリデバイスコンテキスト.

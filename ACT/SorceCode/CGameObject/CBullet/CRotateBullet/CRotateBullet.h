@@ -9,8 +9,8 @@ class CRotateBullet
 	:public CBullet
 {
 public:
-	//			どの陣営のバレットか	ポジション	属性		X方向の速さ		Y方向の速さ	X方向の中心からの位置	Y方向の中心からの位置	開始角度
-	CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double X_Speed, double Y_Speed, double X_Range, double Y_Range, double StartAngle);
+	//			どの陣営のバレットか	ポジション	属性			速さ		X方向の中心からの位置	Y方向の中心からの位置	開始角度		サイズ		消える時間
+	CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime);
 	~CRotateBullet();
 
 	void Update() override;
@@ -27,4 +27,7 @@ private:
 	VECTOR2_f m_Angle;		//まわる角度
 	VECTOR2_f m_Range;		//キャラからの距離(半径で)
 	VECTOR2_f m_MasterRange;//元のキャラからの位置
+
+	int m_ReleaseTime;		//バレットが消えるまでの時間
+	int m_ReleaseTimeCo;	//バレットが消えるまでの時間をカウントする
 };

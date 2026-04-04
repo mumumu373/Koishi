@@ -181,6 +181,9 @@ void CGame::Update()
 
 	m_upStage->Update();
 
+	//バレットを消す処理を行う
+	DeleteBullet();
+
 	//プレイヤーにカメラが付くようにする
 	m_upCamera->SetPosition(m_upPlayer->GetCenterPosition());
 	m_upCamera->Update();
@@ -220,4 +223,25 @@ void CGame::SetClass()
 
 void CGame::DeleteInstance()
 {
+}
+
+void CGame::DeleteBullet()
+{
+	//バレットのインスタンスを消す
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		//バレットが死んだら
+		if (m_upBullet[i]->m_State == CBullet::enState::Dead) {
+			//erase は、ここから後ろの物はすべて消しますというものとなる	引数に remove_if があるということは？
+			m_upBullet.erase(
+				//remove_ifだけでは削除はしない	begin と end はそれぞれ、先頭、末尾を見てください。というものになる
+				std::remove_if(m_upBullet.begin(), m_upBullet.end(),
+					//[]->ラムダ式を開始します ()
+					[](const std::unique_ptr<CBullet>& Bullet) {
+						//この場合の条件は、バレットがデッド状態なら末尾に追いやる
+						return Bullet->m_State == CBullet::enState::Dead;
+					}),
+				m_upBullet.end()
+			);
+		}
+	}
 }
