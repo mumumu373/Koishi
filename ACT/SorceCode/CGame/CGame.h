@@ -16,6 +16,8 @@
 #include "CGameObject/CCharacter/CBoss/CBoss.h"				//ボスクラス
 #include "CGameObject/CBullet/CBullet.h"					//バレットクラス
 
+#include "CEnemySet/CEnemySet.h"
+
 /************************************************************
 *			ゲームクラス
 */

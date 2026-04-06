@@ -106,6 +106,8 @@ bool CGame::Create()
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 	//----------------------------------------------------------------------------
 
+	m_upEnemy.push_back(CEnemySet::otamesi());
+
 	//ステージのインスタンス生成
 	m_upStage = std::make_unique<CStage>();
 	//マップデータの読み込み

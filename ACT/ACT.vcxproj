@@ -140,6 +140,7 @@
     <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.cpp" />
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
+    <ClCompile Include="SorceCode\CGame\CEnemySet\CEnemySet.cpp" />
     <ClCompile Include="SorceCode\CGame\CGame.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CGameObject.cpp" />
     <ClCompile Include="SorceCode\CImage\CImage.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.h" />
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
+    <ClInclude Include="SorceCode\CGame\CEnemySet\CEnemySet.h" />
     <ClInclude Include="SorceCode\CGame\CGame.h" />
     <ClInclude Include="SorceCode\CGameObject\CGameObject.h" />
     <ClInclude Include="SorceCode\CImage\CImage.h" />
