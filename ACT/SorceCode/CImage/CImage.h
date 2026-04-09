@@ -11,6 +11,13 @@
 class CImage
 {
 public:
+
+	struct Vct3
+	{
+		int x;
+		int y;
+		int z;
+	};
 	//コマ割り構造体
 	struct FRAMESPLIT
 	{
@@ -60,16 +67,25 @@ public:
 	//画像を透過＋半透明＋拡大できる描画関数		Bigerが画像を大きくする
 	void TransAlBlendExpansion(int xDest, int yDest, int xBiger, int yBiger, int wDest, int hDest,
 		int xSrc, int ySrc, int Alpha);
+	//画像を透過＋半透明＋回転できる描画関数
+	void TransAlBlendRotation3(int xDest, int yDest, int wDest, int hDest,
+		int xSrc, int ySrc, int wSrc, int hSrc, int Alpha, float Delection_X, float Delection_Y, float Delection_Z);
+
 
 	//カメラ用の描画関数		(カメラのみ使うように)
 	void TransAlBlendCamera(int xDest, int yDest, int wDest, int hDest,
 		int xSrc, int ySrc, int wSrc, int hSrc, int xBiger, int yBiger, int Alpha, float Delection);
 
 private:
+
+
 	//=delete [削除定義]　と呼ばれる機能
 	//指定された場合、その関数は呼び出せなくなる
 	CImage() = delete;		//デフォルトコンストラクタ削除(使用禁止)
 private:
+
+	Vct3 MakeRotation(Vct3 pos, float Delection_X, float Delection_Y, float Delection_Z);
+
 	HBITMAP m_hBmp;		//ビットマップ
 
 	HDC			 m_hScreenDC;		//スクリーンDC(ディスプレイ)

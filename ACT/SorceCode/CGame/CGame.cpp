@@ -93,6 +93,9 @@ bool CGame::Create()
 	//プレイヤーのインスタンス生成		プレイヤーはゲームが始まった時に作りたい
 	m_upPlayer = std::make_unique<CPlayer>();
 
+	m_pWire = std::make_unique<CWire>();
+
+
 	//エネミーのインスタンス生成
 	//エネミーを作るタイミングで良い
 
@@ -122,9 +125,15 @@ bool CGame::Create()
 
 
 	//初期設定
-	CMouseInput::InitialSettings(m_pGameWnd->hWnd);
+	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 100, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 500, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 400 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 1500, 100 }));
 
 
+	Nega =std::make_unique<NEGA>(); 
+	m_upWireActionSupporter = std::make_unique<CWireActionSupporter>();
 	return true;
 }
 
@@ -162,13 +171,14 @@ void CGame::Update()
 {
 	//仮置き
 	CMouseInput::Update();
-	if (CMouseInput::GetMouseLeft(true, false)) {
-		CMouseInput::ColorChange();
-	}
 
 
+	m_pWire->Update();
 
 	//プレイヤーの動作
+	//ワイヤーを撃てるかセット
+	m_upPlayer->SetWireShotCan(m_pWire->canShot());
+	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
 
 	constexpr float playerW = 144;
@@ -192,14 +202,39 @@ void CGame::Update()
 		m_upEnemy[i]->Update();
 	}
 
+	for (int i = 0; i < m_pCWirepoint.size(); i++) {
+		m_pCWirepoint[i]->Update();
+	}
+	m_upWireActionSupporter->Update();
+
+	//マウスとエネミーの当たり判定処理
+	m_upCollisionDetection->MouseToEnemyCollision(m_upEnemy, m_upCamera);
+
 	//プレイヤーとエネミーの当たり判定処理
 	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
+	//ワイヤーとワイヤーポイントの当たり判定処理
+	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
+
+	if (m_pWire->GetRock()) {
+		m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
+	}
+
 	m_upStage->Update();
+
+
+	//ワイヤーとワイヤーポイント
+	Collision();
+
+
 
 	//プレイヤーにカメラが付くようにする
 	m_upCamera->SetPosition(m_upPlayer->GetCenterPosition());
 	m_upCamera->Update();
+	//ワイヤーを撃つ処理
+	if (m_upPlayer->GetWireShot()) {
+		m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera));
+	}
 
 	//インスタンスを破棄する関数
 	DeleteInstance();
@@ -211,6 +246,8 @@ void CGame::Draw()
 
 	//ステージの描画
 	m_upStage->Draw(m_upCamera);
+	//ワイヤーの描画
+	m_pWire->Draw(m_upCamera);
 
 	//プレイヤーの描画
 	m_upPlayer->Draw(m_upCamera);
@@ -220,8 +257,22 @@ void CGame::Draw()
 		m_upEnemy[i]->Draw(m_upCamera);
 	}
 
+	for (int i = 0; i < m_pCWirepoint.size(); i++) {
+		m_pCWirepoint[i]->Draw(m_upCamera);
+	}
+	if (CMouseInput::GetMouseLeft(true,false)) {
+		//
+		Nega->Draw(m_pGameWnd->hScreenDC);
+	
+	}
+	
 	//仮置き
 	CMouseInput::Draw();
+}
+
+void CGame::Collision()
+{
+	
 }
 
 void CGame::SetClass()

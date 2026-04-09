@@ -17,6 +17,10 @@ public:
 
 	//ステージ上の座標をカメラ上の座標に変換
 	VECTOR2_f CalcToPositionInCamera(const VECTOR2_f* Pos);
+	VECTOR2_f CalcToPositionInCamera(const VECTOR2_f Pos);
+	//カメラ上の座標をステージ上の座標に変換
+	VECTOR2_f CalcToPositionInStage(const VECTOR2_f* Pos);
+
 	//ステージの表示座標を算出
 	VECTOR2_f CalcToStagePosition();
 
