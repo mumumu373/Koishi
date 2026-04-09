@@ -24,6 +24,8 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_Player		,"Data\\Image\\PlayerKoishiDebug.bmp"	,"Player"} ,
 		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp"				,"Enemy"} ,
 		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"IMG_Mouse"} ,
+		{ enImgList::IMG_String		,"Data\\Image\\String.bmp"				,"String"} ,
+		{ enImgList::IMG_Wirepoint	,"Data\\Image\\GroundBack.bmp"			,"WirePoint"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
 	};

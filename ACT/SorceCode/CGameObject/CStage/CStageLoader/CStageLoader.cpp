@@ -25,7 +25,7 @@ bool CStageLoader::LoadMap(const std::string& fileName)
         return false;
     }
 
-    std::string line; // 1行用バッファ
+    std::string line;
 
     //1行目: マップのサイズ（縦,横）を読み込む
     if (std::getline(ifs, line))
