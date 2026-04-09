@@ -3,7 +3,6 @@
 #include <Global.h>
 #include <vector>
 #include <thread>
-#include <threads.h>
 #include <atomic>
 NEGA::NEGA()
 {

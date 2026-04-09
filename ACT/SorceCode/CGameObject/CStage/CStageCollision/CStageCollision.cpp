@@ -4,15 +4,15 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     const std::vector<std::vector<int>>& mapData,
     float chipW, float chipH)
 {
-    // チェックする座標のリストを作成
-    float checkX[] = { pos.x, pos.x + w / 2.0f, pos.x + w - 1.0f };
-    float checkY[] = { pos.y, pos.y + h / 2.0f, pos.y + h - 1.0f };
+    //チェックする座標のリストを作成
+    float checkX[] = { pos.x, pos.x + w / 3.0f,pos.x + w / 1.5f, pos.x + w - 1.0f };
+    float checkY[] = { pos.y, pos.y + h / 3.0f,pos.y + h / 1.5f, pos.y + h - 1.0f };
 
     for (float x : checkX) 
     {
         for (float y : checkY) 
         {
-            // ピクセル座標をマップの配列番号に変換
+            //ピクセル座標をマップの配列番号に変換
             int mapX = (int)(x / chipW);
             int mapY = (int)(y / chipH);
 
