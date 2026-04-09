@@ -5,11 +5,9 @@
 #include "CCamera/CCamera.h"									//カメラクラス
 #include "CSound/CSoundManager.h"								//サウンドマネージャークラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"		//当たり判定クラス
-#include "CGameObject/CStage/CStage.h"							//ステージクラス
-#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
-#include "CGameObject/CStage/CStageLoader/CStageLoader.h"		//ステージ読み込み定クラス
-#include "CGameObject/CStage/CStageResource/CStageResource.h"	//ステージ読み込み定クラス
+#include "CGameObject/CStage/CStageManager/CStageManager.h"		//ステージクラス
 #include "CGame/CEnemyFactory/CEnemyFactory.h"					//エネミーを作るクラス
+
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"				//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"				//エネミーマネージャークラス
 
@@ -136,10 +134,7 @@ private:
 	//----------------------バレット---------------------
 
 	//----------------------ステージ--------------------
-	std::unique_ptr<CStage>			 m_upStage;
-	std::unique_ptr<CStageCollision> m_upStageCollision;
-	std::unique_ptr<CStageLoader>	 m_upStageLoader;
-	std::unique_ptr<CStageResource>  m_upStageResource;
+	std::unique_ptr<CStageManager> m_upStageManager;
 
 
 	//----------------------カメラ-----------------------
