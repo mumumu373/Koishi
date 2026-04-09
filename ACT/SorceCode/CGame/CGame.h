@@ -13,7 +13,12 @@
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"				//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"				//エネミーマネージャークラス
 
-#include "CMouseInput//CMouseInput.h"
+#include "CMouseInput//CMouseInput.h"//マウス入力クラス
+#include"CWire/CWire.h"	///ワイヤークラス
+#include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"	///ワイヤーポイントクラス
+
+#include "NEGA/NEGA.h"
+#include "CWireActionSupporter/CWireActionSupporter.h"
 
 /************************************************************
 *			ゲームクラス
@@ -80,6 +85,7 @@ public:
 	HWND GetWnd() const { return m_pGameWnd->hWnd; }
 
 private:
+	void Collision();
 	//クラスをセットする関数
 	void SetClass();
 
@@ -120,7 +126,9 @@ private:
 
 	//														-ゲームオブジェクト系-
 	//----------------------プレイヤー-------------------
-	std::unique_ptr<CPlayer> m_upPlayer;
+	std::unique_ptr<CPlayer> m_upPlayer; 
+	std::unique_ptr<CWire>m_pWire;
+	std::vector<std::unique_ptr<CWirepoint>>m_pCWirepoint;
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく
@@ -136,4 +144,7 @@ private:
 
 	//----------------------カメラ-----------------------
 	std::unique_ptr<CCamera> m_upCamera;
+
+	std::unique_ptr<NEGA> Nega;	//ネガポジ反転クラス
+	std::unique_ptr<CWireActionSupporter> m_upWireActionSupporter;	//ワイヤーアクションをサポートするクラス
 };

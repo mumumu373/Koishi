@@ -17,8 +17,7 @@ private:	//private : 外部アクセス不可
 	//使用するCPUをしていする
 	HRESULT SelectUseCPU(DWORD PracessAffinitMask);
 	//ウィンドウクラスを登録
-	HRESULT RegisterMyWindowClass(HINSTANCE hInstance,
-																					const char* pApplicationName);
+	HRESULT RegisterMyWindowClass(HINSTANCE hInstance,const char* pApplicationName);
 	//ウィンドウ領域の調整
 	HRESULT AbjustMyWindowRect(
 		int* pOutWidth, int* pOutHeight,

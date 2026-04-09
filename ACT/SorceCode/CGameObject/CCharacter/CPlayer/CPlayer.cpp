@@ -1,11 +1,19 @@
 #include "CPlayer.h"
 
+
+#include "CMouseInput//CMouseInput.h"
+
 CPlayer::CPlayer()
 	: m_Jumping(false)
-	, m_JumpPower(12.0)
+	, m_JumpPower(JUMP_POWER)
 	, m_JumpAcc(0)
 	, m_JumpRemove(false)
 	, m_JumpRemoveCo(0)
+	, m_WireShot(false)
+	, m_WireShotCan(false)
+	, m_Acceleration({ 0,0 })
+	, AvoidanceCount(0)
+	, AvoidanceCoolCount(0)
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -15,10 +23,30 @@ CPlayer::CPlayer()
 	m_MyCamp = enMyCamp::PlayerCamp;
 
 	StartSetting();
+
+	{
+		m_leftkey[0] = false;
+		m_rightkey[0] = false;
+		m_leftkey[1] = false;
+		m_rightkey[1] = false;
+		m_Ldashcount = 0;
+		m_Rdashcount = 0;
+		m_Ldash = false;
+		m_Rdash = false;
+	}
 }
 
 CPlayer::~CPlayer()
 {
+}
+
+void CPlayer::StartWirePointCatch()
+{
+	enActionState = enActionState::WirePointCatch;
+	
+	m_JumpAcc = 0;
+	m_Acceleration = { 0,0 };
+	m_MoveState = enActionState::None;
 }
 
 void CPlayer::StartSetting()
@@ -35,45 +63,99 @@ void CPlayer::StartSetting()
 	m_Speed = { 10,10 };
 
 	m_OldPosition = m_Position;
+
 }
 
 void CPlayer::Update()
 {
+	m_State = enState::Living;
+	m_WireShot = false;
+
 	//過去の自分
+
 	m_OldPosition = m_Position;
-	//プレイヤーの動きの制御
-	MovePlayer();
+	OldGroundStand = GroundStand;
 
 	//常にfalseにする
 	GroundStand = false;
+	//ワイヤーポイントを掴んでいないなら
+	if (enActionState !=enActionState::WirePointCatch) {
+		//プレイヤーのジャンプの制御
+		JumpPlayer();
 
-	//プレイヤーのジャンプの制御
-	JumpPlayer();
-	
+		
+		if (AvoidanceCoolCount > 0) {
 
-	KyeInput();
+			AvoidanceCoolCount--;
+		}
+		else {
+			if (enActionState != enActionState::Avoidance&& OldGroundStand==true) {
+				KyeInput();
+			}
+			else {
+				if (enActionState != enActionState::AirAvoidance && OldGroundStand == false) {
+					AirKeyInput();
+				}
+			}
+			
+		}
+
+		
+		Dash();
+		if (OldGroundStand ==true) {
+			m_Acceleration = { 0,0 };
+			//プレイヤーの動きの制御
+			MovePlayer();
+		}
+		if (m_Jumping) {
+			MovePlayerJump();
+		}
+		else {
+			MovePlayerGround();
+		}
+
+		
+	}
+	AvoidanceEnd();
 
 	//仮置き地面
 	if (m_Position.y > 900 - m_Framesplit.h) {
 		m_Position.y = 900 - m_Framesplit.h;
+		//空中回避状態なら
+		if (enActionState != enActionState::AirAvoidance) {
+			GroundStand = true;
+			//地面に着いたらまたジャンプできるように
+			m_JumpRemove = false;
+			m_Jumping = false;
+			m_JumpAcc = 0;
+			m_Acceleration.y = 0;
+		}
 
-		GroundStand = true;
-		//地面に着いたらまたジャンプできるように
-		m_JumpRemove = false;
-		m_Jumping = false;
-		m_JumpAcc = 0;
 	}
 }
 
 void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 {
+	int i = 0;
+	if (enActionState == enActionState::Avoidance) {
+		i = 50;
+	}
 	//アニメーション処理
 	Animation();
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-
-	//CImageManagerがシングルトン化しているので、サウンドのように使える
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
+	////CImageManagerがシングルトン化しているので、サウンドのように使える
+	//CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
+	//	DispPos.x,				//表示位置x座標
+	//	DispPos.y,				//表示位置y座標
+	//	m_Framesplit.w,			//画像幅
+	//	m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+	//	m_Framesplit.x,			//元画像x座標
+	//	m_Framesplit.y,			//元画像y座標
+	//	m_FrameSize.x,			//元画像xサイズ		
+	//	m_FrameSize.y,			//元画像yサイズ
+	//	m_Alpha, m_Delection);					//透明度、角度
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
@@ -82,11 +164,49 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, m_Delection);					//透明度、角度
+		m_Alpha, i, m_Delection, 0);					//透明度、角度
+}
+
+void CPlayer::WireEnd(VECTOR2_f Spead)
+{
+	enActionState = enActionState::WireShot;
+	m_Acceleration = Spead;
+	m_Jumping = true;
+
+}
+
+double CPlayer::GetWireStartSpeed()
+{
+	double Speed = m_Position.y  - m_OldPosition.y;
+
+	if(Speed>0){
+		return Speed;
+	}
+	return 0;
 }
 
 void CPlayer::Animation()
 {
+	switch (m_MoveState) {
+	case enMoveState::Wait:
+		break;
+	case enMoveState::MoveLeft:
+		if (m_Delection <= 0) {
+			m_Delection = 0;
+		}
+		else {
+			m_Delection -= TurnAroundSpeed;
+		}
+		break;
+	case enMoveState::MoveRight:
+		if (m_Delection >= 180) {
+			m_Delection = 180;
+		}
+		else {
+			m_Delection += TurnAroundSpeed;
+		}
+		break;
+	}
 }
 
 void CPlayer::EnemyHit(int Enemy, int Color)
@@ -108,19 +228,93 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 	}
 }
 
+void CPlayer::AvoidanceEnd()
+{
+	if (AvoidanceCount > 0) {
+		AvoidanceCount--;
+
+	}
+	else {
+		if (AvoidanceCount == 0) {
+			AvoidanceCount = -1;//回避状態を終わらせる
+			enActionState = enActionState::None;
+			m_MoveState = enMoveState::Wait;
+			AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
+
+			m_Acceleration = { 0,0 };//空中の加速度をリセットする
+		}
+	}
+}
+
 void CPlayer::KyeInput()
 {
-	if (GetAsyncKeyState('A') & 0x8000)
+	m_leftkey[1] = m_leftkey[0];
+	m_leftkey[0] = GetAsyncKeyState('A') & 0x8000;
+
+	m_rightkey[1] = m_rightkey[0];
+	m_rightkey[0] = GetAsyncKeyState('D') & 0x8000;
+
+
+	if (m_leftkey[0])
 	{
 		m_MoveState = enMoveState::MoveLeft;
+		//シフトキーを押しているなら回避状態にする
+		if (enActionState != enActionState::WireShot) {
+			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {			
+					enActionState = enActionState::Avoidance;
+				AvoidanceCount = AvoidanceTime;
+			}
+		}
+		if (m_leftkey[1] == false) {
+			if (m_Ldashcount>0) {
+				m_Ldash = true;
+			}
+			else {
+				m_Ldashcount = DashcountMAX;
+				
+			}
+		}
 	}
-	else if (GetAsyncKeyState('D') & 0x8000)
+	else if (m_rightkey[0])
 	{
 		m_MoveState = enMoveState::MoveRight;
+
+		//シフトキーを押しているなら回避状態にする
+		if (enActionState != enActionState::WireShot) {
+			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {		
+					enActionState = enActionState::Avoidance;
+				AvoidanceCount = AvoidanceTime;
+			}
+		}
+		if (m_rightkey[1] ==false) {
+		
+			if (m_Rdashcount > 0) {
+				m_Rdash = true;
+			}
+			else {
+				m_Rdashcount = DashcountMAX;
+
+			}
+		}
 	}
 	//無操作状態
 	else {
 		m_MoveState = enMoveState::Wait;
+	}
+	//ワイヤー発射指示
+	if (CMouseInput::GetMouseRight(true, false)&& m_WireShotCan) {
+		m_WireShot = true;
+	}
+
+}
+
+void CPlayer::AirKeyInput()
+{
+	if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+
+		enActionState = enActionState::AirAvoidance;
+		AirAvoidanceVECTSet();
+		AvoidanceCount = AvoidanceTime;
 	}
 }
 
@@ -130,21 +324,62 @@ void CPlayer::MovePlayer()
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-		m_Position.x -= m_Speed.x;
+
+		if (m_Ldash == true) {
+			m_Acceleration.x -= m_Speed.x*2;
+		}
+		else {
+			m_Acceleration.x -= m_Speed.x;
+		}
 		break;
 	case enMoveState::MoveRight:
-		m_Position.x += m_Speed.x;
+		if (m_Rdash == true) {
+			m_Acceleration.x += m_Speed.x*2;
+		}
+		else {
+			m_Acceleration.x += m_Speed.x;
+		}
+
 		break;
 	}
+}
 
-	//----デバックコード----
-	if (GetAsyncKeyState('M'))
-	{
-		m_Position.x += 1;
+void CPlayer::MovePlayerJump()
+{
+	if(enActionState == enActionState::AirAvoidance) {
+		m_Acceleration.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
+		m_Acceleration.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 	}
-	if (GetAsyncKeyState('N'))
-	{
-		m_Position.x -= 1;
+	else {
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
+		m_Acceleration.x *= 0.999;
+
+		if (m_Acceleration.x<1 && m_Acceleration.x>-1) {
+			m_Acceleration.x = 0;
+		}
+
+	}
+	
+}
+
+void CPlayer::MovePlayerGround()
+{
+	if (enActionState == enActionState::Avoidance) {
+		if (m_Acceleration.x<=0) {
+			//左回避状態なら
+			m_Position.x -= AvoidanceDistance / AvoidanceTime;
+		}
+		else {
+			m_Position.x += AvoidanceDistance / AvoidanceTime;
+		}
+		m_Position.y += m_Acceleration.y;
+	}
+	else {
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 	}
 
 }
@@ -174,8 +409,55 @@ void CPlayer::JumpPlayer()
 			m_JumpRemoveCo = 0;
 		}
 	}
-	else {
-		m_JumpAcc -= Gravity;
-		m_Position.y -= m_JumpAcc;
+	
+		//空中回避状態なら
+		if (enActionState != enActionState::AirAvoidance) {
+			m_JumpAcc -= Gravity;
+			m_Position.y -= m_JumpAcc;
+		}
+}
+
+void CPlayer::Dash()
+{
+	//keyinputの次に動く
+	if (m_Ldashcount > 0) {
+		m_Ldashcount--;
+
 	}
+	if (m_Rdashcount > 0) {
+		m_Rdashcount--;
+
+	}
+	switch (m_MoveState) {
+	case enMoveState::Wait:
+		break;
+	case enMoveState::MoveLeft:
+		m_Rdashcount = 0;
+		m_Rdash = false;
+		break;
+	case enMoveState::MoveRight:
+		m_Ldashcount = 0;
+		m_Ldash = false;
+		break;
+	}
+}
+
+void CPlayer::AirAvoidanceVECTSet()
+{
+	AirAvoidanceVECT = { 0,0 };
+
+	if (GetAsyncKeyState('A') & 0x8000) {
+		AirAvoidanceVECT.x = -1;
+	}
+	if (GetAsyncKeyState('D') & 0x8000) {
+		AirAvoidanceVECT.x = 1;
+	}
+	if (GetAsyncKeyState('S') & 0x8000) {
+		AirAvoidanceVECT.y = 1;
+	}
+	if (GetAsyncKeyState('W') & 0x8000) {
+		AirAvoidanceVECT.y = -1;
+	}
+	AirAvoidanceVECT = NormalVector(AirAvoidanceVECT);
+
 }

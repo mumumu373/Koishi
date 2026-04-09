@@ -130,6 +130,7 @@
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CCharacter.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.cpp" />
     <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.cpp" />
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
@@ -143,8 +144,11 @@
     <ClCompile Include="SorceCode\CSound\CSoundManager.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStage.cpp" />
     <ClCompile Include="SorceCode\CWinlnit\CWinInit.cpp" />
+    <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp" />
+    <ClCompile Include="SorceCode\CWire\CWire.cpp" />
     <ClCompile Include="SorceCode\Global.cpp" />
     <ClCompile Include="SorceCode\Main.cpp" />
+    <ClCompile Include="SorceCode\NEGA\NEGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.h" />
@@ -153,6 +157,7 @@
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CCharacter.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.h" />
     <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CEnemy.h" />
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
@@ -166,9 +171,12 @@
     <ClInclude Include="SorceCode\CSound\CSoundManager.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStage.h" />
     <ClInclude Include="SorceCode\CWinlnit\CWinInit.h" />
+    <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h" />
+    <ClInclude Include="SorceCode\CWire\CWire.h" />
     <ClInclude Include="SorceCode\Global.h" />
     <ClInclude Include="SorceCode\MyMacro.h" />
     <ClInclude Include="SorceCode\MyMath.h" />
+    <ClInclude Include="SorceCode\NEGA\NEGA.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
