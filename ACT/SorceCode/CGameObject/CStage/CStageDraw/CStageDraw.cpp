@@ -12,6 +12,8 @@ CStageDraw::~CStageDraw()
 {
 }
 
+//--------------------------------------------------------------------------------------------------------------
+
 void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 {
     // 背景の切り取り範囲設定（スクロール等の処理があればここで拡張）
@@ -41,6 +43,8 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 
 }
 
+//--------------------------------------------------------------------------------------------------------------
+
 void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
 {
 
@@ -65,3 +69,6 @@ void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
         255);           // 透明度
 
 }
+
+//--------------------------------------------------------------------------------------------------------------
+

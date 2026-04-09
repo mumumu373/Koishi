@@ -1,5 +1,7 @@
 #include "CStageCollision.h"
 
+//--------------------------------------------------------------------------------------------------------------
+
 bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     const std::vector<std::vector<int>>& mapData,
     float chipW, float chipH)
@@ -33,3 +35,5 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     }
     return false;
 }
+
+//--------------------------------------------------------------------------------------------------------------
