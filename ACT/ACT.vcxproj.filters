@@ -122,6 +122,10 @@
     <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp">
       <Filter>SorceCode\CWireActionSupporter</Filter>
     </ClCompile>
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageManager\CStageManager.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -189,5 +193,9 @@
     <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h">
       <Filter>SorceCode\CWireActionSupporter</Filter>
     </ClInclude>
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageManager\CStageManager.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.h" />
   </ItemGroup>
 </Project>

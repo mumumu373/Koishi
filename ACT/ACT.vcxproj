@@ -126,7 +126,6 @@
   <ItemGroup>
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageManager\CStageManager.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.cpp" />
-    <ClCompile Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.cpp" />
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp" />
@@ -155,7 +154,6 @@
   <ItemGroup>
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageManager\CStageManager.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.h" />
-    <ClInclude Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.h" />
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />

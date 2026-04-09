@@ -4,8 +4,7 @@ CStageManager::CStageManager()
 	: m_upStageLoader		(nullptr)
 	, m_upStage				(nullptr)
 	, m_upStageCollision	(nullptr)
-	, m_upStageResource		(nullptr)
-
+	, m_upStageDraw			(nullptr)
 {
 }
 
@@ -16,16 +15,15 @@ CStageManager::~CStageManager()
 bool CStageManager::Create()
 {
 	//ステージのインスタンス生成
-	m_upStage = std::make_unique<CStage>();
+	//m_upStage = std::make_unique<CStage>();
 	m_upStageCollision = std::make_unique<CStageCollision>();
 	m_upStageLoader = std::make_unique<CStageLoader>();
-	m_upStageResource = std::make_unique<CStageResource>(m_upStage, m_upStageLoader, m_upStageCollision);
+	m_upStageDraw = std::make_unique<CStageDraw>();
 
-	m_upStageResource->Create();
-
+	//データ読み込み
 	if (m_upStageLoader->LoadMap("Data\\MapData\\Map01.csv") == false) return false;
-	m_upStage->SetMapMax(m_upStageLoader->GetMapWidth(), m_upStageLoader->GetMapHeight());
-	m_upStage->SetMapData(m_upStageLoader->GetMapData());
+	m_upStageDraw->SetMapMax(m_upStageLoader->GetMapWidth(), m_upStageLoader->GetMapHeight());
+	m_upStageDraw->SetMapData(m_upStageLoader->GetMapData());
 
 }
 
@@ -39,7 +37,7 @@ void CStageManager::Update()
 
 void CStageManager::Draw(std::unique_ptr<CCamera>& pCamera)
 {
-	m_upStage->Draw(pCamera);
+	m_upStageDraw->Draw(pCamera);
 }
 
 void CStageManager::Destroy()
