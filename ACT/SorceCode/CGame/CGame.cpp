@@ -101,6 +101,8 @@ bool CGame::Create()
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy));
 	
 	//----------------------------------------------------------------------------
+
+	//ステージマネージャーのインスタンス生成
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
@@ -173,6 +175,7 @@ void CGame::Update()
 	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
 
+	//当たり判定
 	bool test = m_upStageManager->IsHit(*m_upPlayer);
 
 	if (test)
@@ -208,6 +211,7 @@ void CGame::Update()
 		m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
 	}
 
+	//ステージの更新
 	m_upStageManager->Update();
 
 

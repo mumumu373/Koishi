@@ -75,9 +75,6 @@
     <ClCompile Include="SorceCode\CImage\CImage.cpp">
       <Filter>SorceCode\CImageManager\CImage</Filter>
     </ClCompile>
-    <ClCompile Include="SorceCode\CGameObject\CStage\CStage.cpp">
-      <Filter>SorceCode\CGameObject\CStage</Filter>
-    </ClCompile>
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp">
       <Filter>SorceCode\CCamera</Filter>
     </ClCompile>
@@ -148,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="SorceCode\MyMacro.h">
       <Filter>SorceCode</Filter>
-    </ClInclude>
-    <ClInclude Include="SorceCode\CGameObject\CStage\CStage.h">
-      <Filter>SorceCode\CGameObject\CStage</Filter>
     </ClInclude>
     <ClInclude Include="SorceCode\CCamera\CCamera.h">
       <Filter>SorceCode\CCamera</Filter>

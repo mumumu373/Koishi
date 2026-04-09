@@ -2,7 +2,6 @@
 #include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 #include "CGameObject/CStage/CStageLoader/CStageLoader.h"		//ステージ読み込み定クラス
 #include "CGameObject/CStage/CStageDraw/CStageDraw.h"			//ステージ描画クラス
-#include "CGameObject/CStage/CStage.h"							//ステージクラス
 
 #include "CGameObject/CCharacter/CCharacter.h"			//キャラクタークラス
 
@@ -28,7 +27,6 @@ public:
 
 private:
 
-	std::unique_ptr<CStage>			 m_upStage;
 	std::unique_ptr<CStageCollision> m_upStageCollision;
 	std::unique_ptr<CStageLoader>	 m_upStageLoader;
 	std::unique_ptr<CStageDraw>		 m_upStageDraw;

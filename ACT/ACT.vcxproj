@@ -143,7 +143,6 @@
     <ClCompile Include="SorceCode\CMouseInput\CMouseInput.cpp" />
     <ClCompile Include="SorceCode\CSound\CSound.cpp" />
     <ClCompile Include="SorceCode\CSound\CSoundManager.cpp" />
-    <ClCompile Include="SorceCode\CGameObject\CStage\CStage.cpp" />
     <ClCompile Include="SorceCode\CWinlnit\CWinInit.cpp" />
     <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp" />
     <ClCompile Include="SorceCode\CWire\CWire.cpp" />
@@ -171,7 +170,6 @@
     <ClInclude Include="SorceCode\CMouseInput\CMouseInput.h" />
     <ClInclude Include="SorceCode\CSound\CSound.h" />
     <ClInclude Include="SorceCode\CSound\CSoundManager.h" />
-    <ClInclude Include="SorceCode\CGameObject\CStage\CStage.h" />
     <ClInclude Include="SorceCode\CWinlnit\CWinInit.h" />
     <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h" />
     <ClInclude Include="SorceCode\CWire\CWire.h" />

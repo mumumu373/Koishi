@@ -2,7 +2,6 @@
 
 CStageManager::CStageManager()
 	: m_upStageLoader		(nullptr)
-	, m_upStage				(nullptr)
 	, m_upStageCollision	(nullptr)
 	, m_upStageDraw			(nullptr)
 {
@@ -15,7 +14,6 @@ CStageManager::~CStageManager()
 bool CStageManager::Create()
 {
 	//ステージのインスタンス生成
-	//m_upStage = std::make_unique<CStage>();
 	m_upStageCollision = std::make_unique<CStageCollision>();
 	m_upStageLoader = std::make_unique<CStageLoader>();
 	m_upStageDraw = std::make_unique<CStageDraw>();
