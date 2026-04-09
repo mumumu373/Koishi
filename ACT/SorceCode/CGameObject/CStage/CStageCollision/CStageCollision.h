@@ -19,4 +19,12 @@ public:
     bool IsHit(const VECTOR2_f& pos, float w, float h,
         const std::vector<std::vector<int>>& mapData,
         float chipW, float chipH);
+
+
+    void Resolve(VECTOR2_f& nextPos, // 移動後の暫定座標（書き換えられる）
+        const VECTOR2_f& currentPos, // 移動前の確定座標
+        float w, float h,
+        const std::vector<std::vector<int>>& mapData,
+        float chipW, float chipH);
+
 };
