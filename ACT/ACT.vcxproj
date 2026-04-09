@@ -127,6 +127,7 @@
     <ClCompile Include="SorceCode\CCamera\CCamera.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CCircularBullet\CCircularBullet.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CRockOnBullet\CRockOnBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CPlayer\CHeart\CHeart.cpp" />
     <ClCompile Include="SorceCode\CGame\CBossFactory\CBossFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.cpp" />
@@ -157,6 +159,7 @@
     <ClInclude Include="SorceCode\CCamera\CCamera.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CCircularBullet\CCircularBullet.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CRockOnBullet\CRockOnBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
@@ -165,6 +168,7 @@
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CPlayer\CHeart\CHeart.h" />
     <ClInclude Include="SorceCode\CGame\CBossFactory\CBossFactory.h" />
     <ClInclude Include="SorceCode\CGame\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGame\CCollisionDetection\CCollisionDetection.h" />
