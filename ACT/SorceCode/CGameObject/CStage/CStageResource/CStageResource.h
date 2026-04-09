@@ -19,7 +19,7 @@ public:
 
 	~CStageResource();
 
-	bool Create();
+	void Create();
 
 	//リソースを解放する関数(CGameでリソース交換するときは絶対に呼ぶ)
 	void Relese();

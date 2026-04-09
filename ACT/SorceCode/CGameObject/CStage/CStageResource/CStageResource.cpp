@@ -14,12 +14,9 @@ CStageResource::~CStageResource()
 {
 }
 
-bool CStageResource::Create()
+void CStageResource::Create()
 {
 	//マップデータの読み込み
-	if(m_pStageLoader->LoadMap("Data\\MapData\\Map01.csv") == false) return false;
-	m_pStage->SetMapMax(m_pStageLoader->GetMapWidth(), m_pStageLoader->GetMapHeight());
-	m_pStage->SetMapData(m_pStageLoader->GetMapData());
 
 }
 

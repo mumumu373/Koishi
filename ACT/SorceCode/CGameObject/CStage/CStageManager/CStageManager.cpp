@@ -13,7 +13,7 @@ CStageManager::~CStageManager()
 {
 }
 
-void CStageManager::Create()
+bool CStageManager::Create()
 {
 	//ステージのインスタンス生成
 	m_upStage = std::make_unique<CStage>();
@@ -22,6 +22,11 @@ void CStageManager::Create()
 	m_upStageResource = std::make_unique<CStageResource>(m_upStage, m_upStageLoader, m_upStageCollision);
 
 	m_upStageResource->Create();
+
+	if (m_upStageLoader->LoadMap("Data\\MapData\\Map01.csv") == false) return false;
+	m_upStage->SetMapMax(m_upStageLoader->GetMapWidth(), m_upStageLoader->GetMapHeight());
+	m_upStage->SetMapData(m_upStageLoader->GetMapData());
+
 }
 
 void CStageManager::Init()

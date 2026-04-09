@@ -13,7 +13,7 @@ public:
 	CStageManager();
 	~CStageManager();
 
-	void Create();
+	bool Create();
 	void Init();
 	void Update();
 	void Draw(std::unique_ptr<CCamera>& pCamera);
