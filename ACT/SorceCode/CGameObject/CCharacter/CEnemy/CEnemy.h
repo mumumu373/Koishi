@@ -18,7 +18,10 @@ public:
 	//こっちのほうを使う
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
 
+	//プレイヤーの位置を取得
+	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
 protected:
 	void Animation() override {};
-
+protected:
+	VECTOR2_f m_PlayerPos;
 };

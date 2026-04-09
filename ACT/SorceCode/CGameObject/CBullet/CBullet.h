@@ -57,4 +57,7 @@ protected:
 	VECTOR2 m_FrameSize;//元画像サイズ
 	int m_Alpha;		//透明度
 	double m_Delection;	//角度
+
+	int m_ReleaseTime;		//バレットが消えるまでの時間
+	int m_ReleaseTimeCo;	//バレットが消えるまでの時間をカウントする
 };

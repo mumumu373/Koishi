@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject/CBullet/CRotateBullet/CRotateBullet.h"	//周りをまわるバレット
 #include "CGameObject/CBullet/CCircularBullet/CCircularBullet.h"	//360°方向に撃てるバレット
+#include "CGameObject/CBullet/CRockOnBullet/CRockOnBullet.h"	//狙い打てる撃てるバレット
 
 /***********************************************************************************************
 *		バレットを作るクラス
@@ -20,6 +21,7 @@ public:
 	{
 		return std::make_unique<CRotateBullet>(Camp, Pos, Color, Speed, X_Range, Y_Range, StartAngle, Size, ReleaseTime);
 	}
+
 	//360°方向に撃てるバレット										
 	static inline std::unique_ptr<CBullet> CreateCircularBullet(
 		//陣営			位置			属性			スピード		
@@ -28,6 +30,14 @@ public:
 		double Vector, double StartAngle, int Size, int ReleaseTime)
 	{
 		return std::make_unique<CCircularBullet>(Camp, Pos, Color, Speed, Vector, StartAngle, Size, ReleaseTime);
+	}
+
+	//狙い撃ちするバレット
+	static inline std::unique_ptr<CBullet> CreateRockOnBullet(
+		int Camp, VECTOR2_f Pos, int Color, double Speed,
+		VECTOR2_f TargetPos, int Size, int ReleaseTime)
+	{
+		return std::make_unique<CRockOnBullet>(Camp, Pos, Color, Speed, TargetPos, Size, ReleaseTime);
 	}
 private:
 

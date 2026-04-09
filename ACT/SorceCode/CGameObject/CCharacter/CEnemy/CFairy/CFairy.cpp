@@ -14,6 +14,10 @@ CFairy::CFairy(int Kinds, VECTOR2_f SetPos)
 	//エネミー陣営です
 	m_MyCamp = enMyCamp::EnemyCamp;
 
+	//バレットの初期設定
+	m_BulletShot = false;
+	m_BulletShotCo = 0;
+
 	StartSetting();
 }
 
@@ -29,14 +33,27 @@ void CFairy::StartSetting()
 	case enColor::NoColor:
 		m_Framesplit = { 0,32,80,80 };
 		m_Speed = { 0,0 };
+
+		//打ち出すタイミングを設定
+		m_BulletShotTiming = 2;
+		//バレットの持続時間を設定
+		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Red:
 		m_Framesplit = { 32,32,100,100 };
 		m_Speed = { 1,0 };
+
+		m_BulletShotTiming = 60;
+
+		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Blue:
 		m_Framesplit = { 0,32,200,200 };
 		m_Speed = { 0,0 };
+
+		m_BulletShotTiming = 60;
+
+		m_ShotReleaseTime = 60;
 		break;
 	}
 	//元画像サイズ
@@ -70,6 +87,18 @@ void CFairy::Draw(std::unique_ptr<CCamera>& pCamera)
 void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
+
+	//バレットを撃ちだす動作
+	m_BulletShotCo++;
+	if (m_BulletShot == true) {
+		m_BulletShot = false;
+		m_BulletShotCo = 0;
+		//プレイヤーを狙うバレット
+		upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 24, m_PlayerPos, 64, 60));
+	}
+	if (m_BulletShotCo >= m_BulletShotTiming) {
+		m_BulletShot = true;
+	}
 
 	switch (m_Color) {
 	case enColor::NoColor:

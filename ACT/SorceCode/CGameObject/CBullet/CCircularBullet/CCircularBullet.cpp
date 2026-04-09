@@ -1,6 +1,6 @@
 #include "CCircularBullet.h"
 
-CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Vector, double StartAngle, int Size, int ReleaseTime)
+CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Amount, double StartAngle, int Size, int ReleaseTime)
 {
 	//生存中に
 	m_State = enState::Living;
@@ -42,8 +42,8 @@ CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Spee
 	m_MasterPosition = m_Position;
 
 	//バレットを撃ちだす角度を計算
-	m_Vector.x = cos((Vector + StartAngle) / 180 * M_PI) * Speed;
-	m_Vector.y = sin((Vector + StartAngle) / 180 * M_PI) * Speed;
+	m_Vector.x = cos((Amount + StartAngle) / 180 * M_PI) * Speed;
+	m_Vector.y = sin((Amount + StartAngle) / 180 * M_PI) * Speed;
 
 	//バレットが消えるまでの時間をセット
 	m_ReleaseTime = ReleaseTime;

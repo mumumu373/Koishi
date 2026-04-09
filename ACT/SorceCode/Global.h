@@ -34,7 +34,7 @@ double GetRadian(VECTOR2_f Vect);
 VECTOR2_f NormalVector(VECTOR2_f Vect);
 
 //方向にして返す
-double GetDelectionVect(VECTOR2_f enemipos, VECTOR2_f player);
+double GetDelectionVect(VECTOR2_f TarGetPos, VECTOR2_f MasterPos);
 
 //キャラのポジションの距離を計る
-double GetHowToLong(VECTOR2_f enemipos, VECTOR2_f player);
+double GetHowToLong(VECTOR2_f TarGetPos, VECTOR2_f MasterPos);

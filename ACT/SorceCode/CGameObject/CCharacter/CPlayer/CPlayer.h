@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject/CCharacter/CCharacter.h"
+#include "CGameObject/CCharacter/CPlayer/CHeart/CHeart.h"
 
 /*****************************************************************************************************
 *		プレイヤークラス
@@ -35,6 +36,9 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+
+	//プレイヤーのハートを描画する
+	void PlayerHeartDraw() { m_upHeart->Draw(); }
 private:
 	void Animation() override;
 public://パブリック
@@ -48,10 +52,16 @@ private:
 	void MovePlayer();
 	//プレイヤーのジャンプ制御
 	void JumpPlayer();
+	//プレイヤーの属性変更
+	void PlayerColorChange();
 private:
 	bool m_Jumping;			//ジャンプしてます！
 	const double m_JumpPower;		//ジャンプ力
 	double m_JumpAcc;		//ジャンプ力を加算させる
 	bool m_JumpRemove;		//ジャンプボタンを離したぞ！
 	int m_JumpRemoveCo;		//ジャンプボタンを押した時間を図る
+
+	bool m_ChangeColor;		//属性を変更したか
+
+	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス
 };

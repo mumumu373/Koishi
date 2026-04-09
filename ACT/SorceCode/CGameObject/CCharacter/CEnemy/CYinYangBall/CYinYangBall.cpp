@@ -31,6 +31,7 @@ CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos)
 
 CYinYangBall::~CYinYangBall()
 {
+	//ここに装飾クラスの解放を作る
 }
 
 void CYinYangBall::StartSetting()
@@ -132,6 +133,7 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	if (m_BulletShot == true) {
 		m_BulletShot = false;
 		m_BulletShotCo = 0;
+			//360°方向に打てるバレットを作る
 		for (int i = 0; i < m_AmountBullet; i++) {
 			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 6, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 60));
 		}

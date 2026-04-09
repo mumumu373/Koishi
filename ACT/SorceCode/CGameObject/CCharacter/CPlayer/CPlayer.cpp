@@ -15,6 +15,9 @@ CPlayer::CPlayer()
 	m_MyCamp = enMyCamp::PlayerCamp;
 
 	StartSetting();
+
+	//ハートクラス作成
+	m_upHeart = std::make_unique<CHeart>();
 }
 
 CPlayer::~CPlayer()
@@ -35,6 +38,9 @@ void CPlayer::StartSetting()
 	m_Speed = { 10,10 };
 
 	m_OldPosition = m_Position;
+
+	//属性を変えたかを確認
+	m_ChangeColor = false;
 }
 
 void CPlayer::Update()
@@ -75,6 +81,9 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	else if (GetAsyncKeyState('S') & 0x8000) {
 		m_Position.y += m_Speed.y;
 	}
+
+	//プレイヤーの属性変更制御
+	PlayerColorChange();
 
 	KyeInput();
 }
@@ -184,5 +193,44 @@ void CPlayer::JumpPlayer()
 	else {
 		m_JumpAcc -= Gravity;
 		m_Position.y -= m_JumpAcc;
+	}
+}
+
+void CPlayer::PlayerColorChange()
+{
+	//属性を変更する
+	if (GetAsyncKeyState('Q') & 0x8000) {
+		//色が変わっていたらそれ以降は変えない
+		if (m_ChangeColor == false) {
+			m_ChangeColor = true;
+
+			m_Color--;
+
+			//変えたときNoColorなら
+			if (m_Color < enColor::NoColor) {
+				//Blue(最後の列挙)にする
+				m_Color = enColor::Blue;
+			}
+
+			//ハートのほうの属性も変える
+			m_upHeart->ChangeHeartColor(m_Color);
+		}
+	}
+	else if (GetAsyncKeyState('E') & 0x8000) {
+		if (m_ChangeColor == false) {
+			m_ChangeColor = true;
+
+			m_Color++;
+
+			if (m_Color > enColor::Blue) {
+				m_Color = enColor::NoColor;
+			}
+
+			m_upHeart->ChangeHeartColor(m_Color);
+		}
+	}
+	//離したら
+	else {
+		m_ChangeColor = false;
 	}
 }

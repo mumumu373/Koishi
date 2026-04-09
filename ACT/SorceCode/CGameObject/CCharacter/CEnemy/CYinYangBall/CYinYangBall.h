@@ -27,8 +27,8 @@ private:
 	int m_AmountDeco;		//装飾の量
 
 	bool m_BulletShot;		//バレットを撃ったか
-	int m_BulletShotCo;		//バレットを撃つタイミングをカウント
 	int m_BulletShotTiming;	//バレットを撃ちだすタイミング	
+	int m_BulletShotCo;		//バレットを撃つタイミングをカウント
 	int m_AmountBullet;		//打ち出すバレットの量
 	double m_ShotBulletAngle;	//打ち出すバレットの角度
 	int m_ShotReleaseTime;	//バレットの持続時間

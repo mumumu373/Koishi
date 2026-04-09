@@ -27,7 +27,4 @@ private:
 	VECTOR2_f m_Angle;		//まわる角度
 	VECTOR2_f m_Range;		//キャラからの距離(半径で)
 	VECTOR2_f m_MasterRange;//元のキャラからの位置
-
-	int m_ReleaseTime;		//バレットが消えるまでの時間
-	int m_ReleaseTimeCo;	//バレットが消えるまでの時間をカウントする
 };

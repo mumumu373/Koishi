@@ -165,6 +165,8 @@ void CGame::Update()
 	//エネミーの動作
 	//ある分回す
 	for (int i = 0; i < m_upEnemy.size(); i++) {
+		//プレイヤーの位置を取得する
+		m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 		m_upEnemy[i]->Update(m_upBullet);
 	}
 
@@ -217,6 +219,9 @@ void CGame::Draw()
 	for (int i = 0; i < m_upBullet.size(); i++) {
 		m_upBullet[i]->Draw(m_upCamera);
 	}
+
+	//プレイヤーのハートを描画する
+	m_upPlayer->PlayerHeartDraw();
 }
 
 void CGame::SetClass()
