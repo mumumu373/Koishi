@@ -23,11 +23,11 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
                 return true;
             }
 
-            //チップ番号の判定（0:空間, 15:背景、それ以外は壁とする）
+            //チップ番号の判定
             int tipID = mapData[mapY][mapX];
             if (tipID != 0 && tipID != 15) 
             {
-                return true; // どこか1点でも壁に当たればヒット
+                return true; //どこか1点でも壁に当たればヒット
             }
         }
     }
