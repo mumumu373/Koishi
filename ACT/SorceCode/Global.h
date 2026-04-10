@@ -27,6 +27,15 @@ typedef struct _GameWindow
 	BOOL		isWndClose;		//ウィンドウ閉じてるか確認用.
 } GameWindow;
 
+//オブジェクトの位置と描画の情報
+struct ObjectInfo
+{
+	double x;	//x座標
+	double y;	//y座標
+	int xw;		//幅
+	int yh;		//高さ
+};
+
 //x,yのベクトルをラジアンに変える
 double GetRadian(VECTOR2_f Vect);
 

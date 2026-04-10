@@ -9,15 +9,6 @@
 class CCollisionDetection
 {
 public:
-	//オブジェクトの位置と描画の情報
-	struct ObjectInfo
-	{
-		double x;	//x座標
-		double y;	//y座標
-		int xw;		//幅
-		int yh;		//高さ
-	};
-public:
 	CCollisionDetection();
 	~CCollisionDetection();
 

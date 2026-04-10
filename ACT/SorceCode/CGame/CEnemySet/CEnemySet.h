@@ -15,24 +15,6 @@ public:
 	CEnemySet();
 	~CEnemySet();
 
-	//エネミーのjsonファイルを開く関数
-	static inline void LoadEnemies() 
-	{
-		//jsonファイルを開く
-		std::ifstream file("EnemyState.json");
-		//ファイルを開けなかったら
-		if (!file.is_open()) {
-			std::cout << "ファイルが開けませんでした！" << std::endl;
-			return;
-		}
-
-		json data;
-		file >> data;
-
-		std::string type = data["Enemies"][0]["Pos"]["Type"];
-		std::cout << "1体目の敵は: " << type << std::endl;
-	}
-
 	//保存用(本実装では消すように)
 	static inline std::unique_ptr<CEnemy> Otamesi()
 	{

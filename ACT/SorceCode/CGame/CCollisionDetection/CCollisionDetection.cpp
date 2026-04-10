@@ -34,7 +34,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 	}
 }
 
-CCollisionDetection::ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
+ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
 {
 	ObjectInfo PlayerInfo;
 
@@ -60,7 +60,7 @@ CCollisionDetection::ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_p
 	return PlayerInfo;
 }
 
-CCollisionDetection::ObjectInfo CCollisionDetection::SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize)
+ObjectInfo CCollisionDetection::SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize)
 {
 	ObjectInfo EnemyInfo;
 
