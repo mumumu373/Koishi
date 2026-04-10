@@ -2,6 +2,7 @@
 
 #include "CMouseInput//CMouseInput.h"
 
+#include<iostream>
 CPlayer::CPlayer()
 	: m_Jumping(false)
 	, m_JumpPower(JUMP_POWER)
@@ -148,17 +149,6 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	Animation();
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-	////CImageManagerがシングルトン化しているので、サウンドのように使える
-	//CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
-	//	DispPos.x,				//表示位置x座標
-	//	DispPos.y,				//表示位置y座標
-	//	m_Framesplit.w,			//画像幅
-	//	m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-	//	m_Framesplit.x,			//元画像x座標
-	//	m_Framesplit.y,			//元画像y座標
-	//	m_FrameSize.x,			//元画像xサイズ		
-	//	m_FrameSize.y,			//元画像yサイズ
-	//	m_Alpha, m_Delection);					//透明度、角度
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
@@ -192,17 +182,10 @@ double CPlayer::GetWireStartSpeed()
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	//プレイヤーの動きの制御
-	MovePlayer();
+	//MovePlayer();
 
 	//プレイヤーのジャンプの制御
 	//JumpPlayer();
-	//デバッグ用動作
-	if (GetAsyncKeyState('W') & 0x8000) {
-		m_Position.y -= m_Speed.y;
-	}
-	else if (GetAsyncKeyState('S') & 0x8000) {
-		m_Position.y += m_Speed.y;
-	}
 
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
@@ -281,6 +264,23 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 
 void CPlayer::AvoidanceEnd()
 {
+	if (AvoidanceCount > 0) {
+		AvoidanceCount--;
+
+	}
+	else {
+		if (AvoidanceCount == 0) {
+			AvoidanceCount = -1;//回避状態を終わらせる
+			if (enActionState != enActionState::WirePointCatch) {
+				enActionState = enActionState::None;
+			}
+
+			m_MoveState = enMoveState::Wait;
+			AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
+
+			m_Acceleration = { 0,0 };//空中の加速度をリセットする
+		}
+	}
 }
 
 void CPlayer::KyeInput()
@@ -399,7 +399,6 @@ void CPlayer::MovePlayerJump()
 		}
 
 	}
-	
 }
 
 void CPlayer::MovePlayerGround()

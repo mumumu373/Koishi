@@ -194,14 +194,14 @@ void CGame::Update()
 	//当たり判定
 	bool test = m_upStageManager->IsHit(*m_upPlayer);
 
-	if (test)
-	{
-		std::cout << "当たってるよ！" << std::endl;
-	}
-	else
-	{
-		std::cout << "当たってないよ！" << std::endl;
-	}
+	//if (test)
+	//{
+	//	std::cout << "当たってるよ！" << std::endl;
+	//}
+	//else
+	//{
+	//	std::cout << "当たってないよ！" << std::endl;
+	//}
 
 	//エネミーの動作
 	//ある分回す
@@ -297,11 +297,6 @@ void CGame::Draw()
 	
 	//仮置き
 	CMouseInput::Draw();
-}
-
-void CGame::Collision()
-{
-
 }
 
 void CGame::SetClass()
