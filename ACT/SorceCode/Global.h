@@ -48,11 +48,3 @@ double GetDelectionVect(VECTOR2_f TarGetPos, VECTOR2_f MasterPos);
 //キャラのポジションの距離を計る
 double GetHowToLong(VECTOR2_f enemipos, VECTOR2_f player);
 
-//オブジェクトの位置と描画の情報
-struct ObjectInfo
-{
-	double x;	//x座標
-	double y;	//y座標
-	int xw;		//幅
-	int yh;		//高さ
-};

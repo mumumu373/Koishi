@@ -1,6 +1,6 @@
 #pragma once
 #include <math.h>
-#include "Global.h"
+
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミークラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"//ワイヤーポイントクラス
@@ -8,8 +8,7 @@
 /****************************************************************************
 *		当たり判定クラス
 */
-class CPlayer;
-class CWire;
+
 class CCollisionDetection
 {
 public:

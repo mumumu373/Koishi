@@ -296,7 +296,7 @@ void CGame::Draw()
 		//Nega->Draw(m_pGameWnd->hScreenDC);
 	
 	}
-	//m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
+	m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
 	//‰¼’u‚«
 	CMouseInput::Draw();
 }

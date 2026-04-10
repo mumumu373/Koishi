@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include "MyMath.h"
 #include "Global.h"
-#include <CGame/CCollisionDetection/CCollisionDetection.h>
+#include"CCamera/CCamera.h"
 
 
 class CMouseInput

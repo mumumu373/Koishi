@@ -1,8 +1,7 @@
 #include "CWire/CWire.h"
 
 #include "CMouseInput//CMouseInput.h"//マウス入力クラス
-
-
+#include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"
 CWire::CWire()
 {
 }
