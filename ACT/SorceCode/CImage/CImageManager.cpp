@@ -18,7 +18,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 	};
 	ImgList Img_List[]
 	{ 
-		{enImgList::IMG_StageMain	,"Data\\MapImage\\Otamesi.bmp","MainStage"} ,
+		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMain.bmp","MainStage"} ,
 		{enImgList::IMG_BuckGround1	,"Data\\MapImage\\BG1.bmp","BackGround_1"} ,
 		{enImgList::IMG_BuckGround2	,"Data\\MapImage\\BG2.bmp","BackGround_2"} ,
 		{enImgList::IMG_Koishi		,"Data\\Image\\Koishi.bmp","Koishi"} ,
