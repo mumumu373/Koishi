@@ -45,7 +45,6 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
                 std::cout << "EventHit" << std::endl;
 				m_isEventChipHit = true; // イベントチップに当たったフラグを立てる
             }
-
            
             if (tipID != 0 && tipID != 15) 
             {
@@ -54,7 +53,7 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
             }
         }
     }
-
-
     return false;
 }
+
+//--------------------------------------------------------------------------------------------------------------
