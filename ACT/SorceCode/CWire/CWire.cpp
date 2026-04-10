@@ -62,8 +62,10 @@ void CWire::Update()
 void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	if (m_ShotState != ShotSteto::no) {
+	
+
 		//ワイヤーの先端とプレイヤーの距離を測る
-		int pieces = GetHowToLong(m_DpPlayer->GetCenterPosition(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size);
+		int pieces = GetHowToLong(m_DpPlayer->GetCenterPosition(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size-1);
 		//ワイヤーの先端とプレイヤーの角度を測る
 		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
 		for (int i = 0; i < pieces+1; i++)
@@ -75,8 +77,8 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 				m_Framesplit.x = 0;
 			}
 			VECTOR2_f pos;
-			pos .x= (m_Toptpoint.x )+( cos(Radian)* (size)* i);
-			pos.y = (m_Toptpoint.y )+( sin(Radian) * (size ) * i);
+			pos .x= (m_Toptpoint.x )+( cos(Radian)* (size-1)* i);
+			pos.y = (m_Toptpoint.y )+( sin(Radian) * (size-1 ) * i);
 			
 			VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
 			CImageManager::SelectImg(CImageManager::enImgList::IMG_String)->TransAlBlendRotation(

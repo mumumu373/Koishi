@@ -3,7 +3,7 @@
 #include "MyMath.h"
 #include "Global.h"
 #include <CGame/CCollisionDetection/CCollisionDetection.h>
-class CCollisionDetection;
+
 
 class CMouseInput
 {
@@ -34,8 +34,8 @@ public:
 	static void Draw() { GetInstance()->draw(); };
 
 	//マウスの当たり判定を取得
-	static CCollisionDetection::ObjectInfo  GetcollisionMouse() {
-		CCollisionDetection::ObjectInfo i;
+	static ObjectInfo  GetcollisionMouse() {
+		ObjectInfo i;
 			i.x = GetInstance()->MousePos.x - GetInstance()->Size / 2;
 		i.y = GetInstance()->MousePos.y - GetInstance()->Size / 2;
 		i.xw= GetInstance()->Size;
@@ -61,7 +61,7 @@ public:
 
 	//マウスの座標を取得
 	static VECTOR2_f GetMousePos();
-	static VECTOR2_f GetMousePosCamera(std::unique_ptr<CCamera>& m_pCamera) {
+	static VECTOR2_f GetMousePosCamera(CCamera* m_pCamera) {
 		return m_pCamera->CalcToPositionInStage(&GetInstance()->MousePos);
 	}
 	//

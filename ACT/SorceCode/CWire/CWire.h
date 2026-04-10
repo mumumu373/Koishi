@@ -60,4 +60,6 @@ private:
 	double m_Radian;//ワイヤーの角度
 	VECTOR2_f m_Toptpoint;//ワイヤーの先端の座標
 	VECTOR2_f m_Targetpoint;//ワイヤーの目標地点
+
+	
 };

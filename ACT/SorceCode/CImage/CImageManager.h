@@ -23,6 +23,7 @@ public:
 		IMG_Wirepoint,		//ワイヤーポイント
 		IMG_BackGround,		//背景
 		IMG_BackSky,			//空
+		IMG_Slash,		//斬撃
 	};
 public:
 	static CImageManager* GetInstance()

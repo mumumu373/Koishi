@@ -58,6 +58,9 @@
     <Filter Include="SorceCode\CWireActionSupporter">
       <UniqueIdentifier>{5d52d1bc-c9fb-4f83-85dc-40c9521b66e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SorceCode\CNormalAttack">
+      <UniqueIdentifier>{634345ca-c988-4d82-9d8b-f7504811ea0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SorceCode\Main.cpp">
@@ -121,6 +124,12 @@
     </ClCompile>
     <ClCompile Include="SorceCode\CWireActionSupporter\CWireActionSupporter.cpp">
       <Filter>SorceCode\CWireActionSupporter</Filter>
+    </ClCompile>
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.cpp" />
+    <ClCompile Include="SorceCode\CNormalAttack\CNormalAttack.cpp">
+      <Filter>SorceCode\CNormalAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +197,12 @@
     </ClInclude>
     <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h">
       <Filter>SorceCode\CWireActionSupporter</Filter>
+    </ClInclude>
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.h" />
+    <ClInclude Include="SorceCode\CNormalAttack\CNormalAttack.h">
+      <Filter>SorceCode\CNormalAttack</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

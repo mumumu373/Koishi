@@ -28,6 +28,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{ enImgList::IMG_Wirepoint	,"Data\\Image\\GroundBack.bmp"			,"WirePoint"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
+		{enImgList::IMG_Slash		,"Data\\Image\\slash32x96.bmp"		,"IMG_Slash"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	

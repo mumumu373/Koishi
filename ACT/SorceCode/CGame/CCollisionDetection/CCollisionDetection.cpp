@@ -44,7 +44,7 @@ void CCollisionDetection::MouseToEnemyCollision(std::vector<std::unique_ptr<CEne
 			ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
 
 			//“–‚½‚Á‚½‚ç
-			if (CircleDetection({ CMouseInput::GetMousePosCamera(Camera).x,CMouseInput::GetMousePosCamera(Camera).y,1,1 }, EnemyPos) == true) {
+			if (CircleDetection({ CMouseInput::GetMousePosCamera(Camera.get()).x,CMouseInput::GetMousePosCamera(Camera.get()).y,1,1 }, EnemyPos) == true) {
 				VECTOR2_f i;
 				i = Camera->CalcToPositionInCamera(upEnemy[EnemyNo]->GetCenterPosition());
 				CMouseInput::SetMousePos(i);
@@ -84,7 +84,7 @@ void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<C
 
 
 
-CCollisionDetection::ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
+ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
 {
 	ObjectInfo PlayerInfo;
 
@@ -110,7 +110,7 @@ CCollisionDetection::ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_p
 	return PlayerInfo;
 }
 
-CCollisionDetection::ObjectInfo CCollisionDetection::SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize)
+ObjectInfo CCollisionDetection::SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize)
 {
 	ObjectInfo EnemyInfo;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include "Global.h"
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミークラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"//ワイヤーポイントクラス
@@ -7,18 +8,12 @@
 /****************************************************************************
 *		当たり判定クラス
 */
-
+class CPlayer;
+class CWire;
 class CCollisionDetection
 {
 public:
-	//オブジェクトの位置と描画の情報
-	struct ObjectInfo
-	{
-		double x;	//x座標
-		double y;	//y座標
-		int xw;		//幅
-		int yh;		//高さ
-	};
+
 public:
 	CCollisionDetection();
 	~CCollisionDetection();

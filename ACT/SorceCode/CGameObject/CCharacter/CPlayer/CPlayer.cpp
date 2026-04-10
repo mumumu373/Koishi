@@ -3,6 +3,11 @@
 
 #include "CMouseInput//CMouseInput.h"
 
+void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
+{
+	NormalAttack->DrawColion(c,h, pCamera);
+}
+
 CPlayer::CPlayer()
 	: m_Jumping(false)
 	, m_JumpPower(JUMP_POWER)
@@ -34,6 +39,7 @@ CPlayer::CPlayer()
 		m_Ldash = false;
 		m_Rdash = false;
 	}
+	NormalAttack= std::make_unique<CNormalAttack>();
 }
 
 CPlayer::~CPlayer()
@@ -66,8 +72,31 @@ void CPlayer::StartSetting()
 
 }
 
+void CPlayer::Attackmove()
+{
+	if (enActionState== enActionState::Attack) {
+		if (NormalAttack->GetAttack() == false) {
+			enActionState == enActionState::None;
+		}
+
+	}
+	else {
+		if (NormalAttack->GetAttack() == false) {
+			if (CMouseInput::GetMouseLeft(true, true)) {
+				NormalAttack->Strat(GetDelectionVect(GetCenterPosition(), CMouseInput::GetMousePosCamera(m_pCamera)), GetCenterPosition());
+				enActionState == enActionState::Attack;
+			}
+
+		}
+	}
+
+		
+}
+
 void CPlayer::Update()
 {
+	NormalAttack->Update();
+
 	m_State = enState::Living;
 	m_WireShot = false;
 
@@ -82,7 +111,7 @@ void CPlayer::Update()
 	if (enActionState !=enActionState::WirePointCatch) {
 		//プレイヤーのジャンプの制御
 		JumpPlayer();
-
+		Attackmove();//攻撃
 		
 		if (AvoidanceCoolCount > 0) {
 
@@ -142,29 +171,27 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	}
 	//アニメーション処理
 	Animation();
+	m_Delection+=50;
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-	////CImageManagerがシングルトン化しているので、サウンドのように使える
-	//CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation(
-	//	DispPos.x,				//表示位置x座標
-	//	DispPos.y,				//表示位置y座標
-	//	m_Framesplit.w,			//画像幅
-	//	m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-	//	m_Framesplit.x,			//元画像x座標
-	//	m_Framesplit.y,			//元画像y座標
-	//	m_FrameSize.x,			//元画像xサイズ		
-	//	m_FrameSize.y,			//元画像yサイズ
-	//	m_Alpha, m_Delection);					//透明度、角度
+
+	if (enActionState != enActionState::AirAvoidance) {
+		m_Delection = 0;
+	}
+
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation3(
-		DispPos.x,				//表示位置x座標
+		DispPos.x ,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
-		m_Framesplit.w,			//画像幅
-		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+		m_Framesplit.h,			//画像幅
+		m_Framesplit.w,			//高さ	<-拡大して表示するサイズ		
 		m_Framesplit.x,			//元画像x座標
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, i, m_Delection, 0);					//透明度、角度
+
+		m_Alpha, i, 0, 0);					//透明度、角度
+
+	NormalAttack->Draw(pCamera);
 }
 
 void CPlayer::WireEnd(VECTOR2_f Spead)
@@ -237,7 +264,10 @@ void CPlayer::AvoidanceEnd()
 	else {
 		if (AvoidanceCount == 0) {
 			AvoidanceCount = -1;//回避状態を終わらせる
-			enActionState = enActionState::None;
+			if (enActionState != enActionState::WirePointCatch) {
+				enActionState = enActionState::None;
+			}
+			
 			m_MoveState = enMoveState::Wait;
 			AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
 
@@ -315,6 +345,10 @@ void CPlayer::AirKeyInput()
 		enActionState = enActionState::AirAvoidance;
 		AirAvoidanceVECTSet();
 		AvoidanceCount = AvoidanceTime;
+	}
+	//ワイヤー発射指示
+	if (CMouseInput::GetMouseRight(true, false) && m_WireShotCan) {
+		m_WireShot = true;
 	}
 }
 
