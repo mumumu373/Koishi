@@ -27,6 +27,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
 , m_upCamera				(nullptr)
+, m_upBoss					(nullptr)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -95,7 +96,6 @@ bool CGame::Create()
 
 	m_pWire = std::make_unique<CWire>();
 
-
 	//ボスを作る
 	m_upBoss = CBossFactory::CreateNazrin();
 
@@ -111,9 +111,12 @@ bool CGame::Create()
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 	//----------------------------------------------------------------------------
 
+
 	//ステージマネージャーのインスタンス生成
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
+
+	m_upEnemy.push_back(CEnemySet::otamesi());
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
@@ -171,8 +174,6 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
-
 	//仮置き
 	CMouseInput::Update();
 
@@ -184,6 +185,10 @@ void CGame::Update()
 	m_upPlayer->SetWireShotCan(m_pWire->canShot());
 	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
+
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
+
+	//プレイヤーの動作
 	m_upPlayer->Update(m_upBullet);
 
 	//当たり判定
@@ -237,10 +242,6 @@ void CGame::Update()
 	//ステージの更新
 	m_upStageManager->Update();
 
-
-	//ワイヤーとワイヤーポイント
-	Collision();
-
 	//バレットを消す処理を行う
 	DeleteBullet();
 
@@ -272,7 +273,6 @@ void CGame::Draw()
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Draw(m_upCamera);
 	}
-
 	//ボスの描画
 	if (m_upBoss != nullptr) {
 		m_upBoss->Draw(m_upCamera);
@@ -301,7 +301,7 @@ void CGame::Draw()
 
 void CGame::Collision()
 {
-	
+
 }
 
 void CGame::SetClass()

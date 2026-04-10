@@ -1,6 +1,5 @@
 #include "CPlayer.h"
 
-
 #include "CMouseInput//CMouseInput.h"
 
 CPlayer::CPlayer()
@@ -34,7 +33,6 @@ CPlayer::CPlayer()
 		m_Ldash = false;
 		m_Rdash = false;
 	}
-}
 
 	//ハートクラス作成
 	m_upHeart = std::make_unique<CHeart>();
@@ -161,7 +159,7 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	//	m_FrameSize.x,			//元画像xサイズ		
 	//	m_FrameSize.y,			//元画像yサイズ
 	//	m_Alpha, m_Delection);					//透明度、角度
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation3(
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
@@ -276,12 +274,13 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 			break;
 		}
 		break;
+
+		m_Acceleration = { 0,0 };//空中の加速度をリセットする
 	}
 }
 
-			m_Acceleration = { 0,0 };//空中の加速度をリセットする
-		}
-	}
+void CPlayer::AvoidanceEnd()
+{
 }
 
 void CPlayer::KyeInput()
