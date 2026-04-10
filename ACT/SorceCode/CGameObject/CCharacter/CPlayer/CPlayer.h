@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject/CCharacter/CCharacter.h"
+#include "CGameObject/CCharacter/CPlayer/CHeart/CHeart.h"
 
 #include "CWire/CWire.h"
 #include "CNormalAttack/CNormalAttack.h"
@@ -69,6 +70,11 @@ public:
 	void SetCamera(CCamera* m_pCamer) {
 		m_pCamera = m_pCamer;
 	}
+
+	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+
+	//プレイヤーのハートを描画する
+	void PlayerHeartDraw() { m_upHeart->Draw(); }
 private:
 	void Animation() override;
 public://パブリック
@@ -85,6 +91,8 @@ private:
 	void MovePlayerGround();
 	//プレイヤーのジャンプ制御
 	void JumpPlayer();
+	//プレイヤーの属性変更
+	void PlayerColorChange();
 
 	void Dash();
 private:
@@ -107,6 +115,10 @@ private:
 	int AvoidanceCount;	//回避にかかる時間を図る
 	int AvoidanceCoolCount;//回避のクールタイムを図る
 	VECTOR2_f AirAvoidanceVECT;	//空中回避のベクトル
+
+	bool m_ChangeColor;		//属性を変更したか
+
+	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス
 
 	std::unique_ptr<CNormalAttack> NormalAttack;
 	CCamera* m_pCamera;

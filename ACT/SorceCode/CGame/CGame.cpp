@@ -24,15 +24,16 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hWorkBmp2				(nullptr)
 , m_hFont					(nullptr)
 , m_upCollisionDetection	(nullptr)
+, m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
-, m_upStageLoader			(nullptr)
-, m_upStage					(nullptr)
-, m_upStageCollision		(nullptr)
-, m_upStageResource			(nullptr)
 , m_upCamera				(nullptr)
+, m_upBoss					(nullptr)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
+	}
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i] = nullptr;
 	}
 }
 
@@ -95,29 +96,34 @@ bool CGame::Create()
 	
 	m_pWire = std::make_unique<CWire>();
 
+	//ボスを作る
+	m_upBoss = CBossFactory::CreateNazrin();
 
 	//エネミーのインスタンス生成
 	//エネミーを作るタイミングで良い
 
 	//エネミーを作っている
-	VECTOR2_f SetEnemy = { 200,200 };
+	VECTOR2_f SetEnemy = { 200,400 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy));
-	
+	SetEnemy.y -= 200;																//作るときにムーブタイプを決めておく
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::Green, SetEnemy, CFairy::enMoveType::Stop, 60, 120));
+	SetEnemy.x += 300;
+	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 	//----------------------------------------------------------------------------
 
-	//ステージのインスタンス生成
-	m_upStage			= std::make_unique<CStage>();
-	m_upStageCollision	= std::make_unique<CStageCollision>();
-	m_upStageLoader		= std::make_unique<CStageLoader>();
-	m_upStageResource = std::make_unique<CStageResource>(m_upStage, m_upStageLoader, m_upStageCollision);
 
-	m_upStageResource->Create();
+	//ステージマネージャーのインスタンス生成
+	m_upStageManager = std::make_unique<CStageManager>();
+	m_upStageManager->Create();
+
+	m_upEnemy.push_back(CEnemySet::otamesi());
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
 		m_upCamera = std::make_unique<CCamera>();
-		//ステージの幅と高さをセットする
-		m_upCamera->SetStageSize(m_upStageLoader->GetWidth(), m_upStageLoader->GetHeight());
+		//ステージの幅と高さをセットする<w.h>
+		std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+		m_upCamera->SetStageSize(MapSize.first,MapSize.second);
 	}
 
 	//エネミーをポリモーで動かそうとすると、ここのセットクラスはいらないかも
@@ -142,7 +148,6 @@ bool CGame::Create()
 //破棄関数
 void CGame::Destroy()
 {
-
 	//stdの破棄用の関数をまた追加する
 
 	//BITMAPの解放.--------------------------------------------------重要---------------------------
@@ -183,25 +188,39 @@ void CGame::Update()
 	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
 
-	constexpr float playerW = 144;
-	constexpr float playerH = 144;
-	constexpr float ChipW = 48;
-	constexpr float ChipH = 48;
-	bool test = m_upStageCollision->IsHit(m_upPlayer->GetPosition(), playerW, playerH,m_upStageLoader->GetMapData(), ChipW, ChipH);
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
 
-	if (test)
-	{
-		std::cout << "当たってるよ！" << std::endl;
-	}
-	else
-	{
-		std::cout << "当たってないよ！" << std::endl;
-	}
+	//プレイヤーの動作
+	m_upPlayer->Update(m_upBullet);
+
+	//当たり判定
+	bool test = m_upStageManager->IsHit(*m_upPlayer);
+
+	//if (test)
+	//{
+	//	std::cout << "当たってるよ！" << std::endl;
+	//}
+	//else
+	//{
+	//	std::cout << "当たってないよ！" << std::endl;
+	//}
 
 	//エネミーの動作
 	//ある分回す
 	for (int i = 0; i < m_upEnemy.size(); i++) {
-		m_upEnemy[i]->Update();
+		//プレイヤーの位置を取得する
+		m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
+		m_upEnemy[i]->Update(m_upBullet);
+	}
+
+	//ボスの動作
+	if (m_upBoss != nullptr) {
+		m_upBoss->Update(m_upBullet);
+	}
+
+	//バレットの動作
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i]->Update();
 	}
 
 	for (int i = 0; i < m_pCWirepoint.size(); i++) {
@@ -222,13 +241,11 @@ void CGame::Update()
 		m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
 	}
 
-	m_upStage->Update();
+	//ステージの更新
+	m_upStageManager->Update();
 
-
-	//ワイヤーとワイヤーポイント
-	Collision();
-
-
+	//バレットを消す処理を行う
+	DeleteBullet();
 
 	//プレイヤーにカメラが付くようにする
 	m_upCamera->SetPosition(m_upPlayer->GetCenterPosition());
@@ -247,7 +264,7 @@ void CGame::Draw()
 {
 
 	//ステージの描画
-	m_upStage->Draw(m_upCamera);
+	m_upStageManager->Draw(m_upCamera);
 	//ワイヤーの描画
 	m_pWire->Draw(m_upCamera);
 
@@ -258,6 +275,18 @@ void CGame::Draw()
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i]->Draw(m_upCamera);
 	}
+	//ボスの描画
+	if (m_upBoss != nullptr) {
+		m_upBoss->Draw(m_upCamera);
+	}
+
+	//バレットの描画
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		m_upBullet[i]->Draw(m_upCamera);
+	}
+
+	//プレイヤーのハートを描画する
+	m_upPlayer->PlayerHeartDraw();
 
 	for (int i = 0; i < m_pCWirepoint.size(); i++) {
 		m_pCWirepoint[i]->Draw(m_upCamera);
@@ -272,15 +301,31 @@ void CGame::Draw()
 	CMouseInput::Draw();
 }
 
-void CGame::Collision()
-{
-	
-}
-
 void CGame::SetClass()
 {
 }
 
 void CGame::DeleteInstance()
 {
+}
+
+void CGame::DeleteBullet()
+{
+	//バレットのインスタンスを消す
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		//バレットが死んだら
+		if (m_upBullet[i]->m_State == CBullet::enState::Dead) {
+			//erase は、ここから後ろの物はすべて消しますというものとなる	引数に remove_if があるということは？
+			m_upBullet.erase(
+				//remove_ifだけでは削除はしない	begin と end はそれぞれ、先頭、末尾を見てください。というものになる
+				std::remove_if(m_upBullet.begin(), m_upBullet.end(),
+					//[]->ラムダ式を開始します ()
+					[](const std::unique_ptr<CBullet>& Bullet) {
+						//この場合の条件は、バレットがデッド状態なら末尾に追いやる
+						return Bullet->m_State == CBullet::enState::Dead;
+					}),
+				m_upBullet.end()
+			);
+		}
+	}
 }

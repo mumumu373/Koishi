@@ -1,6 +1,5 @@
 #include "CPlayer.h"
 
-
 #include "CMouseInput//CMouseInput.h"
 
 void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
@@ -40,6 +39,9 @@ CPlayer::CPlayer()
 		m_Rdash = false;
 	}
 	NormalAttack= std::make_unique<CNormalAttack>();
+
+	//ハートクラス作成
+	m_upHeart = std::make_unique<CHeart>();
 }
 
 CPlayer::~CPlayer()
@@ -70,6 +72,8 @@ void CPlayer::StartSetting()
 
 	m_OldPosition = m_Position;
 
+	//属性を変えたかを確認
+	m_ChangeColor = false;
 }
 
 void CPlayer::Attackmove()
@@ -174,13 +178,14 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	m_Delection+=50;
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-
-	if (enActionState != enActionState::AirAvoidance) {
-		m_Delection = 0;
-	}
-
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation3(
+		DispPos.x,				//表示位置x座標
+	//	m_Framesplit.y,			//元画像y座標
+		m_Framesplit.w,			//画像幅
+		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+	//	m_Alpha, m_Delection);					//透明度、角度
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Player)->TransAlBlendRotation3(
-		DispPos.x ,				//表示位置x座標
+		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.h,			//画像幅
 		m_Framesplit.w,			//高さ	<-拡大して表示するサイズ		
@@ -210,6 +215,20 @@ double CPlayer::GetWireStartSpeed()
 		return Speed;
 	}
 	return 0;
+}
+
+void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+	//プレイヤーの動きの制御
+	//MovePlayer();
+
+	//プレイヤーのジャンプの制御
+	//JumpPlayer();
+
+	//プレイヤーの属性変更制御
+	PlayerColorChange();
+
+	KyeInput();
 }
 
 void CPlayer::Animation()
@@ -252,22 +271,48 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 			break;
 		}
 		break;
+		//-------------------------妖精-------------------------
+	case enMyCharacter::Fairy:
+		switch (Color) {
+		case enColor::NoColor:
+		case enColor::Red:
+		case enColor::Yellow:
+		case enColor::Green:
+		case enColor::Blue:
+			m_Position = { 0,0 };
+			break;
+		}
+		break;
+		//-------------------------陰陽玉-------------------------
+	case enMyCharacter::YinYangBall:
+		switch (Color) {
+		case enColor::NoColor:
+		case enColor::Red:
+		case enColor::Yellow:
+		case enColor::Green:
+		case enColor::Blue:
+			m_Position = { 0,0 };
+			break;
+		}
+		break;
+
+		m_Acceleration = { 0,0 };//空中の加速度をリセットする
 	}
 }
 
 void CPlayer::AvoidanceEnd()
 {
 	if (AvoidanceCount > 0) {
-		AvoidanceCount--;
+			if (enActionState != enActionState::WirePointCatch) {
+				enActionState = enActionState::None;
+			}
+			
 
 	}
 	else {
 		if (AvoidanceCount == 0) {
 			AvoidanceCount = -1;//回避状態を終わらせる
-			if (enActionState != enActionState::WirePointCatch) {
-				enActionState = enActionState::None;
-			}
-			
+			enActionState = enActionState::None;
 			m_MoveState = enMoveState::Wait;
 			AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
 
@@ -396,7 +441,6 @@ void CPlayer::MovePlayerJump()
 		}
 
 	}
-	
 }
 
 void CPlayer::MovePlayerGround()
@@ -473,6 +517,45 @@ void CPlayer::Dash()
 		m_Ldashcount = 0;
 		m_Ldash = false;
 		break;
+	}
+}
+
+void CPlayer::PlayerColorChange()
+{
+	//属性を変更する
+	if (GetAsyncKeyState('Q') & 0x8000) {
+		//色が変わっていたらそれ以降は変えない
+		if (m_ChangeColor == false) {
+			m_ChangeColor = true;
+
+			m_Color--;
+
+			//変えたときNoColorなら
+			if (m_Color < enColor::NoColor) {
+				//Blue(最後の列挙)にする
+				m_Color = enColor::Blue;
+			}
+
+			//ハートのほうの属性も変える
+			m_upHeart->ChangeHeartColor(m_Color);
+		}
+	}
+	else if (GetAsyncKeyState('E') & 0x8000) {
+		if (m_ChangeColor == false) {
+			m_ChangeColor = true;
+
+			m_Color++;
+
+			if (m_Color > enColor::Blue) {
+				m_Color = enColor::NoColor;
+			}
+
+			m_upHeart->ChangeHeartColor(m_Color);
+		}
+	}
+	//離したら
+	else {
+		m_ChangeColor = false;
 	}
 }
 

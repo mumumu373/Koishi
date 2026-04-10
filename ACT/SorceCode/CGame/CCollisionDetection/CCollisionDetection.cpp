@@ -76,9 +76,7 @@ void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<C
 				}
 			}
 		}
-	}
-	
-	
+	}	
 }
 
 
