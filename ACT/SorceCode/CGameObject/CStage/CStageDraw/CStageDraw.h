@@ -42,6 +42,10 @@ public:
 	}
 
 private:
+	void DrawSkyLoop(float LoopX);
+	void DrawMountainLoop(float LoopX);
+
+private:
 
 	CImage::FRAMESPLIT m_Chip;  // マップチップ1つあたりの幅、高さ
 	VECTOR2_f m_MapMax;         // マップデータの縦と横の最大数
