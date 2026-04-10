@@ -47,15 +47,17 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 
 void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
 {
-    float loopX = fmod(CurrentStagePos.x, m_Framesplit.w);
+    float SkyloopX = fmod(CurrentStagePos.x * 0.5f, m_Framesplit.w);
+    float MountainloopX = fmod(CurrentStagePos.x, m_Framesplit.w);
 
-    DrawSkyLoop(loopX);
-    DrawMountainLoop(loopX);
+
+    DrawSkyLoop(SkyloopX, CurrentStagePos.y);
+    DrawMountainLoop(MountainloopX, CurrentStagePos.y);
 }
 
 //--------------------------------------------------------------------------------------------------------------
 
-void CStageDraw::DrawMountainLoop(float loopX)
+void CStageDraw::DrawMountainLoop(const float loopX, const float y)
 {
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackGround)->TransAlBlend(
         loopX,          
@@ -68,7 +70,7 @@ void CStageDraw::DrawMountainLoop(float loopX)
 
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackGround)->TransAlBlend(
         loopX + m_Framesplit.w,
-        0,             
+        0,
         m_Framesplit.w,
         m_Framesplit.h,
         m_Framesplit.x,
@@ -79,11 +81,11 @@ void CStageDraw::DrawMountainLoop(float loopX)
 
 //--------------------------------------------------------------------------------------------------------------
 
-void CStageDraw::DrawSkyLoop(float loopX)
+void CStageDraw::DrawSkyLoop(const float loopX, const float y)
 {
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
         loopX,         
-        0,             
+        0,
         m_Framesplit.w,
         m_Framesplit.h,
         m_Framesplit.x,
@@ -93,7 +95,7 @@ void CStageDraw::DrawSkyLoop(float loopX)
     // ステージ背景1の描画
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
         loopX + m_Framesplit.w,
-        0,              
+        0,
         m_Framesplit.w, 
         m_Framesplit.h, 
         m_Framesplit.x, 

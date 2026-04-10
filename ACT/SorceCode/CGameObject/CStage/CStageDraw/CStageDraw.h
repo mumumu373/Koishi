@@ -42,8 +42,8 @@ public:
 	}
 
 private:
-	void DrawSkyLoop(float LoopX);
-	void DrawMountainLoop(float LoopX);
+	void DrawSkyLoop(const float LoopX,const float y);
+	void DrawMountainLoop(const float LoopX, const float y);
 
 private:
 
