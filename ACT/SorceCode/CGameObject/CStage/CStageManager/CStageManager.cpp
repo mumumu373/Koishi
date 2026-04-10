@@ -64,7 +64,7 @@ bool CStageManager::IsHit(CCharacter& charactor)
 	};
 
 	//当たり判定に必要な情報を取得
-	VECTOR2_f	playerPos	= charactor.GetPosition();
+	VECTOR2_f	charactorPos	= charactor.GetPosition();
 	Size		size		= { charactor.GetFrameSplit().w,charactor.GetFrameSplit().h };
 	auto		mapData		= m_upStageLoader->GetMapData();
 	constexpr	float chipW = 48;
@@ -74,7 +74,7 @@ bool CStageManager::IsHit(CCharacter& charactor)
 	//=========当たり判定=========
 
 	return m_upStageCollision->IsHit(
-			playerPos,
+			charactorPos,
 			size.w, size.h,
 			mapData,
 			chipW, chipH);
