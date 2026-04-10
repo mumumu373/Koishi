@@ -178,15 +178,6 @@ void CGame::Update()
 	//当たり判定
 	bool test = m_upStageManager->IsHit(*m_upPlayer);
 
-	if (test)
-	{
-		std::cout << "当たってるよ！" << std::endl;
-	}
-	else
-	{
-		std::cout << "当たってないよ！" << std::endl;
-	}
-
 	//エネミーの動作
 	//ある分回す
 	for (int i = 0; i < m_upEnemy.size(); i++) {
