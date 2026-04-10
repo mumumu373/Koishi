@@ -104,6 +104,17 @@
     </ClCompile>
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
     <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
+    <ClCompile Include="SorceCode\CGame\CBossFactory\CBossFactory.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CBullet.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.cpp" />
+    <ClCompile Include="SorceCode\CGame\CBulletFactory\CBulletFactory.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CCircularBullet\CCircularBullet.cpp" />
+    <ClCompile Include="SorceCode\CGame\CEnemySet\CEnemySet.cpp" />
     <ClCompile Include="SorceCode\CMouseInput\CMouseInput.cpp">
       <Filter>SorceCode\CMouseInput</Filter>
     </ClCompile>
@@ -172,6 +183,17 @@
     </ClInclude>
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
     <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
+    <ClInclude Include="SorceCode\CGame\CBossFactory\CBossFactory.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CBullet.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.h" />
+    <ClInclude Include="SorceCode\CGame\CBulletFactory\CBulletFactory.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CCircularBullet\CCircularBullet.h" />
+    <ClInclude Include="SorceCode\CGame\CEnemySet\CEnemySet.h" />
     <ClInclude Include="SorceCode\CMouseInput\CMouseInput.h">
       <Filter>SorceCode\CMouseInput</Filter>
     </ClInclude>

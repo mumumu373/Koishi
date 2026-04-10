@@ -28,6 +28,15 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{ enImgList::IMG_Wirepoint	,"Data\\Image\\GroundBack.bmp"			,"WirePoint"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
+		{enImgList::IMG_StageMain,"Data\\MapImage\\Otamesi.bmp","MainStage"} ,
+		{enImgList::IMG_BuckGround1,"Data\\MapImage\\BG1.bmp","BackGround_1"} ,
+		{enImgList::IMG_BuckGround2,"Data\\MapImage\\BG2.bmp","BackGround_2"} ,
+		{enImgList::IMG_Koishi,"Data\\Image\\Koishi.bmp","Koishi"} ,
+		{enImgList::IMG_Heart,"Data\\Image\\Heart.bmp","Heart"} ,
+		{enImgList::IMG_Enemy,"Data\\Image\\Enemy.bmp","Enemy"} ,
+		{enImgList::IMG_Nazrin,"Data\\Image\\Nazrin.bmp","Nazrin"} ,
+		{enImgList::IMG_Bullet,"Data\\Image\\Bullet.bmp","Bullet"} ,
+		{enImgList::IMG_Effect,"Data\\Image\\Effect.bmp","Effect"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	

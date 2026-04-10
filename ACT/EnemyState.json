@@ -1,0 +1,13 @@
+{
+  "Stage": "Stage1",
+  "Enemies": [
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 400,
+        "y": 400
+      },
+      "Color": 1
+    }
+  ]
+}
