@@ -4,7 +4,7 @@ CStageDraw::CStageDraw()
     : m_Chip(0, 0, 48, 48)
     , m_MapMax()
     , m_mapData()
-	, m_Framesplit()
+	, m_Framesplit(0, 0, WND_W, WND_H)
 {
 }
 
@@ -47,28 +47,62 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 
 void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
 {
+    //クランプ
+    float SkyloopX = fmod(CurrentStagePos.x * 0.5f, m_Framesplit.w);
+    float MountainloopX = fmod(CurrentStagePos.x, m_Framesplit.w);
 
-    // ステージ背景1の描画
-    CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
-        0,              // 表示位置x
-        0,              // 表示位置y
-        m_Framesplit.w, // 画像幅
-        m_Framesplit.h, // 高さ
-        m_Framesplit.x, // 元画像x
-        m_Framesplit.y, // 元画像y
-        255);           // 透明度
+    //背景描画
+    DrawSkyLoop(SkyloopX, CurrentStagePos.y);
+    DrawMountainLoop(MountainloopX, CurrentStagePos.y);
+}
 
-    // ステージ背景1の描画
+//--------------------------------------------------------------------------------------------------------------
+
+void CStageDraw::DrawMountainLoop(const float loopX, const float y)
+{
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackGround)->TransAlBlend(
-        0,              // 表示位置x
-        0,              // 表示位置y
-        m_Framesplit.w, // 画像幅
-        m_Framesplit.h, // 高さ
-        m_Framesplit.x, // 元画像x
-        m_Framesplit.y, // 元画像y
-        255);           // 透明度
+        loopX,          
+        0,              
+        m_Framesplit.w, 
+        m_Framesplit.h, 
+        m_Framesplit.x, 
+        m_Framesplit.y, 
+        255);           
+
+    CImageManager::SelectImg(CImageManager::enImgList::IMG_BackGround)->TransAlBlend(
+        loopX + m_Framesplit.w,
+        0,
+        m_Framesplit.w,
+        m_Framesplit.h,
+        m_Framesplit.x,
+        m_Framesplit.y,
+        255);          
 
 }
 
 //--------------------------------------------------------------------------------------------------------------
 
+void CStageDraw::DrawSkyLoop(const float loopX, const float y)
+{
+    CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
+        loopX,         
+        0,
+        m_Framesplit.w,
+        m_Framesplit.h,
+        m_Framesplit.x,
+        m_Framesplit.y,
+        255);          
+
+    // ステージ背景1の描画
+    CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
+        loopX + m_Framesplit.w,
+        0,
+        m_Framesplit.w, 
+        m_Framesplit.h, 
+        m_Framesplit.x, 
+        m_Framesplit.y, 
+        255);           
+
+}
+
+//--------------------------------------------------------------------------------------------------------------

@@ -33,13 +33,23 @@ public:
 	}
 
 	/*****************************************************************************************
-	* @brief    背景描画関数
+	* @brief    マップデータをセットする関数。Managerで受け取る
 	* @param    MapData : マップデータ
 	*****************************************************************************************/
 	void SetMapData(const std::vector<std::vector<int>>& MapData) 
 	{ 
 		m_mapData = MapData;
 	}
+
+private:
+
+	/*****************************************************************************************
+	* @brief    空と山のループ描画関数
+	* @param    LoopX	: ループのX座標
+	*			y		: Y座標
+	*****************************************************************************************/
+	void DrawSkyLoop(const float LoopX,const float y);
+	void DrawMountainLoop(const float LoopX, const float y);
 
 private:
 

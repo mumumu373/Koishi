@@ -4,8 +4,8 @@
 
 class CStageCollision {
 public:
-    CStageCollision() {}
-
+    CStageCollision();
+    ~CStageCollision();
 /*****************************************************************************************
 * @brief    マップデータの読込
 *
@@ -19,4 +19,10 @@ public:
     bool IsHit(const VECTOR2_f& pos, float w, float h,
         const std::vector<std::vector<int>>& mapData,
         float chipW, float chipH);
+
+    bool GetIsEventChipHit();
+
+private:
+	bool m_isEventChipHit; // イベントチップに当たったかどうかのフラグ
+
 };
