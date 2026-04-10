@@ -47,10 +47,11 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 
 void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
 {
+    //クランプ
     float SkyloopX = fmod(CurrentStagePos.x * 0.5f, m_Framesplit.w);
     float MountainloopX = fmod(CurrentStagePos.x, m_Framesplit.w);
 
-
+    //背景描画
     DrawSkyLoop(SkyloopX, CurrentStagePos.y);
     DrawMountainLoop(MountainloopX, CurrentStagePos.y);
 }
