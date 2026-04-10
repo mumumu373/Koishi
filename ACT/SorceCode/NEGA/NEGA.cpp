@@ -27,10 +27,10 @@ NEGA::~NEGA()
 
 void NEGA::Draw(HDC Scre)
 {
-	//
+	//根がポジ返還
 	BitBlt(Scre, 0, 0, WND_W, WND_H, Scre, 0, 0, DSTINVERT);
 
-}
+}	
 /*
 {
 	int Size = WND_W * WND_H;
@@ -133,7 +133,7 @@ void NEGA::DrawCH(HDC Scre)
 		BYTE b = GetBValue(pixels[i]);//青の値を取得
 
 
-		pixels[i] = RGB(b, r, g);//平均値をRGBに変換して保存
+		pixels[i] = RGB(b, r, g);//
 	}
 	SetDIBits(Scre, bmp, 0, WND_H, &pixels[0], &bmi, DIB_RGB_COLORS);
 

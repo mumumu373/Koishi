@@ -46,4 +46,5 @@ VECTOR2_f NormalVector(VECTOR2_f Vect);
 double GetDelectionVect(VECTOR2_f TarGetPos, VECTOR2_f MasterPos);
 
 //キャラのポジションの距離を計る
-double GetHowToLong(VECTOR2_f TarGetPos, VECTOR2_f MasterPos);
+double GetHowToLong(VECTOR2_f enemipos, VECTOR2_f player);
+

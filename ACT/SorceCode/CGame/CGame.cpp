@@ -93,7 +93,7 @@ bool CGame::Create()
 	//-------------------------動的に作って消したい者達-----------------------------
 	//プレイヤーのインスタンス生成		プレイヤーはゲームが始まった時に作りたい
 	m_upPlayer = std::make_unique<CPlayer>();
-
+	
 	m_pWire = std::make_unique<CWire>();
 
 	//ボスを作る
@@ -140,6 +140,8 @@ bool CGame::Create()
 
 	Nega =std::make_unique<NEGA>(); 
 	m_upWireActionSupporter = std::make_unique<CWireActionSupporter>();
+
+	m_upPlayer->SetCamera(m_upCamera.get());
 	return true;
 }
 
@@ -250,7 +252,7 @@ void CGame::Update()
 	m_upCamera->Update();
 	//ワイヤーを撃つ処理
 	if (m_upPlayer->GetWireShot()) {
-		m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera));
+		m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
 	}
 
 	//インスタンスを破棄する関数
@@ -291,10 +293,10 @@ void CGame::Draw()
 	}
 	if (CMouseInput::GetMouseLeft(true,false)) {
 		//
-		Nega->Draw(m_pGameWnd->hScreenDC);
+		//Nega->Draw(m_pGameWnd->hScreenDC);
 	
 	}
-	
+	m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
 	//仮置き
 	CMouseInput::Draw();
 }

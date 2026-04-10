@@ -348,11 +348,16 @@ void CImage::TransAlBlendRotation3(int xDest, int yDest, int wDest, int hDest, i
 	pos[2].z = z;
 	//s—ñì‚é•Ï”	Šp“x‚ğ“ü‚ê‚Ä‚¢‚é
 	//¶ã
+	int Ten = wDest/2+1;
+	int S;
 	Po[0] = MakeRotation(pos[0], Delection_X, Delection_Y, Delection_Z);
+
 	//‰Eã
 	Po[1] = MakeRotation(pos[1], Delection_X, Delection_Y, Delection_Z);
+
 	//¶‰º
 	Po[2] = MakeRotation(pos[2], Delection_X, Delection_Y, Delection_Z);
+
 
 	POINT Point[3];
 	//¶ã

@@ -1,8 +1,7 @@
 #include "CWire/CWire.h"
 
 #include "CMouseInput//CMouseInput.h"//マウス入力クラス
-
-
+#include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"
 CWire::CWire()
 {
 }
@@ -62,6 +61,8 @@ void CWire::Update()
 void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	if (m_ShotState != ShotSteto::no) {
+	
+
 		//ワイヤーの先端とプレイヤーの距離を測る
 		int pieces = GetHowToLong(m_DpPlayer->GetCenterPosition(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size-1);
 		//ワイヤーの先端とプレイヤーの角度を測る

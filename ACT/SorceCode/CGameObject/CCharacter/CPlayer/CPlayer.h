@@ -3,6 +3,7 @@
 #include "CGameObject/CCharacter/CPlayer/CHeart/CHeart.h"
 
 #include "CWire/CWire.h"
+#include "CNormalAttack/CNormalAttack.h"
 /*****************************************************************************************************
 *		プレイヤークラス
 */
@@ -16,9 +17,9 @@ public:
 	static constexpr double JUMP_POWER = 12;//ジャンプ力
 	static constexpr int DashcountMAX = 30;//ダッシュの受付時間
 	static constexpr int TurnAroundSpeed = 10;//向きを変える速さ
-	static constexpr double AvoidanceDistance = 144;//回避の距離
-	static constexpr int AvoidanceTime = 6;//回避にかかる時間
-	static constexpr int AvoidancecoolTime = 90;//回避のクールタイム
+	static constexpr double AvoidanceDistance = 288;//回避の距離
+	static constexpr int AvoidanceTime = 60;//回避にかかる時間
+	static constexpr int AvoidancecoolTime = 0;//回避のクールタイム
 public:
 	//アクション状態
 	enum enActionState
@@ -39,6 +40,7 @@ public:
 	bool GroundStand = false;		//地面に立っています
 	bool OldGroundStand = false;		//前フレームの地面に立っている状態
 public:
+	void DrawH(HDC c, HWND h, std::unique_ptr<CCamera>& pCamera);//後で消す
 	CPlayer();
 	~CPlayer();
 	//ワイヤーポイントを掴む状態にする
@@ -46,7 +48,7 @@ public:
 	void StartSetting() override;
 
 	int GetStete() { return m_State; }
-
+	void Attackmove();
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 	//ワイヤーを撃てるかセット
@@ -65,6 +67,9 @@ public:
 	void SetPosition(VECTOR2_f pos) { m_Position = pos; };
 	void WireEnd(VECTOR2_f Spead);
 	double GetWireStartSpeed();
+	void SetCamera(CCamera* m_pCamer) {
+		m_pCamera = m_pCamer;
+	}
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
 
@@ -114,4 +119,7 @@ private:
 	bool m_ChangeColor;		//属性を変更したか
 
 	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス
+
+	std::unique_ptr<CNormalAttack> NormalAttack;
+	CCamera* m_pCamera;
 };

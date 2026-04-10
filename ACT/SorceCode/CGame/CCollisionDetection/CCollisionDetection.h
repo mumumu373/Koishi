@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミークラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"//ワイヤーポイントクラス
@@ -10,6 +11,8 @@
 
 class CCollisionDetection
 {
+public:
+
 public:
 	CCollisionDetection();
 	~CCollisionDetection();
