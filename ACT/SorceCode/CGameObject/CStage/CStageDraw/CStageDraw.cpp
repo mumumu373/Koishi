@@ -17,7 +17,7 @@ CStageDraw::~CStageDraw()
 void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 {
     // 背景の切り取り範囲設定（スクロール等の処理があればここで拡張）
-    m_Framesplit = { 0, 0, WND_W, WND_H };
+    m_Framesplit = { 0, 0, 1280, WND_H };
 
     //背景の描画
     VECTOR2_f StagePos = pCamera->CalcToStagePosition();
@@ -58,7 +58,7 @@ void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
 
 //--------------------------------------------------------------------------------------------------------------
 
-void CStageDraw::DrawMountainLoop(const float loopX, const float y)
+void CStageDraw::DrawMountainLoop(const float loopX, const float y) const
 {
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackGround)->TransAlBlend(
         loopX,          

@@ -19,7 +19,7 @@ public:
 
 	/*****************************************************************************************
 	* @brief    背景描画関数
-	* @parama   CurrentStagePos : 現在のステージの位置
+	* @param   CurrentStagePos : 現在のステージの位置
 	*****************************************************************************************/
 	void BackGroundDraw(VECTOR2_f CurrentStagePos);
 
@@ -49,7 +49,7 @@ private:
 	*			y		: Y座標
 	*****************************************************************************************/
 	void DrawSkyLoop(const float LoopX,const float y);
-	void DrawMountainLoop(const float LoopX, const float y);
+	void DrawMountainLoop(const float LoopX, const float y) const;
 
 private:
 

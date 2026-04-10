@@ -22,6 +22,8 @@ public:
 
     bool GetIsEventChipHit();
 
+	void EventChipPattern();
+
 private:
 	bool m_isEventChipHit; // イベントチップに当たったかどうかのフラグ
 

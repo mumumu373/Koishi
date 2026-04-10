@@ -18,42 +18,63 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     const std::vector<std::vector<int>>& mapData,
     float chipW, float chipH)
 {
-    //チェックする座標のリストを作成
-    float checkX[] = { pos.x, pos.x + w / 3.0f,pos.x + w / 1.5f, pos.x + w - 1.0f };
-    float checkY[] = { pos.y, pos.y + h / 3.0f,pos.y + h / 1.5f, pos.y + h - 1.0f };
-	m_isEventChipHit = false; // 開始時に毎回リセット
+    float checkX[] = { pos.x, pos.x + w / 3.0f, pos.x + w / 1.5f, pos.x + w - 1.0f };
+    float checkY[] = { pos.y, pos.y + h / 3.0f, pos.y + h / 1.5f, pos.y + h - 1.0f };
+    m_isEventChipHit = false;
 
-    for (float x : checkX) 
+    // 添え字(i, j)を使ってループを回す
+    for (int i = 0; i < 4; ++i)
     {
-        for (float y : checkY) 
+        float x = checkX[i]; // 現在のX座標
+
+        for (int j = 0; j < 4; ++j)
         {
-            //ピクセル座標をマップの配列番号に変換
+            float y = checkY[j]; // 現在のY座標
+
             int mapX = (int)(x / chipW);
             int mapY = (int)(y / chipH);
 
-            //配列の範囲外チェック（画面外は壁とみなす例）
             if (mapY < 0 || mapY >= (int)mapData.size() ||
-                mapX < 0 || mapX >= (int)mapData[0].size()) 
+                mapX < 0 || mapX >= (int)mapData[0].size())
             {
                 return true;
             }
 
-            //チップ番号の判定
             int tipID = mapData[mapY][mapX];
-            if (tipID == 19)
+
+            switch (tipID)
             {
+            case 19:
                 std::cout << "EventHit" << std::endl;
-				m_isEventChipHit = true; //イベントチップに当たったフラグを立てる
+                m_isEventChipHit = true;
+                break;
+
+            case 20:
+                // i == 0 ならば、checkX[0] (一番左側) の判定点である
+                if (i == 0)
+                {
+                    std::cout << "MapChange" << std::endl;
+                    m_isEventChipHit = true;
+                }
+                break;
+
+            default:
+                break;
             }
-           
-            if (tipID != 0 && tipID != 15) 
+
+            // 壁判定（0と15以外は衝突）
+            if (tipID != 0 && tipID != 15)
             {
-                std::cout << mapData[mapY][mapX] << "Hit" << std::endl;
-                return true; //どこか1点でも壁に当たればヒット
+                std::cout << tipID << std::endl;
+                return true;
             }
         }
     }
     return false;
 }
-
 //--------------------------------------------------------------------------------------------------------------
+
+void CStageCollision::EventChipPattern()
+{
+
+}
