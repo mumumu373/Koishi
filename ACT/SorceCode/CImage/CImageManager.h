@@ -16,13 +16,18 @@ public:
 		IMG_StageMain = 0,	//ステージのメイン画像(ブロック状の物達)
 		IMG_BuckGround1,	//背景1
 		IMG_BuckGround2,	//背景2
-		IMG_Player,			//プレイヤー
+		IMG_Koishi,			//こいし(プレイヤー)
+		IMG_Heart,			//ハート(体力)
 		IMG_Enemy,			//エネミー
 		IMG_Mouse,			//マウス
 		IMG_String,			//ワイヤー	
 		IMG_Wirepoint,		//ワイヤーポイント
 		IMG_BackGround,		//背景
 		IMG_BackSky,			//空
+		IMG_Nazrin,			//ナズーリン	1面ボス
+
+		IMG_Bullet,			//全員のバレット
+		IMG_Effect,			//エフェクト
 	};
 public:
 	static CImageManager* GetInstance()

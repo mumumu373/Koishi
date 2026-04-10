@@ -34,8 +34,8 @@ public:
 	static void Draw() { GetInstance()->draw(); };
 
 	//ƒ}ƒEƒX‚Ì“–‚½‚è”»’è‚ðŽæ“¾
-	static CCollisionDetection::ObjectInfo  GetcollisionMouse() {
-		CCollisionDetection::ObjectInfo i;
+	static ObjectInfo GetcollisionMouse() {
+		ObjectInfo i;
 			i.x = GetInstance()->MousePos.x - GetInstance()->Size / 2;
 		i.y = GetInstance()->MousePos.y - GetInstance()->Size / 2;
 		i.xw= GetInstance()->Size;

@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
+#include "CGame/CBulletFactory/CBulletFactory.h"	//バレットを作るクラス
 
 /***********************************************
 *			キャラクタークラス
@@ -23,10 +24,12 @@ public:
 	enum enMyCharacter
 	{
 		Player = 0,	//プレイヤー
+
 		Kedama,		//毛玉
 		Fairy,		//妖精
-		//以降敵の名前
-		Galleria,		//ボス
+		YinYangBall,//陰陽玉
+
+		Nazrin,		//ボス
 	};
 
 	int m_MyCharacter = enMyCharacter::Player;
@@ -76,6 +79,9 @@ public:
 	virtual void Update() override{}		// {}←定義
 
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {}
+
+	//オーバーロードさせる
+	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) = 0;
 protected:
 	virtual void Animation() = 0;			//アニメーション関数
 protected:
@@ -87,4 +93,6 @@ protected:
 	VECTOR2_f m_OldPosition;	//移動前の位置
 
 	VECTOR2 m_FrameSize;		//切り抜く画像のサイズ
+
+	int m_AnimetionCo;			//アニメーション切り替えのカウンター
 };

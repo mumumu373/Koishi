@@ -1,11 +1,6 @@
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"
 
-
-
-
-
 CWirepoint::CWirepoint(VECTOR2_f pos, int Size)
-	:CCharacter()
 {
 	m_State = enState::Living;
 	m_Position = pos;

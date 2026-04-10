@@ -1,18 +1,25 @@
 #pragma once
 #include <Windows.h>
 #include "Global.h"
-#include "CImage/CImageManager.h"								//イメージクラス
-#include "CCamera/CCamera.h"									//カメラクラス
-#include "CSound/CSoundManager.h"								//サウンドマネージャークラス
-#include "CGame/CCollisionDetection/CCollisionDetection.h"		//当たり判定クラス
-#include "CGameObject/CStage/CStageManager/CStageManager.h"		//ステージクラス
-#include "CGame/CEnemyFactory/CEnemyFactory.h"					//エネミーを作るクラス
+#include "CImage/CImageManager.h"							//イメージクラス
+#include "CCamera/CCamera.h"								//カメラクラス
+#include "CSound/CSoundManager.h"							//サウンドマネージャークラス
+#include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
+//----------------------------------------------------------
+#include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
+#include "CGame/CBossFactory/CBossFactory.h"				//ボスを作るクラス
+#include "CGame/CBulletFactory/CBulletFactory.h"			//バレットを作るクラス
+//----------------------------------------------------------この3つはまた別のところで呼び出す
+#include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
+#include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミークラス
+#include "CGameObject/CCharacter/CBoss/CBoss.h"				//ボスクラス
+#include "CGameObject/CBullet/CBullet.h"					//バレットクラス
 
-#include "CGameObject/CCharacter/CPlayer/CPlayer.h"				//プレイヤークラス
-#include "CGameObject/CCharacter/CEnemy/CEnemy.h"				//エネミーマネージャークラス
+#include "CEnemySet/CEnemySet.h"
+#include "CGameObject/CStage/CStageManager/CStageManager.h"		//ステージクラス
 
 #include "CMouseInput//CMouseInput.h"//マウス入力クラス
-#include"CWire/CWire.h"	///ワイヤークラス
+#include "CWire/CWire.h"	///ワイヤークラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"	///ワイヤーポイントクラス
 
 #include "NEGA/NEGA.h"
@@ -90,6 +97,10 @@ private:
 	//インスタンスを破棄する関数
 	void DeleteInstance();
 
+	//バレットを削除する関数
+	void DeleteBullet();
+
+private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 
 	HDC m_hMemDC;  //メモリデバイスコンテキスト.
@@ -125,13 +136,17 @@ private:
 	//														-ゲームオブジェクト系-
 	//----------------------プレイヤー-------------------
 	std::unique_ptr<CPlayer> m_upPlayer; 
-	std::unique_ptr<CWire>m_pWire;
-	std::vector<std::unique_ptr<CWirepoint>>m_pCWirepoint;
+	std::unique_ptr<CWire >m_pWire;
+	std::vector<std::unique_ptr<CWirepoint>> m_pCWirepoint;
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく
 
+	//----------------------ボス------------------------
+	std::unique_ptr<CBoss> m_upBoss;
+
 	//----------------------バレット---------------------
+	std::vector<::std::unique_ptr<CBullet>> m_upBullet;	
 
 	//----------------------ステージ--------------------
 	std::unique_ptr<CStageManager> m_upStageManager;
