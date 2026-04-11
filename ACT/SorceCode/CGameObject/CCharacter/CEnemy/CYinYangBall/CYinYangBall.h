@@ -9,9 +9,6 @@ class CYinYangBall
 	: public CEnemy
 {
 public:
-	//Å‘å—‰º‘¬“x
-	static constexpr double MAX_FALLING_SPEAD = 25;
-public:
 	//ŒÄ‚Ño‚·‚Æ‚«‚Éí—Ş‚ğŒˆ‚ß‚é
 	CYinYangBall(int Kinds, VECTOR2_f SetPos);
 	~CYinYangBall();
