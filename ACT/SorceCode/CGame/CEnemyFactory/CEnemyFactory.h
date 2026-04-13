@@ -15,20 +15,20 @@ public:
 
 	//ファクトリークラスからエネミークラスを返す関数を作る
 	//ユニークポインター型のエネミークラスを返すようにする
-	static inline std::unique_ptr<CEnemy> CreateKedama(int KedamaColor, VECTOR2_f SetPos)
+	static inline std::unique_ptr<CEnemy> CreateKedama(int KedamaColor, VECTOR2_f SetPos, double MoveSpeed, double JumpPower, int ChangeMoveTime, int JumpingTime)
 	{
 		//毛玉クラスの誰を作るかを決める
 		//ユニークポインターはコピーして渡すことができないので、make_uniqueで新しいユニークポインターを作り、中身をクラスなどで作るようにする
 		//毛玉はエネミーを継承しているので返すことができる
-		return std::make_unique<CKedama>(KedamaColor, SetPos);
+		return std::make_unique<CKedama>(KedamaColor, SetPos, MoveSpeed, JumpPower, ChangeMoveTime, JumpingTime);
 	}
 	//エネミーの種類が増えたら下に追加
 	//inlineとは、この関数を呼び出したところ(ヘッダーなど)で直接動作させるようなもので、処理負荷が少ない	(今のエネミーファクトリーだとinlineは必要ない)
 
 	//妖精クラスを作成する関数																			
-	static inline std::unique_ptr<CEnemy> CreateFairy(int FairyColor, VECTOR2_f SetPos, int MoveType, int MoveOp_1, int MoveOp_2)
+	static inline std::unique_ptr<CEnemy> CreateFairy(int FairyColor, VECTOR2_f SetPos, VECTOR2_f Speed, int MoveType, int MoveOp_1, int MoveOp_2)
 	{
-		return std::make_unique<CFairy>(FairyColor, SetPos, MoveType, MoveOp_1, MoveOp_2);
+		return std::make_unique<CFairy>(FairyColor, SetPos, Speed, MoveType, MoveOp_1, MoveOp_2);
 	}
 
 	//陰陽玉クラスを作成する関数

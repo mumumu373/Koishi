@@ -1,6 +1,6 @@
 #include "CKedama.h"
 
-CKedama::CKedama(int Kinds, VECTOR2_f SetPos)
+CKedama::CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower, int ChangeMoveTime, int JumpingTime)
 {
 	//ステージに配置する
 	m_Position = SetPos;
@@ -14,7 +14,27 @@ CKedama::CKedama(int Kinds, VECTOR2_f SetPos)
 	//エネミー陣営です
 	m_MyCamp = enMyCamp::EnemyCamp;
 
+	//スピード
+	m_Speed = { MoveSpeed, MoveSpeed };
+
+	//ジャンプ力
+	m_JumpPower = JumpPower;
+	//ジャンプしているか
+	m_Jumping = false;
+	//ジャンプするタイミング
+	m_JumpingTime = JumpingTime;
+	m_JumpingCo = 0;
+
+	//地面に立っているか
+	m_GroundStand = false;
+	//落下速度の初期化
+	m_FallingSpeed = 0;
+
 	StartSetting();
+
+	//ムーブを変えるタイミングを決める
+	m_ChangeMoveTime = ChangeMoveTime;
+	m_ChangeMoveCo = 0;
 }
 
 CKedama::~CKedama()
@@ -28,15 +48,18 @@ void CKedama::StartSetting()
 	switch (m_Color) {
 	case enColor::NoColor:
 		m_Framesplit = { 0,0,80,80 };
-		m_Speed = { 0,0 };
 		break;
 	case enColor::Red:
 		m_Framesplit = { 32,0,100,100 };
-		m_Speed = { 1,0 };
+		break;
+	case enColor::Yellow:
+		m_Framesplit = { 32,0,100,100 };
+		break;
+	case enColor::Green:
+		m_Framesplit = { 32,0,100,100 };
 		break;
 	case enColor::Blue:
 		m_Framesplit = { 0,0,200,200 };
-		m_Speed = { 0,0 };
 		break;
 	}
 	//元画像サイズ
@@ -76,6 +99,10 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	case enColor::Red:
 		break;
+	case enColor::Yellow:
+		break;
+	case enColor::Green:
+		break;
 	case enColor::Blue:
 		break;
 	}
@@ -84,13 +111,47 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-		m_Position.x -= m_Speed.x;
+	//	m_Position.x -= m_Speed.x;
 		break;
 	case enMoveState::MoveRight:
-		m_Position.x += m_Speed.x;
+	//	m_Position.x += m_Speed.x;
 		break;
 	}
 
+	//仮の地面
+	if (m_Position.y >= WND_H) {
+		//地面に合わせる
+		m_Position.y = WND_H;
+		m_GroundStand = true;
+
+		m_FallingSpeed = 0;
+	}
+	else {
+		//落下速度を計算
+		m_FallingSpeed += Gravity;
+	}
+
+	//ジャンプをさせないなら
+	if (m_JumpingTime != 0) {
+		//地面に立っているなら
+		if (m_GroundStand == true) {
+			//ジャンプするタイミングなら
+			if (m_JumpingCo > m_JumpingTime) {
+				//ジャンプする
+				m_FallingSpeed = -m_JumpPower;
+				m_JumpingCo = 0;
+
+				//地面から離れた
+				m_GroundStand = false;
+			}
+			else {
+				m_JumpingCo++;
+			}
+		}
+	}
+
+	//落下するようにする
+	m_Position.y += m_FallingSpeed;
 }
 
 void CKedama::Animation()
