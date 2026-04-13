@@ -82,6 +82,8 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
             if (tipID != 0 && tipID != 15 && tipID != 19 && tipID != 20)
             {
                 std::cout << tipID << std::endl;
+                m_HitMapX = mapX; 
+                m_HitMapY = mapY;
                 return true;
             }
         }

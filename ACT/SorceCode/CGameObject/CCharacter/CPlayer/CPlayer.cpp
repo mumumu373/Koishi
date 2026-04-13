@@ -5,8 +5,6 @@
 
 #include<iostream>
 
-//デバック判定用定数(消し忘れ注意)
-
 constexpr float PlayerCollisionW = 60.f;
 constexpr float PlayerCollisionH = 100.0f;
 
@@ -66,7 +64,7 @@ void CPlayer::StartSetting()
 
 	m_FrameSize = { 64,64 };
 	m_Framesplit = { 0,0,144,144 };
-	m_Position = { 50,0 };
+	m_Position = { 50,50 };
 
 	//実際の当たり判定
 	m_RealFrameSplit = { 104,104 };
@@ -130,22 +128,6 @@ void CPlayer::Update()
 		
 	}
 	AvoidanceEnd();
-
-	//仮置き地面
-	if (m_Position.y > 900 - m_Framesplit.h) {
-		m_Position.y = 900 - m_Framesplit.h;
-		//空中回避状態なら
-		if (enActionState != enActionState::AirAvoidance) {
-			GroundStand = true;
-			//地面に着いたらまたジャンプできるように
-			m_JumpRemove = false;
-			m_Jumping = false;
-			m_JumpAcc = 0;
-			m_Acceleration.y = 0;
-		}
-
-	}
-
 
 }
 
@@ -409,12 +391,12 @@ void CPlayer::MovePlayerJump()
 	if(enActionState == enActionState::AirAvoidance) {
 		m_Acceleration.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
 		m_Acceleration.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
-		m_Position.x += m_Acceleration.x;
-		m_Position.y += m_Acceleration.y;
+		MoveSafe(m_Acceleration.x, 0);
+		MoveSafe(0, m_Acceleration.y);
 	}
 	else {
-		m_Position.x += m_Acceleration.x;
-		m_Position.y += m_Acceleration.y;
+		MoveSafe(m_Acceleration.x, 0);
+		MoveSafe(0, m_Acceleration.y);
 		m_Acceleration.x *= 0.999;
 
 		if (m_Acceleration.x<1 && m_Acceleration.x>-1) {
@@ -427,17 +409,19 @@ void CPlayer::MovePlayerJump()
 void CPlayer::MovePlayerGround()
 {
 	if (enActionState == enActionState::Avoidance) {
-		if (m_Acceleration.x<=0) {
+		if (m_Acceleration.x <= 0) {
 			//左回避状態なら
-			m_Position.x -= AvoidanceDistance / AvoidanceTime;
+			float moveX = -(AvoidanceDistance / AvoidanceTime);
+			MoveSafe(moveX, 0);
 		}
 		else {
-			m_Position.x += AvoidanceDistance / AvoidanceTime;
+			float moveX = (AvoidanceDistance / AvoidanceTime);
+			MoveSafe(moveX, 0);
 		}
-		m_Position.y += m_Acceleration.y;
+		MoveSafe(0, m_Acceleration.y);
 	}
-	else 
-	{
+	else {
+		MoveSafe(m_Acceleration.x, m_Acceleration.y);
 	}
 
 
@@ -451,7 +435,8 @@ void CPlayer::JumpPlayer()
 			m_Jumping = true;	//ジャンプ中
 
 			m_JumpAcc = m_JumpPower;
-			m_Position.y -= m_JumpPower;
+			MoveSafe(0, -m_JumpPower);
+
 
 			//押している時間を図る
 			if (m_JumpRemoveCo >= 10) {
@@ -472,7 +457,7 @@ void CPlayer::JumpPlayer()
 		//空中回避状態なら
 		if (enActionState != enActionState::AirAvoidance) {
 			m_JumpAcc -= Gravity;
-			m_Position.y -= m_JumpAcc;
+			MoveSafe(0, -m_JumpAcc);
 		}
 }
 
@@ -501,37 +486,46 @@ void CPlayer::Dash()
 	}
 }
 
-// 座標を更新する専用の関数（ここでだけ判定を行う）
+// 座標を更新する専用の関数
 void CPlayer::MoveSafe(float moveX, float moveY)
 {
 	VECTOR2_f offsetPos = { 40.f, 40.f };
 
-	// --- X軸移動 ---
-	if (moveX != 0.0f) {
+	// X軸移動
+	if (moveX != 0.0f) 
+	{
 		VECTOR2_f nextPosX = m_Position;
 		nextPosX.x += moveX;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos)) {
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos)) 
+		{
 			m_Position.x = nextPosX.x;
 		}
-		else {
+		else 
+		{
 			m_Acceleration.x = 0; // 壁に当たったら速度を殺す
 		}
 	}
 
-	// --- Y軸移動 ---
-	if (moveY != 0.0f) {
+	// Y軸移動
+	if (moveY != 0.0f) 
+	{
 		VECTOR2_f nextPosY = m_Position;
 		nextPosY.y += moveY;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos)) {
+		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos))
+		{
 			m_Position.y = nextPosY.y;
 		}
-		else {
+		else
+		{
 			// 地面判定
-			if (moveY > 0) {
+			if (moveY > 0) 
+			{
 				GroundStand = true;
 				m_Jumping = false;
 				m_JumpRemove = false;
+				m_JumpAcc = 0;
 			}
+
 			m_Acceleration.y = 0;
 		}
 	}
