@@ -20,8 +20,10 @@ bool CStageManager::Create()
 	m_upStageLoader = std::make_unique<CStageLoader>();
 	m_upStageDraw = std::make_unique<CStageDraw>();
 
-	//データ読み込み
+	//マップデータ読み込み
 	if (m_upStageLoader->LoadMap("Data\\MapData\\Map01.csv") == false) return false;
+	m_upStageCollision->SetCurrentMapData(m_upStageLoader->GetMapData());
+
 	m_upStageDraw->SetMapMax(m_upStageLoader->GetMapWidth(), m_upStageLoader->GetMapHeight());
 	m_upStageDraw->SetMapData(m_upStageLoader->GetMapData());
 
@@ -76,7 +78,6 @@ bool CStageManager::IsHit(CCharacter& charactor)
 	return m_upStageCollision->IsHit(
 			charactorPos,
 			size.w, size.h,
-			mapData,
 			chipW, chipH);
 
 	//============================

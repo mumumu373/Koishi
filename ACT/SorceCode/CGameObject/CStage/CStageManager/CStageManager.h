@@ -57,14 +57,6 @@ public:
 	*****************************************************************************************/
 	bool IsHit(CCharacter& charactor);
 
-
-	/*****************************************************************************************
-	* @brief    EventChipに当たっているかどうかを取得する関数
-	* 
-	* @return   当たっているかどうか
-	*****************************************************************************************/
-	bool IsEventChipHit() { return m_upStageCollision->GetIsEventChipHit(); }
-
 private:
 
 	std::unique_ptr<CStageCollision> m_upStageCollision;	//ステージの当たり判定クラス

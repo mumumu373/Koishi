@@ -2,7 +2,8 @@
 #include <iostream>
 
 CStageCollision::CStageCollision()
-    : m_isEventChipHit(false)
+    : m_isEventChipHit  (false)
+	, m_MapData()
 {
 }
 
@@ -15,14 +16,12 @@ CStageCollision::~CStageCollision()
 //--------------------------------------------------------------------------------------------------------------
 
 bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
-    const std::vector<std::vector<int>>& mapData,
     float chipW, float chipH)
 {
     float checkX[] = { pos.x, pos.x + w / 3.0f, pos.x + w / 1.5f, pos.x + w - 1.0f };
     float checkY[] = { pos.y, pos.y + h / 3.0f, pos.y + h / 1.5f, pos.y + h - 1.0f };
     m_isEventChipHit = false;
 
-    // 添え字(i, j)を使ってループを回す
     for (int i = 0; i < 4; ++i)
     {
         float x = checkX[i]; // 現在のX座標
@@ -34,13 +33,13 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
             int mapX = (int)(x / chipW);
             int mapY = (int)(y / chipH);
 
-            if (mapY < 0 || mapY >= (int)mapData.size() ||
-                mapX < 0 || mapX >= (int)mapData[0].size())
+            if (mapY < 0 || mapY >= (int)m_MapData.size() ||
+                mapX < 0 || mapX >= (int)m_MapData[0].size())
             {
                 return true;
             }
 
-            int tipID = mapData[mapY][mapX];
+            int tipID = m_MapData[mapY][mapX];
 
             switch (tipID)
             {
@@ -73,8 +72,3 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     return false;
 }
 //--------------------------------------------------------------------------------------------------------------
-
-void CStageCollision::EventChipPattern()
-{
-
-}
