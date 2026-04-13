@@ -4,6 +4,13 @@
 #include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 #include<iostream>
+
+//デバック判定用定数(消し忘れ注意)
+
+constexpr float PlayerCollisionW = 60.f;
+constexpr float PlayerCollisionH = 100.0f;
+
+
 CPlayer::CPlayer()
 	: m_Jumping(false)
 	, m_JumpPower(JUMP_POWER)
@@ -138,6 +145,8 @@ void CPlayer::Update()
 		}
 
 	}
+
+
 }
 
 void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
@@ -160,6 +169,18 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, i, m_Delection, 0);					//透明度、角度
+
+	VECTOR2_f offsetPos = { 40.f,40.f };
+
+	RECT rect;
+	rect.left = DispPos.x + offsetPos.x;
+	rect.top = DispPos.y + offsetPos.y;
+	rect.right = DispPos.x + PlayerCollisionW + offsetPos.x;
+	rect.bottom = DispPos.y + PlayerCollisionH + offsetPos.y	;
+
+	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
+
+
 }
 
 void CPlayer::WireEnd(VECTOR2_f Spead)
@@ -192,6 +213,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	PlayerColorChange();
 
 	KyeInput();
+
 }
 
 void CPlayer::Animation()
@@ -416,37 +438,8 @@ void CPlayer::MovePlayerGround()
 	}
 	else 
 	{
-		//-------------------------------------------------判定-------------------------------------------------
-
-
-		VECTOR2_f nextPos = m_Position;
-		VECTOR2_f offsetPos = { 40.f,40.f };
-		nextPos.x += m_Acceleration.x;
-
-
-		if (CStageCollision::GetInstance()->IsHit(nextPos, 60, 100, 48, 48, offsetPos)) {
-			// 壁に当たった：移動をキャンセルするか、チップの端に補正する
-			// 簡易的には移動させない
-			m_Acceleration.x = 0;
-		}
-		else {
-			m_Position.x = nextPos.x;
-		}
-
-		// 2. Y軸方向の移動と判定
-		VECTOR2_f nextPosY = m_Position; // X軸移動後の座標をベースにする
-		nextPosY.y += m_Acceleration.y;
-
-		if (CStageCollision::GetInstance()->IsHit(nextPos, 60, 100, 48, 48, offsetPos)) {
-			// 床か天井に当たった
-			if (m_Acceleration.y > 0) // 下方向に動いて当たれば接地
-			m_Acceleration.y = 0;
-		}
-		//------------------------------------------------------------------------------------------------------
-
-		m_Position.x += m_Acceleration.x;
-		m_Position.y += m_Acceleration.y;
 	}
+
 
 }
 
@@ -507,6 +500,43 @@ void CPlayer::Dash()
 		break;
 	}
 }
+
+// 座標を更新する専用の関数（ここでだけ判定を行う）
+void CPlayer::MoveSafe(float moveX, float moveY)
+{
+	VECTOR2_f offsetPos = { 40.f, 40.f };
+
+	// --- X軸移動 ---
+	if (moveX != 0.0f) {
+		VECTOR2_f nextPosX = m_Position;
+		nextPosX.x += moveX;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos)) {
+			m_Position.x = nextPosX.x;
+		}
+		else {
+			m_Acceleration.x = 0; // 壁に当たったら速度を殺す
+		}
+	}
+
+	// --- Y軸移動 ---
+	if (moveY != 0.0f) {
+		VECTOR2_f nextPosY = m_Position;
+		nextPosY.y += moveY;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos)) {
+			m_Position.y = nextPosY.y;
+		}
+		else {
+			// 地面判定
+			if (moveY > 0) {
+				GroundStand = true;
+				m_Jumping = false;
+				m_JumpRemove = false;
+			}
+			m_Acceleration.y = 0;
+		}
+	}
+}
+
 
 void CPlayer::PlayerColorChange()
 {

@@ -90,6 +90,10 @@ private:
 	void PlayerColorChange();
 
 	void Dash();
+
+	//マップチップとの当たり判定
+	void MoveSafe(float moveX, float moveY);
+
 private:
 	void AirAvoidanceVECTSet();
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
 #include "CGame/CBulletFactory/CBulletFactory.h"	//バレットを作るクラス
+#include "CGameObject/CStage/CStageCollisionDraw/CStageCollisionDraw.h"		//ステージとの判定描画クラス
 
 /***********************************************
 *			キャラクタークラス
