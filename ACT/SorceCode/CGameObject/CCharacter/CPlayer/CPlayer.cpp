@@ -417,6 +417,8 @@ void CPlayer::MovePlayerGround()
 	else 
 	{
 		//-------------------------------------------------”»’è-------------------------------------------------
+
+
 		VECTOR2_f nextPos = m_Position;
 		VECTOR2_f offsetPos = { 40.f,40.f };
 		nextPos.x += m_Acceleration.x;
