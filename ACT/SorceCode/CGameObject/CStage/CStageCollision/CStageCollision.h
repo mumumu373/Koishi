@@ -32,6 +32,8 @@ public:
     *****************************************************************************************/
     void SetCurrentMapData(const std::vector<std::vector<int>>& mapData) { m_MapData = mapData; }
 
+    int GetHitMapX() const { return m_HitMapX; }
+    int GetHitMapY() const { return m_HitMapY; }
 
 private:
     CStageCollision();
@@ -43,4 +45,7 @@ private:
 
 	// 現在のマップデータを保持する変数
     std::vector<std::vector<int>> m_MapData;
+
+    int m_HitMapX;	// 当たったマップチップのX座標
+    int m_HitMapY;	// 当たったマップチップのY座標
 };
