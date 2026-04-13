@@ -9,6 +9,16 @@ class CNazrin
 	:public CBoss
 {
 public:
+	//攻撃のパターン
+	enum enAttackMove
+	{
+		Standby,	//待機
+		Move_01,	//左下端からバレットを飛ばしてから右下端からバレットを出す
+		Move_02,	//左右にステップしてから上空に行って、バレットを降らせる
+	};
+
+	int m_AttackMove = enAttackMove::Standby;
+public:
 	CNazrin();
 	~CNazrin();
 
@@ -20,6 +30,14 @@ public:
 private:
 	void Animation() override;
 private:
-	bool m_BulletShot;	//バレットを撃つ
-	int m_BulletShotCo;	//撃つまでのカウント
+	bool m_Jumping;			//今ジャンプしているか
+	int m_JumpingCo;		//ジャンプするタイミングをカウント
+
+	bool m_BulletShot;		//バレットを撃つ
+	int m_BulletShotCo;		//撃つまでのカウント
+
+	double m_FallingSpeed;	//落下速度
+	bool m_GroundStand;		//地面に立っているか	
+
+	int m_AttackMoveChangeCo;	//攻撃のパターンを変えるタイミングをカウント
 };

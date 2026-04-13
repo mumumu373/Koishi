@@ -10,7 +10,7 @@ class CKedama
 {
 public:
 	//最大落下速度
-	static constexpr double MAX_FALLING_SPEAD = 25;
+	static constexpr double MAX_FALLING_SPEED = 25;
 public:
 	//呼び出すときに 種類		位置		スピード			ジャンプ力		ムーブを変えるタイミング	ジャンプするタイミング
 	CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower, int ChangeMoveTime, int JumpingTime);

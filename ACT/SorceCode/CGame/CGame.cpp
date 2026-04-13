@@ -108,9 +108,9 @@ bool CGame::Create()
 	VECTOR2_f SetEnemy = { 200,400 };
 	VECTOR2_f Speed = { 4,4 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 60));
-	SetEnemy.y -= 200;																//作るときにムーブタイプを決めておく
+	SetEnemy.y -= 10;																//作るときにムーブタイプを決めておく
 	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::Green, SetEnemy, Speed, CFairy::enMoveType::Stop, 60, 120));
-	SetEnemy.x += 300;
+	SetEnemy.x += 100;
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 	//----------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	//m_upEnemy.push_back(CEnemySet::otamesi());
+	m_upEnemy.push_back(CEnemySet::otamesi());
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成

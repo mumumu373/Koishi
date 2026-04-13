@@ -119,15 +119,21 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-		//m_Position.x -= m_Speed.x;
+		//ステージに対してその場所に行けるか判定
+		MoveSafe(-m_Speed.x, 0);
 		break;
 	case enMoveState::MoveRight:
-		//m_Position.x += m_Speed.x;
+		MoveSafe(m_Speed.x, 0);
 		break;
 	}
 
 	//落下速度を計算
-	m_FallingSpeed += Gravity;
+	if (m_FallingSpeed >= MAX_FALLING_SPEED) {
+		m_FallingSpeed = MAX_FALLING_SPEED;
+	}
+	else {
+		m_FallingSpeed += Gravity;
+	}
 
 	//ジャンプをさせないなら
 	if (m_JumpingTime != 0) {
