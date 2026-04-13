@@ -2,7 +2,6 @@
 
 CStageManager::CStageManager()
 	: m_upStageLoader		(nullptr)
-	, m_upStageCollision	(nullptr)
 	, m_upStageDraw			(nullptr)
 	, m_StageName			()
 {
@@ -17,7 +16,6 @@ CStageManager::~CStageManager()
 bool CStageManager::Create()
 {
 	//ステージのインスタンス生成
-	m_upStageCollision = std::make_unique<CStageCollision>();
 	m_upStageLoader = std::make_unique<CStageLoader>();
 	m_upStageDraw = std::make_unique<CStageDraw>();
 
@@ -85,10 +83,10 @@ bool CStageManager::IsHit(CCharacter& charactor)
 
 	//=========当たり判定=========
 
-	return m_upStageCollision->IsHit(
+	return CStageCollision::GetInstance()->IsHit(
 			charactorPos,
 			size.w, size.h,
-			chipW, chipH);
+			chipW, chipH, {0, 0});
 
 	//============================
 }
@@ -102,7 +100,7 @@ void CStageManager::ChangeStage(enStage stageNum)
 	// マップデータ読み込み
 	if (m_upStageLoader->LoadMap(m_CurrentStage) == false) return;
 
-	m_upStageCollision->SetCurrentMapData(m_upStageLoader->GetMapData());
+	CStageCollision::GetInstance()->SetCurrentMapData(m_upStageLoader->GetMapData());
 	m_upStageDraw->SetMapMax(m_upStageLoader->GetMapWidth(), m_upStageLoader->GetMapHeight());
 	m_upStageDraw->SetMapData(m_upStageLoader->GetMapData());
 }

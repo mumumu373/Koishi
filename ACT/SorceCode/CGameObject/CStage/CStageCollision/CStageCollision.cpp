@@ -16,10 +16,27 @@ CStageCollision::~CStageCollision()
 //--------------------------------------------------------------------------------------------------------------
 
 bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
-    float chipW, float chipH)
+    float chipW, float chipH, VECTOR2_f offset)
 {
-    float checkX[] = { pos.x, pos.x + w / 3.0f, pos.x + w / 1.5f, pos.x + w - 1.0f };
-    float checkY[] = { pos.y, pos.y + h / 3.0f, pos.y + h / 1.5f, pos.y + h - 1.0f };
+    float startX = pos.x + offset.x;
+    float startY = pos.y + offset.y;
+
+    float checkX[] = 
+    {
+        startX,                  
+        startX + w / 3.0f,       
+        startX + w * 2.0f / 3.0f,
+        startX + w - 1.0f        
+    };
+
+    float checkY[] =
+    {
+        startY,
+        startY + h / 3.0f,
+        startY + h * 2.0f / 3.0f,
+        startY + h - 1.0f
+    };
+
     m_isEventChipHit = false;
 
     for (int i = 0; i < 4; ++i)
@@ -62,7 +79,7 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
             }
 
             // 壁判定（0と15以外は衝突）
-            if (tipID != 0 && tipID != 15)
+            if (tipID != 0 && tipID != 15 && tipID != 19 && tipID != 20)
             {
                 std::cout << tipID << std::endl;
                 return true;

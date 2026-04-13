@@ -4,7 +4,13 @@
 
 class CStageCollision {
 public:
-    CStageCollision();
+
+    static CStageCollision* GetInstance()
+    {
+        static CStageCollision s_Instance;
+        return &s_Instance;
+    }
+
     ~CStageCollision();
     /*****************************************************************************************
     * @brief    マップデータの読込
@@ -17,7 +23,7 @@ public:
     *			chipH   : チップの高さ
     *****************************************************************************************/
     bool IsHit(const VECTOR2_f& pos, float w, float h,
-        float chipW, float chipH);
+        float chipW, float chipH, VECTOR2_f offset);
 
 
     /*****************************************************************************************
@@ -28,6 +34,10 @@ public:
 
 
 private:
+    CStageCollision();
+    CStageCollision(const CStageCollision& rhs) = delete;
+    CStageCollision& operator=(CStageCollision& rhs) = delete;
+
     // イベントチップに当たったかどうかのフラグ
 	bool m_isEventChipHit;
 

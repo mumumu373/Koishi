@@ -1,6 +1,7 @@
 #include "CPlayer.h"
 
 #include "CMouseInput//CMouseInput.h"
+#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 #include<iostream>
 CPlayer::CPlayer()
@@ -58,7 +59,7 @@ void CPlayer::StartSetting()
 
 	m_FrameSize = { 64,64 };
 	m_Framesplit = { 0,0,144,144 };
-	m_Position = { 0,0 };
+	m_Position = { 50,0 };
 
 	//実際の当たり判定
 	m_RealFrameSplit = { 104,104 };
@@ -413,7 +414,34 @@ void CPlayer::MovePlayerGround()
 		}
 		m_Position.y += m_Acceleration.y;
 	}
-	else {
+	else 
+	{
+		//-------------------------------------------------判定-------------------------------------------------
+		VECTOR2_f nextPos = m_Position;
+		VECTOR2_f offsetPos = { 40.f,40.f };
+		nextPos.x += m_Acceleration.x;
+
+
+		if (CStageCollision::GetInstance()->IsHit(nextPos, 60, 100, 48, 48, offsetPos)) {
+			// 壁に当たった：移動をキャンセルするか、チップの端に補正する
+			// 簡易的には移動させない
+			m_Acceleration.x = 0;
+		}
+		else {
+			m_Position.x = nextPos.x;
+		}
+
+		// 2. Y軸方向の移動と判定
+		VECTOR2_f nextPosY = m_Position; // X軸移動後の座標をベースにする
+		nextPosY.y += m_Acceleration.y;
+
+		if (CStageCollision::GetInstance()->IsHit(nextPos, 60, 100, 48, 48, offsetPos)) {
+			// 床か天井に当たった
+			if (m_Acceleration.y > 0) // 下方向に動いて当たれば接地
+			m_Acceleration.y = 0;
+		}
+		//------------------------------------------------------------------------------------------------------
+
 		m_Position.x += m_Acceleration.x;
 		m_Position.y += m_Acceleration.y;
 	}

@@ -79,7 +79,6 @@ public:
 
 private:
 
-	std::unique_ptr<CStageCollision> m_upStageCollision;	//ステージの当たり判定クラス
 	std::unique_ptr<CStageLoader>	 m_upStageLoader;		//ステージ読み込みクラス
 	std::unique_ptr<CStageDraw>		 m_upStageDraw;			//ステージ描画クラス
 
