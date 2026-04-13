@@ -182,6 +182,9 @@ void CGame::Update()
 	//‰¼’u‚«
 	CMouseInput::Update();
 
+	if (GetAsyncKeyState('I') & 0x8000) {
+		m_upCamera->SetPos(4000, 100);
+	}
 
 	m_pWire->Update();
 

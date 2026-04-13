@@ -88,6 +88,14 @@ void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, m_Delection);	//透明度、角度
+
+	RECT rect;
+	rect.left = DispPos.x;
+	rect.top = DispPos.y ;
+	rect.right = DispPos.x + m_RealFrameSplit.x ;
+	rect.bottom = DispPos.y + m_RealFrameSplit.y;
+	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
+
 }
 
 void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
@@ -111,25 +119,15 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-	//	m_Position.x -= m_Speed.x;
+		//m_Position.x -= m_Speed.x;
 		break;
 	case enMoveState::MoveRight:
-	//	m_Position.x += m_Speed.x;
+		//m_Position.x += m_Speed.x;
 		break;
 	}
 
-	//仮の地面
-	if (m_Position.y >= WND_H) {
-		//地面に合わせる
-		m_Position.y = WND_H;
-		m_GroundStand = true;
-
-		m_FallingSpeed = 0;
-	}
-	else {
-		//落下速度を計算
-		m_FallingSpeed += Gravity;
-	}
+	//落下速度を計算
+	m_FallingSpeed += Gravity;
 
 	//ジャンプをさせないなら
 	if (m_JumpingTime != 0) {
@@ -151,9 +149,57 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 
 	//落下するようにする
-	m_Position.y += m_FallingSpeed;
+	MoveSafe(0, m_FallingSpeed);
 }
 
+// 座標を更新する専用の関数
+void CKedama::MoveSafe(float moveX, float moveY)
+{
+	VECTOR2_f offsetPos = { 0.f, 0.f };
+
+	// X軸移動
+	if (moveX != 0.0f)
+	{
+		VECTOR2_f nextPosX = m_Position;
+		nextPosX.x += moveX;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX, m_RealFrameSplit.x, m_RealFrameSplit.y, 48, 48, offsetPos))
+		{
+			m_Position.x = nextPosX.x;
+		}
+		else
+		{
+			//ムーブ方向を変更
+			m_MoveState++;
+
+			//右方向から左へ
+			if (m_MoveState > enMoveState::MoveRight) {
+				m_MoveState = enMoveState::MoveLeft;
+			}
+		}
+	}
+
+	// Y軸移動
+	if (moveY != 0.0f)
+	{
+		VECTOR2_f nextPosY = m_Position;
+		nextPosY.y += moveY;
+
+		if (!CStageCollision::GetInstance()->IsHit(nextPosY, m_RealFrameSplit.x, m_RealFrameSplit.y, 48, 48, offsetPos))
+		{
+			m_Position.y = nextPosY.y;
+		}
+		else
+		{
+			// 地面判定
+			if (moveY > 0)
+			{
+				m_GroundStand = true;
+				m_Jumping = false;
+				m_FallingSpeed = 0;
+			}
+		}
+	}
+}
 void CKedama::Animation()
 {
 }

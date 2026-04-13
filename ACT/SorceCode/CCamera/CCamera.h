@@ -39,6 +39,8 @@ public:
 		m_CameraMasterPos.y = PlayerPos.y;
 	}
 
+	void SetPos(double PosX, double PosY) { m_Position = { PosX,PosY }; }
+
 private:
 	//ˆÚ“®”ÍˆÍ
 	void MoveRange();

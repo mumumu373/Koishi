@@ -1,5 +1,6 @@
 #pragma once
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//継承
+#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 /***********************************************************************
 *	エネミー毛玉クラス
@@ -20,6 +21,8 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+
+	void MoveSafe(float moveX, float moveY);
 private:
 	void Animation() override;
 private:

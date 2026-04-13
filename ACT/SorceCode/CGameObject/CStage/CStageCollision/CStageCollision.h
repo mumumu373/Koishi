@@ -21,6 +21,7 @@ public:
     *			mapData : マップデータ
     *			chipW   : チップの幅
     *			chipH   : チップの高さ
+    * @return   trueならヒット!
     *****************************************************************************************/
     bool IsHit(const VECTOR2_f& pos, float w, float h,
         float chipW, float chipH, VECTOR2_f offset);
