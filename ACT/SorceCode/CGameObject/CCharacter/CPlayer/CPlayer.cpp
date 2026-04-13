@@ -186,11 +186,9 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-
-		m_Alpha, i, 0, 0);					//透明度、角度
+		m_Alpha, i, m_Delection, 0);					//透明度、角度
 
 	NormalAttack->Draw(pCamera);
-		m_Alpha, i, m_Delection, 0);					//透明度、角度
 
 	VECTOR2_f offsetPos = { 40.f,40.f };
 
