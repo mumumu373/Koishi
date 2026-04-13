@@ -73,6 +73,8 @@ bool CGame::Create()
 		m_MasterWorkDC = CreateCompatibleDC(m_pGameWnd->hScreenDC);						//作業用DCマスターの作成
 		m_MasterWorkBmp = CreateCompatibleBitmap(m_pGameWnd->hScreenDC, WND_W, WND_H);	//作業用BITMAPマスターの作成
 		SelectObject(m_MasterWorkDC, m_MasterWorkBmp);									//DCマスターとBITMAPマスターを紐づけ
+
+		CStageCollisionDraw::GetInstance()->SetScreenDC(m_pGameWnd->hScreenDC);	//当たり判定の描画クラスにスクリーンDCをセットする
 	}
 
 	if (NoCreateInstance != true) {
@@ -192,18 +194,6 @@ void CGame::Update()
 
 	//プレイヤーの動作
 	m_upPlayer->Update(m_upBullet);
-
-	//当たり判定
-	bool test = m_upStageManager->IsHit(*m_upPlayer);
-
-	//if (test)
-	//{
-	//	std::cout << "当たってるよ！" << std::endl;
-	//}
-	//else
-	//{
-	//	std::cout << "当たってないよ！" << std::endl;
-	//}
 
 	//エネミーの動作
 	//ある分回す

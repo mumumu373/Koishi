@@ -5,11 +5,19 @@
 
 #include "CGameObject/CCharacter/CCharacter.h"			//キャラクタークラス
 
-
+#include <unordered_map>
+#include <string>
 
 class CStageManager
 {
 public:
+
+	enum class enStage
+	{
+		Map01 = 0,
+		Map02,
+	};
+
 	CStageManager();
 	~CStageManager();
 
@@ -17,7 +25,6 @@ public:
 	* @brief    作成関数
 	*****************************************************************************************/
 	bool Create();
-
 
 	/*****************************************************************************************
 	* @brief    初期化関数
@@ -59,16 +66,21 @@ public:
 
 
 	/*****************************************************************************************
-	* @brief    EventChipに当たっているかどうかを取得する関数
-	* 
-	* @return   当たっているかどうか
+	* @brief    ステージのファイル名をセットする関数
 	*****************************************************************************************/
-	bool IsEventChipHit() { return m_upStageCollision->GetIsEventChipHit(); }
+	void SetStageData();
+
+
+	/*****************************************************************************************
+	* @brief    ステージの切り替え
+	* @param    stageNum : 切り替えたいステージの番号
+	*****************************************************************************************/
+	void ChangeStage(enStage stageNum);
 
 private:
 
-	std::unique_ptr<CStageCollision> m_upStageCollision;	//ステージの当たり判定クラス
 	std::unique_ptr<CStageLoader>	 m_upStageLoader;		//ステージ読み込みクラス
 	std::unique_ptr<CStageDraw>		 m_upStageDraw;			//ステージ描画クラス
 
+	std::unordered_map<enStage, std::string> m_StageName;	//全ステージの名前
 };

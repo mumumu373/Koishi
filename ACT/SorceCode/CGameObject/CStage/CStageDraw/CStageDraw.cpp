@@ -93,7 +93,6 @@ void CStageDraw::DrawSkyLoop(const float loopX, const float y)
         m_Framesplit.y,
         255);          
 
-    // ステージ背景1の描画
     CImageManager::SelectImg(CImageManager::enImgList::IMG_BackSky)->TransAlBlend(
         loopX + m_Framesplit.w,
         0,

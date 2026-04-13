@@ -2,7 +2,8 @@
 #include <iostream>
 
 CStageCollision::CStageCollision()
-    : m_isEventChipHit(false)
+    : m_isEventChipHit  (false)
+	, m_MapData()
 {
 }
 
@@ -15,14 +16,29 @@ CStageCollision::~CStageCollision()
 //--------------------------------------------------------------------------------------------------------------
 
 bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
-    const std::vector<std::vector<int>>& mapData,
-    float chipW, float chipH)
+    float chipW, float chipH, VECTOR2_f offset)
 {
-    float checkX[] = { pos.x, pos.x + w / 3.0f, pos.x + w / 1.5f, pos.x + w - 1.0f };
-    float checkY[] = { pos.y, pos.y + h / 3.0f, pos.y + h / 1.5f, pos.y + h - 1.0f };
+    float startX = pos.x + offset.x;
+    float startY = pos.y + offset.y;
+
+    float checkX[] = 
+    {
+        startX,                  
+        startX + w / 3.0f,       
+        startX + w * 2.0f / 3.0f,
+        startX + w - 1.0f        
+    };
+
+    float checkY[] =
+    {
+        startY,
+        startY + h / 3.0f,
+        startY + h * 2.0f / 3.0f,
+        startY + h - 1.0f
+    };
+
     m_isEventChipHit = false;
 
-    // 添え字(i, j)を使ってループを回す
     for (int i = 0; i < 4; ++i)
     {
         float x = checkX[i]; // 現在のX座標
@@ -34,13 +50,13 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
             int mapX = (int)(x / chipW);
             int mapY = (int)(y / chipH);
 
-            if (mapY < 0 || mapY >= (int)mapData.size() ||
-                mapX < 0 || mapX >= (int)mapData[0].size())
+            if (mapY < 0 || mapY >= (int)m_MapData.size() ||
+                mapX < 0 || mapX >= (int)m_MapData[0].size())
             {
                 return true;
             }
 
-            int tipID = mapData[mapY][mapX];
+            int tipID = m_MapData[mapY][mapX];
 
             switch (tipID)
             {
@@ -63,9 +79,11 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
             }
 
             // 壁判定（0と15以外は衝突）
-            if (tipID != 0 && tipID != 15)
+            if (tipID != 0 && tipID != 15 && tipID != 19 && tipID != 20)
             {
                 std::cout << tipID << std::endl;
+                m_HitMapX = mapX; 
+                m_HitMapY = mapY;
                 return true;
             }
         }
@@ -73,8 +91,3 @@ bool CStageCollision::IsHit(const VECTOR2_f& pos, float w, float h,
     return false;
 }
 //--------------------------------------------------------------------------------------------------------------
-
-void CStageCollision::EventChipPattern()
-{
-
-}
