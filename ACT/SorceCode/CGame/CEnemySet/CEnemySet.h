@@ -38,7 +38,7 @@ public:
 		VECTOR2_f s = { data["Enemies"][0]["Pos"]["x"].get<float>(),data["Enemies"][0]["Pos"]["y"].get<float>() };
 
 		//Color‚Ì‚Æ‚±‚ë‚Í”’l‚ÅA•¶š—ñ‚Å‚Í‚È‚¢
-		return std::make_unique<CKedama>(data["Enemies"][0]["Color"], s);
+		return std::make_unique<CKedama>(data["Enemies"][0]["Color"], s, 5, 5, 5, 60);
 	}
 
 	static inline std::unique_ptr<CEnemy> otamesi()
@@ -60,7 +60,7 @@ public:
 			int color = data["Enemies"][0]["Color"].get<int>();
 
 			VECTOR2_f s = { x, y };
-			return std::make_unique<CKedama>(color, s);
+			return std::make_unique<CKedama>(color, s, 5, 5, 5, 60);
 
 		}
 		catch (const std::exception& e) {

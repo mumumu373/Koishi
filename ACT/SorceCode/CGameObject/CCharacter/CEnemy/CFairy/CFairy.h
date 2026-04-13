@@ -20,7 +20,7 @@ public:
 	int m_MoveType = enMoveType::Stop;
 public:
 	//ŒÄ‚Ño‚·‚Æ‚«‚Éí—Ş‚ğŒˆ‚ß‚é
-	CFairy(int Kinds, VECTOR2_f SetPos, int MoveType, int MoveOp_1, int MoveOp_2);
+	CFairy(int Kinds, VECTOR2_f SetPos, VECTOR2_f Speed, int MoveType, int MoveOp_1, int MoveOp_2);
 	~CFairy();
 
 	void StartSetting() override;
