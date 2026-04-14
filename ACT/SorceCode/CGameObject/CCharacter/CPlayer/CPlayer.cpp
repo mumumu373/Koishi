@@ -532,14 +532,17 @@ void CPlayer::MoveSafe(float moveX, float moveY)
 {
 	VECTOR2_f offsetPos = { 40.f, 40.f };
 
+		double nextPosX = m_Position.x;
+		double nextPosY = m_Position.y;
+
 	// XŽ²ˆÚ“®
 	if (moveX != 0.0f) 
 	{
-		double nextPosX = m_Position.x;
-		nextPosX += moveX;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX,0, 60, 100, offsetPos)) 
+		double MovePos = nextPosX;
+		MovePos += moveX;
+		if (!CStageCollision::GetInstance()->IsHit(MovePos, nextPosY, 60, 100, offsetPos))
 		{
-			m_Position.x = nextPosX;
+			m_Position.x = MovePos;
 		}
 		else 
 		{
@@ -550,11 +553,11 @@ void CPlayer::MoveSafe(float moveX, float moveY)
 	// YŽ²ˆÚ“®
 	if (moveY != 0.0f) 
 	{
-		double nextPosY = m_Position.y;
-		nextPosY += moveY;
-		if (!CStageCollision::GetInstance()->IsHit(0,nextPosY, 60, 100, offsetPos))
+		double MovePos = nextPosY;
+		MovePos += moveY;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX, MovePos, 60, 100, offsetPos))
 		{
-			m_Position.y = nextPosY;
+			m_Position.y = MovePos;
 		}
 		else
 		{

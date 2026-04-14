@@ -115,12 +115,6 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-		m_Position.x += 10;
-	}
-	else if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-		m_Position.x -= 10;
-	}
 	if (GetAsyncKeyState(VK_UP) & 0x8000) {
 		m_FallingSpeed = 0;
 		m_Position.y -= 10;
@@ -131,19 +125,11 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	case enMoveState::MoveLeft:
 		//ステージに対してその場所に行けるか判定
-		//m_Position.x -= m_Speed.x;
+		m_Position.x -= m_Speed.x;
 		break;
 	case enMoveState::MoveRight:
-		//m_Position.x += m_Speed.x;
+		m_Position.x += m_Speed.x;
 		break;
-	}
-
-	//落下速度を計算
-	if (m_FallingSpeed >= MAX_FALLING_SPEED) {
-		m_FallingSpeed = MAX_FALLING_SPEED;
-	}
-	else {
-		m_FallingSpeed += Gravity;
 	}
 
 	//ジャンプをさせないなら
@@ -176,27 +162,130 @@ void CKedama::Animation()
 {
 }
 
+//ステージとの判定を見る
 void CKedama::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 {
 	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
 
-	//動いた距離
-	double MovePosX = m_Position.x - m_OldPosition.x;
-	double MovePosY = m_Position.y - m_OldPosition.y;
+	//ブロックに触れていないなら
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, m_Framesplit.w, m_Framesplit.h, offsetPos) != true) {
+		m_GroundStand = false;
 
-	//まだ横に動こうとしているなら
-	if (MovePosX != 0.0f) {
-		//X方向のブロックに当たったら
-		if (CStageCollision::GetInstance()->IsHit(MovePosX,0, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
-			m_Position.x += MovePosX;
+		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
+		//落下速度を計算
+		if (m_FallingSpeed >= MAX_FALLING_SPEED) {
+			m_FallingSpeed = MAX_FALLING_SPEED;
+		}
+		else {
+			m_FallingSpeed += Gravity;
 		}
 	}
+	else {
+		//動いた距離
+		double MoveRangeX = m_Position.x - m_OldPosition.x;
+		double MoveRangeY = m_Position.y - m_OldPosition.y;
 
-	//まだ縦に動こうとしているなら
-	if (MovePosY != 0.0f) {
-		//X方向のブロックに当たったら
-		if (CStageCollision::GetInstance()->IsHit(MovePosY, 0, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
-			//m_Position.x += MovePosY;
+		//移動していた方向をもらう
+		double WasMove = MoveRangeX;
+
+		//まだ横に動こうとしているなら
+		if (MoveRangeX != 0.0f) {
+			//その場所に行けるかどうかを確認し、いけないのであれば、移動距離を減らしていってを繰り返す
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.x += MoveRangeX;
+
+				//X方向に動くことができるか
+				if (CStageCollision::GetInstance()->IsHit(checkPos.x, m_OldPosition.y, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
+					//std::abs(数値)：絶対値（Absolute）
+					//これを使うことで、どれだけ移動するかの絶対値を見ることができるので、+や-の区分無く判定することができる
+					if (std::abs(MoveRangeX) <= 1.0f) {
+						MoveRangeX = 0; // 1px以下なら移動不可として終了	壁に張り付いている感じ
+						m_Position.x = m_OldPosition.x;
+
+						//ムーブ方向を変更
+						m_MoveState++;
+
+						//右方向から左へ
+						if (m_MoveState > enMoveState::MoveRight) {
+							m_MoveState = enMoveState::MoveLeft;
+						}
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					if (MoveRangeX > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeX = MoveRangeX - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeX = MoveRangeX + 1.0;
+					}
+					//		↓こんな方法も
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeX > 0) ? 1.0 : -1.0;
+					//MoveRangeX -= sign * 1.0;
+				}
+				//動けるなら
+				else {
+					m_Position.x = checkPos.x;
+					break;
+				}
+			}
+		}
+
+		//まだ縦に動こうとしているなら
+		if (MoveRangeY != 0.0f) {
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.y += MoveRangeY;
+
+				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, m_Framesplit.w, m_Framesplit.h, offsetPos)) {
+
+					if (std::abs(MoveRangeY) <= 1.0f) {
+						//地面の判定
+						if (MoveRangeY > 0) {
+							if (m_GroundStand != true) {
+								m_GroundStand = true;
+								m_Jumping = false;
+								m_FallingSpeed = 0;
+							}
+						}
+						//天井の判定
+						else {
+							m_FallingSpeed = 0;
+						}
+
+						MoveRangeY = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
+						m_Position.y = m_OldPosition.y;
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					//地面判定としてみることもできる
+					if (MoveRangeY > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeY = MoveRangeY - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeY = MoveRangeY + 1.0;
+					}
+
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeY > 0) ? 1.0 : -1.0;
+					//MoveRangeY -= sign * 1.0;
+				}
+				else {
+					m_Position.y = checkPos.y;
+					break;
+				}
+			}
 		}
 	}
 }
