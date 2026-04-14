@@ -119,7 +119,7 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	m_upEnemy.push_back(CEnemySet::otamesi());
+	//m_upEnemy.push_back(CEnemySet::otamesi());
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
@@ -226,7 +226,7 @@ void CGame::Update()
 	m_upCollisionDetection->MouseToEnemyCollision(m_upEnemy, m_upCamera);
 
 	//プレイヤーとエネミーの当たり判定処理
-	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+	//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
 	//ワイヤーとワイヤーポイントの当たり判定処理
 	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);

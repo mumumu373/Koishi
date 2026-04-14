@@ -17,6 +17,9 @@ CNazrin::CNazrin()
 	//生存中にする
 	m_State = enState::Living;
 
+	//スタンバイ中
+	m_AttackMove = enAttackMove::Standby;
+
 	StartSetting();
 }
 

@@ -23,8 +23,7 @@ public:
     *			chipH   : チップの高さ
     * @return   trueならヒット!
     *****************************************************************************************/
-    bool IsHit(const VECTOR2_f& pos, float w, float h,
-        float chipW, float chipH, VECTOR2_f offset);
+    bool IsHit(const double& PosX, const double& PosY, float w, float h, VECTOR2_f offset);
 
 
     /*****************************************************************************************

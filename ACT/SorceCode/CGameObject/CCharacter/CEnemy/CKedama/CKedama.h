@@ -22,9 +22,11 @@ public:
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
 
-	void MoveSafe(float moveX, float moveY);
 private:
 	void Animation() override;
+
+	//ステージとの当たり判定	
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 private:
 	int m_ChangeMoveTime;	//ムーブを変えるタイミング
 	int m_ChangeMoveCo;		//ムーブを変えるタイミングをカウント

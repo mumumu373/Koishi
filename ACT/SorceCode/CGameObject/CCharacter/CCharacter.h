@@ -2,6 +2,7 @@
 #include "CGameObject/CGameObject.h"	//ゲームオブジェクトクラス
 #include "CGame/CBulletFactory/CBulletFactory.h"	//バレットを作るクラス
 #include "CGameObject/CStage/CStageCollisionDraw/CStageCollisionDraw.h"		//ステージとの判定描画クラス
+#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 /***********************************************
 *			キャラクタークラス
@@ -83,8 +84,12 @@ public:
 
 	//オーバーロードさせる
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) = 0;
+
 protected:
 	virtual void Animation() = 0;			//アニメーション関数
+
+	//ステージとの当たり判定		許容する範囲(見た目よりも大きくなど)
+	virtual void StageCollision(double OffsetPos_X, double OffsetPos_Y) = 0;
 protected:
 	int m_Alpha;				//透明度
 	double m_Delection;			//角度

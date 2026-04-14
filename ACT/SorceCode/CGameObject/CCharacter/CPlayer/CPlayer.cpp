@@ -1,7 +1,6 @@
 #include "CPlayer.h"
 
 #include "CMouseInput//CMouseInput.h"
-#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
 {
@@ -536,11 +535,11 @@ void CPlayer::MoveSafe(float moveX, float moveY)
 	// X軸移動
 	if (moveX != 0.0f) 
 	{
-		VECTOR2_f nextPosX = m_Position;
-		nextPosX.x += moveX;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos)) 
+		double nextPosX = m_Position.x;
+		nextPosX += moveX;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX,0, 60, 100, offsetPos)) 
 		{
-			m_Position.x = nextPosX.x;
+			m_Position.x = nextPosX;
 		}
 		else 
 		{
@@ -551,11 +550,11 @@ void CPlayer::MoveSafe(float moveX, float moveY)
 	// Y軸移動
 	if (moveY != 0.0f) 
 	{
-		VECTOR2_f nextPosY = m_Position;
-		nextPosY.y += moveY;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos))
+		double nextPosY = m_Position.y;
+		nextPosY += moveY;
+		if (!CStageCollision::GetInstance()->IsHit(0,nextPosY, 60, 100, offsetPos))
 		{
-			m_Position.y = nextPosY.y;
+			m_Position.y = nextPosY;
 		}
 		else
 		{

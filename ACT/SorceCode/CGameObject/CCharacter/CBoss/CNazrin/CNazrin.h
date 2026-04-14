@@ -29,6 +29,9 @@ public:
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
 private:
 	void Animation() override;
+
+	//ステージとの当たり判定
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
 private:
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingCo;		//ジャンプするタイミングをカウント

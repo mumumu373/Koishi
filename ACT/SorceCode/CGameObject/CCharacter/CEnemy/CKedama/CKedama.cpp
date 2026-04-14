@@ -115,15 +115,26 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	}
 
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+		m_Position.x += 10;
+	}
+	else if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+		m_Position.x -= 10;
+	}
+	if (GetAsyncKeyState(VK_UP) & 0x8000) {
+		m_FallingSpeed = 0;
+		m_Position.y -= 10;
+	}
+
 	switch (m_MoveState) {
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
 		//ステージに対してその場所に行けるか判定
-		MoveSafe(-m_Speed.x, 0);
+		//m_Position.x -= m_Speed.x;
 		break;
 	case enMoveState::MoveRight:
-		MoveSafe(m_Speed.x, 0);
+		//m_Position.x += m_Speed.x;
 		break;
 	}
 
@@ -155,57 +166,32 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 
 	//落下するようにする
-	MoveSafe(0, m_FallingSpeed);
+	m_Position.y += m_FallingSpeed;
+
+	//ステージとの当たり判定を行う
+	StageCollision(0,0);
 }
 
-// 座標を更新する専用の関数
-void CKedama::MoveSafe(float moveX, float moveY)
-{
-	VECTOR2_f offsetPos = { 0.f, 0.f };
-
-	// X軸移動
-	if (moveX != 0.0f)
-	{
-		VECTOR2_f nextPosX = m_Position;
-		nextPosX.x += moveX;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX, m_RealFrameSplit.x, m_RealFrameSplit.y, 48, 48, offsetPos))
-		{
-			m_Position.x = nextPosX.x;
-		}
-		else
-		{
-			//ムーブ方向を変更
-			m_MoveState++;
-
-			//右方向から左へ
-			if (m_MoveState > enMoveState::MoveRight) {
-				m_MoveState = enMoveState::MoveLeft;
-			}
-		}
-	}
-
-	// Y軸移動
-	if (moveY != 0.0f)
-	{
-		VECTOR2_f nextPosY = m_Position;
-		nextPosY.y += moveY;
-
-		if (!CStageCollision::GetInstance()->IsHit(nextPosY, m_RealFrameSplit.x, m_RealFrameSplit.y, 48, 48, offsetPos))
-		{
-			m_Position.y = nextPosY.y;
-		}
-		else
-		{
-			// 地面判定
-			if (moveY > 0)
-			{
-				m_GroundStand = true;
-				m_Jumping = false;
-				m_FallingSpeed = 0;
-			}
-		}
-	}
-}
 void CKedama::Animation()
 {
+}
+
+void CKedama::StageCollision(double OffsetPos_X, double OffsetPos_Y)
+{
+	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
+
+	double PosX = m_Position.x - m_OldPosition.x;
+	double PosY = m_Position.y - m_OldPosition.y;
+	if (PosX != 0.0f) {
+		//ブロックに当たったら
+		if (CStageCollision::GetInstance()->IsHit(PosX,0, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
+			m_Position.x -= PosX;
+		}
+	}
+
+	if (m_Position.y != m_OldPosition.y) {
+
+
+		m_Position.y -= PosY;
+	}
 }

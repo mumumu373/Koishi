@@ -84,9 +84,9 @@ bool CStageManager::IsHit(CCharacter& charactor)
 	//=========当たり判定=========
 
 	return CStageCollision::GetInstance()->IsHit(
-			charactorPos,
+			charactorPos.x, charactorPos.y,
 			size.w, size.h,
-			chipW, chipH, {0, 0});
+			{0, 0});
 
 	//============================
 }

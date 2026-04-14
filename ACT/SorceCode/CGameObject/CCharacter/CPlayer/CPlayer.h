@@ -77,6 +77,9 @@ public:
 	void PlayerHeartDraw() { m_upHeart->Draw(); }
 private:
 	void Animation() override;
+
+	//ステージとの当たり判定
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
 public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(int Enemy, int Color);

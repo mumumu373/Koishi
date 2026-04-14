@@ -20,5 +20,8 @@ public:
 
 protected:
 	void Animation() override {};
+
+	//ステージとの当たり判定
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override{};
 protected:
 };
