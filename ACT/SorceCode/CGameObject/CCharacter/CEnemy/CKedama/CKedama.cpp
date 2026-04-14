@@ -180,18 +180,23 @@ void CKedama::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 {
 	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
 
-	double PosX = m_Position.x - m_OldPosition.x;
-	double PosY = m_Position.y - m_OldPosition.y;
-	if (PosX != 0.0f) {
-		//ブロックに当たったら
-		if (CStageCollision::GetInstance()->IsHit(PosX,0, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
-			m_Position.x -= PosX;
+	//動いた距離
+	double MovePosX = m_Position.x - m_OldPosition.x;
+	double MovePosY = m_Position.y - m_OldPosition.y;
+
+	//まだ横に動こうとしているなら
+	if (MovePosX != 0.0f) {
+		//X方向のブロックに当たったら
+		if (CStageCollision::GetInstance()->IsHit(MovePosX,0, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
+			m_Position.x += MovePosX;
 		}
 	}
 
-	if (m_Position.y != m_OldPosition.y) {
-
-
-		m_Position.y -= PosY;
+	//まだ縦に動こうとしているなら
+	if (MovePosY != 0.0f) {
+		//X方向のブロックに当たったら
+		if (CStageCollision::GetInstance()->IsHit(MovePosY, 0, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
+			//m_Position.x += MovePosY;
+		}
 	}
 }
