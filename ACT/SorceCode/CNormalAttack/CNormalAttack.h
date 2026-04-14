@@ -23,8 +23,7 @@ public:
 	}
 ObjectInfo GetColion(int No);
 	int GetAttack() {
-		return Attacked
-			;
+		return Attacked;
 	}
 private:
 ObjectInfo Colion[ColionMAX];

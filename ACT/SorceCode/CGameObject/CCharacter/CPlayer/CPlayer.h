@@ -17,9 +17,9 @@ public:
 	static constexpr double JUMP_POWER = 12;//ジャンプ力
 	static constexpr int DashcountMAX = 30;//ダッシュの受付時間
 	static constexpr int TurnAroundSpeed = 10;//向きを変える速さ
-	static constexpr double AvoidanceDistance = 288;//回避の距離
-	static constexpr int AvoidanceTime = 60;//回避にかかる時間
-	static constexpr int AvoidancecoolTime = 0;//回避のクールタイム
+	static constexpr double AvoidanceDistance = 300;//回避の距離
+	static constexpr int AvoidanceTime = 10;//回避にかかる時間
+	static constexpr int AvoidancecoolTime = 30;//回避のクールタイム
 public:
 	//アクション状態
 	enum enActionState
@@ -81,6 +81,8 @@ public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(int Enemy, int Color);
 
+	//
+	void MoveSafeWrier(VECTOR2_f pos);
 private:
 	void AvoidanceEnd();
 	void KyeInput();
@@ -98,6 +100,7 @@ private:
 
 	//マップチップとの当たり判定
 	void MoveSafe(float moveX, float moveY);
+
 
 private:
 	void AirAvoidanceVECTSet();

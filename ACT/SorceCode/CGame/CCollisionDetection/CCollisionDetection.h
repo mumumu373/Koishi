@@ -23,8 +23,12 @@ public:
 	void PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
 
 	void MouseToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CCamera>& Camera);
+
+	void MouseToWirePoint(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CCamera>& Camera);
 	//ワイヤーとエネミーの当たり判定
 	void WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CWire>& pWire);
+
+
 public:
 
 	//円どうしの当たり判定

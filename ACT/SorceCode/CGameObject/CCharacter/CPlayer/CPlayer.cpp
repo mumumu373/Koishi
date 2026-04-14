@@ -232,7 +232,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
 
-	KyeInput();
+	//KyeInput();
 
 }
 
@@ -308,9 +308,8 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 void CPlayer::AvoidanceEnd()
 {
 	if (AvoidanceCount > 0) {
-			if (enActionState != enActionState::WirePointCatch) {
-				enActionState = enActionState::None;
-			}
+		AvoidanceCount -= 1;
+	
 			
 
 	}
@@ -339,7 +338,7 @@ void CPlayer::KyeInput()
 	{
 		m_MoveState = enMoveState::MoveLeft;
 		//シフトキーを押しているなら回避状態にする
-		if (enActionState != enActionState::WireShot) {
+		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {			
 					enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
@@ -360,7 +359,7 @@ void CPlayer::KyeInput()
 		m_MoveState = enMoveState::MoveRight;
 
 		//シフトキーを押しているなら回避状態にする
-		if (enActionState != enActionState::WireShot) {
+		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {		
 					enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
@@ -390,11 +389,13 @@ void CPlayer::KyeInput()
 
 void CPlayer::AirKeyInput()
 {
-	if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+	if (enActionState != enActionState::WireShot&& enActionState != enActionState::WirePointCatch) {
+		if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
 
-		enActionState = enActionState::AirAvoidance;
-		AirAvoidanceVECTSet();
-		AvoidanceCount = AvoidanceTime;
+			enActionState = enActionState::AirAvoidance;
+			AirAvoidanceVECTSet();
+			AvoidanceCount = AvoidanceTime;
+		}
 	}
 	//ワイヤー発射指示
 	if (CMouseInput::GetMouseRight(true, false) && m_WireShotCan) {
@@ -431,10 +432,11 @@ void CPlayer::MovePlayer()
 void CPlayer::MovePlayerJump()
 {
 	if(enActionState == enActionState::AirAvoidance) {
-		m_Acceleration.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
-		m_Acceleration.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
-		MoveSafe(m_Acceleration.x, 0);
-		MoveSafe(0, m_Acceleration.y);
+		VECTOR2_f SPin;
+		SPin.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
+		SPin.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
+		MoveSafe(SPin.x, 0);
+		MoveSafe(0, SPin.y);
 	}
 	else {
 		MoveSafe(m_Acceleration.x, 0);
@@ -473,27 +475,30 @@ void CPlayer::JumpPlayer()
 {
 	//ジャンプボタンをまだ押していなければ
 	if (m_JumpRemove == false) {
-		if (GetAsyncKeyState('W') & 0x8000) {
-			m_Jumping = true;	//ジャンプ中
+		if (enActionState != enActionState::Avoidance) {
+			if (GetAsyncKeyState('W') & 0x8000) {
+				m_Jumping = true;	//ジャンプ中
 
-			m_JumpAcc = m_JumpPower;
-			MoveSafe(0, -m_JumpPower);
+				m_JumpAcc = m_JumpPower;
+				//oveSafe(0, -m_JumpPower);
 
 
-			//押している時間を図る
-			if (m_JumpRemoveCo >= 10) {
-				m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
+				//押している時間を図る
+				if (m_JumpRemoveCo >= 10) {
+					m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
+					m_JumpRemoveCo = 0;
+				}
+				else {
+					m_JumpRemoveCo++;
+				}
+			}
+			//ジャンプボタンを離したなら
+			else {
+				m_JumpRemove = true;
 				m_JumpRemoveCo = 0;
 			}
-			else {
-				m_JumpRemoveCo++;
-			}
 		}
-		//ジャンプボタンを離したなら
-		else {
-			m_JumpRemove = true;
-			m_JumpRemoveCo = 0;
-		}
+
 	}
 	
 		//空中回避状態なら
@@ -569,6 +574,42 @@ void CPlayer::MoveSafe(float moveX, float moveY)
 			}
 
 			m_Acceleration.y = 0;
+		}
+	}
+}
+
+void CPlayer::MoveSafeWrier(VECTOR2_f pos)
+{
+	VECTOR2_f offsetPos = { 40.f, 40.f };
+
+	// X軸移動
+	//if (moveX != 0.0f) 
+	{
+		VECTOR2_f nextPosX = pos;
+		nextPosX.y = m_Position.y;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos))
+		{
+			m_Position.x = nextPosX.x;
+		}
+		else
+		{
+			//m_Acceleration.x = 0; // 壁に当たったら速度を殺す
+		}
+	}
+
+	// Y軸移動
+	//if (moveY != 0.0f) 
+	{
+		VECTOR2_f nextPosY = pos;
+		nextPosY.x = m_Position.x;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos))
+		{
+			m_Position.y = nextPosY.y;
+		}
+		else
+		{
+
+			//m_Acceleration.y = 0;
 		}
 	}
 }

@@ -43,6 +43,7 @@ void CCollisionDetection::MouseToEnemyCollision(std::vector<std::unique_ptr<CEne
 			//当たり判定のセット
 			ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
 
+
 			//当たったら
 			if (CircleDetection({ CMouseInput::GetMousePosCamera(Camera.get()).x,CMouseInput::GetMousePosCamera(Camera.get()).y,1,1 }, EnemyPos) == true) {
 				VECTOR2_f i;
@@ -53,6 +54,29 @@ void CCollisionDetection::MouseToEnemyCollision(std::vector<std::unique_ptr<CEne
 		}
 	}
 
+}
+
+void CCollisionDetection::MouseToWirePoint(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CCamera>& Camera)
+{
+	//エネミー
+	for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+		if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
+			//当たり判定のセット
+			ObjectInfo EnemyPos;
+			EnemyPos.x = upEnemy[EnemyNo]->GetPosition().x;
+			EnemyPos.y = upEnemy[EnemyNo]->GetPosition().y;
+			EnemyPos.xw = upEnemy[EnemyNo]->GetFrameSplit().w;
+			EnemyPos.yh = upEnemy[EnemyNo]->GetFrameSplit().h;
+			Camera.get();
+			//当たったら
+				if (CircleDetection( CMouseInput::GetcollisionMouseCamera(Camera.get()), EnemyPos) == true) {
+				VECTOR2_f i;
+				i = Camera->CalcToPositionInCamera(upEnemy[EnemyNo]->GetCenterPosition());
+				CMouseInput::SetMousePos(i);
+				CMouseInput::ColorChange();
+			}
+		}
+	}
 }
 
 void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& m_pCWirepoint, std::unique_ptr<CWire>& pWire)

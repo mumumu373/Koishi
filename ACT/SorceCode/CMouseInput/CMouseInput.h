@@ -42,6 +42,16 @@ public:
 		i.yh = GetInstance()->Size;
 		return i;
 	}
+	static ObjectInfo  GetcollisionMouseCamera(CCamera* m_pCamera) {
+		ObjectInfo i;
+		VECTOR2_f pos = { GetInstance()->MousePos.x - GetInstance()->Size / 2 ,GetInstance()->MousePos.y - GetInstance()->Size / 2 };
+			
+		i.x = m_pCamera->CalcToPositionInStage(&pos).x;
+		i.y = m_pCamera->CalcToPositionInStage(&pos).y;
+		i.xw = GetInstance()->Size;
+		i.yh = GetInstance()->Size;
+		return i;
+	}
 	static int GetcollisionMouseSize() {
 		return GetInstance()->Size;
 	}
