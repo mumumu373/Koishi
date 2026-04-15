@@ -1,7 +1,6 @@
 #include "CPlayer.h"
 
 #include "CMouseInput//CMouseInput.h"
-#include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
 
 void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
 {
@@ -106,15 +105,15 @@ void CPlayer::Attackmove()
 
 void CPlayer::Update()
 {
-	NormalAttack->Update();
-
-	m_State = enState::Living;
-	m_WireShot = false;
-
 	//過去の自分
 
 	m_OldPosition = m_Position;
 	OldGroundStand = GroundStand;
+
+	NormalAttack->Update();
+
+	m_State = enState::Living;
+	m_WireShot = false;
 
 	//常にfalseにする
 	GroundStand = false;
@@ -234,6 +233,8 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 	//KyeInput();
 
+	//ステージとの判定
+	StageCollision(40, 40);
 }
 
 void CPlayer::Animation()
@@ -257,6 +258,116 @@ void CPlayer::Animation()
 			m_Delection += TurnAroundSpeed;
 		}
 		break;
+	}
+}
+
+//ステージとの判定を見る
+void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
+{
+	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
+
+	//ブロックに触れていないなら						プレイヤーやキャラは画像の位置が少しずれているので指定して直す
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, 60, 100, offsetPos) != true) {
+		GroundStand = false;
+	}
+	else {
+		//動いた距離
+		double MoveRangeX = m_Position.x - m_OldPosition.x;
+		double MoveRangeY = m_Position.y - m_OldPosition.y;
+
+		//まだ横に動こうとしているなら
+		if (MoveRangeX != 0.0f) {
+			//その場所に行けるかどうかを確認し、いけないのであれば、移動距離を減らしていってを繰り返す
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.x += MoveRangeX;
+
+				//X方向に動くことができるか						プレイヤーやキャラは画像の位置が少しずれているので指定して直す
+				if (CStageCollision::GetInstance()->IsHit(checkPos.x, m_OldPosition.y, 60, 100, offsetPos) == true) {
+					//std::abs(数値)：絶対値（Absolute）
+					//これを使うことで、どれだけ移動するかの絶対値を見ることができるので、+や-の区分無く判定することができる
+					if (std::abs(MoveRangeX) <= 1.0f) {
+						MoveRangeX = 0; // 1px以下なら移動不可として終了	壁に張り付いている感じ
+						m_Position.x = m_OldPosition.x;
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					if (MoveRangeX > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeX = MoveRangeX - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeX = MoveRangeX + 1.0;
+					}
+					//		↓こんな方法も
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeX > 0) ? 1.0 : -1.0;
+					//MoveRangeX -= sign * 1.0;
+				}
+				//動けるなら
+				else {
+					m_Position.x = checkPos.x;
+					break;
+				}
+			}
+		}
+
+		//まだ縦に動こうとしているなら
+		if (MoveRangeY != 0.0f) {
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.y += MoveRangeY;
+				//Y方向に動けるか									プレイヤーやキャラは画像の位置が少しずれているので指定して直す
+				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, 60, 100, offsetPos)) {
+
+					if (std::abs(MoveRangeY) <= 1.0f) {
+						//地面の判定
+						if (MoveRangeY > 0) {
+							if (GroundStand != true) {
+								GroundStand = true;
+								m_Jumping = false;
+								m_JumpRemove = false;
+								m_JumpAcc = 0;
+								m_Acceleration.y = 0;
+							}
+						}
+						//天井の判定
+						else {
+							m_Acceleration.y = 0;
+						}
+
+						MoveRangeY = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
+						m_Position.y = m_OldPosition.y;
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					//地面判定としてみることもできる
+					if (MoveRangeY > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeY = MoveRangeY - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeY = MoveRangeY + 1.0;
+					}
+
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeY > 0) ? 1.0 : -1.0;
+					//MoveRangeY -= sign * 1.0;
+				}
+				else {
+					m_Position.y = checkPos.y;
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -312,6 +423,7 @@ void CPlayer::AvoidanceEnd()
 	
 			
 
+
 	}
 	else {
 		if (AvoidanceCount == 0) {
@@ -340,7 +452,7 @@ void CPlayer::KyeInput()
 		//シフトキーを押しているなら回避状態にする
 		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {			
-					enActionState = enActionState::Avoidance;
+				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
 			}
 		}
@@ -361,7 +473,7 @@ void CPlayer::KyeInput()
 		//シフトキーを押しているなら回避状態にする
 		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {		
-					enActionState = enActionState::Avoidance;
+				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
 			}
 		}
@@ -372,7 +484,6 @@ void CPlayer::KyeInput()
 			}
 			else {
 				m_Rdashcount = DashcountMAX;
-
 			}
 		}
 	}
@@ -431,16 +542,16 @@ void CPlayer::MovePlayer()
 
 void CPlayer::MovePlayerJump()
 {
-	if(enActionState == enActionState::AirAvoidance) {
 		VECTOR2_f SPin;
 		SPin.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
 		SPin.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
 		MoveSafe(SPin.x, 0);
 		MoveSafe(0, SPin.y);
+		MoveSafe(0, m_Acceleration.y);
 	}
 	else {
-		MoveSafe(m_Acceleration.x, 0);
-		MoveSafe(0, m_Acceleration.y);
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 		m_Acceleration.x *= 0.999;
 
 		if (m_Acceleration.x<1 && m_Acceleration.x>-1) {
@@ -456,19 +567,18 @@ void CPlayer::MovePlayerGround()
 		if (m_Acceleration.x <= 0) {
 			//左回避状態なら
 			float moveX = -(AvoidanceDistance / AvoidanceTime);
-			MoveSafe(moveX, 0);
+			m_Position.x += moveX;
 		}
 		else {
 			float moveX = (AvoidanceDistance / AvoidanceTime);
-			MoveSafe(moveX, 0);
+			m_Position.x += moveX;
 		}
-		MoveSafe(0, m_Acceleration.y);
+		m_Position.y -= m_Acceleration.y;
 	}
 	else {
-		MoveSafe(m_Acceleration.x, m_Acceleration.y);
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 	}
-
-
 }
 
 void CPlayer::JumpPlayer()
@@ -478,34 +588,38 @@ void CPlayer::JumpPlayer()
 		if (enActionState != enActionState::Avoidance) {
 			if (GetAsyncKeyState('W') & 0x8000) {
 				m_Jumping = true;	//ジャンプ中
+			m_JumpAcc = m_JumpPower;
+			m_Position.y -= m_JumpAcc;
+			MoveSafe(0, -m_JumpPower);
 
-				m_JumpAcc = m_JumpPower;
-				//oveSafe(0, -m_JumpPower);
-
-
-				//押している時間を図る
-				if (m_JumpRemoveCo >= 10) {
-					m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
-					m_JumpRemoveCo = 0;
-				}
-				else {
-					m_JumpRemoveCo++;
-				}
-			}
-			//ジャンプボタンを離したなら
-			else {
-				m_JumpRemove = true;
+			//押している時間を図る
+			if (m_JumpRemoveCo >= 10) {
+				m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
 				m_JumpRemoveCo = 0;
 			}
+			else {
+				m_JumpRemoveCo++;
+			}
 		}
-
+		//ジャンプボタンを離したなら
+		else {
+			m_JumpRemove = true;
+			m_JumpRemoveCo = 0;
+		}
 	}
 	
-		//空中回避状態なら
+	//空中回避状態なら
+	if (enActionState != enActionState::AirAvoidance) {
+		//最大落下速度
+		if (m_JumpAcc > MAX_FALLING_SPEED) {
+			m_Position.y = MAX_FALLING_SPEED;
+		}
+		else {
 		if (enActionState != enActionState::AirAvoidance) {
 			m_JumpAcc -= Gravity;
-			MoveSafe(0, -m_JumpAcc);
+			m_Position.y -= m_JumpAcc;
 		}
+	}
 }
 
 void CPlayer::Dash()
@@ -532,52 +646,6 @@ void CPlayer::Dash()
 		break;
 	}
 }
-
-// 座標を更新する専用の関数
-void CPlayer::MoveSafe(float moveX, float moveY)
-{
-	VECTOR2_f offsetPos = { 40.f, 40.f };
-
-	// X軸移動
-	if (moveX != 0.0f) 
-	{
-		VECTOR2_f nextPosX = m_Position;
-		nextPosX.x += moveX;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos)) 
-		{
-			m_Position.x = nextPosX.x;
-		}
-		else 
-		{
-			m_Acceleration.x = 0; // 壁に当たったら速度を殺す
-		}
-	}
-
-	// Y軸移動
-	if (moveY != 0.0f) 
-	{
-		VECTOR2_f nextPosY = m_Position;
-		nextPosY.y += moveY;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos))
-		{
-			m_Position.y = nextPosY.y;
-		}
-		else
-		{
-			// 地面判定
-			if (moveY > 0) 
-			{
-				GroundStand = true;
-				m_Jumping = false;
-				m_JumpRemove = false;
-				m_JumpAcc = 0;
-			}
-
-			m_Acceleration.y = 0;
-		}
-	}
-}
-
 void CPlayer::MoveSafeWrier(VECTOR2_f pos)
 {
 	VECTOR2_f offsetPos = { 40.f, 40.f };
@@ -613,6 +681,7 @@ void CPlayer::MoveSafeWrier(VECTOR2_f pos)
 		}
 	}
 }
+
 
 
 void CPlayer::PlayerColorChange()

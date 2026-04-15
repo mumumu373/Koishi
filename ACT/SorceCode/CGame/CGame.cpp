@@ -107,7 +107,7 @@ bool CGame::Create()
 	//エネミーを作っている
 	VECTOR2_f SetEnemy = { 200,400 };
 	VECTOR2_f Speed = { 4,4 };
-	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 60));
+	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 120));
 	SetEnemy.y -= 10;																//作るときにムーブタイプを決めておく
 	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::Green, SetEnemy, Speed, CFairy::enMoveType::Stop, 60, 120));
 	SetEnemy.x += 100;
@@ -179,6 +179,8 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
+
 	//仮置き
 	CMouseInput::Update();
 
@@ -193,8 +195,6 @@ void CGame::Update()
 	m_upPlayer->SetWireShotCan(m_pWire->canShot());
 	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
-
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
 
 	//プレイヤーの動作
 	m_upPlayer->Update(m_upBullet);
@@ -228,7 +228,7 @@ void CGame::Update()
 	m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 
 	//プレイヤーとエネミーの当たり判定処理
-//	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+	//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
 	//ワイヤーとワイヤーポイントの当たり判定処理
 	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);

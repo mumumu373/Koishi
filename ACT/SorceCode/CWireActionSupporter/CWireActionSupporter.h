@@ -10,6 +10,9 @@ public:
 	void Update() ;
 	void WireActionEnd();//ワイヤーアクション終了
 private:
+	//ステージとの当たり判定
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y);
+private:
 	bool WireActioning;//ワイヤーアクション中か
 	double NawSpeed;//-なら左、+なら右
 	CPlayer* m_dpPlayer;//プレイヤーのダブルポインタ

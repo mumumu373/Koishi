@@ -28,8 +28,12 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+
 private:
 	void Animation() override;
+
+	//ステージとの当たり判定	妖精には必要なし
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
 
 	//ムーブの動作関数
 	void MoveControl();
