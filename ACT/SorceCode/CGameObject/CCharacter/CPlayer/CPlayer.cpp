@@ -105,15 +105,15 @@ void CPlayer::Attackmove()
 
 void CPlayer::Update()
 {
-	NormalAttack->Update();
-
-	m_State = enState::Living;
-	m_WireShot = false;
-
 	//過去の自分
 
 	m_OldPosition = m_Position;
 	OldGroundStand = GroundStand;
+
+	NormalAttack->Update();
+
+	m_State = enState::Living;
+	m_WireShot = false;
 
 	//常にfalseにする
 	GroundStand = false;
@@ -272,12 +272,12 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 
 		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
 		//落下速度を計算
-		if (m_Acceleration.y >= MAX_FALLING_SPEED) {
+		/*if (m_Acceleration.y >= MAX_FALLING_SPEED) {
 			m_Acceleration.y = MAX_FALLING_SPEED;
 		}
 		else {
 			m_Acceleration.y += Gravity;
-		}
+		}*/
 	}
 	else {
 		//動いた距離
@@ -381,6 +381,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 		}
 	}
 }
+
 void CPlayer::EnemyHit(int Enemy, int Color)
 {
 	//当たったエネミーが誰か
@@ -432,8 +433,6 @@ void CPlayer::AvoidanceEnd()
 			if (enActionState != enActionState::WirePointCatch) {
 				enActionState = enActionState::None;
 			}
-			
-
 	}
 	else {
 		if (AvoidanceCount == 0) {
@@ -584,10 +583,9 @@ void CPlayer::MovePlayerGround()
 		m_Position.y -= m_Acceleration.y;
 	}
 	else {
-		m_Position = m_Acceleration;
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 	}
-
-
 }
 
 void CPlayer::JumpPlayer()

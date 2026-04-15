@@ -179,6 +179,8 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
+
 	//仮置き
 	CMouseInput::Update();
 
@@ -193,8 +195,6 @@ void CGame::Update()
 	m_upPlayer->SetWireShotCan(m_pWire->canShot());
 	m_upPlayer->WireShotStato(m_pWire->GetplayWire());
 	m_upPlayer->Update();
-
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
 
 	//プレイヤーの動作
 	m_upPlayer->Update(m_upBullet);
