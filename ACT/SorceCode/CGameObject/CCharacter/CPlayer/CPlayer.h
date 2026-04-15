@@ -62,14 +62,18 @@ public:
 		};
 	}
 	//trueÇ»ÇÁÉèÉCÉÑÅ[ÇåÇÇƒÇÈ
-	bool GetWireShot() { return m_WireShot; };
-	void ShotWire() { enActionState = enActionState::WireShot; };
-	void SetPosition(VECTOR2_f pos) { m_Position = pos; };
+	bool GetWireShot() { return m_WireShot; }
+	void ShotWire() { enActionState = enActionState::WireShot; }
+	void SetPosition(VECTOR2_f pos) { m_Position = pos; }
 	void WireEnd(VECTOR2_f Spead);
 	double GetWireStartSpeed();
 	void SetCamera(CCamera* m_pCamer) {
 		m_pCamera = m_pCamer;
 	}
+
+	//ÇªÇÍÇºÇÍå¬ï Ç…ìnÇ∑
+	void SetPos_X(double Pos_X) { m_Position.x = Pos_X; }
+	void SetPos_Y(double Pos_Y) { m_Position.y = Pos_Y; }
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
 

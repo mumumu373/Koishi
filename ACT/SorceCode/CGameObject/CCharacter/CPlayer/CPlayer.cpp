@@ -231,7 +231,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
 
-	KyeInput();
+	//KyeInput();
 
 	//ステージとの判定
 	StageCollision(40, 40);
@@ -266,26 +266,14 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 {
 	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
 
-	//ブロックに触れていないなら
-	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, m_Framesplit.w, m_Framesplit.h, offsetPos) != true) {
+	//ブロックに触れていないなら						プレイヤーやキャラは画像の位置が少しずれているので指定して直す
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, 60, 100, offsetPos) != true) {
 		GroundStand = false;
-
-		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
-		//落下速度を計算
-		/*if (m_Acceleration.y >= MAX_FALLING_SPEED) {
-			m_Acceleration.y = MAX_FALLING_SPEED;
-		}
-		else {
-			m_Acceleration.y += Gravity;
-		}*/
 	}
 	else {
 		//動いた距離
 		double MoveRangeX = m_Position.x - m_OldPosition.x;
 		double MoveRangeY = m_Position.y - m_OldPosition.y;
-
-		//移動していた方向をもらう
-		double WasMove = MoveRangeX;
 
 		//まだ横に動こうとしているなら
 		if (MoveRangeX != 0.0f) {
@@ -294,8 +282,8 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 				VECTOR2_f checkPos = m_OldPosition;
 				checkPos.x += MoveRangeX;
 
-				//X方向に動くことができるか
-				if (CStageCollision::GetInstance()->IsHit(checkPos.x, m_OldPosition.y, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
+				//X方向に動くことができるか						プレイヤーやキャラは画像の位置が少しずれているので指定して直す
+				if (CStageCollision::GetInstance()->IsHit(checkPos.x, m_OldPosition.y, 60, 100, offsetPos) == true) {
 					//std::abs(数値)：絶対値（Absolute）
 					//これを使うことで、どれだけ移動するかの絶対値を見ることができるので、+や-の区分無く判定することができる
 					if (std::abs(MoveRangeX) <= 1.0f) {
@@ -333,8 +321,8 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 			while (1) {
 				VECTOR2_f checkPos = m_OldPosition;
 				checkPos.y += MoveRangeY;
-
-				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, m_Framesplit.w, m_Framesplit.h, offsetPos)) {
+				//Y方向に動けるか									プレイヤーやキャラは画像の位置が少しずれているので指定して直す
+				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, 60, 100, offsetPos)) {
 
 					if (std::abs(MoveRangeY) <= 1.0f) {
 						//地面の判定
@@ -344,6 +332,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 								m_Jumping = false;
 								m_JumpRemove = false;
 								m_JumpAcc = 0;
+								m_Acceleration.y = 0;
 							}
 						}
 						//天井の判定
@@ -461,7 +450,7 @@ void CPlayer::KyeInput()
 		//シフトキーを押しているなら回避状態にする
 		if (enActionState != enActionState::WireShot) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {			
-					enActionState = enActionState::Avoidance;
+				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
 			}
 		}
@@ -482,7 +471,7 @@ void CPlayer::KyeInput()
 		//シフトキーを押しているなら回避状態にする
 		if (enActionState != enActionState::WireShot) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {		
-					enActionState = enActionState::Avoidance;
+				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
 			}
 		}
@@ -493,7 +482,6 @@ void CPlayer::KyeInput()
 			}
 			else {
 				m_Rdashcount = DashcountMAX;
-
 			}
 		}
 	}
@@ -615,11 +603,17 @@ void CPlayer::JumpPlayer()
 		}
 	}
 	
-		//空中回避状態なら
-		if (enActionState != enActionState::AirAvoidance) {
+	//空中回避状態なら
+	if (enActionState != enActionState::AirAvoidance) {
+		//最大落下速度
+		if (m_JumpAcc > MAX_FALLING_SPEED) {
+			m_Position.y = MAX_FALLING_SPEED;
+		}
+		else {
 			m_JumpAcc -= Gravity;
 			m_Position.y -= m_JumpAcc;
 		}
+	}
 }
 
 void CPlayer::Dash()

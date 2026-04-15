@@ -185,9 +185,6 @@ void CKedama::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 		double MoveRangeX = m_Position.x - m_OldPosition.x;
 		double MoveRangeY = m_Position.y - m_OldPosition.y;
 
-		//移動していた方向をもらう
-		double WasMove = MoveRangeX;
-
 		//まだ横に動こうとしているなら
 		if (MoveRangeX != 0.0f) {
 			//その場所に行けるかどうかを確認し、いけないのであれば、移動距離を減らしていってを繰り返す

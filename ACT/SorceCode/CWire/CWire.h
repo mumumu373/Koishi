@@ -2,7 +2,7 @@
 #include "CGameObject/CGameObject.h"	
 #include "CGameObject//CCharacter/CPlayer/CPlayer.h"	//プレイヤー
 
-
+//前方宣言
 class CWirepoint;
 class CPlayer;
 
