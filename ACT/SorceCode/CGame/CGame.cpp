@@ -228,7 +228,10 @@ void CGame::Update()
 	m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 
 	//プレイヤーとエネミーの当たり判定処理
+	//	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+
 	//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+
 
 	//ワイヤーとワイヤーポイントの当たり判定処理
 	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);

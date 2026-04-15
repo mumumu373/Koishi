@@ -1,7 +1,6 @@
 #include "CPlayer.h"
 
 #include "CMouseInput//CMouseInput.h"
-
 void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
 {
 	NormalAttack->DrawColion(c,h, pCamera);
@@ -170,12 +169,7 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	m_Delection+=50;
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
-	//CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation3(
-	//	DispPos.x,				//表示位置x座標
-	////	m_Framesplit.y,			//元画像y座標
-	//	m_Framesplit.w,			//画像幅
-	//	m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-	////	m_Alpha, m_Delection);					//透明度、角度
+
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
@@ -420,10 +414,9 @@ void CPlayer::AvoidanceEnd()
 {
 	if (AvoidanceCount > 0) {
 		AvoidanceCount -= 1;
-	
-			
-
-
+			if (enActionState != enActionState::WirePointCatch) {
+				enActionState = enActionState::None;
+			}
 	}
 	else {
 		if (AvoidanceCount == 0) {
@@ -542,12 +535,16 @@ void CPlayer::MovePlayer()
 
 void CPlayer::MovePlayerJump()
 {
+	if(enActionState == enActionState::AirAvoidance) {
 		VECTOR2_f SPin;
 		SPin.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
 		SPin.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
-		MoveSafe(SPin.x, 0);
-		MoveSafe(0, SPin.y);
-		MoveSafe(0, m_Acceleration.y);
+		m_Position.x += SPin.x;
+		m_Position.y += SPin.y;
+		m_Acceleration.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
+		m_Acceleration.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 	}
 	else {
 		m_Position.x += m_Acceleration.x;
@@ -588,24 +585,27 @@ void CPlayer::JumpPlayer()
 		if (enActionState != enActionState::Avoidance) {
 			if (GetAsyncKeyState('W') & 0x8000) {
 				m_Jumping = true;	//ジャンプ中
-			m_JumpAcc = m_JumpPower;
-			m_Position.y -= m_JumpAcc;
-			MoveSafe(0, -m_JumpPower);
 
-			//押している時間を図る
-			if (m_JumpRemoveCo >= 10) {
-				m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
+				m_JumpAcc = m_JumpPower;
+				m_Position.y -= m_JumpAcc;
+
+
+				//押している時間を図る
+				if (m_JumpRemoveCo >= 10) {
+					m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
+					m_JumpRemoveCo = 0;
+				}
+				else {
+					m_JumpRemoveCo++;
+				}
+			}
+			//ジャンプボタンを離したなら
+			else {
+				m_JumpRemove = true;
 				m_JumpRemoveCo = 0;
 			}
-			else {
-				m_JumpRemoveCo++;
-			}
 		}
-		//ジャンプボタンを離したなら
-		else {
-			m_JumpRemove = true;
-			m_JumpRemoveCo = 0;
-		}
+
 	}
 	
 	//空中回避状態なら
@@ -615,7 +615,6 @@ void CPlayer::JumpPlayer()
 			m_Position.y = MAX_FALLING_SPEED;
 		}
 		else {
-		if (enActionState != enActionState::AirAvoidance) {
 			m_JumpAcc -= Gravity;
 			m_Position.y -= m_JumpAcc;
 		}
@@ -646,43 +645,6 @@ void CPlayer::Dash()
 		break;
 	}
 }
-void CPlayer::MoveSafeWrier(VECTOR2_f pos)
-{
-	VECTOR2_f offsetPos = { 40.f, 40.f };
-
-	// X軸移動
-	//if (moveX != 0.0f) 
-	{
-		VECTOR2_f nextPosX = pos;
-		nextPosX.y = m_Position.y;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX, 60, 100, 48, 48, offsetPos))
-		{
-			m_Position.x = nextPosX.x;
-		}
-		else
-		{
-			//m_Acceleration.x = 0; // 壁に当たったら速度を殺す
-		}
-	}
-
-	// Y軸移動
-	//if (moveY != 0.0f) 
-	{
-		VECTOR2_f nextPosY = pos;
-		nextPosY.x = m_Position.x;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosY, 60, 100, 48, 48, offsetPos))
-		{
-			m_Position.y = nextPosY.y;
-		}
-		else
-		{
-
-			//m_Acceleration.y = 0;
-		}
-	}
-}
-
-
 
 void CPlayer::PlayerColorChange()
 {
