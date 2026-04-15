@@ -13,7 +13,7 @@ class CPlayer
 {
 public:
 	//最大落下速度
-	static constexpr double MAX_FALLING_SPEAD = 25;//落下速度の最大値
+	static constexpr double MAX_FALLING_SPEED = 25;//落下速度の最大値
 	static constexpr double JUMP_POWER = 12;//ジャンプ力
 	static constexpr int DashcountMAX = 30;//ダッシュの受付時間
 	static constexpr int TurnAroundSpeed = 10;//向きを変える速さ
@@ -79,7 +79,7 @@ private:
 	void Animation() override;
 
 	//ステージとの当たり判定
-	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(int Enemy, int Color);
@@ -98,9 +98,6 @@ private:
 	void PlayerColorChange();
 
 	void Dash();
-
-	//マップチップとの当たり判定
-	void MoveSafe(float moveX, float moveY);
 
 private:
 	void AirAvoidanceVECTSet();

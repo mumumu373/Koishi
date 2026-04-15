@@ -233,6 +233,8 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 	KyeInput();
 
+	//ステージとの判定
+	StageCollision(40, 40);
 }
 
 void CPlayer::Animation()
@@ -259,6 +261,126 @@ void CPlayer::Animation()
 	}
 }
 
+//ステージとの判定を見る
+void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
+{
+	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
+
+	//ブロックに触れていないなら
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, m_Framesplit.w, m_Framesplit.h, offsetPos) != true) {
+		GroundStand = false;
+
+		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
+		//落下速度を計算
+		if (m_Acceleration.y >= MAX_FALLING_SPEED) {
+			m_Acceleration.y = MAX_FALLING_SPEED;
+		}
+		else {
+			m_Acceleration.y += Gravity;
+		}
+	}
+	else {
+		//動いた距離
+		double MoveRangeX = m_Position.x - m_OldPosition.x;
+		double MoveRangeY = m_Position.y - m_OldPosition.y;
+
+		//移動していた方向をもらう
+		double WasMove = MoveRangeX;
+
+		//まだ横に動こうとしているなら
+		if (MoveRangeX != 0.0f) {
+			//その場所に行けるかどうかを確認し、いけないのであれば、移動距離を減らしていってを繰り返す
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.x += MoveRangeX;
+
+				//X方向に動くことができるか
+				if (CStageCollision::GetInstance()->IsHit(checkPos.x, m_OldPosition.y, m_Framesplit.w, m_Framesplit.h, offsetPos) == true) {
+					//std::abs(数値)：絶対値（Absolute）
+					//これを使うことで、どれだけ移動するかの絶対値を見ることができるので、+や-の区分無く判定することができる
+					if (std::abs(MoveRangeX) <= 1.0f) {
+						MoveRangeX = 0; // 1px以下なら移動不可として終了	壁に張り付いている感じ
+						m_Position.x = m_OldPosition.x;
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					if (MoveRangeX > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeX = MoveRangeX - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeX = MoveRangeX + 1.0;
+					}
+					//		↓こんな方法も
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeX > 0) ? 1.0 : -1.0;
+					//MoveRangeX -= sign * 1.0;
+				}
+				//動けるなら
+				else {
+					m_Position.x = checkPos.x;
+					break;
+				}
+			}
+		}
+
+		//まだ縦に動こうとしているなら
+		if (MoveRangeY != 0.0f) {
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.y += MoveRangeY;
+
+				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, m_Framesplit.w, m_Framesplit.h, offsetPos)) {
+
+					if (std::abs(MoveRangeY) <= 1.0f) {
+						//地面の判定
+						if (MoveRangeY > 0) {
+							if (GroundStand != true) {
+								GroundStand = true;
+								m_Jumping = false;
+								m_JumpRemove = false;
+								m_JumpAcc = 0;
+							}
+						}
+						//天井の判定
+						else {
+							m_Acceleration.y = 0;
+						}
+
+						MoveRangeY = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
+						m_Position.y = m_OldPosition.y;
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					//地面判定としてみることもできる
+					if (MoveRangeY > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeY = MoveRangeY - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeY = MoveRangeY + 1.0;
+					}
+
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeY > 0) ? 1.0 : -1.0;
+					//MoveRangeY -= sign * 1.0;
+				}
+				else {
+					m_Position.y = checkPos.y;
+					break;
+				}
+			}
+		}
+	}
+}
 void CPlayer::EnemyHit(int Enemy, int Color)
 {
 	//当たったエネミーが誰か
@@ -432,12 +554,12 @@ void CPlayer::MovePlayerJump()
 	if(enActionState == enActionState::AirAvoidance) {
 		m_Acceleration.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
 		m_Acceleration.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
-		MoveSafe(m_Acceleration.x, 0);
-		MoveSafe(0, m_Acceleration.y);
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 	}
 	else {
-		MoveSafe(m_Acceleration.x, 0);
-		MoveSafe(0, m_Acceleration.y);
+		m_Position.x += m_Acceleration.x;
+		m_Position.y += m_Acceleration.y;
 		m_Acceleration.x *= 0.999;
 
 		if (m_Acceleration.x<1 && m_Acceleration.x>-1) {
@@ -453,16 +575,16 @@ void CPlayer::MovePlayerGround()
 		if (m_Acceleration.x <= 0) {
 			//左回避状態なら
 			float moveX = -(AvoidanceDistance / AvoidanceTime);
-			MoveSafe(moveX, 0);
+			m_Position.x += moveX;
 		}
 		else {
 			float moveX = (AvoidanceDistance / AvoidanceTime);
-			MoveSafe(moveX, 0);
+			m_Position.x += moveX;
 		}
-		MoveSafe(0, m_Acceleration.y);
+		m_Position.y -= m_Acceleration.y;
 	}
 	else {
-		MoveSafe(m_Acceleration.x, m_Acceleration.y);
+		m_Position = m_Acceleration;
 	}
 
 
@@ -476,7 +598,7 @@ void CPlayer::JumpPlayer()
 			m_Jumping = true;	//ジャンプ中
 
 			m_JumpAcc = m_JumpPower;
-			MoveSafe(0, -m_JumpPower);
+			m_Position.y -= m_JumpAcc;
 
 
 			//押している時間を図る
@@ -498,7 +620,7 @@ void CPlayer::JumpPlayer()
 		//空中回避状態なら
 		if (enActionState != enActionState::AirAvoidance) {
 			m_JumpAcc -= Gravity;
-			MoveSafe(0, -m_JumpAcc);
+			m_Position.y -= m_JumpAcc;
 		}
 }
 
@@ -526,55 +648,6 @@ void CPlayer::Dash()
 		break;
 	}
 }
-
-// 座標を更新する専用の関数
-void CPlayer::MoveSafe(float moveX, float moveY)
-{
-	VECTOR2_f offsetPos = { 40.f, 40.f };
-
-		double nextPosX = m_Position.x;
-		double nextPosY = m_Position.y;
-
-	// X軸移動
-	if (moveX != 0.0f) 
-	{
-		double MovePos = nextPosX;
-		MovePos += moveX;
-		if (!CStageCollision::GetInstance()->IsHit(MovePos, nextPosY, 60, 100, offsetPos))
-		{
-			m_Position.x = MovePos;
-		}
-		else 
-		{
-			m_Acceleration.x = 0; // 壁に当たったら速度を殺す
-		}
-	}
-
-	// Y軸移動
-	if (moveY != 0.0f) 
-	{
-		double MovePos = nextPosY;
-		MovePos += moveY;
-		if (!CStageCollision::GetInstance()->IsHit(nextPosX, MovePos, 60, 100, offsetPos))
-		{
-			m_Position.y = MovePos;
-		}
-		else
-		{
-			// 地面判定
-			if (moveY > 0) 
-			{
-				GroundStand = true;
-				m_Jumping = false;
-				m_JumpRemove = false;
-				m_JumpAcc = 0;
-			}
-
-			m_Acceleration.y = 0;
-		}
-	}
-}
-
 
 void CPlayer::PlayerColorChange()
 {
