@@ -90,6 +90,18 @@ void CCamera::CameraReset()
 	m_Position.y = 0;
 }
 
+void CCamera::SetBossBattleCamera_Nazrin(VECTOR2_f PlayerPos)
+{
+	//カメラポジションのベスト位置
+	m_CameraMasterPos.x = PlayerPos.x + (WND_W / 2) - 50;
+	//Y座標は指定して配置する(ブロックをロードすると手間が多い)
+	m_CameraMasterPos.y = 815 - 160;
+}
+
+void CCamera::BossBattleCamera()
+{
+}
+
 void CCamera::MoveRange()
 {
 	//カメラ移動制限(ステージ左側)

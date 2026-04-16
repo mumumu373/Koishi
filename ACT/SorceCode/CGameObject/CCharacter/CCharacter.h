@@ -31,7 +31,9 @@ public:
 		Fairy,		//妖精
 		YinYangBall,//陰陽玉
 
-		Nazrin,		//ボス
+		//ボス
+		Nazrin,		//ナズーリン
+		Seija,		//正邪
 	};
 
 	int m_MyCharacter = enMyCharacter::Player;

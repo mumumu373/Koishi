@@ -20,6 +20,9 @@ public:
 	static constexpr double AvoidanceDistance = 300;//回避の距離
 	static constexpr int AvoidanceTime = 10;//回避にかかる時間
 	static constexpr int AvoidancecoolTime = 30;//回避のクールタイム
+
+	bool EVENT_HIT;		//イベントブロックに当たったら
+	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
 public:
 	//アクション状態
 	enum enActionState
@@ -49,7 +52,7 @@ public:
 
 	int GetStete() { return m_State; }
 	void Attackmove();
-	void Update() override;
+	void Update() override {};
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 	//ワイヤーを撃てるかセット
 	void SetWireShotCan(bool can) { m_WireShotCan = can; };
@@ -76,6 +79,8 @@ public:
 	void SetPos_Y(double Pos_Y) { m_Position.y = Pos_Y; }
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+	//ムービーシーンのアップデート
+	void MovieSceneUpdate();
 
 	//プレイヤーのハートを描画する
 	void PlayerHeartDraw() { m_upHeart->Draw(); }
@@ -88,8 +93,8 @@ public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(int Enemy, int Color);
 
-	//
-	void MoveSafeWrier(VECTOR2_f pos);
+	//カメラの当たり判定(ボスバトルなどの)
+	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
 private:
 	void AvoidanceEnd();
 	void KyeInput();

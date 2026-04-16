@@ -43,6 +43,8 @@ enum enScene
 	GameMainToResult,	//ゲームメインからリザルトへ
 	Result,		//リザルト
 	ResultToTitle,		//リザルトからタイトルへ
+	Movie,		//ムービーシーン
+	BossBattle,	//ボスバトルシーン(カメラの制御などを変更するので専用のシーンを用意する)
 };
 
 int m_Scene;	//ゲームシーン
@@ -60,6 +62,8 @@ int m_WorldState = enWorldState::Normal;
 public:
 	bool NoCreateInstance = false;	//作りたくないものは作らない
 	bool NoDeleteInstance = false;	//消したくないものは消さない
+public:
+	int m_MovieSceneCameraMoveCo = 0;;			//ムービーシーンのカメラが動くタイミングをカウント
 public:
 	CGame();		//コンストラクタ
 	CGame(GameWindow* pGameWnd);	//コンストラクタ(引数あり)

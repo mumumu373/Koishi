@@ -18,6 +18,11 @@ public:
 
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
 
+	//ボスとの戦闘フラグを踏んだ
+	virtual void BossBattleFlag(VECTOR2_f PlayerPos) = 0;
+
+	//会話などのムービーシーンの時に動作する関数	現在何の会話をしているかを取得する
+	virtual void MovieSceneUpdate() = 0;
 protected:
 	void Animation() override {};
 

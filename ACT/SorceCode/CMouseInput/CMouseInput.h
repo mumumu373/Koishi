@@ -42,6 +42,7 @@ public:
 		i.yh = GetInstance()->Size;
 		return i;
 	}
+
 	static ObjectInfo  GetcollisionMouseCamera(CCamera* m_pCamera) {
 		ObjectInfo i;
 		VECTOR2_f pos = { GetInstance()->MousePos.x - GetInstance()->Size / 2 ,GetInstance()->MousePos.y - GetInstance()->Size / 2 };
@@ -52,12 +53,15 @@ public:
 		i.yh = GetInstance()->Size;
 		return i;
 	}
+
 	static int GetcollisionMouseSize() {
 		return GetInstance()->Size;
 	}
+
 	static void ColorChange() {
 		GetInstance()->MouseColorChange = true;
 	}
+
 	static CMouseInput* GetInstance()
 	{
 		//唯一のインスタンスを作成する

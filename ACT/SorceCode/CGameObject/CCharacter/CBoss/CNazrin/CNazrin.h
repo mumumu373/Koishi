@@ -27,17 +27,24 @@ public:
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+
+	//ボスとの戦闘フラグを踏んだ
+	virtual void BossBattleFlag(VECTOR2_f SetPos) override;
+
+	//会話などのムービーシーンの時に動作する関数
+	virtual void MovieSceneUpdate() override;
 private:
 	void Animation() override;
 
 	//ステージとの当たり判定
-	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 private:
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingCo;		//ジャンプするタイミングをカウント
 
 	bool m_BulletShot;		//バレットを撃つ
 	int m_BulletShotCo;		//撃つまでのカウント
+	int m_HowShotBullet;	//バレットを何発撃った？
 
 	double m_FallingSpeed;	//落下速度
 	bool m_GroundStand;		//地面に立っているか	

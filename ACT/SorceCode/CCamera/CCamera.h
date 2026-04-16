@@ -30,6 +30,9 @@ public:
 	//カメラのサイズと位置をリセット
 	void CameraReset();
 
+	//カメラの位置取得
+	VECTOR2_f GetCameraPos() { return m_Position; }
+
 	//ステージの幅高さをセットする
 	void SetStageSize(double Width, double Heigth) { m_StageSize = { Width ,Heigth }; }
 	//セットした物の位置を中心にカメラが動くようにする
@@ -40,6 +43,11 @@ public:
 	}
 
 	void SetPos(double PosX, double PosY) { m_Position = { PosX,PosY }; }
+
+	//ボスバトルのカメラをセット(ナズーリン)
+	void SetBossBattleCamera_Nazrin(VECTOR2_f PlayerPos);
+	//
+	void BossBattleCamera();
 
 private:
 	//移動範囲

@@ -35,6 +35,8 @@ public:
     int GetHitMapX() const { return m_HitMapX; }
     int GetHitMapY() const { return m_HitMapY; }
 
+    bool GetHitEvent()const { return m_isEventChipHit; }
+
 private:
     CStageCollision();
     CStageCollision(const CStageCollision& rhs) = delete;

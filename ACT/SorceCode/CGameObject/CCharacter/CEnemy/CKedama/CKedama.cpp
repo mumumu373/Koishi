@@ -115,11 +115,6 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	}
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000) {
-		m_FallingSpeed = 0;
-		m_Position.y -= 10;
-	}
-
 	switch (m_MoveState) {
 	case enMoveState::Wait:
 		break;
