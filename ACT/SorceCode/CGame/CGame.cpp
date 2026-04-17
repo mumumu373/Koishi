@@ -138,10 +138,12 @@ bool CGame::Create()
 
 	//‰ŠúÝ’è
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 100, 400 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 500, 400 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 400 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 1500, 100 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 300, 800 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 600, 700 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 600 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 1500, 800 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 2000, 600 }));
+	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 2500, 400 }));
 
 
 	Nega =std::make_unique<NEGA>(); 

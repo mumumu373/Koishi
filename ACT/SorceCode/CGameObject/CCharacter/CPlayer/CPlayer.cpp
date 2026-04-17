@@ -219,6 +219,12 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
 
+	if (GetAsyncKeyState('Y') & 0x8000) {
+		static int Co = 0;
+		upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, GetPosition(), m_Color, 6, 0 + Co*20 , 64, 4));
+		Co++;
+	}
+
 	//ステージとの判定
 	StageCollision(44, 44);
 }
@@ -380,6 +386,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 		}
 	}
 
+	//横方向の判定だけ見て、触れたか確認d
 	//イベントブロック(ボス戦突入イベント)に触れていたら
 	if (CStageCollision::GetInstance()->GetHitEvent() == true) {
 		EVENT_HIT = true;

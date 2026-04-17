@@ -103,9 +103,6 @@ void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<C
 	}	
 }
 
-
-
-
 ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
 {
 	ObjectInfo PlayerInfo;

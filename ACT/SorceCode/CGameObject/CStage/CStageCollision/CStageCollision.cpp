@@ -60,8 +60,11 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
             switch (tipID)
             {
             case 19:
-                std::cout << "EventHit" << std::endl;
-                m_isEventChipHit = true;
+                if (i == 0)
+                {
+                    std::cout << "EventHit" << std::endl;
+                    m_isEventChipHit = true;
+                }
                 break;
 
             case 20:

@@ -137,12 +137,15 @@
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.cpp" />
-    <ClCompile Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.cpp" />
     <ClCompile Include="SorceCode\CNormalAttack\CNormalAttack.cpp">
       <Filter>SorceCode\CNormalAttack</Filter>
     </ClCompile>
+    <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollisionDraw\CStageCollisionDraw.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CRockOnBullet\CRockOnBullet.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CCharacter\CPlayer\CHeart\CHeart.cpp" />
+    <ClCompile Include="SorceCode\CGameObject\CBullet\CPredictionBullet\CPredictionBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -218,7 +221,6 @@
     <ClInclude Include="SorceCode\CWireActionSupporter\CWireActionSupporter.h">
       <Filter>SorceCode\CWireActionSupporter</Filter>
     </ClInclude>
-    <ClInclude Include="SorceCode\CGameObject\CStage\CStageResource\CStageResource.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.h" />
     <ClInclude Include="SorceCode\CNormalAttack\CNormalAttack.h">
@@ -228,5 +230,9 @@
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageLoader\CStageLoader.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollision\CStageCollision.h" />
+    <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollisionDraw\CStageCollisionDraw.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CRockOnBullet\CRockOnBullet.h" />
+    <ClInclude Include="SorceCode\CGameObject\CCharacter\CPlayer\CHeart\CHeart.h" />
+    <ClInclude Include="SorceCode\CGameObject\CBullet\CPredictionBullet\CPredictionBullet.h" />
   </ItemGroup>
 </Project>

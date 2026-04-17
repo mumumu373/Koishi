@@ -41,6 +41,7 @@ private:
 private:
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingCo;		//ジャンプするタイミングをカウント
+	double m_JumpPower;		//ジャンプ力
 
 	bool m_BulletShot;		//バレットを撃つ
 	int m_BulletShotCo;		//撃つまでのカウント
@@ -50,4 +51,9 @@ private:
 	bool m_GroundStand;		//地面に立っているか	
 
 	int m_AttackMoveChangeCo;	//攻撃のパターンを変えるタイミングをカウント
+
+	int m_AttackMoveCo;			//攻撃の動作をカウントする
+
+	VECTOR2_f m_MemoryPos;		//ポジションを記憶しておく
+	VECTOR2_f m_BattleStartPos;	//ボスバトルのスタート位置
 };
