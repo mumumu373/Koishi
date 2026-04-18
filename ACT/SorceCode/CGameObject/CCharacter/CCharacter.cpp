@@ -2,7 +2,7 @@
 
 CCharacter::CCharacter()
 	: m_Alpha(255)
-	, m_Delection(0)
+	, m_Delection(0,0,0)
 	, m_NoDamageCo(0)
 	, m_NoDamageTime(false)
 	, m_Speed(0, 0)

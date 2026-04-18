@@ -69,7 +69,7 @@ void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
 	//CImageManagerがシングルトン化しているので、サウンドのように使える
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Nazrin)->TransAlBlendRotation(
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Nazrin)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
@@ -78,7 +78,8 @@ void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, m_Delection);					//透明度、角度
+		m_Alpha, 
+		m_Delection.x, m_Delection.y, m_Delection.z);					//透明度、角度
 }
 
 void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)

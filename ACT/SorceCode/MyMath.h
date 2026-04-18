@@ -31,3 +31,20 @@ struct VECTOR2_f
 	{
 	}
 };
+
+//ベクトル3方向構造体
+struct VECTOR3
+{
+	double x;
+	double y;
+	double z;
+
+	VECTOR3(double xSrc, double ySrc, double zSrc)
+		:x(xSrc), y(ySrc), z(zSrc)
+	{
+	}
+	VECTOR3()
+		:VECTOR3(0, 0, 0)
+	{
+	}
+};

@@ -1,6 +1,6 @@
 #include "CPredictionBullet.h"
 
-CPredictionBullet::CPredictionBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double StartAngle, int Size, int ShotTime)
+CPredictionBullet::CPredictionBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double StartAngle, int Size_X, int Size_Y, int ShotTime, int ReleaseTime)
 {
 	//警告からバレットを出すので、セットから
 	m_State = enState::Set;
@@ -17,13 +17,17 @@ CPredictionBullet::CPredictionBullet(int Camp, VECTOR2_f Pos, int Color, double 
 	//速さをセット
 	m_Speed = { Speed,Speed };
 
-	m_Framesplit = { 0,64,320,128 };
+	//バレットのサイズをセット
+	m_BulletSize_X = Size_X;
+	m_BulletSize_Y = Size_Y;
+
+	m_Framesplit = { 0,64,400,200 };
 
 	//元のサイズ
 	m_FrameSize = { 64,32 };
 
 	//少し透明にして表示する
-	m_Alpha = 150;
+	m_Alpha = 200;
 
 	//そのキャラの真ん中から出るようにする
 	m_Position.x -= (m_Framesplit.w / 2);
@@ -43,6 +47,10 @@ CPredictionBullet::CPredictionBullet(int Camp, VECTOR2_f Pos, int Color, double 
 	//バレットを撃つタイミングを初期化
 	m_BulletShotCo = 0;
 	m_BulletShotTime = ShotTime * 60;
+
+	//バレットが消える時間を計測
+	m_ReleaseTime = ReleaseTime;
+	m_ReleaseTimeCo = 0;
 
 	//警告線を出して登場するのでtrue
 	m_WarningLineCo = 1;
@@ -96,6 +104,14 @@ void CPredictionBullet::Update()
 		//ベクトル分移動していく
 		m_Position.x += m_Vector.x;
 		m_Position.y += m_Vector.y;
+
+		//バレットを消す処理
+		if (m_ReleaseTimeCo >= m_ReleaseTime) {
+			m_State = enState::Dead;
+		}
+		else {
+			m_ReleaseTimeCo++;
+		}
 	}
 }
 
@@ -140,6 +156,6 @@ void CPredictionBullet::StartBulletShot()
 		//生存中に
 		m_State = enState::Living;
 		//大きさと形を変更
-		m_Framesplit = { 0,32,128,96 };
+		m_Framesplit = { 0,32,m_BulletSize_X,m_BulletSize_Y };
 	}
 }

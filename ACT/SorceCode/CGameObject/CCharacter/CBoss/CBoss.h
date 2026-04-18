@@ -23,10 +23,14 @@ public:
 
 	//会話などのムービーシーンの時に動作する関数	現在何の会話をしているかを取得する
 	virtual void MovieSceneUpdate() = 0;
+
+	//プレイヤーの場所を見ておく
+	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
 protected:
 	void Animation() override {};
 
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override{};
 protected:
+	VECTOR2_f m_PlayerPos;		//プレイヤーの位置	
 };

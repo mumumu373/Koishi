@@ -78,7 +78,7 @@ void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Enemy)->TransAlBlendRotation(
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Enemy)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
@@ -87,7 +87,8 @@ void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, m_Delection);	//透明度、角度
+		m_Alpha, 
+		m_Delection.x, m_Delection.y, m_Delection.z);	//透明度、角度
 
 	RECT rect;
 	rect.left = DispPos.x;
@@ -155,6 +156,16 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 void CKedama::Animation()
 {
+	switch (m_MoveState) {
+	case enMoveState::Wait:
+		break;
+	case enMoveState::MoveLeft:
+		m_Delection.y = 0;
+		break;
+	case enMoveState::MoveRight:
+		m_Delection.y = 180;
+		break;
+	}
 }
 
 //ステージとの判定を見る

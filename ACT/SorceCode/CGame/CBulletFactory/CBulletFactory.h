@@ -41,12 +41,12 @@ public:
 		return std::make_unique<CRockOnBullet>(Camp, Pos, Color, Speed, TargetPos, Size, ReleaseTime);
 	}
 
-	//予告線を出してから撃てるバレット
-	static inline std::unique_ptr<CBullet> CreatePredictionBullet(
-		int Camp, VECTOR2_f Pos, int Color, double Speed,
-		double StartAngle, int Size, int ShotTime)
+	//予告線を出してから撃てるバレット							//陣営			位置		属性		スピード	
+	static inline std::unique_ptr<CBullet> CreatePredictionBullet(int Camp, VECTOR2_f Pos, int Color, double Speed,
+		//初期角度		サイズX		バレットY	撃つタイミング	消えるタイミング
+		double StartAngle, int Size_X, int Size_Y, int ShotTime, int ReleaseTime)
 	{
-		return std::make_unique<CPredictionBullet>(Camp, Pos, Color, Speed, StartAngle, Size, ShotTime);
+		return std::make_unique<CPredictionBullet>(Camp, Pos, Color, Speed, StartAngle, Size_X, Size_Y, ShotTime, ReleaseTime);
 	}
 private:
 

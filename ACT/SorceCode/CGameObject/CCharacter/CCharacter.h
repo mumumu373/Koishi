@@ -94,7 +94,7 @@ protected:
 	virtual void StageCollision(double OffsetPos_X, double OffsetPos_Y) = 0;
 protected:
 	int m_Alpha;				//“§–¾“x
-	double m_Delection;			//Šp“x
+	VECTOR3 m_Delection;		//x,y,z•ûŒü‚ÉŒü‚«‚ð•Ï‚¦‚é
 
 	int m_NoDamageCo;			//–³“GŽžŠÔ‚ð‚Í‚©‚é
 

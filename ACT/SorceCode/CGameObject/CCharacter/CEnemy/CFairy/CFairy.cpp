@@ -101,7 +101,7 @@ void CFairy::Draw(std::unique_ptr<CCamera>& pCamera)
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Enemy)->TransAlBlendRotation(
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Enemy)->TransAlBlendRotation3(
 		DispPos.x,				//表示位置x座標
 		DispPos.y,				//表示位置y座標
 		m_Framesplit.w,			//画像幅
@@ -110,7 +110,8 @@ void CFairy::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, m_Delection);	//透明度、角度
+		m_Alpha,
+		m_Delection.x, m_Delection.y, m_Delection.z);	//透明度、角度
 }
 
 void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
@@ -149,6 +150,13 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 void CFairy::Animation()
 {
+	//プレイヤーの方に向く
+	if (m_PlayerPos.x >= m_Position.x) {
+		m_Delection.y = 180;
+	}
+	else {
+		m_Delection.y = 0;
+	}
 }
 
 void CFairy::MoveControl()

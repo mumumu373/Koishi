@@ -115,7 +115,6 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	}
 	//アニメーション処理
 	Animation();
-	m_Delection+=50;
 
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
@@ -128,7 +127,7 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, i, m_Delection, 0);					//透明度、角度
+		m_Alpha, m_Delection.x, m_Delection.y, m_Delection.z);					//透明度、角度
 
 	NormalAttack->Draw(pCamera);
 
@@ -221,7 +220,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 	if (GetAsyncKeyState('Y') & 0x8000) {
 		static int Co = 0;
-		upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, GetPosition(), m_Color, 6, 0 + Co*20 , 64, 4));
+		upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, GetPosition(), m_Color, 6, 0 + Co * 20, 128, 96, 1, 180));
 		Co++;
 	}
 
@@ -259,20 +258,10 @@ void CPlayer::Animation()
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-		if (m_Delection <= 0) {
-			m_Delection = 0;
-		}
-		else {
-			m_Delection -= TurnAroundSpeed;
-		}
+		m_Delection.y = 0;
 		break;
 	case enMoveState::MoveRight:
-		if (m_Delection >= 180) {
-			m_Delection = 180;
-		}
-		else {
-			m_Delection += TurnAroundSpeed;
-		}
+		m_Delection.y = 180;
 		break;
 	}
 }

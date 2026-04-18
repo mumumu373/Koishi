@@ -12,8 +12,8 @@ public:
 	//バレットを打ち出した処理が通ったかを見る
 	bool HowStartBulletShot = false;
 public:
-						//陣営			位置		属性		スピード	初期角度	サイズ		撃つタイミング
-	CPredictionBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double StartAngle, int Size, int ShotTime);
+						//陣営			位置		属性		スピード	初期角度		サイズX		バレットY	撃つタイミング	消えるタイミング
+	CPredictionBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double StartAngle, int Size_X, int Size_Y, int ShotTime, int ReleaseTime);
 	~CPredictionBullet();
 
 	void Update() override;
@@ -30,6 +30,8 @@ private:
 	VECTOR2_f m_Vector;			//打ち出すベクトル
 
 	double m_StartAngle;		//初期角度
+	int m_BulletSize_X;			//撃つバレットのサイズX
+	int m_BulletSize_Y;			//撃つバレットのサイズY
 
 	int m_BulletShotCo;			//バレットを打ち出すタイミングを計測
 	int m_BulletShotTime;		//バレットを打ち出すタイミング

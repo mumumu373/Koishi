@@ -322,6 +322,8 @@ void CGame::Update()
 
 		//ボスの動作	ボスバトルのときだけ動作する
 		if (m_upBoss != nullptr) {
+			//プレイヤーの位置を取得する
+			m_upBoss->SetPlayerPos(m_upPlayer->GetCenterPosition());
 			m_upBoss->Update(m_upBullet);
 		}
 
