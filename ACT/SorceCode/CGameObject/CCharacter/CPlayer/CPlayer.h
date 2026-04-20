@@ -14,12 +14,13 @@ class CPlayer
 public:
 	//最大落下速度
 	static constexpr double MAX_FALLING_SPEED = 25;//落下速度の最大値
-	static constexpr double JUMP_POWER = 12;//ジャンプ力
+	static constexpr double JUMP_POWER = 20;//ジャンプ力
 	static constexpr int DashcountMAX = 30;//ダッシュの受付時間
 	static constexpr int TurnAroundSpeed = 10;//向きを変える速さ
 	static constexpr double AvoidanceDistance = 300;//回避の距離
 	static constexpr int AvoidanceTime = 10;//回避にかかる時間
 	static constexpr int AvoidancecoolTime = 30;//回避のクールタイム
+	static constexpr double PlayerGrobtyi = 0.4;
 
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置

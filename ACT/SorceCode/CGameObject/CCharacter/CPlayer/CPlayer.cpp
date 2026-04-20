@@ -649,7 +649,7 @@ void CPlayer::JumpPlayer()
 			m_Position.y = MAX_FALLING_SPEED;
 		}
 		else {
-			m_JumpAcc -= Gravity;
+			m_JumpAcc -= PlayerGrobtyi;
 			m_Position.y -= m_JumpAcc;
 		}
 	}
