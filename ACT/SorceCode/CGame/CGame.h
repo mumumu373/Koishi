@@ -108,6 +108,10 @@ private:
 
 	//カーソルを動かす関数
 	void MoveCursor();
+
+	//タイトルの色々を設定する関数
+	void SetTitleInfo();	
+
 private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 
@@ -168,7 +172,8 @@ private:
 
 	//選択肢
 	std::vector<std::function<void()>>	m_Action;
-	int m_SelectAction;	//選択肢のどれを選んでいるか
+	std::vector<VECTOR2_f>	m_CursorPosition;
+	int m_CursorAction;	//選択肢のどれを選んでいるか
 	
 
 };

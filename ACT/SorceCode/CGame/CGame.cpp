@@ -29,7 +29,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upCamera				(nullptr)
 , m_upBoss					(nullptr)
 , m_Action					()
-, m_SelectAction			()
+, m_CursorAction			()
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -153,12 +153,8 @@ bool CGame::Create()
 
 	m_upPlayer->SetCamera(m_upCamera.get());
 
-	//タイトルでの選択肢
-	m_Action =
-	{
-		[this]() { TitleToGameMain(); },
-		[this]() { GameEnd(); }
-	};
+	//タイトルの色々を設定する関数
+	SetTitleInfo();
 
 	return true;
 }
@@ -205,7 +201,7 @@ void CGame::Update()
 
 		if(GetAsyncKeyState(VK_RETURN) & 0x8000) 
 		{
-			m_Action[m_SelectAction]();
+			m_Action[m_CursorAction]();
 		}
 		break;
 
@@ -409,7 +405,7 @@ void CGame::Draw()
 			0, 0);
 
 		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
-			0, m_SelectAction * 128,
+			m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
 			128, 128,
 			0, 0,
 			255);
@@ -493,31 +489,46 @@ void CGame::DeleteBullet()
 
 //---------タイトルの選択肢関数------------
 
+//タイトルからゲームメインに移行する関数
 void CGame::TitleToGameMain()
 {
 	m_Scene = enScene::GameMain;
 }
 
+//ゲームを終了する関数
 void CGame::GameEnd()
 {
-	//ウィンドウを閉じることをWindowsに知らせる.
 	PostMessage(m_pGameWnd->hWnd, WM_CLOSE, 0, 0);
-
 }
 
+//カーソルを動かす関数
 void CGame::MoveCursor()
 {
 	if (GetAsyncKeyState(VK_UP) & 0x0001)
 	{
-		m_SelectAction--;
-		if (m_SelectAction < 0) m_SelectAction = m_Action.size() - 1;
+		m_CursorAction--;
+		if (m_CursorAction < 0) m_CursorAction = m_Action.size() - 1;
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x0001)
 	{
-		m_SelectAction++;
-		if (m_SelectAction >= m_Action.size()) m_SelectAction = 0;
+		m_CursorAction++;
+		if (m_CursorAction >= m_Action.size()) m_CursorAction = 0;
 	}
 }
 
+void CGame::SetTitleInfo()
+{
+	//タイトルでの選択肢
+	m_Action =
+	{
+		[this]() { TitleToGameMain(); },
+		[this]() { GameEnd(); }
+	};
+
+	//タイトルでのカーソルの位置
+	m_CursorPosition.push_back({ 400,300 });
+	m_CursorPosition.push_back({ 400,500 });
+
+}
 //----------------------------------------
