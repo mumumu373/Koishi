@@ -274,10 +274,6 @@ void CGame::Update()
 				//カメラをボス戦用にセットする
 				m_upCamera->SetBossBattleCamera_Nazrin(m_upPlayer->GetPosition());
 			}
-			//正邪用のカメラを用意する
-			else if (m_upBoss->m_MyCharacter == CBoss::enMyCharacter::Seija) {
-
-			}
 		}
 
 		break;
@@ -289,7 +285,7 @@ void CGame::Update()
 		//ボスのムービーシーン中の動作
 		m_upBoss->MovieSceneUpdate();
 
-		//プレイヤーが地面についてから
+		//プレイヤーが地面についてからうごかしたい
 		if (m_MovieSceneCameraMoveCo >= 20) {
 			//ムービーシーン
 			m_upCamera->Update();
@@ -316,7 +312,7 @@ void CGame::Update()
 
 		//プレイヤーの動作
 		m_upPlayer->Update(m_upBullet);
-
+		//カメラとの当たり判定
 		m_upPlayer->CameraCollision(m_upCamera->GetCameraPos(), 44, 44);
 
 
@@ -324,6 +320,9 @@ void CGame::Update()
 		if (m_upBoss != nullptr) {
 			//プレイヤーの位置を取得する
 			m_upBoss->SetPlayerPos(m_upPlayer->GetCenterPosition());
+			//カメラの位置を取得する
+			m_upBoss->SetCameraPos(m_upCamera->GetCameraPos());
+			//ボスの動作
 			m_upBoss->Update(m_upBullet);
 		}
 

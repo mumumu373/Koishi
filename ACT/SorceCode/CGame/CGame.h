@@ -38,11 +38,8 @@ public:
 enum enScene
 {
 	Title,		//タイトル
-	TitleToGameMain,	//タイトルからゲームメインへ
 	GameMain,	//ゲーム中
-	GameMainToResult,	//ゲームメインからリザルトへ
-	Result,		//リザルト
-	ResultToTitle,		//リザルトからタイトルへ
+	Death,		//デス中
 	Movie,		//ムービーシーン
 	BossBattle,	//ボスバトルシーン(カメラの制御などを変更するので専用のシーンを用意する)
 };
@@ -54,7 +51,6 @@ enum enWorldState
 {
 	Normal,		//通常
 	StopWorld,	//ゲームメインで動作する物を一時的に止める
-	PlayerDeath,//どちらかのプレイヤーが死亡中になったらこの状態になる	(演出を行うため)
 };
 
 int m_WorldState = enWorldState::Normal;

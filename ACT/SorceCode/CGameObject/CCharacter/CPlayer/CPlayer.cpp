@@ -219,9 +219,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	PlayerColorChange();
 
 	if (GetAsyncKeyState('Y') & 0x8000) {
-		static int Co = 0;
-		upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, GetPosition(), m_Color, 6, 0 + Co * 20, 128, 96, 1, 180));
-		Co++;
+		upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, GetCenterPosition(), m_Color, 6, 180, 192, 144, 1, 180));
 	}
 
 	//ステージとの判定

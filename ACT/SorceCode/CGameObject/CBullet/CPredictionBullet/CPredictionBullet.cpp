@@ -155,7 +155,13 @@ void CPredictionBullet::StartBulletShot()
 		m_Alpha = 255;
 		//生存中に
 		m_State = enState::Living;
+		//そのキャラの真ん中から出るようにする
+		//m_Position.x -= (m_Framesplit.w / 2);
+		m_Position.y -= (m_Framesplit.h / 4);
 		//大きさと形を変更
 		m_Framesplit = { 0,32,m_BulletSize_X,m_BulletSize_Y };
+		//そのキャラの真ん中から出るようにする
+		m_Position.x += (m_Framesplit.w / 2);
+		m_Position.y += (m_Framesplit.h / 2);
 	}
 }

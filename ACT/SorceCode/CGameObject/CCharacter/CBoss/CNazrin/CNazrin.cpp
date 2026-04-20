@@ -86,17 +86,6 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	//バレットを撃ちだす動作
-	if (m_BulletShot == false) {
-		m_BulletShot = true;
-		m_BulletShotCo = 0;
-		//周りをまわる弾を生成
-		upBullet.push_back(CBulletFactory::CreateRotateBullet(m_MyCamp, GetCenterPosition(), Blue, 3, 100, 100, 180, 64, 240));
-	}
-	else if (m_BulletShotCo >= 60) {
-		m_BulletShot = false;
-	}
-
 	switch (m_AttackMove) {
 	case enAttackMove::Standby:
 		//攻撃パターンを変えるとき
@@ -122,14 +111,14 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				if (m_AttackMoveCo == 0) {
 					//バレットを3発同じ角度で出す(スピードは違う)
 					for (int i = 1; i <= 3; i++) {
-						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (-30 * m_HowShotBullet), -120, 80, 180, 0));
+						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (-30 * m_HowShotBullet), -120, 80, 240, 0));
 					}
 				}
 				//2回目
 				else if (m_AttackMoveCo == 1) {
 					//バレットを3発同じ角度で出す(2回目は右方向に撃つ)
 					for (int i = 1; i <= 3; i++) {
-						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (30 * m_HowShotBullet), -60, 80, 180, 0));
+						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (30 * m_HowShotBullet), -60, 80, 240, 0));
 					}
 				}
 				//何発(何回)バレットを撃った動作をしたか
@@ -162,6 +151,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 						//左に飛んで移動する
 						m_Position.x -= 12;
 					}
+					//地面についたら
 					else {
 						//もう一回動かします
 						m_AttackMoveCo = 1;
@@ -171,6 +161,9 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 						//カウントをリセットしておく
 						m_AttackMoveChangeCo = 0;
+
+						//反対の方向を見るようにする
+						m_Delection.y = 180;
 					}
 				}
 				//2回目以降は別の行動にする
@@ -189,6 +182,17 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 					//次に動く時のジャンプ力を設定する
 					m_JumpPower = 80;
+
+					//上に飛んでいくようにする
+					//ジャンプするように
+					m_FallingSpeed = -m_JumpPower;
+
+					m_Jumping = true;
+					m_GroundStand = false;
+
+					//ジャンプする前の場所を記憶
+					m_MemoryPos = m_Position;
+
 				}
 			}
 			else {
@@ -199,26 +203,36 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 		break;
 	case enAttackMove::Move_02:
-		if (m_GroundStand == true) {
-			//ジャンプするように
-			m_FallingSpeed = -m_JumpPower;
-
-			m_Jumping = true;
-			m_GroundStand = false;
-
-			//ジャンプする前の場所を記憶
-			m_MemoryPos = m_Position;
-		}
-
 		//画面上の外にいったら
 		if (m_Position.y <= m_MemoryPos.y - WND_H - m_Framesplit.h) {
-			m_Position.y = m_MemoryPos.y - WND_H - m_Framesplit.h;
 			//落下しないようにする
 			m_FallingSpeed = 0;
 
-			//攻撃した回数が5回に達するまで
-			if (m_AttackMoveCo < 4) {
+			//バレットの撃てる準備ができた
+			m_BulletShot = true;
+		}
 
+		if (m_BulletShot == true) {
+			//バレットを撃つタイミング
+			if (m_BulletShotCo >= 20) {
+				//攻撃した回数が4回に達するまで
+				if (m_AttackMoveCo < 4) {
+					//攻撃した回数でどこにバレットを撃つかを決める
+					switch (m_AttackMoveCo) {
+						//左右に警告弾を放つ
+					case 0:
+						m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w;
+						m_Position.y = m_CameraPos.y + (WND_H / 2) - m_Framesplit.h - 24;
+																				//				X座標はキャラの右から			Y座標は真ん中で
+						upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, { GetPosition().x + m_Framesplit.w * 2,GetCenterPosition().y }, m_Color, 12, 0, 192, 144, 1, 180));
+
+						m_AttackMoveCo++;
+						break;
+					}
+				}
+			}
+			else {
+				m_BulletShotCo++;
 			}
 		}
 		break;
@@ -230,6 +244,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	StageCollision(44, 44);
 }
 
+//ボスバトルが始まった時の関数
 void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
 {
 	//ナズーリンの配置
@@ -261,6 +276,7 @@ void CNazrin::Animation()
 
 	if (m_AnimetionCo >= 15) {
 		m_Framesplit.x += 64;
+		//最後のアニメーションなら
 		if (m_Framesplit.x > 64*3) {
 			m_Framesplit.x = 0;
 		}

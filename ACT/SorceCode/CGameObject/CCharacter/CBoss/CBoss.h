@@ -26,6 +26,9 @@ public:
 
 	//プレイヤーの場所を見ておく
 	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
+
+	//カメラの場所をセット
+	void SetCameraPos(VECTOR2_f CameraPos) { m_CameraPos = CameraPos; }
 protected:
 	void Animation() override {};
 
@@ -33,4 +36,6 @@ protected:
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override{};
 protected:
 	VECTOR2_f m_PlayerPos;		//プレイヤーの位置	
+
+	VECTOR2_f m_CameraPos;		//カメラの位置
 };
