@@ -30,7 +30,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
 		{enImgList::IMG_Nazrin		,"Data\\Image\\Nazrin.bmp","Nazrin"} ,
-		{enImgList::IMG_Bullet		,"Data\\Image\\Bulleta.bmp","Bullet"} ,
+		{enImgList::IMG_Bullet		,"Data\\Image\\Bulletaa.bmp","Bullet"} ,
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
 		{enImgList::IMG_Slash		,"Data\\Image\\slash32x96.bmp"		,"IMG_Slash"} ,
 	};
