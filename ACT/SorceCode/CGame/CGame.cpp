@@ -114,7 +114,7 @@ bool CGame::Create()
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 
 	//ゲームシーン状態にしておく
-	m_Scene = enScene::GameMain;
+	m_Scene = enScene::Title;
 	//----------------------------------------------------------------------------
 
 
@@ -189,6 +189,11 @@ void CGame::Update()
 	//仮置き
 	CMouseInput::Update();
 	switch (m_Scene) {
+	case enScene::Title:
+		if(GetAsyncKeyState(VK_RETURN) & 0x8000) {
+			m_Scene = enScene::GameMain;
+		}
+		break;
 	case enScene::GameMain:
 
 		if (GetAsyncKeyState('I') & 0x8000) {
