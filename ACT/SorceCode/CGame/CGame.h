@@ -100,6 +100,14 @@ private:
 	//バレットを削除する関数
 	void DeleteBullet();
 
+	//タイトルからゲームメインに移行する関数
+	void TitleToGameMain();
+
+	//ゲームを終了する関数
+	void GameEnd();
+
+	//カーソルを動かす関数
+	void MoveCursor();
 private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 
@@ -157,4 +165,10 @@ private:
 
 	std::unique_ptr<NEGA> Nega;	//ネガポジ反転クラス
 	std::unique_ptr<CWireActionSupporter> m_upWireActionSupporter;	//ワイヤーアクションをサポートするクラス
+
+	//選択肢
+	std::vector<std::function<void()>>	m_Action;
+	int m_SelectAction;	//選択肢のどれを選んでいるか
+	
+
 };
