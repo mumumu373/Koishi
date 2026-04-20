@@ -15,8 +15,6 @@ public:
 
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
-
-	void CharacterHit() override;		//ヒットした時のバレットの処理
 private:
 	void Animation() override;
 private:

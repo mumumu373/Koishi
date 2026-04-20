@@ -111,14 +111,14 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				if (m_AttackMoveCo == 0) {
 					//バレットを3発同じ角度で出す(スピードは違う)
 					for (int i = 1; i <= 3; i++) {
-						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (-30 * m_HowShotBullet), -120, 80, 240, 0));
+						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (-30 * m_HowShotBullet), -120, 80, 240, 0, false));
 					}
 				}
 				//2回目
 				else if (m_AttackMoveCo == 1) {
 					//バレットを3発同じ角度で出す(2回目は右方向に撃つ)
 					for (int i = 1; i <= 3; i++) {
-						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (30 * m_HowShotBullet), -60, 80, 240, 0));
+						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (30 * m_HowShotBullet), -60, 80, 240, 0, false));
 					}
 				}
 				//何発(何回)バレットを撃った動作をしたか
@@ -219,14 +219,75 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				if (m_AttackMoveCo < 4) {
 					//攻撃した回数でどこにバレットを撃つかを決める
 					switch (m_AttackMoveCo) {
-						//左右に警告弾を放つ
+						//左右に弾を放つ
 					case 0:
-						m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w;
-						m_Position.y = m_CameraPos.y + (WND_H / 2) - m_Framesplit.h - 24;
-																				//				X座標はキャラの右から			Y座標は真ん中で
-						upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, { GetPosition().x + m_Framesplit.w * 2,GetCenterPosition().y }, m_Color, 12, 0, 192, 144, 1, 180));
-
+						//左右から迫るバレット
+						for (int i = 0; i < 4; i++) {
+							switch (i) {
+							case 0:
+								//画面左端上から出てくるように
+								m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w - 150;
+								m_Position.y = m_CameraPos.y - (WND_H / 2) + 24;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color,2,0, 0, 200, 240, 3, true));
+								break;
+							case 1:
+								//画面左端下から出てくるように
+								m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w - 150;
+								m_Position.y = m_CameraPos.y + (WND_H / 2) - m_Framesplit.h;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 0, 200, 240, 3, true));
+								break;
+							case 2:
+								//画面右端上から出てくるように
+								m_Position.x = m_CameraPos.x + (WND_W / 2) + 150;
+								m_Position.y = m_CameraPos.y - (WND_H / 2) + 24;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 180, 200, 240, 3, true));
+								break;
+							case 3:
+								//画面右端下から出てくるように
+								m_Position.x = m_CameraPos.x + (WND_W / 2) + 150;
+								m_Position.y = m_CameraPos.y + (WND_H / 2) - m_Framesplit.h;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 180, 200, 240, 3, true));
+								break;
+							}
+						}
+						//次のバレット
 						m_AttackMoveCo++;
+						//クールタイム
+						m_BulletShotCo = 0;
+						break;
+					case 1:
+						for (int i = 0; i < 4; i++) {
+							switch (i) {
+							case 0:
+								//画面左端上から出てくるように
+								m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w - 100;
+								m_Position.y = m_CameraPos.y - (WND_H / 2) - m_Framesplit.h - 100;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 45, 200, 240, 3, true));
+								break;
+							case 1:
+								//画面左端下から出てくるように
+								m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w - 100;
+								m_Position.y = m_CameraPos.y + (WND_H / 2) + m_Framesplit.h + 100;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, -45, 200, 240, 3, true));
+								break;
+							case 2:
+								//画面右端上から出てくるように
+								m_Position.x = m_CameraPos.x + (WND_W / 2) + m_Framesplit.w + 100;
+								m_Position.y = m_CameraPos.y - (WND_H / 2) - m_Framesplit.h - 100;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 135, 200, 240, 3, true));
+								break;
+							case 3:
+								//画面右端下から出てくるように
+								m_Position.x = m_CameraPos.x + (WND_W / 2) + m_Framesplit.w + 100;
+								m_Position.y = m_CameraPos.y + (WND_H / 2) + m_Framesplit.h + 100;
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 225, 200, 240, 3, true));
+								break;
+							}
+						}
+						//次のバレット
+						m_AttackMoveCo++;
+						//クールタイム
+						m_BulletShotCo = 0;
 						break;
 					}
 				}

@@ -9,14 +9,12 @@ class CCircularBullet
 	:public CBullet
 {
 public:
-					//陣営			位置			属性		スピード		数			初期角度	サイズ		消える時間			加速度
-	CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Amount, double StartAngle, int Size, int ReleaseTime, double SpeedAcc);
+					//陣営			位置			属性		スピード		数			初期角度	サイズ		消える時間			加速度		なずのバレットを撃つか
+	CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Amount, double StartAngle, int Size, int ReleaseTime, double SpeedAcc, bool NazrinBullet);
 	~CCircularBullet();
 
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
-
-	void CharacterHit() override;		//ヒットした時のバレットの処理
 private:
 	void Animation() override;
 private:

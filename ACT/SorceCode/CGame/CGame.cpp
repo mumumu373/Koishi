@@ -230,7 +230,8 @@ void CGame::Update()
 
 		//プレイヤーとエネミーの当たり判定処理
 		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
-
+		//プレイヤーとバレットの当たり判定処理
+		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
 
 		//ワイヤーとワイヤーポイントの当たり判定処理
 		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
@@ -352,6 +353,8 @@ void CGame::Update()
 		m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 		//プレイヤーとエネミーの当たり判定処理
 		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+		//プレイヤーとバレットの当たり判定処理
+		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
 		//ワイヤーとワイヤーポイントの当たり判定処理
 		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
 

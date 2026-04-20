@@ -113,7 +113,3 @@ void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 void CRotateBullet::Animation()
 {
 }
-
-void CRotateBullet::CharacterHit()
-{
-}

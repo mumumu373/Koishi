@@ -93,10 +93,6 @@ void CRockOnBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Alpha, m_Delection);					//透明度、角度
 }
 
-void CRockOnBullet::CharacterHit()
-{
-}
-
 void CRockOnBullet::Animation()
 {
 }

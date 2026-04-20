@@ -93,6 +93,9 @@ public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(int Enemy, int Color);
 
+	//バレットに触れたなら
+	void BulletHit(int Color);
+
 	//カメラの当たり判定(ボスバトルなどの)
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
 private:

@@ -46,7 +46,7 @@ public:
 	virtual void Update() override {};
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {};
 
-	virtual void CharacterHit() {};		//ヒットした時のバレットの処理
+	void CharacterHit() { m_State = enState::Dead; };				//ヒットした時のバレットの処理
 
 protected:
 	virtual void Animation() {};
