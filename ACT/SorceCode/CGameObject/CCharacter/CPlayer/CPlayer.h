@@ -95,6 +95,9 @@ public://パブリック
 
 	//カメラの当たり判定(ボスバトルなどの)
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
+
+	void MoveSafeWrier(VECTOR2_f pos);
+
 private:
 	void AvoidanceEnd();
 	void KyeInput();

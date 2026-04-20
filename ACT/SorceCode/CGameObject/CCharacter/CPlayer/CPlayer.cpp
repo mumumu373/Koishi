@@ -737,3 +737,38 @@ void CPlayer::AirAvoidanceVECTSet()
 	AirAvoidanceVECT = NormalVector(AirAvoidanceVECT);
 
 }
+void CPlayer::MoveSafeWrier(VECTOR2_f pos)
+{
+	VECTOR2_f offsetPos = { 40.f, 40.f };
+
+	// XŽ²ˆÚ“®
+	//if (moveX != 0.0f) 
+	{
+		VECTOR2_f nextPosX = pos;
+		nextPosX.y = m_Position.y;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosX.x, nextPosX.y, 60, 100, offsetPos))
+		{
+			m_Position.x = nextPosX.x;
+		}
+		else
+		{
+			//m_Acceleration.x = 0; // •Ç‚É“–‚½‚Á‚½‚ç‘¬“x‚ðŽE‚·
+		}
+	}
+
+	// YŽ²ˆÚ“®
+	//if (moveY != 0.0f) 
+	{
+		VECTOR2_f nextPosY = pos;
+		nextPosY.x = m_Position.x;
+		if (!CStageCollision::GetInstance()->IsHit(nextPosY.x, nextPosY.y, 60,100, offsetPos))
+		{
+			m_Position.y = nextPosY.y;
+		}
+		else
+		{
+
+			//m_Acceleration.y = 0;
+		}
+	}
+}

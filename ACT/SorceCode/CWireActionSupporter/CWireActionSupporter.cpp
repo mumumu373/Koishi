@@ -122,10 +122,10 @@ void CWireActionSupporter::Update()
 			Radian += i;
 			double x = (m_dpWirePoint->GetCenterPosition().x) + (cos(Radian) * Long) - m_dpPlayer->GetFrameSplit().w / 2;
 			double y = (m_dpWirePoint->GetCenterPosition().y) + (sin(Radian) * Long) - m_dpPlayer->GetFrameSplit().h / 2;
-			m_dpPlayer->SetPosition({ x,y });
+			m_dpPlayer->MoveSafeWrier({ x,y });
 
 			//ステージの当たり判定を行う
-			StageCollision(40, 40);
+			//StageCollision(40, 40);
 		}
 	}
 }
