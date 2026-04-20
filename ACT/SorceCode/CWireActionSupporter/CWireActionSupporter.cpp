@@ -60,6 +60,7 @@ void CWireActionSupporter::Update()
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
 		if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
 		{
+			m_dpWire->SetTopPoint(m_dpWirePoint->GetPosition());
 			//[1]がOldPositionらしい
 			pos[1] = pos[0];
 			pos[0] = m_dpPlayer->GetCenterPosition();

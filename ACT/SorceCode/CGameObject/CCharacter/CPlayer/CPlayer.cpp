@@ -447,9 +447,7 @@ void CPlayer::AvoidanceEnd()
 {
 	if (AvoidanceCount > 0) {
 		AvoidanceCount -= 1;
-			if (enActionState != enActionState::WirePointCatch) {
-				enActionState = enActionState::None;
-			}
+		
 	}
 	else {
 		if (AvoidanceCount == 0) {
@@ -459,6 +457,10 @@ void CPlayer::AvoidanceEnd()
 			AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
 
 			m_Acceleration = { 0,0 };//空中の加速度をリセットする
+
+			if (enActionState != enActionState::WirePointCatch) {
+				enActionState = enActionState::None;
+			}
 		}
 	}
 }
@@ -527,12 +529,14 @@ void CPlayer::KyeInput()
 void CPlayer::AirKeyInput()
 {
 	if (enActionState != enActionState::WireShot&& enActionState != enActionState::WirePointCatch) {
-		if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+	
+			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
 
-			enActionState = enActionState::AirAvoidance;
-			AirAvoidanceVECTSet();
-			AvoidanceCount = AvoidanceTime;
+				enActionState = enActionState::AirAvoidance;
+				AirAvoidanceVECTSet();
+				AvoidanceCount = AvoidanceTime;
 		}
+
 	}
 	//ワイヤー発射指示
 	if (CMouseInput::GetMouseRight(true, false) && m_WireShotCan) {
@@ -574,10 +578,7 @@ void CPlayer::MovePlayerJump()
 		SPin.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
 		m_Position.x += SPin.x;
 		m_Position.y += SPin.y;
-		m_Acceleration.x = AirAvoidanceVECT.x * AvoidanceDistance / AvoidanceTime;
-		m_Acceleration.y = AirAvoidanceVECT.y * AvoidanceDistance / AvoidanceTime;
-		m_Position.x += m_Acceleration.x;
-		m_Position.y += m_Acceleration.y;
+		
 	}
 	else {
 		m_Position.x += m_Acceleration.x;

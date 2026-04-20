@@ -51,6 +51,7 @@ public:
 	CWirepoint* GetCatchPoint() { return m_CatchWirepoint; }
 	bool canShot();
 	VECTOR2_f GetTopPoint() { return m_Toptpoint; };
+	void SetTopPoint(VECTOR2_f pos) {m_Toptpoint = pos;}
 	void WireEnd() { m_ShotState = ShotSteto::back; }
 	int  GetWireMaxRongr() { return WireMaxRongr; }
 private:
