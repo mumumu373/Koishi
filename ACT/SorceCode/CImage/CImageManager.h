@@ -30,7 +30,8 @@ public:
 		IMG_Effect,			//エフェクト
 		IMG_Slash,			//斬撃
 
-		IMG_Title,			//タイトル
+		IMG_Title,			//タイトルの画像
+		IMG_Cursor,			//カーソルの画像
 	};
 public:
 	static CImageManager* GetInstance()

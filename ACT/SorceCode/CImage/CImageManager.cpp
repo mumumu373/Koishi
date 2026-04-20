@@ -34,6 +34,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
 		{enImgList::IMG_Slash		,"Data\\Image\\slash32x96.bmp"		,"IMG_Slash"} ,
 		{enImgList::IMG_Title		,"Data\\Image\\Title.bmp"			,"IMG_Title"} ,
+		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"IMG_Cursor"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	

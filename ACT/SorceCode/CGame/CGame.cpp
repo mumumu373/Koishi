@@ -396,6 +396,11 @@ void CGame::Draw()
 			0, 0,
 			1280, 720,
 			0, 0);
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
+			0, 0,
+			128, 128,
+			0, 0,
+			255);
 
 		break;
 	case enScene::GameMain:
