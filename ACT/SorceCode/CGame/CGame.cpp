@@ -190,10 +190,15 @@ void CGame::Update()
 	CMouseInput::Update();
 	switch (m_Scene) {
 	case enScene::Title:
+
+
+
 		if(GetAsyncKeyState(VK_RETURN) & 0x8000) {
 			m_Scene = enScene::GameMain;
 		}
 		break;
+
+
 	case enScene::GameMain:
 
 		if (GetAsyncKeyState('I') & 0x8000) {
@@ -383,42 +388,60 @@ void CGame::Update()
 //描画関数(画像の表示処理を行う)
 void CGame::Draw()
 {
-	//ステージの描画
-	m_upStageManager->Draw(m_upCamera);
-	//ワイヤーの描画
-	m_pWire->Draw(m_upCamera);
+	switch (m_Scene)
+	{
+	case enScene::Title:
+		
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_Title)->BBlt(
+			0, 0,
+			1280, 720,
+			0, 0);
 
-	//プレイヤーの描画
-	m_upPlayer->Draw(m_upCamera);
+		break;
+	case enScene::GameMain:
+		
+		//ステージの描画
+		m_upStageManager->Draw(m_upCamera);
+		//ワイヤーの描画
+		m_pWire->Draw(m_upCamera);
 
-	//エネミー描画
-	for (int i = 0; i < m_upEnemy.size(); i++) {
-		m_upEnemy[i]->Draw(m_upCamera);
-	}
-	//ボスの描画
-	if (m_upBoss != nullptr) {
-		m_upBoss->Draw(m_upCamera);
-	}
+		//プレイヤーの描画
+		m_upPlayer->Draw(m_upCamera);
 
-	//バレットの描画
-	for (int i = 0; i < m_upBullet.size(); i++) {
-		m_upBullet[i]->Draw(m_upCamera);
-	}
+		//エネミー描画
+		for (int i = 0; i < m_upEnemy.size(); i++) {
+			m_upEnemy[i]->Draw(m_upCamera);
+		}
+		//ボスの描画
+		if (m_upBoss != nullptr) {
+			m_upBoss->Draw(m_upCamera);
+		}
 
-	//プレイヤーのハートを描画する
-	m_upPlayer->PlayerHeartDraw();
+		//バレットの描画
+		for (int i = 0; i < m_upBullet.size(); i++) {
+			m_upBullet[i]->Draw(m_upCamera);
+		}
 
-	for (int i = 0; i < m_pCWirepoint.size(); i++) {
-		m_pCWirepoint[i]->Draw(m_upCamera);
+		//プレイヤーのハートを描画する
+		m_upPlayer->PlayerHeartDraw();
+
+		for (int i = 0; i < m_pCWirepoint.size(); i++) {
+			m_pCWirepoint[i]->Draw(m_upCamera);
+		}
+		if (CMouseInput::GetMouseLeft(true, false)) {
+			//
+			//Nega->Draw(m_pGameWnd->hScreenDC);
+			int a = 0;
+		}
+		m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
+		//仮置き
+		CMouseInput::Draw();
+
+		break;
+
+	default:
+		break;
 	}
-	if (CMouseInput::GetMouseLeft(true,false)) {
-		//
-		//Nega->Draw(m_pGameWnd->hScreenDC);
-		int a = 0;
-	}
-	m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
-	//仮置き
-	CMouseInput::Draw();
 }
 
 void CGame::SetClass()

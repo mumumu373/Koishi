@@ -28,7 +28,9 @@ public:
 
 		IMG_Bullet,			//全員のバレット
 		IMG_Effect,			//エフェクト
-		IMG_Slash,		//斬撃
+		IMG_Slash,			//斬撃
+
+		IMG_Title,			//タイトル
 	};
 public:
 	static CImageManager* GetInstance()
