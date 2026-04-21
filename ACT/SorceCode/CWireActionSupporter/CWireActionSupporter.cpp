@@ -15,8 +15,9 @@ CWireActionSupporter::~CWireActionSupporter()
 
 void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CWirepoint* m_DPWirePoint)
 {
-	AllNullptr();
+
 	if (WireActioning == false) {
+		AllNullptr();
 		WireActioning = true;
 
 		pos[0] = m_DPlayer->GetCenterPosition();
@@ -49,11 +50,11 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 
 void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPWire, CEnemy* m_DPEnemi)
 {
-	AllNullptr();
+	
 
 	if (WireActioning == false) {
 		WireActioning = true;
-	
+		AllNullptr();
 		pos[0] = m_DPlayer->GetCenterPosition();
 		pos[1] = m_DPlayer->GetCenterPosition();
 
