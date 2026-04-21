@@ -127,7 +127,7 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			m_BulletShot = false;
 			m_BulletShotCo = 0;
 			//プレイヤーを狙うバレット
-			upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 24, m_PlayerPos, 64, 60));
+			upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 24, m_PlayerPos, 64, 60, true));
 		}
 		if (m_BulletShotCo >= m_BulletShotTiming) {
 			m_BulletShot = true;

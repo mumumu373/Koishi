@@ -109,7 +109,7 @@ bool CGame::Create()
 	VECTOR2_f Speed = { 4,4 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 120));
 	SetEnemy.y -= 10;																//作るときにムーブタイプを決めておく
-	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::Green, SetEnemy, Speed, CFairy::enMoveType::Stop, 60, 120));
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy, Speed, CFairy::enMoveType::Stop, 60, 120));
 	SetEnemy.x += 100;
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 

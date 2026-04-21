@@ -218,8 +218,8 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
 
-	if (GetAsyncKeyState('Y') & 0x8000) {
-		upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 90, 144, 120, 2, true));
+	if (GetAsyncKeyState('Y') & 0x0001) {
+		upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 10, GetCenterPosition(), 90, 300, true));
 	}
 
 	//ステージとの判定

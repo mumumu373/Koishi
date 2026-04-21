@@ -8,8 +8,8 @@
 class CRockOnBullet
 	:public CBullet
 {
-public:				//陣営		位置		属性			速度			対象の位置		大きさ		消える時間
-	CRockOnBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, VECTOR2_f TargetPos, int Size, int ReleaseTime);
+public:				//陣営		位置		属性			速度			対象の位置		大きさ		消える時間		ナズーリンのバレットを撃つか
+	CRockOnBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, VECTOR2_f TargetPos, int Size, int ReleaseTime, bool NazrinBullet);
 	~CRockOnBullet();
 
 	void Update() override;

@@ -16,10 +16,10 @@ public:
 	static inline std::unique_ptr<CBullet> CreateRotateBullet(
 		//	陣営			ポジション	属性			速さ			
 		int Camp, VECTOR2_f Pos, int Color, double Speed,
-		//	X方向の距離		Y方向の距離			開始角度			サイズ		消える時間
-		double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime)
+		//	X方向の距離		Y方向の距離			開始角度			サイズ		消える時間	ナズのバレットを撃つか
+		double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime, bool NazrinBullet)
 	{
-		return std::make_unique<CRotateBullet>(Camp, Pos, Color, Speed, X_Range, Y_Range, StartAngle, Size, ReleaseTime);
+		return std::make_unique<CRotateBullet>(Camp, Pos, Color, Speed, X_Range, Y_Range, StartAngle, Size, ReleaseTime, NazrinBullet);
 	}
 
 	//360°方向に撃てるバレット										
@@ -35,9 +35,9 @@ public:
 	//狙い撃ちするバレット
 	static inline std::unique_ptr<CBullet> CreateRockOnBullet(
 		int Camp, VECTOR2_f Pos, int Color, double Speed,
-		VECTOR2_f TargetPos, int Size, int ReleaseTime)
+		VECTOR2_f TargetPos, int Size, int ReleaseTime, bool NazrinBullet)
 	{
-		return std::make_unique<CRockOnBullet>(Camp, Pos, Color, Speed, TargetPos, Size, ReleaseTime);
+		return std::make_unique<CRockOnBullet>(Camp, Pos, Color, Speed, TargetPos, Size, ReleaseTime, NazrinBullet);
 	}
 private:
 
