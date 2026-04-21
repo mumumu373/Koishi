@@ -40,7 +40,7 @@ public:
 		}
 		return false;
 	}
-	void Startcatch(CWirepoint* point);
+	void Startcatch(VECTOR2_f pos);
 	int GetSize() { return size; }
 	bool GetRock() { 
 		if ( m_ShotState == ShotSteto::Rock) {

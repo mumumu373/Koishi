@@ -152,6 +152,12 @@ void CPlayer::WireEnd(VECTOR2_f Spead)
 
 }
 
+void CPlayer::WireEndEnemi()
+{
+	enActionState = enActionState::WireShot;
+	m_Jumping = true;
+}
+
 double CPlayer::GetWireStartSpeed()
 {
 	double Speed = m_Position.y  - m_OldPosition.y;

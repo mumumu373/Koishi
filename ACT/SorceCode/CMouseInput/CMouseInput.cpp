@@ -6,6 +6,7 @@ CMouseInput::CMouseInput()
 	, MouseLeft{ false,false }
 	, MouseRight{ false,false }
 	, MouseWheel{ false,false }
+	, MouseRightStoop(false)
 {
 	Size = StertSize;
 }
@@ -25,9 +26,16 @@ void CMouseInput::update() {
 		MouseLeft[0] = false;
 	}
 	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-		MouseRight[0] = true;
+		if (MouseRightStoop!=true) {
+			MouseRight[0] = true;
+		}
+		else {
+			MouseRight[0] = false;
+		}
+		
 	}
 	else {
+		MouseRightStoop = false;
 		MouseRight[0] = false;
 	}
 	if (GetAsyncKeyState(VK_MBUTTON) & 0x8000) {

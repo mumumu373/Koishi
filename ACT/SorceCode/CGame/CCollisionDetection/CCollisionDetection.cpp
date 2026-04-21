@@ -79,9 +79,8 @@ void CCollisionDetection::MouseToWirePoint(std::vector<std::unique_ptr<CWirepoin
 	}
 }
 
-void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& m_pCWirepoint, std::unique_ptr<CWire>& pWire)
+void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& m_pCWirepoint, std::unique_ptr<CWire>& pWire, std::unique_ptr<CPlayer>& upPlayer, std::unique_ptr<CWireActionSupporter>& m_upWireActionSupporter)
 {
-	//エネミー
 	if (pWire->Getcatch()) {
 		for (int EnemyNo = 0; EnemyNo < m_pCWirepoint.size(); EnemyNo++) {
 			if (m_pCWirepoint[EnemyNo]->m_State == CCharacter::enState::Living) {
@@ -94,14 +93,41 @@ void CCollisionDetection::WireToWirepointCollision(std::vector<std::unique_ptr<C
 
 				//当たったら
 				if (CircleDetection({ pWire->GetTopPoint().x, pWire->GetTopPoint().y, pWire->GetSize(), pWire->GetSize() }, EnemyPos) == true) {
-					 
-					pWire->Startcatch(m_pCWirepoint[EnemyNo].get());
 
+					pWire->Startcatch({ m_pCWirepoint[EnemyNo]->GetCenterPosition().x - pWire->GetSize() / 2, m_pCWirepoint[EnemyNo]->GetCenterPosition().x - pWire->GetSize() / 2});
+					m_upWireActionSupporter->StartWireAction(upPlayer.get(), pWire.get(), m_pCWirepoint[EnemyNo].get());
 				}
 			}
 		}
 	}	
 }
+
+void CCollisionDetection::WireToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CWire>& pWire, std::unique_ptr<CPlayer>& upPlayer, std::unique_ptr<CWireActionSupporter>& m_upWireActionSupporter)
+{
+	if (pWire->Getcatch()) {
+		for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+			if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
+				//当たり判定のセット
+				ObjectInfo EnemyPos;
+				EnemyPos.x = upEnemy[EnemyNo]->GetPosition().x;
+				EnemyPos.y = upEnemy[EnemyNo]->GetPosition().y;
+				EnemyPos.xw = upEnemy[EnemyNo]->GetFrameSplit().w;
+				EnemyPos.yh = upEnemy[EnemyNo]->GetFrameSplit().h;
+
+				//当たったら
+				if (CircleDetection({ pWire->GetTopPoint().x, pWire->GetTopPoint().y, pWire->GetSize(), pWire->GetSize() }, EnemyPos) == true) {
+
+					pWire->Startcatch({ upEnemy[EnemyNo]->GetCenterPosition().x - pWire->GetSize() / 2, upEnemy[EnemyNo]->GetCenterPosition().x - pWire->GetSize() / 2 });
+					m_upWireActionSupporter->StartWireActionEnemi(upPlayer.get(), pWire.get(), upEnemy[EnemyNo].get());
+
+				}
+			}
+		}
+	}
+
+}
+
+
 
 ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
 {

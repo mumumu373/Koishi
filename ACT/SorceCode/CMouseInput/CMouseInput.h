@@ -82,6 +82,9 @@ public:
 	static void SetMousePos(VECTOR2_f pos) {
 		GetInstance()->MousePos = pos;
 	}
+	static void MouseRightStoopr() {
+		GetInstance()->MouseRightStoop = true;
+	}
 private:
 
 	//そのまま関数を呼び出すと全てにゲットインスタンスを描く必要があるので中継する
@@ -108,5 +111,6 @@ private:
 	 bool MouseRight[2];
 	 bool MouseWheel[2];
 	 VECTOR2_f MousePos;
+	 bool MouseRightStoop;
 };
 

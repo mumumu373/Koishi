@@ -226,8 +226,11 @@ void CGame::Update()
 		//ある分回す
 		for (int i = 0; i < m_upEnemy.size(); i++) {
 			//プレイヤーの位置を取得する
-			m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
-			m_upEnemy[i]->Update(m_upBullet);
+			if (m_upEnemy[i]->GetChtchWire()!= CEnemy::CatchWire::Catch) {
+				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
+				m_upEnemy[i]->Update(m_upBullet);
+			}
+	
 		}
 
 		//バレットの動作
@@ -248,14 +251,12 @@ void CGame::Update()
 		//プレイヤーとエネミーの当たり判定処理
 		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
-
+		//ワイヤーと敵	
+		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
 		//ワイヤーとワイヤーポイントの当たり判定処理
-		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
+		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
-		//ワイヤーをどこに出すかの処理
-		if (m_pWire->GetRock()) {
-			m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
-		}
+		
 
 		//ステージの更新
 		m_upStageManager->Update();
@@ -369,13 +370,16 @@ void CGame::Update()
 		m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 		//プレイヤーとエネミーの当たり判定処理
 		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+		// 
+			//ワイヤーと敵	
+		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
 		//ワイヤーとワイヤーポイントの当たり判定処理
-		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire);
+		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
-		//ワイヤーをどこに出すかの処理
-		if (m_pWire->GetRock()) {
-			m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
-		}
+		////ワイヤーをどこに出すかの処理
+		//if (m_pWire->GetRock()) {
+		//	m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
+		//}
 
 		//ワイヤーを撃つ処理
 		if (m_upPlayer->GetWireShot()) {

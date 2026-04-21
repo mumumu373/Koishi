@@ -70,6 +70,7 @@ public:
 	void ShotWire() { enActionState = enActionState::WireShot; }
 	void SetPosition(VECTOR2_f pos) { m_Position = pos; }
 	void WireEnd(VECTOR2_f Spead);
+	void WireEndEnemi();
 	double GetWireStartSpeed();
 	void SetCamera(CCamera* m_pCamer) {
 		m_pCamera = m_pCamer;

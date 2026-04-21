@@ -8,8 +8,15 @@ class CEnemy
 	:public CCharacter
 {
 public:
-	CEnemy() {};
+	CEnemy();
 	virtual ~CEnemy() {};
+
+	enum CatchWire {
+		No,
+		Catch,
+
+	};
+	
 
 	virtual void StartSetting() override {};
 	virtual void Update() override {};
@@ -20,6 +27,11 @@ public:
 
 	//プレイヤーの位置を取得
 	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
+
+	void SetPosition(VECTOR2_f pos) { m_Position = pos; }
+
+	void CatchWire() { m_CatchWire = CatchWire::Catch; }
+	int GetChtchWire() { return m_CatchWire; }
 protected:
 	void Animation() override {};
 
@@ -27,4 +39,5 @@ protected:
 	virtual void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
 protected:
 	VECTOR2_f m_PlayerPos;
+	int m_CatchWire;
 };

@@ -15,6 +15,7 @@ CWireActionSupporter::~CWireActionSupporter()
 
 void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CWirepoint* m_DPWirePoint)
 {
+	AllNullptr();
 	if (WireActioning == false) {
 		WireActioning = true;
 
@@ -46,6 +47,27 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 	
 }
 
+void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPWire, CEnemy* m_DPEnemi)
+{
+	AllNullptr();
+
+	if (WireActioning == false) {
+		WireActioning = true;
+	
+		pos[0] = m_DPlayer->GetCenterPosition();
+		pos[1] = m_DPlayer->GetCenterPosition();
+
+		m_dpPlayer = m_DPlayer;
+		//m_dpPlayer->StartWirePointCatch();
+		m_dpWire = m_DPWire;
+		m_dpEnemi = m_DPEnemi;
+
+		NawSpeed = m_DPlayer->GetWireStartSpeed();
+
+		m_dpWire->SetTopPoint(m_DPEnemi->GetCenterPosition());
+	}
+}
+
 
 
 void CWireActionSupporter::Update()
@@ -56,78 +78,11 @@ void CWireActionSupporter::Update()
 		}
 	}
 
-
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
-		if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
-		{
-			m_dpWire->SetTopPoint(m_dpWirePoint->GetPosition());
-			//[1]がOldPositionらしい
-			pos[1] = pos[0];
-			pos[0] = m_dpPlayer->GetCenterPosition();
-
-			double Long = GetHowToLong(m_dpPlayer->GetCenterPosition(), m_dpWirePoint->GetCenterPosition());
-
-			if (GetAsyncKeyState('W') & 0x8000) {
-				Long -= 2;
-			}
-			else {
-				if (GetAsyncKeyState('S') & 0x8000) {
-					Long += 5;
-					if (Long > m_dpWire->GetWireMaxRongr()) {
-						Long = m_dpWire->GetWireMaxRongr();
-					}
-				}
-			}
-			if (Long <= 128) { Long = 128; }//0で割るのはエラーになるから
-			double Radian = GetDelectionVect(m_dpPlayer->GetCenterPosition(), m_dpWirePoint->GetCenterPosition());
-
-			int kakudo = (Radian * 180 / M_PI);
-
-
-			//180度未満
-			int kakudo2 = 90;
-
-
-
-			if (GetAsyncKeyState('A') & 0x8000) {
-				kakudo2 += 20;
-			}
-			else {
-				if (GetAsyncKeyState('D') & 0x8000) {
-					kakudo2 -= 20;
-				}
-			}
-			int diff = kakudo - kakudo2;
-
-			// 2. 差を -180 ~ 180 の範囲に補正する
-			if (diff > 180)  diff -= 360;
-			if (diff < -180) diff += 360;
-
-
-			//185度より小さい
-			if (diff < -5) {
-				NawSpeed += Gravity;
-			}
-			else {
-				if (diff > +5) {
-					NawSpeed -= Gravity;
-				}
-
-			}
-
-			NawSpeed *= 0.99;
-			double NawSpeed2 = NawSpeed;
-
-
-			double i = (double)NawSpeed2 / Long;
-			Radian += i;
-			double x = (m_dpWirePoint->GetCenterPosition().x) + (cos(Radian) * Long) - m_dpPlayer->GetFrameSplit().w / 2;
-			double y = (m_dpWirePoint->GetCenterPosition().y) + (sin(Radian) * Long) - m_dpPlayer->GetFrameSplit().h / 2;
-			m_dpPlayer->MoveSafeWrier({ x,y });
-
-			//ステージの当たり判定を行う
-			//StageCollision(40, 40);
-		}
+		WirePointAction();
+	}
+	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpEnemi != nullptr) {
+		EnemitoAction();
 	}
 }
 
@@ -249,4 +204,132 @@ void CWireActionSupporter::StageCollision(double OffsetPos_X, double OffsetPos_Y
 			}
 		}
 	}
+}
+
+void CWireActionSupporter::WirePointAction()
+{
+	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
+	{
+		m_dpWire->SetTopPoint(m_dpWirePoint->GetPosition());
+		//[1]がOldPositionらしい
+		pos[1] = pos[0];
+		pos[0] = m_dpPlayer->GetCenterPosition();
+
+		double Long = GetHowToLong(m_dpPlayer->GetCenterPosition(), m_dpWirePoint->GetCenterPosition());
+
+		if (GetAsyncKeyState('W') & 0x8000) {
+			Long -= 2;
+		}
+		else {
+			if (GetAsyncKeyState('S') & 0x8000) {
+				Long += 5;
+				if (Long > m_dpWire->GetWireMaxRongr()) {
+					Long = m_dpWire->GetWireMaxRongr();
+				}
+			}
+		}
+		if (Long <= 128) { Long = 128; }//0で割るのはエラーになるから
+		double Radian = GetDelectionVect(m_dpPlayer->GetCenterPosition(), m_dpWirePoint->GetCenterPosition());
+
+		int kakudo = (Radian * 180 / M_PI);
+
+
+		//180度未満
+		int kakudo2 = 90;
+
+
+
+		if (GetAsyncKeyState('A') & 0x8000) {
+			kakudo2 += 20;
+		}
+		else {
+			if (GetAsyncKeyState('D') & 0x8000) {
+				kakudo2 -= 20;
+			}
+		}
+		int diff = kakudo - kakudo2;
+
+		// 2. 差を -180 ~ 180 の範囲に補正する
+		if (diff > 180)  diff -= 360;
+		if (diff < -180) diff += 360;
+
+
+		//185度より小さい
+		if (diff < -5) {
+			NawSpeed += Gravity;
+		}
+		else {
+			if (diff > +5) {
+				NawSpeed -= Gravity;
+			}
+
+		}
+
+		NawSpeed *= 0.99;
+		double NawSpeed2 = NawSpeed;
+
+
+		double i = (double)NawSpeed2 / Long;
+		Radian += i;
+		double x = (m_dpWirePoint->GetCenterPosition().x) + (cos(Radian) * Long) - m_dpPlayer->GetFrameSplit().w / 2;
+		double y = (m_dpWirePoint->GetCenterPosition().y) + (sin(Radian) * Long) - m_dpPlayer->GetFrameSplit().h / 2;
+		m_dpPlayer->MoveSafeWrier({ x,y });
+
+		//ステージの当たり判定を行う
+		//StageCollision(40, 40);
+	}
+}
+
+void CWireActionSupporter::AllNullptr()
+{
+	m_dpPlayer = nullptr;
+	m_dpWire = nullptr;
+	m_dpWirePoint = nullptr;
+	m_dpEnemi = nullptr;
+}
+
+
+void CWireActionSupporter::EnemitoAction()
+{
+	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
+	{
+		m_dpEnemi->CatchWire();
+		m_dpWire->SetTopPoint(m_dpEnemi->GetCenterPosition());
+		//[1]がOldPositionらしい
+
+
+		double Long = GetHowToLong(m_dpPlayer->GetCenterPosition(), m_dpEnemi->GetCenterPosition());
+
+	
+
+		Long -= EnemiReedPower;
+		double Radian = GetDelectionVect(m_dpPlayer->GetCenterPosition(), m_dpEnemi->GetCenterPosition());
+
+
+		double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * Long) - m_dpEnemi->GetFrameSplit().w / 2;
+		double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * Long) - m_dpEnemi->GetFrameSplit().h / 2;
+		m_dpEnemi->SetPosition({ x,y });
+
+		if (Long < AttackEria) {
+			EnemiActionEnd();
+		}
+
+	}
+
+}
+
+void CWireActionSupporter::EnemiActionEnd()
+{
+
+	WireActioning = false;
+	m_dpWire->WireEnd();
+	//ここに敵を飛ばす処理を描く
+
+	///次にマウスを話すまで反応しない
+	CMouseInput::MouseRightStoopr();
+
+	m_dpPlayer->WireEndEnemi();
+	m_dpPlayer = nullptr;
+	m_dpWire = nullptr;
+	m_dpEnemi = nullptr;
 }
