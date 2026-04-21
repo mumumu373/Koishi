@@ -1,12 +1,16 @@
 #include "CWireActionSupporter.h"
 #include "CMouseInput//CMouseInput.h"
 CWireActionSupporter::CWireActionSupporter()
-	:m_dpPlayer(nullptr),
-	 m_dpWire(nullptr),
-	 m_dpWirePoint(nullptr),
-	NawSpeed(0),
-	WireActioning(false)
+	: WireActioning(false)
+	, NawSpeed(0)
+	, m_dpWire(nullptr)
+	, m_dpWirePoint(nullptr)
+	, m_dpPlayer(nullptr)
+	, m_dpEnemi(nullptr)
 {
+	for (int i = 0; i < 2; i++) {
+		pos[i] = { 0,0 };
+	}
 }
 
 CWireActionSupporter::~CWireActionSupporter()
@@ -50,8 +54,6 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 
 void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPWire, CEnemy* m_DPEnemi)
 {
-	
-
 	if (WireActioning == false) {
 		WireActioning = true;
 		AllNullptr();

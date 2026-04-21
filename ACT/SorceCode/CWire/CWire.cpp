@@ -3,6 +3,11 @@
 #include "CMouseInput//CMouseInput.h"//マウス入力クラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"
 CWire::CWire()
+	: m_CatchWirepoint(nullptr)
+	, m_DpPlayer(nullptr)
+	, m_Radian()
+	, m_Toptpoint()
+	, m_Targetpoint()
 {
 }
 

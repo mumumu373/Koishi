@@ -90,9 +90,6 @@ public:
 	HWND GetWnd() const { return m_pGameWnd->hWnd; }
 
 private:
-	void Collision();
-	//クラスをセットする関数
-	void SetClass();
 
 	//インスタンスを破棄する関数
 	void DeleteInstance();
@@ -175,5 +172,4 @@ private:
 	std::vector<VECTOR2_f>	m_CursorPosition;
 	int m_CursorAction;	//選択肢のどれを選んでいるか
 	
-
 };

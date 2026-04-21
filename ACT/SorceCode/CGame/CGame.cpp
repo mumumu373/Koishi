@@ -134,10 +134,6 @@ bool CGame::Create()
 		m_upCamera->SetStageSize(MapSize.first,MapSize.second);
 	}
 
-	//エネミーをポリモーで動かそうとすると、ここのセットクラスはいらないかも
-	SetClass();
-
-
 	//初期設定
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
 	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 300, 800 }));
@@ -253,6 +249,7 @@ void CGame::Update()
 
 		//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
+
 		//プレイヤーとバレットの当たり判定処理
 		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
 
@@ -373,8 +370,8 @@ void CGame::Update()
 		m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 		//プレイヤーとエネミーの当たり判定処理
 		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
-		// 
-			//ワイヤーと敵	
+ 
+		//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
 		//プレイヤーとバレットの当たり判定処理
 		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
@@ -421,6 +418,8 @@ void CGame::Draw()
 
 		break;
 	case enScene::GameMain:
+	case enScene::Movie:
+	case enScene::BossBattle:
 		
 		//ステージの描画
 		m_upStageManager->Draw(m_upCamera);
@@ -464,10 +463,6 @@ void CGame::Draw()
 	default:
 		break;
 	}
-}
-
-void CGame::SetClass()
-{
 }
 
 void CGame::DeleteInstance()
