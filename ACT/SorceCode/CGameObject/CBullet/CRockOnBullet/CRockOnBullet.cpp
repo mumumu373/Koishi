@@ -1,6 +1,6 @@
 #include "CRockOnBullet.h"
 
-CRockOnBullet::CRockOnBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, VECTOR2_f TargetPos, int Size, int ReleaseTime)
+CRockOnBullet::CRockOnBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, VECTOR2_f TargetPos, int Size, int ReleaseTime, bool NazrinBullet)
 {
 	//生存中に
 	m_State = enState::Living;
@@ -17,23 +17,36 @@ CRockOnBullet::CRockOnBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, V
 	//速さをセット
 	m_Speed = { Speed,Speed };
 
-	m_Framesplit = { 0,0,64,64 };
-	switch (m_Color) {
-	case enColor::NoColor:
-		break;
-		//色を対応させる
-	case enColor::Blue:
-		m_Framesplit.x += 32;
-	case enColor::Green:
-		m_Framesplit.x += 32;
-	case enColor::Yellow:
-		m_Framesplit.x += 32;
-	case enColor::Red:
-		m_Framesplit.x += 32;
-		break;
+	m_Framesplit = { 0,0,Size,Size };
+	//ナズーリンのバレットじゃないなら
+	if (NazrinBullet == false) {
+		switch (m_Color) {
+		case enColor::NoColor:
+			break;
+			//色を対応させる
+		case enColor::Blue:
+			m_Framesplit.x += 32;
+		case enColor::Green:
+			m_Framesplit.x += 32;
+		case enColor::Yellow:
+			m_Framesplit.x += 32;
+		case enColor::Red:
+			m_Framesplit.x += 32;
+			break;
+		}
+		//元のサイズ
+		m_FrameSize = { 32,32 };
 	}
-	//元のサイズ
-	m_FrameSize = { 32,32 };
+	else {
+		//ナズーリンのバレットを固定する
+		m_Framesplit = { 0,32,Size * 2,Size };
+
+		//元のサイズ
+		m_FrameSize = { 64,32 };
+	}
+
+	//対象にたいして向くようにする
+	m_Delection = GetDelectionVect(TargetPos, Pos) * 57.32484;
 
 	//そのキャラの真ん中から出るようにする
 	m_Position.x -= (m_Framesplit.w / 2);
@@ -91,10 +104,6 @@ void CRockOnBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, m_Delection);					//透明度、角度
-}
-
-void CRockOnBullet::CharacterHit()
-{
 }
 
 void CRockOnBullet::Animation()

@@ -26,6 +26,13 @@ public:
 	void MouseToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CCamera>& Camera);
 
 	void MouseToWirePoint(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CCamera>& Camera);
+	//ワイヤーとエネミーの当たり判定
+	void WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CWire>& pWire);
+
+	//プレイヤーとバレットの当たり判定
+	void PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet);
+
+
 	//ワイヤーとワイヤーポイントの当たり判定
 	void WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& m_pCWirepoint, std::unique_ptr<CWire>& pWire, std::unique_ptr<CPlayer>& upPlayer, std::unique_ptr<CWireActionSupporter>& m_upWireActionSupporter );
 	//
@@ -76,5 +83,7 @@ private:
 	ObjectInfo SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize);
 	//エネミーの位置情報
 	ObjectInfo SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize);
+	//バレットの位置情報
+	ObjectInfo SetBulletInfo(std::unique_ptr<CBullet>& upBullet);
 private:
 };

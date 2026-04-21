@@ -224,8 +224,8 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
 
-	if (GetAsyncKeyState('Y') & 0x8000) {
-		upBullet.push_back(CBulletFactory::CreatePredictionBullet(m_MyCamp, GetCenterPosition(), m_Color, 6, 180, 192, 144, 1, 180));
+	if (GetAsyncKeyState('Y') & 0x0001) {
+		upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 10, GetCenterPosition(), 90, 300, true));
 	}
 
 	//ステージとの判定
@@ -431,6 +431,19 @@ void CPlayer::EnemyHit(int Enemy, int Color)
 		break;
 
 		m_Acceleration = { 0,0 };//空中の加速度をリセットする
+	}
+}
+
+void CPlayer::BulletHit(int Color)
+{
+	switch (Color) {
+	case enColor::NoColor:
+	case enColor::Red:
+	case enColor::Yellow:
+	case enColor::Green:
+	case enColor::Blue:
+		//m_Position = { 0,0 };
+		break;
 	}
 }
 

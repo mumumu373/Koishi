@@ -136,7 +136,7 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		m_BulletShotCo = 0;
 			//360‹•ûŒü‚É‘Å‚Ä‚éƒoƒŒƒbƒg‚ğì‚é
 		for (int i = 0; i < m_AmountBullet; i++) {
-			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 180, 0));
+			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 180, 0, false));
 		}
 	}
 	if (m_BulletShotCo >= m_BulletShotTiming) {

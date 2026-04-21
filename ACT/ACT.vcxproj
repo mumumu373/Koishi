@@ -125,7 +125,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SorceCode\CGameObject\CBullet\CPredictionBullet\CPredictionBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageCollisionDraw\CStageCollisionDraw.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageManager\CStageManager.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.cpp" />
@@ -168,7 +167,6 @@
     <ClCompile Include="SorceCode\NEGA\NEGA.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SorceCode\CGameObject\CBullet\CPredictionBullet\CPredictionBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageCollisionDraw\CStageCollisionDraw.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageManager\CStageManager.h" />
     <ClInclude Include="SorceCode\CGameObject\CStage\CStageDraw\CStageDraw.h" />

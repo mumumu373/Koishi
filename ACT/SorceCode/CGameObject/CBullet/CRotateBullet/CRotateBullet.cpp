@@ -1,6 +1,6 @@
 #include "CRotateBullet.h"
 
-CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime)
+CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime, bool NazrinBullet)
 {
 	//生存中に
 	m_State = enState::Living;
@@ -24,29 +24,41 @@ CRotateBullet::CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, d
 	//元の距離セット
 	m_MasterRange = m_Range;
 
-	m_Framesplit = { 0,0,64,64 };
-	switch (m_Color) {
-	case enColor::NoColor:
-		break;
-		//色を対応させる
-	case enColor::Blue:
-		m_Framesplit.x += 32;
-	case enColor::Green:
-		m_Framesplit.x += 32;
-	case enColor::Yellow:
-		m_Framesplit.x += 32;
-	case enColor::Red:
-		m_Framesplit.x += 32;
-		break;
+	m_Framesplit = { 0,0,Size,Size };
+	//ナズーリンのバレットじゃないなら
+	if (NazrinBullet == false) {
+		switch (m_Color) {
+		case enColor::NoColor:
+			break;
+			//色を対応させる
+		case enColor::Blue:
+			m_Framesplit.x += 32;
+		case enColor::Green:
+			m_Framesplit.x += 32;
+		case enColor::Yellow:
+			m_Framesplit.x += 32;
+		case enColor::Red:
+			m_Framesplit.x += 32;
+			break;
+		}
+		//元のサイズ
+		m_FrameSize = { 32,32 };
 	}
-	//元のサイズ
-	m_FrameSize = { 32,32 };
+	else {
+		//ナズーリンのバレットを固定する
+		m_Framesplit = { 0,32,Size * 2,Size };
+
+		//元のサイズ
+		m_FrameSize = { 64,32 };
+	}
 
 	//そのキャラの真ん中から出るようにする
 	m_Position.x -= (m_Framesplit.w / 2);
 	m_Position.y -= (m_Framesplit.h / 2);
 	//元のポジションをセットする
 	m_MasterPosition = m_Position;
+
+	m_Delection = StartAngle;
 
 	//1.57 = 90度
 	//角度をわかりやすくした後処理
@@ -86,8 +98,6 @@ void CRotateBullet::Update()
 	case enState::Dead:
 		break;
 	}
-
-	//m_Delection = GetRadian(m_Position) * 180 / M_PI;
 }
 
 void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
@@ -111,9 +121,5 @@ void CRotateBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 }
 
 void CRotateBullet::Animation()
-{
-}
-
-void CRotateBullet::CharacterHit()
 {
 }

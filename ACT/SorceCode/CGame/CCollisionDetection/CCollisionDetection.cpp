@@ -67,7 +67,6 @@ void CCollisionDetection::MouseToWirePoint(std::vector<std::unique_ptr<CWirepoin
 			EnemyPos.y = upEnemy[EnemyNo]->GetPosition().y;
 			EnemyPos.xw = upEnemy[EnemyNo]->GetFrameSplit().w;
 			EnemyPos.yh = upEnemy[EnemyNo]->GetFrameSplit().h;
-			Camera.get();
 			//当たったら
 				if (CircleDetection( CMouseInput::GetcollisionMouseCamera(Camera.get()), EnemyPos) == true) {
 				VECTOR2_f i;
@@ -127,7 +126,32 @@ void CCollisionDetection::WireToEnemyCollision(std::vector<std::unique_ptr<CEnem
 
 }
 
+void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+	if (upPlayer->m_State == CCharacter::enState::Living) {
+		//当たり判定の位置情報セット
+		ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
 
+		//バレット
+		for (int BulletNo = 0; BulletNo < upBullet.size(); BulletNo++) {
+			if (upBullet[BulletNo]->m_State == CCharacter::enState::Living) {
+				//陣営が違うなら
+				if (upBullet[BulletNo]->m_MyCamp != upPlayer->m_MyCamp) {
+					//当たり判定のセット
+					ObjectInfo BulletPos = SetBulletInfo(upBullet[BulletNo]);
+
+					//当たったら
+					if (CircleDetection(PlayerPos, BulletPos) == true) {
+						//プレイヤーがバレットに当たったときの処理
+						upPlayer->BulletHit(upBullet[BulletNo]->m_Color);
+						//バレットがプレイヤーに当たった時の処理
+						upBullet[BulletNo]->CharacterHit();
+					}
+				}
+			}
+		}
+	}
+}
 
 ObjectInfo CCollisionDetection::SetPlayerInfo(std::unique_ptr<CPlayer>& upPlayer, bool RealSize)
 {
@@ -179,4 +203,19 @@ ObjectInfo CCollisionDetection::SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, b
 	}
 
 	return EnemyInfo;
+}
+
+ObjectInfo CCollisionDetection::SetBulletInfo(std::unique_ptr<CBullet>& upBullet)
+{
+	ObjectInfo BulletInfo;
+
+	BulletInfo = {
+		//キャラクターの当たり判定
+		upBullet->GetPosition().x,
+		upBullet->GetPosition().y,
+		upBullet->GetFrameSplit().w,
+		upBullet->GetFrameSplit().h
+	};
+
+	return BulletInfo;
 }

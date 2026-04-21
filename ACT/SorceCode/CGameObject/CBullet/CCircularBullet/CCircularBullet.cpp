@@ -1,6 +1,6 @@
 #include "CCircularBullet.h"
 
-CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Amount, double StartAngle, int Size, int ReleaseTime, double SpeedAcc)
+CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double Amount, double StartAngle, int Size, int ReleaseTime, double SpeedAcc, bool NazrinBullet)
 {
 	//生存中に
 	m_State = enState::Living;
@@ -17,23 +17,34 @@ CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Spee
 	//速さをセット
 	m_Speed = { Speed,Speed };
 
-	m_Framesplit = { 0,0,64,64 };
-	switch (m_Color) {
-	case enColor::NoColor:
-		break;
-		//色を対応させる
-	case enColor::Blue:
-		m_Framesplit.x += 32;
-	case enColor::Green:
-		m_Framesplit.x += 32;
-	case enColor::Yellow:
-		m_Framesplit.x += 32;
-	case enColor::Red:
-		m_Framesplit.x += 32;
-		break;
+	m_Framesplit = { 0,0,Size,Size };
+
+	//ナズーリンのバレットじゃないなら
+	if (NazrinBullet == false) {
+		switch (m_Color) {
+		case enColor::NoColor:
+			break;
+			//色を対応させる
+		case enColor::Blue:
+			m_Framesplit.x += 32;
+		case enColor::Green:
+			m_Framesplit.x += 32;
+		case enColor::Yellow:
+			m_Framesplit.x += 32;
+		case enColor::Red:
+			m_Framesplit.x += 32;
+			break;
+		}
+		//元のサイズ
+		m_FrameSize = { 32,32 };
 	}
-	//元のサイズ
-	m_FrameSize = { 32,32 };
+	else {
+		//ナズーリンのバレットを固定する
+		m_Framesplit = { 0,32,Size * 2,Size };
+
+		//元のサイズ
+		m_FrameSize = { 64,32 };
+	}
 
 	//そのキャラの真ん中から出るようにする
 	m_Position.x -= (m_Framesplit.w / 2);
@@ -44,6 +55,8 @@ CCircularBullet::CCircularBullet(int Camp, VECTOR2_f Pos, int Color, double Spee
 	//角度を保存しておく
 	m_Amount = Amount;
 	m_StartAngle = StartAngle;
+	//角度を反映
+	m_Delection = StartAngle;
 
 	//バレットを撃ちだす角度を計算
 	m_Vector.x = cos((m_Amount + m_StartAngle) / 180 * M_PI) * m_Speed.x;
@@ -109,10 +122,6 @@ void CCircularBullet::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_FrameSize.x,			//元画像xサイズ		
 		m_FrameSize.y,			//元画像yサイズ
 		m_Alpha, m_Delection);					//透明度、角度
-}
-
-void CCircularBullet::CharacterHit()
-{
 }
 
 void CCircularBullet::Animation()

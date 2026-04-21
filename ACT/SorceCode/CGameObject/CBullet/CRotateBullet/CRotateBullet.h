@@ -9,14 +9,12 @@ class CRotateBullet
 	:public CBullet
 {
 public:
-	//			どの陣営のバレットか	ポジション	属性			速さ		X方向の中心からの位置	Y方向の中心からの位置	開始角度		サイズ		消える時間
-	CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime);
+	//			どの陣営のバレットか	ポジション	属性	速さ		X方向の中心からの位置	Y方向の中心からの位置	開始角度		サイズ		消える時間	ナズのバレットを撃つか
+	CRotateBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, double X_Range, double Y_Range, double StartAngle, int Size, int ReleaseTime, bool NazrinBullet);
 	~CRotateBullet();
 
 	void Update() override;
 	void Draw(std::unique_ptr<CCamera>& pCamera) override;
-
-	void CharacterHit() override;		//ヒットした時のバレットの処理
 private:
 	void Animation() override;
 private:

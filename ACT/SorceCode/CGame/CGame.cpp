@@ -111,7 +111,7 @@ bool CGame::Create()
 	VECTOR2_f Speed = { 4,4 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 120));
 	SetEnemy.y -= 10;																//作るときにムーブタイプを決めておく
-	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::Green, SetEnemy, Speed, CFairy::enMoveType::Stop, 60, 120));
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy, Speed, CFairy::enMoveType::Stop, 60, 120));
 	SetEnemy.x += 100;
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 
@@ -253,6 +253,9 @@ void CGame::Update()
 
 		//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
+		//プレイヤーとバレットの当たり判定処理
+		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
+
 		//ワイヤーとワイヤーポイントの当たり判定処理
 		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
@@ -373,6 +376,8 @@ void CGame::Update()
 		// 
 			//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
+		//プレイヤーとバレットの当たり判定処理
+		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
 		//ワイヤーとワイヤーポイントの当たり判定処理
 		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
