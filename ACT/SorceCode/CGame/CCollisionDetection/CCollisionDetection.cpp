@@ -28,7 +28,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 				//当たったら
 				if (CircleDetection(PlayerPos, EnemyPos) == true) {
 					//プレイヤーがエネミーに当たったときの処理
-					upPlayer->EnemyHit(upEnemy[EnemyNo]->m_MyCharacter, upEnemy[EnemyNo]->m_Color);
+					upPlayer->EnemyHit(10);
 				}
 			}
 		}
@@ -143,7 +143,8 @@ void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPl
 					//当たったら
 					if (CircleDetection(PlayerPos, BulletPos) == true) {
 						//プレイヤーがバレットに当たったときの処理
-						upPlayer->BulletHit(upBullet[BulletNo]->m_Color);
+						upPlayer->BulletHit(upBullet[BulletNo]->m_Color, 20, upBullet[BulletNo]->m_NazrinBullet);
+
 						//バレットがプレイヤーに当たった時の処理
 						upBullet[BulletNo]->CharacterHit();
 					}

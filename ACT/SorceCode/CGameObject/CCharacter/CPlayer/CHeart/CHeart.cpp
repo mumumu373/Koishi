@@ -1,6 +1,6 @@
 #include "CHeart.h"
 
-CHeart::CHeart()
+CHeart::CHeart(int PlayerHP)
 {
 	m_Position = { WND_W/2,0 };
 
@@ -12,7 +12,12 @@ CHeart::CHeart()
 	m_Framesplit = { 0,0,128,128 };
 
 	m_Position.x -= m_Framesplit.w/2;
-	//m_Position.y -= m_Framesplit.h/2;
+	
+	//プレイヤーのHPをセット
+	for (int i = 0; i < enColor::MAX; i++) {
+		m_ColorHP[i] = PlayerHP;
+	}
+	m_HaveHP = PlayerHP;
 }
 
 CHeart::~CHeart()
@@ -40,11 +45,24 @@ void CHeart::Draw()
 		m_Alpha);				//透明度
 }
 
-void CHeart::ChangeHeartColor(int Color)
+int CHeart::ChangeHeartColor(int Color, int PlayerHP)
 {
+	//変更前のHPを入れる
+	m_ColorHP[m_Color] = PlayerHP;
+
+	//属性変更
 	m_Color = Color;
 
 	m_Framesplit.x = 64 * m_Color;
+
+	//属性変更後のHPを渡す
+	return m_ColorHP[Color];
+}
+
+int CHeart::PlayerHeartDamage(int Color, int PlayerHP)
+{
+	//ダメージを受けたときにHPを代入する
+	return m_ColorHP[Color] = PlayerHP;
 }
 
 void CHeart::Animation()

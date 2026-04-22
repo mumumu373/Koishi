@@ -18,8 +18,10 @@ CRockOnBullet::CRockOnBullet(int Camp, VECTOR2_f Pos, int Color, double Speed, V
 	m_Speed = { Speed,Speed };
 
 	m_Framesplit = { 0,0,Size,Size };
+
+	m_NazrinBullet = NazrinBullet;
 	//ナズーリンのバレットじゃないなら
-	if (NazrinBullet == false) {
+	if (m_NazrinBullet == false) {
 		switch (m_Color) {
 		case enColor::NoColor:
 			break;

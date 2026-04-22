@@ -62,7 +62,6 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
             case 19:
                 if (i == 0)
                 {
-                    std::cout << "EventHit" << std::endl;
                     m_isEventChipHit = true;
                 }
                 break;
@@ -71,7 +70,6 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
                 // i == 0 ならば、checkX[0] (一番左側) の判定点である
                 if (i == 0)
                 {
-                    std::cout << "MapChange" << std::endl;
                     m_isEventChipHit = true;
                 }
                 break;
@@ -85,7 +83,6 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
             {
                 m_HitMapX = mapX; 
                 m_HitMapY = mapY;
-                std::cout << m_HitMapX << std::endl;
                 return true;
             }
         }

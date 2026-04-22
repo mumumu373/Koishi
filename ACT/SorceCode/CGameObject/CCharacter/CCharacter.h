@@ -11,6 +11,9 @@ class CCharacter
 	:public CGameObject		//ゲームオブジェクトを継承
 {
 public:
+	int MAX_HP = 100;		//キャラクターの最大体力
+	int HP = 100;			//キャラクターの現在体力
+public:
 	//キャラの状態
 	enum enState
 	{

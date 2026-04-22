@@ -8,6 +8,8 @@ class CBullet
 	:public CGameObject
 {
 public:
+	bool m_NazrinBullet = false;
+public:
 	//ƒoƒŒƒbƒg‚Ìó‘Ô
 	enum enState
 	{

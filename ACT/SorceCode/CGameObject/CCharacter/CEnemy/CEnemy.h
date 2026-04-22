@@ -8,15 +8,16 @@ class CEnemy
 	:public CCharacter
 {
 public:
-	CEnemy();
-	virtual ~CEnemy() {};
-
-	enum CatchWire {
+	//ÉèÉCÉÑÅ[Ç≈Ç¬Ç©Ç‹ÇÍÇΩèÛë‘Çå©ÇÈ
+	enum enCatchWire {
 		No,
 		Catch,
-
 	};
-	
+
+	int m_CatchWire = enCatchWire::No;
+public:
+	CEnemy();
+	virtual ~CEnemy() {};	
 
 	virtual void StartSetting() override {};
 	virtual void Update() override {};
@@ -30,8 +31,8 @@ public:
 
 	void SetPosition(VECTOR2_f pos) { m_Position = pos; }
 
-	void CatchWire() { m_CatchWire = CatchWire::Catch; }
-	int GetChtchWire() { return m_CatchWire; }
+	void CatchWire() { m_CatchWire = enCatchWire::Catch; }
+	int GetCatchWire() { return m_CatchWire; }
 protected:
 	void Animation() override {};
 
@@ -39,5 +40,4 @@ protected:
 	virtual void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
 protected:
 	VECTOR2_f m_PlayerPos;
-	int m_CatchWire;
 };

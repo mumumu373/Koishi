@@ -45,8 +45,13 @@ CPlayer::CPlayer()
 	}
 	NormalAttack= std::make_unique<CNormalAttack>();
 
+	//最大HP
+	MAX_HP = 200;	
+	//HP
+	HP = MAX_HP;	
+
 	//ハートクラス作成
-	m_upHeart = std::make_unique<CHeart>();
+	m_upHeart = std::make_unique<CHeart>(HP);
 }
 
 CPlayer::~CPlayer()
@@ -141,7 +146,7 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 
 	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
 
-
+	std::cout << HP << std::endl;
 }
 
 void CPlayer::WireEnd(VECTOR2_f Spead)
@@ -225,7 +230,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	PlayerColorChange();
 
 	if (GetAsyncKeyState('Y') & 0x0001) {
-		upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 10, GetCenterPosition(), 90, 300, true));
+		EnemyHit(10);
 	}
 
 	//ステージとの判定
@@ -389,62 +394,27 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 	}
 }
 
-void CPlayer::EnemyHit(int Enemy, int Color)
+void CPlayer::EnemyHit(int Damage)
 {
-	//当たったエネミーが誰か
-	switch (Enemy) {
-		//-------------------------毛玉--------------------------
-	case enMyCharacter::Kedama:
-		switch (Color) {
-		case enColor::NoColor:
-		case enColor::Red:
-		case enColor::Yellow:
-		case enColor::Green:
-		case enColor::Blue:
-			m_Position = { 0,0 };
-			break;
-		}
-		break;
-		//-------------------------妖精-------------------------
-	case enMyCharacter::Fairy:
-		switch (Color) {
-		case enColor::NoColor:
-		case enColor::Red:
-		case enColor::Yellow:
-		case enColor::Green:
-		case enColor::Blue:
-			m_Position = { 0,0 };
-			break;
-		}
-		break;
-		//-------------------------陰陽玉-------------------------
-	case enMyCharacter::YinYangBall:
-		switch (Color) {
-		case enColor::NoColor:
-		case enColor::Red:
-		case enColor::Yellow:
-		case enColor::Green:
-		case enColor::Blue:
-			m_Position = { 0,0 };
-			break;
-		}
-		break;
+	HP -= Damage;
 
-		m_Acceleration = { 0,0 };//空中の加速度をリセットする
-	}
+	//減ったHPの属性を入れる
+	m_upHeart->PlayerHeartDamage(m_Color, HP);
+
+	m_Acceleration = { 0,0 };//空中の加速度をリセットする
 }
 
-void CPlayer::BulletHit(int Color)
+void CPlayer::BulletHit(int Color, int Damage, bool NazrinBullet)
 {
-	switch (Color) {
-	case enColor::NoColor:
-	case enColor::Red:
-	case enColor::Yellow:
-	case enColor::Green:
-	case enColor::Blue:
-		//m_Position = { 0,0 };
-		break;
+	//属性が違うならまたはナズーリンのバレットなら
+	if (m_Color != Color || NazrinBullet == true) {
+		//ダメージを受ける
+		HP -= Damage;
+
+		//減ったHPの属性を入れる
+		m_upHeart->PlayerHeartDamage(m_Color, HP);
 	}
+	//属性が一緒ならスルー出来る
 }
 
 void CPlayer::CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y)
@@ -716,7 +686,7 @@ void CPlayer::PlayerColorChange()
 			}
 
 			//ハートのほうの属性も変える
-			m_upHeart->ChangeHeartColor(m_Color);
+			HP = m_upHeart->ChangeHeartColor(m_Color, HP);
 		}
 	}
 	else if (GetAsyncKeyState('E') & 0x8000) {
@@ -729,7 +699,8 @@ void CPlayer::PlayerColorChange()
 				m_Color = enColor::NoColor;
 			}
 
-			m_upHeart->ChangeHeartColor(m_Color);
+			//変更後の属性ごとのHPを受け取る
+			HP = m_upHeart->ChangeHeartColor(m_Color, HP);
 		}
 	}
 	//離したら

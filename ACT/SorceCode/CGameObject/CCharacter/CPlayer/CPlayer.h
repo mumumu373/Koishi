@@ -93,10 +93,10 @@ private:
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 public://パブリック
 	//エネミーに触れたなら
-	void EnemyHit(int Enemy, int Color);
+	void EnemyHit(int Damage);
 
 	//バレットに触れたなら
-	void BulletHit(int Color);
+	void BulletHit(int Color, int Damage, bool NazrinBullet);
 
 	//カメラの当たり判定(ボスバトルなどの)
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
@@ -141,7 +141,7 @@ private:
 
 	bool m_ChangeColor;		//属性を変更したか
 
-	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス
+	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス	属性変更後のへーとの演出はDrawでできる
 
 	std::unique_ptr<CNormalAttack> NormalAttack;
 	CCamera* m_pCamera;

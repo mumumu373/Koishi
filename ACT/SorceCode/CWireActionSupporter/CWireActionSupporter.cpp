@@ -33,6 +33,8 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 		m_dpWirePoint = m_DPWirePoint;
 		NawSpeed = m_DPlayer->GetWireStartSpeed();
 
+		m_dpWire->SetTopPoint(m_dpWirePoint->GetCenterPosition());
+
 		double Radian = GetDelectionVect(m_dpPlayer->GetCenterPosition(), m_dpWirePoint->GetCenterPosition());
 
 		int kakudo = (Radian * 180 / M_PI);
@@ -170,14 +172,6 @@ void CWireActionSupporter::StageCollision(double OffsetPos_X, double OffsetPos_Y
 				if (CStageCollision::GetInstance()->IsHit(checkPos.x, pos[1].y, 60, 100, offsetPos)) {
 
 					if (std::abs(MoveRangeX) <= 1.0f) {
-						//地面の判定
-						if (MoveRangeX > 0) {
-							
-						}
-						//天井の判定
-						else {
-						}
-
 						MoveRangeX = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
 						m_dpPlayer->SetPos_Y(pos[1].y);
 						break;
