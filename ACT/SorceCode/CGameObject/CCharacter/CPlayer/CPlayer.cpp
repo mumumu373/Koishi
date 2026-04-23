@@ -136,6 +136,11 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 
 	NormalAttack->Draw(pCamera);
 
+	//ハートを変えたときの演出用描画
+	if (m_upHeart->ChangeHeartEnd == false) {
+		m_upHeart->HeartChangeDraw(pCamera, { GetPosition().x,GetPosition().y + 10 });
+	}
+
 	VECTOR2_f offsetPos = { 40.f,40.f };
 
 	RECT rect;

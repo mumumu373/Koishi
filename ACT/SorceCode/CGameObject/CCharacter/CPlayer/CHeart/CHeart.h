@@ -8,6 +8,8 @@ class CHeart
 	:public CGameObject
 {
 public:
+	bool ChangeHeartEnd = true;		//ハートの属性を変えたときの演出が終わったことを知らせる
+public:
 	//状態
 	enum enState
 	{
@@ -36,8 +38,11 @@ public:
 	~CHeart();
 
 	virtual void Update() override;
+	//固定の位置に配置したい
 	void Draw();
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {};
+	//ハートを変更したときの
+	void HeartChangeDraw(std::unique_ptr<CCamera>& pCamera,VECTOR2_f PlayerPos);
 
 	//プレイヤーの属性を取得して属性を変える+属性ごとの体力を渡す
 	int ChangeHeartColor(int Color, int PlayerHP);

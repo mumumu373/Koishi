@@ -4,9 +4,11 @@ CWirepoint::CWirepoint(VECTOR2_f pos, int Size)
 {
 	m_State = enState::Living;
 	m_Position = pos;
-	m_Framesplit = { 0,IMGSize,size,size };
+	m_Framesplit = { 0,0,size,size };
 	//元画像サイズ
 	m_FrameSize = { IMGSize,IMGSize };
+
+	m_AnimationCo = 0;
 }
 
 CWirepoint::~CWirepoint()
@@ -42,5 +44,18 @@ void CWirepoint::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Delection.x, m_Delection.y, m_Delection.z);	//透明度、角度
 }
 
-
-
+void CWirepoint::Animation()
+{
+	//アニメーションを追加
+	if (m_AnimationCo >= 30) {
+		m_AnimationCo = 0;
+		m_Framesplit.x += IMGSize;
+		//繰り返す
+		if (m_Framesplit.x > 64) {
+			m_Framesplit.x = 0;
+		}
+	}
+	else {
+		m_AnimationCo++;
+	}
+}
