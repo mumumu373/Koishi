@@ -21,10 +21,10 @@ void CWire::Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint)
 		m_Targetpoint=Targetpoint;
 		
 		m_DpPlayer = Player.get();
-		m_Toptpoint.x = m_DpPlayer->GetCenterPosition().x-size/2;
-		m_Toptpoint.y= m_DpPlayer->GetCenterPosition().y-size/2;
+		m_Toptpoint.x = m_DpPlayer->GetCenterPositionDawn().x-size/2;
+		m_Toptpoint.y= m_DpPlayer->GetCenterPositionDawn().y-size/2;
 
-		m_Radian = GetDelectionVect (m_Targetpoint, m_DpPlayer->GetCenterPosition());
+		m_Radian = GetDelectionVect (m_Targetpoint, m_DpPlayer->GetCenterPositionDawn());
 		m_ShotState = ShotSteto::forward;
 }
 	
@@ -39,9 +39,9 @@ void CWire::Update()
 		m_Toptpoint.y += sin(m_Radian) * GoSpeed;
 		
 		//ワイヤーの先端がプレイヤーから目標地点より遠くなったら引き返す
-		if ((GetHowToLong(m_DpPlayer->GetCenterPosition(), m_Targetpoint) < GetHowToLong(m_DpPlayer->GetCenterPosition(), {m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2})) 
+		if ((GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), m_Targetpoint) < GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), {m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2}))
 			|| CMouseInput::GetMouseRight(false, true)
-			|| WireMaxRongr< GetHowToLong(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 })) {
+			|| WireMaxRongr< GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 })) {
 		
 			m_ShotState = ShotSteto::back;
 		}
@@ -50,7 +50,7 @@ void CWire::Update()
 	else if (m_ShotState == ShotSteto::back) {
 		//帰ってくる時はプレイヤーに向かって動く
 		
-		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y+ size / 2 });
+		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y+ size / 2 });
 		m_Toptpoint.x += cos(Radian) * ComebackSpeed;
 		m_Toptpoint.y += sin(Radian) * ComebackSpeed;
 		///ワイヤーの先端がプレイヤーから50px以内になったらワイヤーを消す
@@ -69,9 +69,9 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 	
 
 		//ワイヤーの先端とプレイヤーの距離を測る
-		int pieces = GetHowToLong(m_DpPlayer->GetCenterPosition(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size-1);
+		int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size-1);
 		//ワイヤーの先端とプレイヤーの角度を測る
-		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPosition(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
+		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
 		for (int i = 0; i < pieces+1; i++)
 		{
 			if (i == 0) {
@@ -97,7 +97,36 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 				255, 180+(Radian*180/ M_PI));					//透明度、角度
 		}
 
+		
+	
 	}
+}
+
+void CWire::WireHandDraw(std::unique_ptr<CCamera>& pCamera)
+{
+	if (m_ShotState != ShotSteto::no) {
+
+		//ワイヤーの先端とプレイヤーの角度を測る
+		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
+
+		VECTOR2_f pos;
+		int Size = m_DpPlayer->GetFrameSplit().w-55;
+		pos.x = m_DpPlayer->GetCenterPositionDawn().x - Size;
+		pos.y = m_DpPlayer->GetCenterPositionDawn().y - Size;
+
+		VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation(
+			DispPos.x,				//表示位置x座標
+			DispPos.y,				//表示位置y座標
+			Size *2,			//画像幅
+			Size *2,			//高さ	<-拡大して表示するサイズ
+			64,			//元a画像x座標
+			64 * 4,			//元画像y座標
+			64,			//元画像xサイズ		
+			64,			//元画像yサイズ
+			255,  (Radian * 180 / M_PI));					//透明度、角度
+	}
+
 }
 
 void CWire::StatoWire(VECTOR2_f pos)

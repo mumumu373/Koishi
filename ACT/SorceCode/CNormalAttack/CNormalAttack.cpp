@@ -26,8 +26,8 @@ void CNormalAttack::Strat(double rag,VECTOR2_f PlayerCenterPos)
 {
 	Antimension = 0;
 	Attacked = true;
-	IMagePos.x = PlayerCenterPos.x +-cos(rag)* AtakuSize* ColionMAX- AtakuSize /2;
-	IMagePos.y = (PlayerCenterPos.y +-sin (rag)* AtakuSize* ColionMAX)- AtakuSize*2/2;
+	IMagePos.x = PlayerCenterPos.x +-cos(rag)* (AtakuSize* ColionMAX- AtakuSize /2);
+	IMagePos.y = (PlayerCenterPos.y +-sin (rag)* (AtakuSize* ColionMAX)- AtakuSize/2);
 	for (int i = 0; i < ColionMAX; i++) {
 		Colion[i].x = PlayerCenterPos.x  +-cos(rag) * AtakuSize*(i+1)- AtakuSize/2;
 		Colion[i].y = PlayerCenterPos.y + -sin(rag) * AtakuSize*(i+1) - AtakuSize / 2;
@@ -54,17 +54,18 @@ void CNormalAttack::Draw(std::unique_ptr<CCamera>& pCamera)
 		
 		int i = Time / ColionMAX;
 		int t = Antimension / i;
-		VECTOR2_f pos= pCamera->CalcToPositionInCamera(&IMagePos);
+		VECTOR2_f Pos = { Colion[0].x + Colion[0].xw / 2 - ((AtakuSize * ColionMAX)/2),Colion[0].y + Colion[0].yh - AtakuSize  };
+		VECTOR2_f pos= pCamera->CalcToPositionInCamera(&Pos);
 		CImageManager::SelectImg(CImageManager::IMG_Slash)->TransAlBlendRotation3(
 			pos.x,
 			pos.y,
-			AtakuSize,
 			AtakuSize * ColionMAX,
+			AtakuSize ,
 			0,
 			32 * t,
 			imageW,
 			imageH,
-			255, 0, 0, Imagerag
+			255, 0, 0, Imagerag-90
 		);
 	}
 	}
@@ -89,7 +90,7 @@ void CNormalAttack::DrawColion(HDC hdc,HWND hwnd, std::unique_ptr<CCamera>& pCam
 				0,
 				1,
 				1,
-				255, 0, 0, 0
+				125, 0, 0, 0
 			);
 
 

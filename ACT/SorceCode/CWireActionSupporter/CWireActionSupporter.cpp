@@ -21,9 +21,9 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 {
 
 	if (WireActioning == false) {
-		AllNullptr();
+	
 		WireActioning = true;
-
+		AllNullptr();
 		pos[0] = m_DPlayer->GetCenterPosition();
 		pos[1] = m_DPlayer->GetCenterPosition();
 
@@ -50,6 +50,11 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 		else {
 			NawSpeed = -NawSpeed;
 		}
+		VECTOR2_f TopPos;
+		TopPos.x = m_dpWirePoint->GetCenterPosition().x - m_dpWire->GetSize() / 2;
+		TopPos.y = m_dpWirePoint->GetCenterPosition().y - m_dpWire->GetSize() / 2;
+		m_dpWire->SetTopPoint(TopPos);
+		PlayerTurnaround();
 	}
 	
 }
@@ -64,12 +69,17 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 
 		m_dpPlayer = m_DPlayer;
 		//m_dpPlayer->StartWirePointCatch();
+		m_dpPlayer->StaratEnemiWire();
 		m_dpWire = m_DPWire;
 		m_dpEnemi = m_DPEnemi;
 
 		NawSpeed = m_DPlayer->GetWireStartSpeed();
 
-		m_dpWire->SetTopPoint(m_DPEnemi->GetCenterPosition());
+		VECTOR2_f TopPos;
+		TopPos.x = m_dpEnemi->GetCenterPosition().x - m_dpWire->GetSize() / 2;
+		TopPos.y = m_dpEnemi->GetCenterPosition().y- m_dpWire->GetSize() / 2;
+		m_dpWire->SetTopPoint(TopPos);
+		PlayerTurnaround();
 	}
 }
 
@@ -77,11 +87,7 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 
 void CWireActionSupporter::Update()
 {
-	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
-		if (CMouseInput::GetMouseRight(false, false)) {
-			WireActionEnd();
-		}
-	}
+
 
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
 		WirePointAction();
@@ -106,6 +112,17 @@ void CWireActionSupporter::WireActionEnd()
 		m_dpWire = nullptr;
 		m_dpWirePoint = nullptr;
 		NawSpeed = 0;
+}
+
+void CWireActionSupporter::PlayerTurnaround()
+{
+	if (m_dpWirePoint!=nullptr) {
+		m_dpPlayer->Turnaround(m_dpWirePoint->GetCenterPosition());
+	}
+	if (m_dpEnemi!= nullptr) {
+		m_dpPlayer->Turnaround(m_dpEnemi->GetCenterPosition());
+	}
+
 }
 
 //ステージとの判定を見る
@@ -205,9 +222,16 @@ void CWireActionSupporter::StageCollision(double OffsetPos_X, double OffsetPos_Y
 
 void CWireActionSupporter::WirePointAction()
 {
+	if (CMouseInput::GetMouseRight(false, false)) {
+		WireActionEnd();
+		return;
+	}
 	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
 	{
-		m_dpWire->SetTopPoint(m_dpWirePoint->GetPosition());
+		VECTOR2_f TopPos; 
+		TopPos.x = m_dpWirePoint->GetCenterPosition().x - m_dpWire->GetSize() / 2;
+		TopPos.y = m_dpWirePoint->GetCenterPosition().y - m_dpWire->GetSize() / 2;
+		m_dpWire->SetTopPoint(TopPos);
 		//[1]がOldPositionらしい
 		pos[1] = pos[0];
 		pos[0] = m_dpPlayer->GetCenterPosition();
@@ -290,8 +314,13 @@ void CWireActionSupporter::EnemitoAction()
 {
 	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
 	{
+		
+
 		m_dpEnemi->CatchWire();
-		m_dpWire->SetTopPoint(m_dpEnemi->GetCenterPosition());
+		VECTOR2_f TopPos;
+		TopPos.x = m_dpEnemi->GetCenterPosition().x - m_dpWire->GetSize() / 2;
+		TopPos.y = m_dpEnemi->GetCenterPosition().y - m_dpWire->GetSize() / 2;
+		m_dpWire->SetTopPoint(TopPos);
 		//[1]がOldPositionらしい
 
 
@@ -308,7 +337,32 @@ void CWireActionSupporter::EnemitoAction()
 		m_dpEnemi->SetPosition({ x,y });
 
 		if (Long < AttackEria) {
-			EnemiActionEnd();
+			int diff = Radian *  180/ M_PI - 90;
+
+			// 2. 差を -180 ~ 180 の範囲に補正する
+			if (diff > 180)  diff -= 360;
+			if (diff < -180) diff += 360;
+
+			if (0< diff) {
+				Radian = 180 * M_PI / 180;
+		
+			}
+			else {
+				Radian = 0;
+			}
+
+
+			double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * AttackEria) - m_dpEnemi->GetFrameSplit().w / 2;
+			double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * AttackEria) - m_dpEnemi->GetFrameSplit().h / 2;
+			m_dpEnemi->SetPosition({ x,y });
+
+			if (CMouseInput::GetMouseRight(false, false)) {
+				EnemiActionEnd();
+				return;
+			}
+
+
+		
 		}
 
 	}
@@ -325,7 +379,8 @@ void CWireActionSupporter::EnemiActionEnd()
 	///次にマウスを話すまで反応しない
 	CMouseInput::MouseRightStoopr();
 
-	m_dpPlayer->WireEndEnemi();
+	m_dpPlayer->EndEnemiWire();
+	//m_dpPlayer->WireEndEnemi();
 	m_dpPlayer = nullptr;
 	m_dpWire = nullptr;
 	m_dpEnemi = nullptr;

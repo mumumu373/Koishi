@@ -21,6 +21,7 @@ public:
 	VECTOR2_f GetPosition() { return m_Position; }
 	//ポジションを渡す(真ん中から)
 	VECTOR2_f GetCenterPosition();
+	VECTOR2_f GetCenterPositionDawn();
 	//ポジションのアドレスを渡す
 	VECTOR2_f* GetPositionadd() { return &m_Position; }
 	//フレームを渡す

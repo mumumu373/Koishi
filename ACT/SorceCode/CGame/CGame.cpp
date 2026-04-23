@@ -428,6 +428,8 @@ void CGame::Draw()
 
 		//プレイヤーの描画
 		m_upPlayer->Draw(m_upCamera);
+		//ワイヤーの手の描画
+		m_pWire->WireHandDraw(m_upCamera);
 
 		//エネミー描画
 		for (int i = 0; i < m_upEnemy.size(); i++) {
