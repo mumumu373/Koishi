@@ -102,7 +102,8 @@ public://パブリック
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
 
 	void MoveSafeWrier(VECTOR2_f pos);
-
+public:
+	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 private:
 	void AvoidanceEnd();
 	void KyeInput();

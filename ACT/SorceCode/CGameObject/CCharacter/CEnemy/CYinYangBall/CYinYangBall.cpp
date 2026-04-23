@@ -169,14 +169,46 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	}
 
+	//攻撃を受けたとき
+	if (AttackHit == true) {
+		//半透明にする
+		m_Alpha = 150;
+		//攻撃が当たらない時間を過ぎたら
+		if (NoHitAttackCo >= NoHitAttackTime) {
+			NoHitAttackCo = 0;
+			AttackHit = false;
+			//表示する
+			m_Alpha = 255;
+		}
+		else {
+			NoHitAttackCo++;
+		}
+	}
+
+	//まわり続けるように
+	m_Delection.z += 7;
+
 	//こっちで装飾の動作をする
 	for (int i = 0; i < m_upYinYangDeco.size(); i++) {
 		m_upYinYangDeco[i]->Update(GetCenterPosition());
 	}
 }
 
+void CYinYangBall::PlayerAttackHit(int Damage)
+{
+	//攻撃が当たった
+	AttackHit = true;
+	//HPを減らす
+	HP -= Damage;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = 0;
+
+	//体力がなくなったら
+	if (HP <= 0) {
+		m_State = enState::Dead;
+	}
+}
+
 void CYinYangBall::Animation()
 {
-	//まわり続けるように
-	m_Delection.z += 7;
 }

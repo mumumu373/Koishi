@@ -15,6 +15,11 @@ public:
 	};
 
 	int m_CatchWire = enCatchWire::No;
+
+	bool AttackHit = false;	//攻撃をくらったか
+
+	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
+	const int NoHitAttackTime = 60;	//攻撃があたらない時間
 public:
 	CEnemy();
 	virtual ~CEnemy() {};	
@@ -25,6 +30,9 @@ public:
 
 	//こっちのほうを使う
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
+
+	//プレイヤーの攻撃がヒットした時の動作
+	virtual void PlayerAttackHit(int Damage) = 0;
 
 	//プレイヤーの位置を取得
 	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
