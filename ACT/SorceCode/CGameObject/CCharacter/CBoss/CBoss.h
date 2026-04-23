@@ -9,6 +9,11 @@ class CBoss
 	:public CCharacter
 {
 public:
+	bool AttackHit = false;	//攻撃をくらったか
+
+	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
+	const int NoHitAttackTime = 40;	//攻撃があたらない時間
+public:
 	CBoss() {};
 	virtual ~CBoss() {};
 
@@ -17,6 +22,9 @@ public:
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {};
 
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
+
+	//プレイヤーの攻撃がヒットした時の動作
+	virtual void PlayerAttackHit(int Damage) = 0;
 
 	//ボスとの戦闘フラグを踏んだ
 	virtual void BossBattleFlag(VECTOR2_f PlayerPos) = 0;
