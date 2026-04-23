@@ -18,10 +18,11 @@ public:
 	 void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
 	 int GetSize() { return size; }
 protected:
-	void Animation() override {};
+	void Animation() override;
 
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
-
+private:
+	int m_AnimationCo;		//アニメーションカウンター
 };
 

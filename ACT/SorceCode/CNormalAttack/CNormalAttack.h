@@ -5,7 +5,7 @@
 
 class CNormalAttack
 {
-	static constexpr int ColionMAX = 2;
+	static constexpr int ColisionMAX = 2;
 	static constexpr int imageW = 64;
 	static constexpr int imageH = 32;
 	static constexpr int Time = 6;//継続時間
@@ -18,15 +18,18 @@ public:
 	void Update();
 	void Draw(std::unique_ptr<CCamera>& pCamera);
 	void DrawColion(HDC hdc, HWND hwnd, std::unique_ptr<CCamera>& pCamera);
-	int GetMAX() {
-		return ColionMAX;
+
+	ObjectInfo GetColion(int No) { 
+		return Colision[No]; 
 	}
-ObjectInfo GetColion(int No);
+	int GetMAX() {
+		return ColisionMAX;
+	}
 	int GetAttack() {
 		return Attacked;
 	}
 private:
-ObjectInfo Colion[ColionMAX];
+	ObjectInfo Colision[ColisionMAX];
 	VECTOR2_f IMagePos;
 	int Imagerag;
 	int Antimension;

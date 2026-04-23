@@ -143,9 +143,40 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	}
 
+	//攻撃を受けたとき
+	if (AttackHit == true) {
+		//半透明にする
+		m_Alpha = 150;
+		//攻撃が当たらない時間を過ぎたら
+		if (NoHitAttackCo >= NoHitAttackTime) {
+			NoHitAttackCo = 0;
+			AttackHit = false;
+			//表示する
+			m_Alpha = 255;
+		}
+		else {
+			NoHitAttackCo++;
+		}
+	}
+
 	//ムーブの動作関数
 	MoveControl();
 
+}
+
+void CFairy::PlayerAttackHit(int Damage)
+{
+	//攻撃が当たった
+	AttackHit = true;
+	//HPを減らす
+	HP -= Damage;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = 0;
+
+	//体力がなくなったら
+	if (HP <= 0) {
+		m_State = enState::Dead;
+	}
 }
 
 void CFairy::Animation()

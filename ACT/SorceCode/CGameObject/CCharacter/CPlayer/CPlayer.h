@@ -111,7 +111,8 @@ public://パブリック
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
 
 	void MoveSafeWrier(VECTOR2_f pos);
-
+public:
+	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 private:
 	void AvoidanceEnd();
 	void KyeInput();
@@ -150,7 +151,7 @@ private:
 
 	bool m_ChangeColor;		//属性を変更したか
 
-	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス	属性変更後のへーとの演出はDrawでできる
+	std::unique_ptr<CHeart> m_upHeart;	//プレイヤーのハート(体力)クラス
 
 	std::unique_ptr<CNormalAttack> NormalAttack;
 	CCamera* m_pCamera;

@@ -256,6 +256,8 @@ void CGame::Update()
 		//ワイヤーとワイヤーポイントの当たり判定処理
 		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
+		//プレイヤーのアタックとエネミーの当たり判定
+		m_upCollisionDetection->PlayerAttackToEnemyCollision(m_upPlayer->GetNormalAttack_p(), m_upEnemy);
 		
 
 		//ステージの更新
@@ -368,20 +370,22 @@ void CGame::Update()
 		m_upCollisionDetection->MouseToEnemyCollision(m_upEnemy, m_upCamera);
 		//マウスとワイヤーポイント
 		m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
+
 		//プレイヤーとエネミーの当たり判定処理
 		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
- 
+
 		//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
+
 		//プレイヤーとバレットの当たり判定処理
 		m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
+
 		//ワイヤーとワイヤーポイントの当たり判定処理
 		m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
-		////ワイヤーをどこに出すかの処理
-		//if (m_pWire->GetRock()) {
-		//	m_upWireActionSupporter->StartWireAction(m_upPlayer.get(), m_pWire.get(), m_pWire->GetCatchPoint());
-		//}
+		//プレイヤーのアタックとエネミーの当たり判定
+		m_upCollisionDetection->PlayerAttackToEnemyCollision(m_upPlayer->GetNormalAttack_p(), m_upEnemy);
+
 
 		//ワイヤーを撃つ処理
 		if (m_upPlayer->GetWireShot()) {

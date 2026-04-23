@@ -14,8 +14,6 @@ public:
 	enum enImgList
 	{
 		IMG_StageMain = 0,	//ステージのメイン画像(ブロック状の物達)
-		IMG_BuckGround1,	//背景1
-		IMG_BuckGround2,	//背景2
 		IMG_Koishi,			//こいし(プレイヤー)
 		IMG_Heart,			//ハート(体力)
 		IMG_Enemy,			//エネミー

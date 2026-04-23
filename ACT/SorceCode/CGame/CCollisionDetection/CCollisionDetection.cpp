@@ -126,6 +126,28 @@ void CCollisionDetection::WireToEnemyCollision(std::vector<std::unique_ptr<CEnem
 
 }
 
+void CCollisionDetection::PlayerAttackToEnemyCollision(std::unique_ptr<CNormalAttack>& upNormalAttack, std::vector<std::unique_ptr<CEnemy>>& upEnemy)
+{
+	//攻撃状態なら
+	if (upNormalAttack->GetAttack() == true) {
+		for (int AttackCollision = 0; AttackCollision < upNormalAttack->GetMAX(); AttackCollision++) {
+			for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+				if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
+					//当たり判定のセット
+					ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
+
+					if (upEnemy[EnemyNo]->AttackHit == false) {
+						//円形と矩形の判定で見る
+						if (CircleToSquareDetection(EnemyPos, upNormalAttack->GetColion(AttackCollision)) == true) {
+							upEnemy[EnemyNo]->PlayerAttackHit(20);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (upPlayer->m_State == CCharacter::enState::Living) {
