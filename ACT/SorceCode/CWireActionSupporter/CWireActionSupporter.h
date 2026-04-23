@@ -6,7 +6,7 @@ class CWireActionSupporter
 {
 private:
 	static constexpr double AttackEria=100;//敵ENEMIへの攻撃射程
-	static constexpr double EnemiReedPower = 10;
+	static constexpr double EnemiReedPower = 50;
 public:
 	CWireActionSupporter();
 	~CWireActionSupporter();

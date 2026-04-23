@@ -13,8 +13,8 @@ class CWire
 private:
 	static constexpr int size = 60;//ワイヤーの長さ
 	static constexpr int IMGSize = 96;//ワイヤーの最大の長さ
-	static constexpr int GoSpeed = 300;//ワイヤーの速さ
-	static constexpr int ComebackSpeed = 60;//ワイヤーの速さ
+	static constexpr int GoSpeed = 60;//ワイヤーの速さ
+	static constexpr int ComebackSpeed = 120;//ワイヤーの速さ
 	static constexpr int WireMaxRongr = 600;//ワイヤーの最大の長さ
 public:
 	enum ShotSteto{
