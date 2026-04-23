@@ -14,6 +14,8 @@ public:
 	void StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPWire, CEnemy* m_DPEnemi);
 	void Update() ;
 	void WireActionEnd();//ワイヤーアクション終了
+
+
 private:
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y);
@@ -22,6 +24,7 @@ private:
 	void EnemitoAction();
 	void EnemiActionEnd(); 
 	void AllNullptr();
+	void PlayerTurnaround();
 private:
 	bool WireActioning;//ワイヤーアクション中か
 	double NawSpeed;//-なら左、+なら右

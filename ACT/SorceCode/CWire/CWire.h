@@ -13,7 +13,7 @@ class CWire
 private:
 	static constexpr int size = 60;//ワイヤーの長さ
 	static constexpr int IMGSize = 96;//ワイヤーの最大の長さ
-	static constexpr int GoSpeed = 30;//ワイヤーの速さ
+	static constexpr int GoSpeed = 300;//ワイヤーの速さ
 	static constexpr int ComebackSpeed = 60;//ワイヤーの速さ
 	static constexpr int WireMaxRongr = 600;//ワイヤーの最大の長さ
 public:
@@ -29,6 +29,7 @@ public:
 	void Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint) ;
 	void Update()override;
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
+	void WireHandDraw(std::unique_ptr<CCamera>& pCamera);
 	void StatoWire(VECTOR2_f pos);
 	bool Getcatch();
 	bool GetplayWire() {

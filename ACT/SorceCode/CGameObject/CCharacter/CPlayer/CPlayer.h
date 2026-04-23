@@ -14,14 +14,17 @@ class CPlayer
 public:
 	//最大落下速度
 	static constexpr double MAX_FALLING_SPEED = 25;//落下速度の最大値
-	static constexpr double JUMP_POWER = 20;//ジャンプ力
+	static constexpr double JUMP_POWER = 10;//ジャンプ力
 	static constexpr int DashcountMAX = 30;//ダッシュの受付時間
 	static constexpr int TurnAroundSpeed = 10;//向きを変える速さ
 	static constexpr double AvoidanceDistance = 300;//回避の距離
 	static constexpr int AvoidanceTime = 10;//回避にかかる時間
 	static constexpr int AvoidancecoolTime = 30;//回避のクールタイム
 	static constexpr double PlayerGrobtyi = 0.4;
-
+	static constexpr double ImageSize = 64;
+	static constexpr  double AirPower = 0.1;
+	static constexpr  int AirSpeedMAX = 15;
+	static constexpr int	AnimationSpeed = 5;//何フレームに一回動くか
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
 public:
@@ -37,6 +40,7 @@ public:
 		WireShot,		//ワイヤー発射
 		WirePointCatch,	//ワイヤーポイントを掴んだ
 		WireObjectCatch,//ワイヤーで物を掴んだ(敵やオブジェクト)
+
 	};
 
 	int enActionState = enActionState::None;
@@ -44,6 +48,8 @@ public:
 	bool GroundStand = false;		//地面に立っています
 	bool OldGroundStand = false;		//前フレームの地面に立っている状態
 public:
+	void Turnaround(VECTOR2_f Pos);
+
 	void DrawH(HDC c, HWND h, std::unique_ptr<CCamera>& pCamera);//後で消す
 	CPlayer();
 	~CPlayer();
@@ -86,6 +92,9 @@ public:
 
 	//プレイヤーのハートを描画する
 	void PlayerHeartDraw() { m_upHeart->Draw(); }
+
+	void StaratEnemiWire();
+	void EndEnemiWire();
 private:
 	void Animation() override;
 
@@ -145,4 +154,6 @@ private:
 
 	std::unique_ptr<CNormalAttack> NormalAttack;
 	CCamera* m_pCamera;
+	int m_AnimationCount;
+	int m_OldSteta;
 };
