@@ -7,6 +7,7 @@ CWireActionSupporter::CWireActionSupporter()
 	, m_dpWirePoint(nullptr)
 	, m_dpPlayer(nullptr)
 	, m_dpEnemi(nullptr)
+	, OldWallHit(false)
 {
 	for (int i = 0; i < 2; i++) {
 		pos[i] = { 0,0 };
@@ -108,6 +109,7 @@ void CWireActionSupporter::WireActionEnd()
 		if (NawSpeed<0) {
 			NawSpeed = -NawSpeed;
 		}
+		if (OldWallHit == true) { NawSpeed = 0; }
 		m_dpPlayer->WireEnd({ cos(Radian) * NawSpeed ,sin(Radian) * NawSpeed - janpPware });
 		m_dpPlayer = nullptr;
 		m_dpWire = nullptr;
@@ -227,6 +229,7 @@ void CWireActionSupporter::WirePointAction()
 		WireActionEnd();
 		return;
 	}
+	OldWallHit = true;
 	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
 	{
 		VECTOR2_f TopPos; 
@@ -295,7 +298,7 @@ void CWireActionSupporter::WirePointAction()
 		Radian += i;
 		double x = (m_dpWirePoint->GetCenterPosition().x) + (cos(Radian) * Long) - m_dpPlayer->GetFrameSplit().w / 2;
 		double y = (m_dpWirePoint->GetCenterPosition().y) + (sin(Radian) * Long) - m_dpPlayer->GetFrameSplit().h / 2;
-		m_dpPlayer->MoveSafeWrier({ x,y });
+		OldWallHit=m_dpPlayer->MoveSafeWrier({ x,y });
 
 		//ステージの当たり判定を行う
 		//StageCollision(40, 40);

@@ -33,5 +33,6 @@ private:
 	CWirepoint* m_dpWirePoint;//ワイヤーポイントのダブルポインタ
 	CEnemy* m_dpEnemi;//エネミー
 	VECTOR2_f pos[2];
+	bool OldWallHit;
 };
 

@@ -297,10 +297,12 @@ void CPlayer::EndEnemiWire()
 
 void CPlayer::Animation()
 {
+	m_Alpha = 255;
 	m_Framesplit.y = 0;
 	if (m_OldSteta !=m_MoveState) {
+	
 		m_Framesplit.x = 0;
-
+		if ((m_MoveState== enMoveState::MoveLeft|| m_MoveState == enMoveState::MoveRight)&&(m_Rdash == true || m_Ldash == true)) { m_Framesplit.x = ImageSize * 4; }
 		m_AnimationCount = 0;
 	}
 
@@ -321,22 +323,47 @@ void CPlayer::Animation()
 		case enMoveState::MoveLeft:
 			m_Delection.y = 0;
 			m_Framesplit.y = ImageSize;
-			if (m_AnimationCount > AnimationSpeed) {
-				m_AnimationCount = 0;
-				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 3) {
-					m_Framesplit.x = 0;
+			if (m_Ldash==true) {
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 7) {
+						m_Framesplit.x = ImageSize * 4;
+					}
+					
 				}
 			}
+			else {
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 3) {
+						m_Framesplit.x = ImageSize;
+					}
+
+				}
+			}
+			
 			break;
 		case enMoveState::MoveRight:
 			m_Delection.y = 180;
 			m_Framesplit.y = ImageSize;
-			if (m_AnimationCount > AnimationSpeed) {
-				m_AnimationCount = 0;
-				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 3) {
-					m_Framesplit.x = 0;
+			if (m_Rdash == true) {
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 7) {
+						m_Framesplit.x = ImageSize*4;
+					}
+				}
+			}
+			else {
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 3) {
+						m_Framesplit.x = 0;
+					}
 				}
 			}
 			break;
@@ -366,33 +393,50 @@ void CPlayer::Animation()
 		break;
 	case enActionState::WireObjectCatch:
 		m_Framesplit.y = ImageSize * 3;
-		if (m_Framesplit.x==0) {
-			m_Framesplit.x = ImageSize*2;
+		if (m_Framesplit.x == 0) {
+			m_Framesplit.x = ImageSize * 2;
 		}
 
-			switch (m_MoveState) {
-			case enMoveState::Wait:
-				
-				break;
-			case enMoveState::MoveLeft:
-				if (m_AnimationCount > AnimationSpeed) {
-					m_AnimationCount = 0;
-					m_Framesplit.x += ImageSize;
-					if (m_Framesplit.x > ImageSize * 3) {
-						m_Framesplit.x = ImageSize*2;
-					}
+		switch (m_MoveState) {
+		case enMoveState::Wait:
+
+			break;
+		case enMoveState::MoveLeft:
+			if (m_AnimationCount > AnimationSpeed) {
+				m_AnimationCount = 0;
+				m_Framesplit.x += ImageSize;
+				if (m_Framesplit.x > ImageSize * 3) {
+					m_Framesplit.x = ImageSize * 2;
 				}
-				break;
-			case enMoveState::MoveRight:
-				if (m_AnimationCount > AnimationSpeed) {
-					m_AnimationCount = 0;
-					m_Framesplit.x += ImageSize;
-					if (m_Framesplit.x > ImageSize * 3) {
-						m_Framesplit.x = ImageSize*2;
-					}
-				}
-				break;
 			}
+			break;
+		case enMoveState::MoveRight:
+			if (m_AnimationCount > AnimationSpeed) {
+				m_AnimationCount = 0;
+				m_Framesplit.x += ImageSize;
+				if (m_Framesplit.x > ImageSize * 3) {
+					m_Framesplit.x = ImageSize * 2;
+				}
+			}
+			break;
+		}
+		break;
+	case enActionState::Avoidance:
+		m_Framesplit.y = ImageSize * 6;
+		m_Framesplit.x = 0;
+		m_Alpha = 100;
+		break;
+	case enActionState::AirAvoidance:
+		m_Framesplit.y = ImageSize * 6;
+		m_Framesplit.x = 0;
+		if (AirAvoidanceVECT.x==0&& AirAvoidanceVECT.y==0) {
+			m_Alpha = 10;
+		}
+		else {
+			m_Alpha = 100;
+		}
+
+
 		break;
 	}
 
@@ -899,10 +943,10 @@ void CPlayer::AirAvoidanceVECTSet()
 	AirAvoidanceVECT = NormalVector(AirAvoidanceVECT);
 
 }
-void CPlayer::MoveSafeWrier(VECTOR2_f pos)
+bool CPlayer::MoveSafeWrier(VECTOR2_f pos)
 {
 	VECTOR2_f offsetPos = { 40.f, 40.f };
-
+	bool Hit = false;
 	// XŽ²ˆÚ“®
 	//if (moveX != 0.0f) 
 	{
@@ -914,6 +958,7 @@ void CPlayer::MoveSafeWrier(VECTOR2_f pos)
 		}
 		else
 		{
+			Hit = true;
 			//m_Acceleration.x = 0; // •Ç‚É“–‚½‚Á‚½‚ç‘¬“x‚ðŽE‚·
 		}
 	}
@@ -929,8 +974,9 @@ void CPlayer::MoveSafeWrier(VECTOR2_f pos)
 		}
 		else
 		{
-
+			Hit = true;
 			//m_Acceleration.y = 0;
 		}
 	}
+	return Hit;
 }
