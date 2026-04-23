@@ -25,6 +25,8 @@ public:
 	static constexpr  double AirPower = 0.1;
 	static constexpr  int AirSpeedMAX = 15;
 	static constexpr int	AnimationSpeed = 5;//何フレームに一回動くか
+	static constexpr  double	NoSpeed = 10;
+	static constexpr  double	cathiSpeed = 5;
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
 public:
@@ -157,4 +159,5 @@ private:
 	CCamera* m_pCamera;
 	int m_AnimationCount;
 	int m_OldSteta;
+	double m_MoveSpeed;	//移動速度を入れる
 };

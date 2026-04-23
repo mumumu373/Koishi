@@ -68,8 +68,9 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 		pos[1] = m_DPlayer->GetCenterPosition();
 
 		m_dpPlayer = m_DPlayer;
-		//m_dpPlayer->StartWirePointCatch();
-		m_dpPlayer->StaratEnemiWire();
+		
+		m_dpPlayer->StartWirePointCatch();
+		//m_dpPlayer->StaratEnemiWire();
 		m_dpWire = m_DPWire;
 		m_dpEnemi = m_DPEnemi;
 
@@ -337,6 +338,8 @@ void CWireActionSupporter::EnemitoAction()
 		m_dpEnemi->SetPosition({ x,y });
 
 		if (Long < AttackEria) {
+			m_dpPlayer->StaratEnemiWire();
+			m_dpWire->EnemiCatch();
 			int diff = Radian *  180/ M_PI - 90;
 
 			// 2. 差を -180 ~ 180 の範囲に補正する
@@ -380,6 +383,7 @@ void CWireActionSupporter::EnemiActionEnd()
 	CMouseInput::MouseRightStoopr();
 
 	m_dpPlayer->EndEnemiWire();
+	m_dpWire->EnemiCatchEND();
 	//m_dpPlayer->WireEndEnemi();
 	m_dpPlayer = nullptr;
 	m_dpWire = nullptr;

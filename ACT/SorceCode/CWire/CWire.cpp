@@ -8,6 +8,7 @@ CWire::CWire()
 	, m_Radian()
 	, m_Toptpoint()
 	, m_Targetpoint()
+	, m_EnemiCatch(false)
 {
 }
 
@@ -104,7 +105,7 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 
 void CWire::WireHandDraw(std::unique_ptr<CCamera>& pCamera)
 {
-	if (m_ShotState != ShotSteto::no) {
+	if (m_ShotState != ShotSteto::no&& m_EnemiCatch==false) {
 		//ワイヤーの先端とプレイヤーの距離を測る
 		int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
 		if (pieces<1) {
@@ -161,4 +162,14 @@ bool CWire::canShot()
 	if (m_ShotState == ShotSteto::no) {
 		return true;
 	}
+}
+
+void CWire::EnemiCatch()
+{
+	m_EnemiCatch = true;
+}
+
+void CWire::EnemiCatchEND()
+{
+	m_EnemiCatch = false;
 }

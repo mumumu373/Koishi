@@ -36,6 +36,7 @@ CPlayer::CPlayer()
 	, AvoidanceCoolCount(0)
 	, m_AnimationCount(0)
 	, m_OldSteta(0)
+	, m_MoveSpeed(0)
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -91,7 +92,7 @@ void CPlayer::StartSetting()
 	//実際の当たり判定
 	m_RealFrameSplit = { 104,104 };
 
-	m_Speed = { 10,10 };
+	
 
 	m_OldPosition = m_Position;
 
@@ -190,6 +191,11 @@ double CPlayer::GetWireStartSpeed()
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
+	m_MoveSpeed = NoSpeed;
+	if (enActionState == enActionState::WireObjectCatch){
+		m_MoveSpeed = cathiSpeed;
+	}
+
 	//過去の自分
 	m_OldPosition = m_Position;
 	OldGroundStand = GroundStand;
@@ -205,7 +211,10 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	if (enActionState != enActionState::WirePointCatch) {
 		//プレイヤーのジャンプの制御
 		JumpPlayer();
-		Attackmove();//攻撃
+		if (enActionState != enActionState::WireObjectCatch){
+			Attackmove();//攻撃
+		}
+	
 
 		if (AvoidanceCoolCount > 0) {
 
@@ -223,7 +232,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 		}
 
-		Attackmove();
+		//Attackmove();
 		Dash();
 		if (OldGroundStand == true) {
 			m_Acceleration = { 0,0 };
@@ -269,7 +278,7 @@ void CPlayer::MovieSceneUpdate()
 	//目的位置よりも手前にいるなら
 	if (m_Position.x <= EVENT_START_POS.x + 100) {
 		//目的地まで移動
-		m_Position.x += m_Speed.x;
+		m_Position.x += m_MoveSpeed;
 	}
 
 	//ステージとの判定
@@ -335,7 +344,7 @@ void CPlayer::Animation()
 	}
 	
 
-	if (m_Jumping==true) {
+	if (m_Jumping==true&& enActionState!= enActionState:: WireObjectCatch) {
 		m_Framesplit.y = ImageSize*2;
 		if (m_Position.y<m_OldPosition.y) {
 			m_Framesplit.x = 0;
@@ -357,14 +366,33 @@ void CPlayer::Animation()
 		break;
 	case enActionState::WireObjectCatch:
 		m_Framesplit.y = ImageSize * 3;
-		m_Framesplit.x = 0;
-		if (m_AnimationCount > AnimationSpeed) {
-			m_AnimationCount = 0;
-			m_Framesplit.x += ImageSize;
-			if (m_Framesplit.x > ImageSize * 3) {
-				m_Framesplit.x = 0;
-			}
+		if (m_Framesplit.x==0) {
+			m_Framesplit.x = ImageSize*2;
 		}
+
+			switch (m_MoveState) {
+			case enMoveState::Wait:
+				
+				break;
+			case enMoveState::MoveLeft:
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 3) {
+						m_Framesplit.x = ImageSize*2;
+					}
+				}
+				break;
+			case enMoveState::MoveRight:
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 3) {
+						m_Framesplit.x = ImageSize*2;
+					}
+				}
+				break;
+			}
 		break;
 	}
 
@@ -449,6 +477,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 						//天井の判定
 						else {
 							m_Acceleration.y = 0;
+							m_JumpAcc = 0;
 						}
 
 						MoveRangeY = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
@@ -564,7 +593,7 @@ void CPlayer::KyeInput()
 	{
 		m_MoveState = enMoveState::MoveLeft;
 		//シフトキーを押しているなら回避状態にする
-		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch) {
+		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch&& enActionState != enActionState::WireObjectCatch) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {			
 				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
@@ -585,7 +614,7 @@ void CPlayer::KyeInput()
 		m_MoveState = enMoveState::MoveRight;
 
 		//シフトキーを押しているなら回避状態にする
-		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch) {
+		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch&& enActionState != enActionState::WireObjectCatch) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {		
 				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
@@ -619,7 +648,7 @@ void CPlayer::AirKeyInput()
 
 	m_rightkey[1] = m_rightkey[0];
 	m_rightkey[0] = GetAsyncKeyState('D') & 0x8000;
-	if (enActionState != enActionState::WireShot&& enActionState != enActionState::WirePointCatch) {
+	if (enActionState != enActionState::WireShot&& enActionState != enActionState::WirePointCatch&&enActionState != enActionState::WireObjectCatch) {
 	
 		if (m_leftkey[0])
 		{
@@ -659,18 +688,18 @@ void CPlayer::MovePlayer()
 	case enMoveState::MoveLeft:
 
 		if (m_Ldash == true) {
-			m_Acceleration.x -= m_Speed.x*2;
+			m_Acceleration.x -= m_MoveSpeed*2;
 		}
 		else {
-			m_Acceleration.x -= m_Speed.x;
+			m_Acceleration.x -= m_MoveSpeed;
 		}
 		break;
 	case enMoveState::MoveRight:
 		if (m_Rdash == true) {
-			m_Acceleration.x += m_Speed.x*2;
+			m_Acceleration.x += m_MoveSpeed *2;
 		}
 		else {
-			m_Acceleration.x += m_Speed.x;
+			m_Acceleration.x += m_MoveSpeed;
 		}
 
 		break;
@@ -684,13 +713,13 @@ void CPlayer::MovePlayerJump()
 	case enMoveState::Wait:
 		break;
 	case enMoveState::MoveLeft:
-			m_Acceleration.x -= m_Speed.x*AirPower;
+			m_Acceleration.x -= m_MoveSpeed *AirPower;
 			if (-AirSpeedMAX > m_Acceleration.x) {
 				m_Acceleration.x = -AirSpeedMAX;
 			}
 		break;
 	case enMoveState::MoveRight:
-			m_Acceleration.x += m_Speed.x* AirPower;
+			m_Acceleration.x += m_MoveSpeed * AirPower;
 			if (AirSpeedMAX< m_Acceleration.x) {
 				m_Acceleration.x = AirSpeedMAX;
 			}
@@ -709,7 +738,9 @@ void CPlayer::MovePlayerJump()
 		m_Position.x += m_Acceleration.x;
 		m_Position.y += m_Acceleration.y;
 		m_Acceleration.x *= 0.999;
-		
+		if (enActionState == enActionState::WireObjectCatch) {
+			m_Acceleration.x *= 0.8;
+		}
 
 
 	}
@@ -743,7 +774,13 @@ void CPlayer::JumpPlayer()
 			if (GetAsyncKeyState('W') & 0x8000) {
 				m_Jumping = true;	//ジャンプ中
 
-				m_JumpAcc = m_JumpPower;
+				if (enActionState == enActionState::WireObjectCatch) {
+					m_JumpAcc = m_JumpPower/2;
+				}
+				else {
+					m_JumpAcc = m_JumpPower;
+				}
+			
 				m_Position.y -= m_JumpAcc;
 
 
