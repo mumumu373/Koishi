@@ -13,11 +13,20 @@ public:
 	enum enAttackMove
 	{
 		Standby,	//待機
-		Move_01,	//左下端からバレットを飛ばしてから右下端からバレットを出す
-		Move_02,	//左右にステップしてから上空に行って、バレットを降らせる
+		Move_01,	//行動1
+		Move_02,	//行動2
 	};
 
 	int m_AttackMove = enAttackMove::Standby;
+
+	//ナズーリンのフェーズ
+	enum enBossPhase
+	{
+		Phase_1,	//フェーズ1
+		Phase_2,	//フェーズ2
+	};
+
+	int m_BossPhase = enBossPhase::Phase_1;
 public:
 	CNazrin();
 	~CNazrin();
@@ -41,6 +50,11 @@ private:
 
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
+
+	//ボスムーブ1のアップデート
+	void BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet);
+	//ボスムーブ2のアップデート
+	void BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet);
 private:
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingCo;		//ジャンプするタイミングをカウント

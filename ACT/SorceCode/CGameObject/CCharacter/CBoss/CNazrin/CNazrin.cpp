@@ -20,6 +20,10 @@ CNazrin::CNazrin()
 	//スタンバイ中
 	m_AttackMove = enAttackMove::Standby;
 
+	//HPをセット
+	MAX_HP = 200;
+	HP = MAX_HP;
+
 	StartSetting();
 }
 
@@ -103,6 +107,173 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 		break;
 	case enAttackMove::Move_01:
+
+		//ムーブ1の動作を実行(フェーズ違いでも同じ関数が使えるように)
+		BossMove_1Update(m_BossPhase, upBullet);
+		
+		break;
+	case enAttackMove::Move_02:
+
+		//ムーブ2の動作を実行
+		BossMove_2Update(m_BossPhase, upBullet);
+		
+		break;
+	}
+
+	//攻撃を受けたとき
+	if (AttackHit == true) {
+		//半透明にする
+		m_Alpha = 150;
+		//攻撃が当たらない時間を過ぎたら
+		if (NoHitAttackCo >= NoHitAttackTime) {
+			NoHitAttackCo = 0;
+			AttackHit = false;
+			//表示する
+			m_Alpha = 255;
+		}
+		else {
+			NoHitAttackCo++;
+		}
+	}
+
+	//落下速度を入れる
+	m_Position.y += m_FallingSpeed;
+
+	StageCollision(44, 44);
+}
+
+void CNazrin::PlayerAttackHit(int Damage)
+{
+	//攻撃が当たった
+	AttackHit = true;
+	//HPを減らす
+	HP -= Damage;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = 0;
+
+	//HPがなくなったら
+	if (HP <= 0) {
+		//フェーズが1なら
+		if (m_BossPhase == enBossPhase::Phase_1) {
+			//フェーズ2に移行する
+			m_BossPhase = enBossPhase::Phase_2;
+		}
+	}
+}
+
+//ボスバトルが始まった時の関数
+void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
+{
+	//ナズーリンの配置
+	m_Position = PlayerPos;
+	m_Position.x += WND_W - 300;
+
+	//バトルが始まった時の位置を保存
+	m_BattleStartPos = m_Position;
+
+	//スタンバイ状態を早めに解いておく
+	m_AttackMoveChangeCo = 240;
+
+	//青色の状態から始まるようにする
+	m_Color = enColor::Blue;
+}
+
+void CNazrin::MovieSceneUpdate()
+{
+	m_OldPosition = m_Position;
+	//落下速度を入れる
+	m_Position.y += m_FallingSpeed;
+
+	StageCollision(44, 44);
+}
+
+void CNazrin::Animation()
+{
+	m_AnimetionCo++;
+
+	if (m_AnimetionCo >= 15) {
+		m_Framesplit.x += 64;
+		//最後のアニメーションなら
+		if (m_Framesplit.x > 64*3) {
+			m_Framesplit.x = 0;
+		}
+		m_AnimetionCo = 0;
+	}
+}
+
+void CNazrin::StageCollision(double OffsetPos_X, double OffsetPos_Y)
+{
+	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
+
+	//ブロックに触れていないなら			判定のサイズをナズーリンの大きさに合わせる
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, 60, 100, offsetPos) != true) {
+		m_GroundStand = false;
+
+		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
+		//落下速度を計算
+		m_FallingSpeed += Gravity;
+	}
+	else {
+		//動いた距離
+		double MoveRangeX = m_Position.x - m_OldPosition.x;
+		double MoveRangeY = m_Position.y - m_OldPosition.y;
+
+		//ナズーリンは横の判定がいらない
+		//まだ縦に動こうとしているなら
+		if (MoveRangeY != 0.0f) {
+			while (1) {
+				VECTOR2_f checkPos = m_OldPosition;
+				checkPos.y += MoveRangeY;
+				//															判定のサイズをナズーリンの大きさに合わせる
+				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, 60, 100, offsetPos)) {
+
+					if (std::abs(MoveRangeY) <= 1.0f) {
+						//地面の判定
+						if (MoveRangeY > 0) {
+							m_FallingSpeed = 0;
+
+							m_GroundStand = true;
+						}
+						//天井の判定
+						else {
+							m_FallingSpeed = 0;
+						}
+
+						MoveRangeY = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
+						m_Position.y = m_OldPosition.y;
+						break;
+					}
+
+					//移動距離を 0 に近づける（後ずさりする）
+					//地面判定としてみることもできる
+					if (MoveRangeY > 0) {
+						//右に動こうとしていたなら、1px 左に戻す
+						MoveRangeY = MoveRangeY - 1.0;
+					}
+					else {
+						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
+						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
+						MoveRangeY = MoveRangeY + 1.0;
+					}
+
+					// 符号を維持したまま、絶対値を1減らす
+					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
+					//double sign = (MoveRangeY > 0) ? 1.0 : -1.0;
+					//MoveRangeY -= sign * 1.0;
+				}
+				else {
+					m_Position.y = checkPos.y;
+					break;
+				}
+			}
+		}
+	}
+}
+
+void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+	switch (BossPhase) {
+	case enBossPhase::Phase_1:
 		//5発撃つまで続く
 		if (m_HowShotBullet < 5) {
 			//撃つ間隔
@@ -112,7 +283,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 					//バレットを3発同じ角度で出す(スピードは違う)
 					for (int i = 1; i <= 5; i++) {
 						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (-20 * m_HowShotBullet), -100, 80, 300, 0, false));
-					}					
+					}
 					upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, -5, (-20 * m_HowShotBullet), -100, 80, 60, 0, false));
 				}
 				//2回目
@@ -206,11 +377,18 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			}
 
 		}
-
 		break;
-	case enAttackMove::Move_02:
+	case enBossPhase::Phase_2:
+		break;
+	}
+}
+
+void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet)
+{
+	switch (BossPhase) {
+	case enBossPhase::Phase_1:
 		//画面上の外にいったら
-		if (m_Position.y <= m_CameraPos.y - (WND_H / 2) - m_Framesplit.h){
+		if (m_Position.y <= m_CameraPos.y - (WND_H / 2) - m_Framesplit.h) {
 			//落下しないようにする
 			m_FallingSpeed = 0;
 
@@ -234,7 +412,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 								//画面左端上から出てくるように
 								m_Position.x = m_CameraPos.x - (WND_W / 2) - m_Framesplit.w - 150;
 								m_Position.y = m_CameraPos.y - (WND_H / 2) + 24;
-								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color,2,0, 0, 150, 240, 3, true));
+								upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, 0, 0, 150, 240, 3, true));
 								break;
 							case 1:
 								//画面左端下から出てくるように
@@ -479,145 +657,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			}
 		}
 		break;
-	}
-
-	//攻撃を受けたとき
-	if (AttackHit == true) {
-		//半透明にする
-		m_Alpha = 150;
-		//攻撃が当たらない時間を過ぎたら
-		if (NoHitAttackCo >= NoHitAttackTime) {
-			NoHitAttackCo = 0;
-			AttackHit = false;
-			//表示する
-			m_Alpha = 255;
-		}
-		else {
-			NoHitAttackCo++;
-		}
-	}
-
-	//落下速度を入れる
-	m_Position.y += m_FallingSpeed;
-
-	StageCollision(44, 44);
-}
-
-void CNazrin::PlayerAttackHit(int Damage)
-{
-	//攻撃が当たった
-	AttackHit = true;
-	//HPを減らす
-	HP -= Damage;
-	//攻撃が当たらない時間のカウントをセット
-	NoHitAttackCo = 0;
-}
-
-//ボスバトルが始まった時の関数
-void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
-{
-	//ナズーリンの配置
-	m_Position = PlayerPos;
-	m_Position.x += WND_W - 300;
-
-	//バトルが始まった時の位置を保存
-	m_BattleStartPos = m_Position;
-
-	//スタンバイ状態を早めに解いておく
-	m_AttackMoveChangeCo = 240;
-
-	//青色の状態から始まるようにする
-	m_Color = enColor::Blue;
-}
-
-void CNazrin::MovieSceneUpdate()
-{
-	m_OldPosition = m_Position;
-	//落下速度を入れる
-	m_Position.y += m_FallingSpeed;
-
-	StageCollision(44, 44);
-}
-
-void CNazrin::Animation()
-{
-	m_AnimetionCo++;
-
-	if (m_AnimetionCo >= 15) {
-		m_Framesplit.x += 64;
-		//最後のアニメーションなら
-		if (m_Framesplit.x > 64*3) {
-			m_Framesplit.x = 0;
-		}
-		m_AnimetionCo = 0;
-	}
-}
-
-void CNazrin::StageCollision(double OffsetPos_X, double OffsetPos_Y)
-{
-	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
-
-	//ブロックに触れていないなら			判定のサイズをナズーリンの大きさに合わせる
-	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, 60, 100, offsetPos) != true) {
-		m_GroundStand = false;
-
-		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
-		//落下速度を計算
-		m_FallingSpeed += Gravity;
-	}
-	else {
-		//動いた距離
-		double MoveRangeX = m_Position.x - m_OldPosition.x;
-		double MoveRangeY = m_Position.y - m_OldPosition.y;
-
-		//ナズーリンは横の判定がいらない
-		//まだ縦に動こうとしているなら
-		if (MoveRangeY != 0.0f) {
-			while (1) {
-				VECTOR2_f checkPos = m_OldPosition;
-				checkPos.y += MoveRangeY;
-				//															判定のサイズをナズーリンの大きさに合わせる
-				if (CStageCollision::GetInstance()->IsHit(m_OldPosition.x, checkPos.y, 60, 100, offsetPos)) {
-
-					if (std::abs(MoveRangeY) <= 1.0f) {
-						//地面の判定
-						if (MoveRangeY > 0) {
-							m_FallingSpeed = 0;
-
-							m_GroundStand = true;
-						}
-						//天井の判定
-						else {
-							m_FallingSpeed = 0;
-						}
-
-						MoveRangeY = 0; // 1px以下なら移動不可として終了	床や天井に当たったときの感じ
-						m_Position.y = m_OldPosition.y;
-						break;
-					}
-
-					//移動距離を 0 に近づける（後ずさりする）
-					//地面判定としてみることもできる
-					if (MoveRangeY > 0) {
-						//右に動こうとしていたなら、1px 左に戻す
-						MoveRangeY = MoveRangeY - 1.0;
-					}
-					else {
-						//左に動こうとしていた（マイナスだった）なら、1px 右に戻す
-						//例: -5.0 + 1.0 = -4.0 （0に近づく！）
-						MoveRangeY = MoveRangeY + 1.0;
-					}
-
-					// 符号を維持したまま、絶対値を1減らす
-					// 例: 5.0 -> 4.0 / -5.0 -> -4.0
-					//double sign = (MoveRangeY > 0) ? 1.0 : -1.0;
-					//MoveRangeY -= sign * 1.0;
-				}
-				else {
-					m_Position.y = checkPos.y;
-					break;
-				}
-			}
-		}
+	case enBossPhase::Phase_2:
+		break;
 	}
 }

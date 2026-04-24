@@ -30,7 +30,7 @@ public:
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
 
 	//プレイヤーの攻撃がヒットした時の動作
-	void PlayerAttackHit(int Damage) override;
+	void PlayerAttackHit(int Damage, int Color) override;
 private:
 	void Animation() override;
 

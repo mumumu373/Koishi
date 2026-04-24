@@ -1,6 +1,6 @@
 #include "CPlayer.h"
-
 #include "CMouseInput//CMouseInput.h"
+
 void CPlayer::Turnaround(VECTOR2_f Pos)
 {
 	if (m_Position.x+m_Framesplit.w/2 < Pos.x)
@@ -58,7 +58,9 @@ CPlayer::CPlayer()
 		m_Ldash = false;
 		m_Rdash = false;
 	}
-	NormalAttack= std::make_unique<CNormalAttack>();
+	NormalAttack = std::make_unique<CNormalAttack>();
+	//プレイヤーのカラーをセットする
+	NormalAttack->SetPlayerColor(m_Color);
 
 	//最大HP
 	MAX_HP = 200;	
@@ -915,6 +917,9 @@ void CPlayer::PlayerColorChange()
 
 			//ハートのほうの属性も変える
 			HP = m_upHeart->ChangeHeartColor(m_Color, HP);
+
+			//攻撃の属性も変える
+			NormalAttack->SetPlayerColor(m_Color);
 		}
 	}
 	else if (GetAsyncKeyState('E') & 0x8000) {
@@ -929,6 +934,9 @@ void CPlayer::PlayerColorChange()
 
 			//変更後の属性ごとのHPを受け取る
 			HP = m_upHeart->ChangeHeartColor(m_Color, HP);
+
+			//攻撃の属性も変える
+			NormalAttack->SetPlayerColor(m_Color);
 		}
 	}
 	//離したら

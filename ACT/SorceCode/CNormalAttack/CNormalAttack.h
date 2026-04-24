@@ -10,6 +10,9 @@ class CNormalAttack
 	static constexpr int imageH = 32;
 	static constexpr int Time = 6;//継続時間
 	static constexpr int AtakuSize = 120;
+
+public:
+	int m_PlayerColor = 0;	//プレイヤーの属性をセット
 public:
 	
 	CNormalAttack();
@@ -28,6 +31,9 @@ public:
 	int GetAttack() {
 		return Attacked;
 	}
+
+	//プレイヤーの属性をセット
+	void SetPlayerColor(int PlayerColor) { m_PlayerColor = PlayerColor; }
 private:
 	ObjectInfo Collision[CollisionMAX];
 	VECTOR2_f IMagePos;
