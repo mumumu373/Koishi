@@ -272,7 +272,7 @@ void CKedama::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
 
 	//ブロックに触れていないなら
-	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, m_Framesplit.w, m_Framesplit.h, offsetPos) != true) {
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y + Gravity, m_Framesplit.w, m_Framesplit.h, offsetPos) != true) {
 		m_GroundStand = false;
 
 		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている

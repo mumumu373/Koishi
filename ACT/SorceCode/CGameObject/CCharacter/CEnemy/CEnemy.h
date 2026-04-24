@@ -19,7 +19,7 @@ public:
 	bool AttackHit = false;	//UŒ‚‚ğ‚­‚ç‚Á‚½‚©
 
 	int NoHitAttackCo = 0;	//UŒ‚‚ª‚ ‚½‚ç‚È‚¢ŠÔ‚ğƒJƒEƒ“ƒg
-	const int NoHitAttackTime = 60;	//UŒ‚‚ª‚ ‚½‚ç‚È‚¢ŠÔ
+	const int NoHitAttackTime = 40;	//UŒ‚‚ª‚ ‚½‚ç‚È‚¢ŠÔ
 public:
 	CEnemy();
 	virtual ~CEnemy() {};	

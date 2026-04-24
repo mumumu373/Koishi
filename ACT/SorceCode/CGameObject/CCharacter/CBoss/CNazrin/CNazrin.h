@@ -68,12 +68,16 @@ private:
 	bool m_GroundStand;		//地面に立っているか	
 
 	int m_AttackMoveChangeCo;	//攻撃のパターンを変えるタイミングをカウント
-
 	int m_AttackMoveCo;			//攻撃の動作をカウントする
 
 	VECTOR2_f m_MemoryPos;		//ポジションを記憶しておく
 	VECTOR2_f m_BattleStartPos;	//ボスバトルのスタート位置
+
+	int m_PhaseChangeCo;		//フェーズを変えるタイミングをカウントする
+	bool m_NextPhaseSetting;	//フェーズを変える準備
 private:
 	int m_AttackAnimCo;			//攻撃アニメーションのカウント
 	bool m_AttackAnimTime;		//攻撃アニメーション中
+
+	bool m_PhaseChangeAniTime;	//フェーズチェンジ中のアニメーション
 };

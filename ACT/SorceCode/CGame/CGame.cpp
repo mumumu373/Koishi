@@ -288,16 +288,14 @@ void CGame::Update()
 
 			//イベントが開始した位置を入れる
 			m_upPlayer->EVENT_START_POS = m_upPlayer->GetPosition();
-
-			//ナズーリン用のカメラを用意する
-			if (m_upBoss->m_MyCharacter == CBoss::enMyCharacter::Nazrin) {
-				//カメラをボス戦用にセットする
-				m_upCamera->SetBossBattleCamera_Nazrin(m_upPlayer->GetPosition());
-			}
 		}
 
 		break;
 	case enScene::Movie:
+
+		if (GetAsyncKeyState('I') & 0x8000) {
+			m_upCamera->SetPos(4000, 100);
+		}
 
 		//プレイヤーのムービーシーン中の動作
 		m_upPlayer->MovieSceneUpdate();
@@ -306,9 +304,15 @@ void CGame::Update()
 		m_upBoss->MovieSceneUpdate();
 
 		//プレイヤーが地面についてからうごかしたい
-		if (m_MovieSceneCameraMoveCo >= 20) {
+		if (m_MovieSceneCameraMoveCo >= 20 && m_upPlayer->GroundStand == true) {
 			//ムービーシーン
 			m_upCamera->Update();
+
+			//ナズーリン用のカメラを用意する
+			if (m_upBoss->m_MyCharacter == CBoss::enMyCharacter::Nazrin) {
+				//カメラをボス戦用にセットする
+				m_upCamera->SetBossBattleCamera_Nazrin(m_upPlayer->GetPosition());
+			}
 
 			//エンターキーまたはマウスで進行できる
 			if (GetAsyncKeyState(VK_RETURN) & 0x8000) {
@@ -316,6 +320,16 @@ void CGame::Update()
 				m_Scene = enScene::BossBattle;
 
 				m_MovieSceneCameraMoveCo = 0;
+
+				//ボス用のステージに変更する
+				m_upStageManager->ChangeStage(CStageManager::enStage::MapBoss);
+
+				//カメラの場所を変更したところと同じ位置になるようにする
+				m_upCamera->SetChangeBossStageCamera(m_upPlayer->GetPositionadd(), m_upBoss->GetPositionadd());
+
+				//ステージの幅と高さをセットする<w.h>
+				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
 			}
 		}
 		else {
@@ -323,6 +337,13 @@ void CGame::Update()
 		}
 		break;
 	case enScene::BossBattle:
+		if (GetAsyncKeyState('I') & 0x8000) {
+			m_upCamera->SetPos(4000, 100);
+		}
+
+		//ムービーシーン
+		m_upCamera->Update();
+
 		//ワイヤーの動作
 		m_pWire->Update();
 
