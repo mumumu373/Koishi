@@ -7,5 +7,6 @@ CEnemy::CEnemy()
 	, m_HitBack(false)
 	, m_HitBackCo(0)
 	, m_HitBackSpeed(0,0)	//ヒットバックする速度
+	, m_ThrowVect(0,0)
 {
 }

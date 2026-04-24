@@ -20,6 +20,10 @@ public:
 
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
 	const int NoHitAttackTime = 40;	//攻撃があたらない時間
+
+	VECTOR2_f ThrowSpeed = { 30,15 };		//投げられる速度
+	bool EnemyThrown = false;		//投げらました！
+	const int ThrowDamage = 100;	//投げたエネミーのダメージ
 public:
 	CEnemy();
 	virtual ~CEnemy() {};	
@@ -34,11 +38,30 @@ public:
 	//プレイヤーの攻撃がヒットした時の動作
 	virtual void PlayerAttackHit(int Damage, int Color) = 0;
 
+	//プレイヤーに投げられた時の動作
+	virtual void ThrowEnemy() = 0;
+
 	//プレイヤーの位置を取得
 	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
 
 	void SetPosition(VECTOR2_f pos) { m_Position = pos; }
 
+	//エネミーを飛ばす準備
+	void SetThrowEnemy() { 
+		EnemyThrown = true; 
+
+		//右側にプレイヤーがいるなら
+		if (m_PlayerPos.x >= GetCenterPosition().x) {
+			m_ThrowVect.x = -ThrowSpeed.x;
+		}
+		//左側にプレイヤーがいるなら
+		else {
+			m_ThrowVect.x = ThrowSpeed.x;
+		}
+		m_ThrowVect.y = ThrowSpeed.y;
+	}
+
+	//ワイヤーキャッチ状態にする
 	void CatchWire() { m_CatchWire = enCatchWire::Catch; }
 	int GetCatchWire() { return m_CatchWire; }
 protected:
@@ -55,4 +78,6 @@ protected:
 	bool m_HitBack;			//攻撃を受けたときのヒットバック中かを見る
 	int m_HitBackCo;		//ヒットバック中のカウント
 	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
+
+	VECTOR2_f m_ThrowVect;		//投げたベクトルを見る
 };

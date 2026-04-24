@@ -222,9 +222,16 @@ void CGame::Update()
 		//ある分回す
 		for (int i = 0; i < m_upEnemy.size(); i++) {
 			//プレイヤーの位置を取得する
+			m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
+
+			//キャッチされていなければ
 			if (m_upEnemy[i]->GetCatchWire()!= CEnemy::enCatchWire::Catch) {
-				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 				m_upEnemy[i]->Update(m_upBullet);
+			}
+			else {
+				if (m_upEnemy[i]->EnemyThrown == true) {
+					m_upEnemy[i]->ThrowEnemy();
+				}
 			}
 	
 		}

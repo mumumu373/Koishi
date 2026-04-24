@@ -221,11 +221,6 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 	//‚Ü‚í‚è‘±‚¯‚é‚æ‚¤‚É
 	m_Delection.z += 7;
-
-	//‚±‚Á‚¿‚Å‘•ü‚Ì“®ì‚ğ‚·‚é
-	for (int i = 0; i < m_upYinYangDeco.size(); i++) {
-		m_upYinYangDeco[i]->Update(GetCenterPosition());
-	}
 }
 
 void CYinYangBall::PlayerAttackHit(int Damage, int Color)
@@ -261,6 +256,18 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 	m_Vector.y = sin(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
 }
 
+void CYinYangBall::ThrowEnemy()
+{
+	m_Position.x += m_ThrowVect.x;
+	m_Position.y -= m_ThrowVect.y;
+
+	m_ThrowVect.y -= Gravity;
+}
+
 void CYinYangBall::Animation()
 {
+	//‚±‚Á‚¿‚Å‘•ü‚Ì“®ì‚ğ‚·‚é
+	for (int i = 0; i < m_upYinYangDeco.size(); i++) {
+		m_upYinYangDeco[i]->Update(GetCenterPosition());
+	}
 }

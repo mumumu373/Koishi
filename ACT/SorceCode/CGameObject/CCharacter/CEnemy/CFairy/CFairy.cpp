@@ -230,6 +230,14 @@ void CFairy::PlayerAttackHit(int Damage, int Color)
 	m_Vector.y = sin(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
 }
 
+void CFairy::ThrowEnemy()
+{
+	m_Position.x += m_ThrowVect.x;
+	m_Position.y -= m_ThrowVect.y;
+
+	m_ThrowVect.y -= Gravity;
+}
+
 void CFairy::Animation()
 {
 	//ƒvƒŒƒCƒ„[‚Ì•û‚ÉŒü‚­

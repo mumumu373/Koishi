@@ -31,6 +31,9 @@ public:
 
 	//プレイヤーの攻撃がヒットした時の動作
 	void PlayerAttackHit(int Damage, int Color) override;
+
+	//プレイヤーに投げられた時の動作
+	void ThrowEnemy() override;
 private:
 	void Animation() override;
 
