@@ -48,4 +48,7 @@ protected:
 	virtual void StageCollision(double OffsetPos_X, double OffsetPos_Y) override {};
 protected:
 	VECTOR2_f m_PlayerPos;
+
+	int m_AnimationCo;		//アニメーション変更時間カウント
+	int m_AnimationTime;	//アニメーション変更時間
 };

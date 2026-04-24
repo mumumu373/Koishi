@@ -148,6 +148,25 @@ void CCollisionDetection::PlayerAttackToEnemyCollision(std::unique_ptr<CNormalAt
 	}
 }
 
+void CCollisionDetection::PlayerAttackToBossCollision(std::unique_ptr<CNormalAttack>& upNormalAttack, std::unique_ptr<CBoss>& upBoss)
+{
+	//UŒ‚ó‘Ô‚È‚ç
+	if (upNormalAttack->GetAttack() == true) {
+		for (int AttackCollision = 0; AttackCollision < upNormalAttack->GetMAX(); AttackCollision++) {
+			if (upBoss->m_State == CCharacter::enState::Living) {
+				ObjectInfo BossPos = SetBossInfo(upBoss, true);
+
+				if (upBoss->AttackHit == false) {
+					//‰~Œ`‚Æ‹éŒ`‚ÅŒ©‚é
+					if (CircleToSquareDetection(BossPos, upNormalAttack->GetColion(AttackCollision)) == true) {
+						upBoss->PlayerAttackHit(20);
+					}
+				}
+			}
+		}
+	}
+}
+
 void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (upPlayer->m_State == CCharacter::enState::Living) {
@@ -241,4 +260,30 @@ ObjectInfo CCollisionDetection::SetBulletInfo(std::unique_ptr<CBullet>& upBullet
 	};
 
 	return BulletInfo;
+}
+
+ObjectInfo CCollisionDetection::SetBossInfo(std::unique_ptr<CBoss>& upBoss, bool RealSize)
+{
+	ObjectInfo BossInfo;
+
+	if (RealSize == true) {
+		BossInfo = {
+			//–{—ˆ‚Ì“–‚½‚è”»’è‚Æˆê’v‚³‚¹‚éŒvŽZ
+			upBoss->GetPosition().x + ((upBoss->GetFrameSplit().w - upBoss->m_RealFrameSplit.x) / 2),
+			upBoss->GetPosition().y + ((upBoss->GetFrameSplit().h - upBoss->m_RealFrameSplit.y) / 2),
+			upBoss->m_RealFrameSplit.x,
+			upBoss->m_RealFrameSplit.y
+		};
+	}
+	else {
+		BossInfo = {
+			//ƒLƒƒƒ‰ƒNƒ^[‚Ì“–‚½‚è”»’è
+			upBoss->GetPosition().x,
+			upBoss->GetPosition().y,
+			upBoss->GetFrameSplit().w,
+			upBoss->GetFrameSplit().h
+		};
+	}
+
+	return BossInfo;
 }

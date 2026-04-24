@@ -1,10 +1,11 @@
 #pragma once
 #include <math.h>
 
-#include "CGameObject/CCharacter/CPlayer/CPlayer.h"	//プレイヤークラス
+#include "CGameObject/CCharacter/CPlayer/CPlayer.h"		//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"		//エネミークラス
 #include "CGameObject/CCharacter/CWirepoint/CWirepoint.h"//ワイヤーポイントクラス
 #include "CCamera/CCamera.h"								//カメラクラス
+#include "CGameObject/CCharacter/CBoss/CBoss.h"
 #include <CWireActionSupporter/CWireActionSupporter.h>
 /****************************************************************************
 *		当たり判定クラス
@@ -40,6 +41,8 @@ public:
 
 	//プレイヤーのアタックとエネミーの当たり判定
 	void PlayerAttackToEnemyCollision(std::unique_ptr<CNormalAttack>& upNormalAttack, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
+	//プレイヤーのアタックとボスの当たり判定
+	void PlayerAttackToBossCollision(std::unique_ptr<CNormalAttack>& upNormalAttack, std::unique_ptr<CBoss>& upBoss);
 public:
 
 	//円どうしの当たり判定
@@ -88,5 +91,7 @@ private:
 	ObjectInfo SetEnemyInfo(std::unique_ptr<CEnemy>& upEnemy, bool RealSize);
 	//バレットの位置情報
 	ObjectInfo SetBulletInfo(std::unique_ptr<CBullet>& upBullet);
+	//ボスの位置情報
+	ObjectInfo SetBossInfo(std::unique_ptr<CBoss>& upBoss, bool RealSize);
 private:
 };

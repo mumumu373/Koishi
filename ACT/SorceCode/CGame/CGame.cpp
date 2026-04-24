@@ -385,6 +385,8 @@ void CGame::Update()
 
 		//プレイヤーのアタックとエネミーの当たり判定
 		m_upCollisionDetection->PlayerAttackToEnemyCollision(m_upPlayer->GetNormalAttack_p(), m_upEnemy);
+		//プレイヤーのアタックとボスの当たり判定	これはボス戦のみ動かす
+		m_upCollisionDetection->PlayerAttackToBossCollision(m_upPlayer->GetNormalAttack_p(), m_upBoss);
 
 
 		//ワイヤーを撃つ処理
