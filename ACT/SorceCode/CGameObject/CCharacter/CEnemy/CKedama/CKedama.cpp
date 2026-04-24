@@ -30,6 +30,12 @@ CKedama::CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower
 	//落下速度の初期化
 	m_FallingSpeed = 0;
 
+	//攻撃を受けたときに使う変数の初期化
+	m_HitBack = false;
+	m_HitBackCo = 0;
+	//ヒットバックする速度
+	m_HitBackSpeed = { 5,10 };
+
 	StartSetting();
 
 	//ムーブを変えるタイミングを決める
@@ -140,6 +146,7 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				//ジャンプする
 				m_FallingSpeed = -m_JumpPower;
 				m_JumpingCo = 0;
+				m_Jumping = true;
 
 				//地面から離れた
 				m_GroundStand = false;
@@ -164,6 +171,38 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		else {
 			NoHitAttackCo++;
 		}
+
+		//ヒットバック処理
+		if (m_HitBack == true) {
+			if (m_HitBackCo >= 10) {
+				//ヒットバック終了
+				m_HitBackCo = 0;
+				m_HitBack = false;
+
+				//浮いたときに自然に見えるようにする
+				m_FallingSpeed = 0;
+
+				//ヒットバックが終わってから
+				//体力がなくなったら
+				if (HP <= 0) {
+					m_State = enState::Dead;
+				}
+			}
+			else {
+				//プレイヤーが自分よりも右側にいるなら
+				if (m_PlayerPos.x >= m_Position.x) {
+					m_Position.x -= m_HitBackSpeed.x;
+				}
+				//左側
+				else {
+					m_Position.x += m_HitBackSpeed.x;
+				}
+				//上に吹っ飛ぶように
+				m_Position.y -= m_HitBackSpeed.y;
+				
+				m_HitBackCo++;
+			}
+		}
 	}
 
 	//落下するようにする
@@ -173,19 +212,29 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	StageCollision(0,0);
 }
 
-void CKedama::PlayerAttackHit(int Damage)
+void CKedama::PlayerAttackHit(int Damage, int Color)
 {
 	//攻撃が当たった
 	AttackHit = true;
-	//HPを減らす
-	HP -= Damage;
+	//もしプレイヤーの属性と一致していたら
+	if (Color == m_Color) {
+		//確実な死を贈る
+		HP = 0;
+
+		//属性が合っていたらめっちゃぶっ飛ばすように
+		m_HitBackSpeed.x *= 15;
+		m_HitBackSpeed.y += 5;
+	}
+	else {
+		//HPを減らす
+		HP -= Damage;
+	}
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;
 
-	//体力がなくなったら
-	if (HP <= 0) {
-		m_State = enState::Dead;
-	}
+	//ヒットバック準備
+	m_HitBack = true;
+	m_HitBackCo = 0;
 }
 
 void CKedama::Animation()

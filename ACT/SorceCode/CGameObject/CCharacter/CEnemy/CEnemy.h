@@ -32,7 +32,7 @@ public:
 	virtual void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override {};
 
 	//プレイヤーの攻撃がヒットした時の動作
-	virtual void PlayerAttackHit(int Damage) = 0;
+	virtual void PlayerAttackHit(int Damage, int Color) = 0;
 
 	//プレイヤーの位置を取得
 	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
@@ -51,4 +51,8 @@ protected:
 
 	int m_AnimationCo;		//アニメーション変更時間カウント
 	int m_AnimationTime;	//アニメーション変更時間
+
+	bool m_HitBack;			//攻撃を受けたときのヒットバック中かを見る
+	int m_HitBackCo;		//ヒットバック中のカウント
+	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
 };

@@ -18,6 +18,16 @@ CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos)
 	m_BulletShotCo = 0;
 	m_ShotBulletAngle = 0;
 
+	//攻撃を受けたときに使う変数の初期化
+	m_HitBack = false;
+	m_HitBackCo = 0;
+
+	//ベクトル初期化
+	m_Vector = { 0.f,0.f };
+
+	//ヒットバックする速度
+	m_HitBackSpeed = { 15,15 };
+
 	StartSetting();
 
 	//装飾クラスを作る
@@ -129,44 +139,46 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	//バレットを撃ちだす動作
-	m_BulletShotCo++;
-	if (m_BulletShot == true) {
-		m_BulletShot = false;
-		m_BulletShotCo = 0;
+	if (AttackHit == false) {
+		//バレットを撃ちだす動作
+		m_BulletShotCo++;
+		if (m_BulletShot == true) {
+			m_BulletShot = false;
+			m_BulletShotCo = 0;
 			//360°方向に打てるバレットを作る
-		for (int i = 0; i < m_AmountBullet; i++) {
-			upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 180, 0, false));
+			for (int i = 0; i < m_AmountBullet; i++) {
+				upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 180, 0, false));
+			}
 		}
-	}
-	if (m_BulletShotCo >= m_BulletShotTiming) {
-		m_BulletShot = true;
-	}
+		if (m_BulletShotCo >= m_BulletShotTiming) {
+			m_BulletShot = true;
+		}
 
-	switch (m_Color) {
-	case enColor::NoColor:
-		break;
-	case enColor::Red:
-		//撃つたびに角度を変える
-		if (m_BulletShot == true) {
-			m_ShotBulletAngle += 45;
+		switch (m_Color) {
+		case enColor::NoColor:
+			break;
+		case enColor::Red:
+			//撃つたびに角度を変える
+			if (m_BulletShot == true) {
+				m_ShotBulletAngle += 45;
+			}
+			break;
+		case enColor::Yellow:
+			if (m_BulletShot == true) {
+				m_ShotBulletAngle += 20;
+			}
+			break;
+		case enColor::Green:
+			if (m_BulletShot == true) {
+				m_ShotBulletAngle += 60;
+			}
+			break;
+		case enColor::Blue:
+			if (m_BulletShot == true) {
+				m_ShotBulletAngle += 10;
+			}
+			break;
 		}
-		break;
-	case enColor::Yellow:
-		if (m_BulletShot == true) {
-			m_ShotBulletAngle += 20;
-		}
-		break;
-	case enColor::Green:
-		if (m_BulletShot == true) {
-			m_ShotBulletAngle += 60;
-		}
-		break;
-	case enColor::Blue:
-		if (m_BulletShot == true) {
-			m_ShotBulletAngle += 10;
-		}
-		break;
 	}
 
 	//攻撃を受けたとき
@@ -185,6 +197,28 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 	}
 
+	//ヒットバック処理
+	if (m_HitBack == true) {
+		if (m_HitBackCo >= 10) {
+			//ヒットバック終了
+			m_HitBackCo = 0;
+			m_HitBack = false;
+
+			//ヒットバックが終わってから
+			//体力がなくなったら
+			if (HP <= 0) {
+				m_State = enState::Dead;
+			}
+		}
+		else {
+			//ベクトルに変えたので、攻撃された反対の方向に飛ぶ
+			m_Position.x += m_Vector.x;
+			m_Position.y += m_Vector.y;
+
+			m_HitBackCo++;
+		}
+	}
+
 	//まわり続けるように
 	m_Delection.z += 7;
 
@@ -194,19 +228,37 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 }
 
-void CYinYangBall::PlayerAttackHit(int Damage)
+void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 {
+	double Speed = 0.f;	//スピード
+
 	//攻撃が当たった
 	AttackHit = true;
-	//HPを減らす
-	HP -= Damage;
+	//もしプレイヤーの属性と一致していたら
+	if (Color == m_Color) {
+		//確実な死を贈る
+		HP = 0;
+
+		//属性が合っていたらめっちゃぶっ飛ばすように
+		Speed = m_HitBackSpeed.x * 5;
+	}
+	else {
+		//HPを減らす
+		HP -= Damage;
+
+		//普通のスピード
+		Speed = m_HitBackSpeed.x;
+	}
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;
 
-	//体力がなくなったら
-	if (HP <= 0) {
-		m_State = enState::Dead;
-	}
+	//ヒットバック準備
+	m_HitBack = true;
+	m_HitBackCo = 0;
+
+	//攻撃した方向と逆に行くように
+	m_Vector.x = cos(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
+	m_Vector.y = sin(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
 }
 
 void CYinYangBall::Animation()

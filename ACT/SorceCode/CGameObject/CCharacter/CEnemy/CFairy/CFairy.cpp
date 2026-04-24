@@ -21,6 +21,12 @@ CFairy::CFairy(int Kinds, VECTOR2_f SetPos, VECTOR2_f Speed, int MoveType, int M
 	m_BulletShot = false;
 	m_BulletShotCo = 0;
 
+	//攻撃を受けたときに使う変数の初期化
+	m_HitBack = false;
+	m_HitBackCo = 0;
+	//妖精のみ、吹っ飛ぶ速度が速いようにする
+	m_HitBackSpeed = { 25,25 };
+
 	StartSetting();
 
 	//呼び出された位置を記憶する
@@ -118,33 +124,38 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	//属性によって撃つバレットを変える
-	switch (m_Color) {
-	case enColor::NoColor:
-		//バレットを撃ちだす動作
-		m_BulletShotCo++;
-		if (m_BulletShot == true) {
-			m_BulletShot = false;
-			m_BulletShotCo = 0;
-			//プレイヤーを狙うバレット
-			upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 24, m_PlayerPos, 64, 60, false));
+	//攻撃を受けていなければ
+	if (AttackHit == false) {
+		//属性によって撃つバレットを変える
+		switch (m_Color) {
+		case enColor::NoColor:
+			//バレットを撃ちだす動作
+			m_BulletShotCo++;
+			if (m_BulletShot == true) {
+				m_BulletShot = false;
+				m_BulletShotCo = 0;
+				//プレイヤーを狙うバレット
+				upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 24, m_PlayerPos, 64, 60, false));
+			}
+			if (m_BulletShotCo >= m_BulletShotTiming) {
+				m_BulletShot = true;
+			}
+			break;
+		case enColor::Red:
+			break;
+		case enColor::Yellow:
+			break;
+		case enColor::Green:
+			break;
+		case enColor::Blue:
+			break;
 		}
-		if (m_BulletShotCo >= m_BulletShotTiming) {
-			m_BulletShot = true;
-		}
-		break;
-	case enColor::Red:
-		break;
-	case enColor::Yellow:
-		break;
-	case enColor::Green:
-		break;
-	case enColor::Blue:
-		break;
-	}
 
+		//ムーブの動作関数
+		MoveControl();
+	}
 	//攻撃を受けたとき
-	if (AttackHit == true) {
+	else if (AttackHit == true) {
 		//半透明にする
 		m_Alpha = 150;
 		//攻撃が当たらない時間を過ぎたら
@@ -159,24 +170,64 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 	}
 
-	//ムーブの動作関数
-	MoveControl();
+	//ヒットバック処理
+	if (m_HitBack == true) {
+		if (m_HitBackCo >= 10) {
+			//ヒットバック終了
+			m_HitBackCo = 0;
+			m_HitBack = false;
+
+			//ヒットバックが終わってから
+			//体力がなくなったら
+			if (HP <= 0) {
+				m_State = enState::Dead;
+			}
+
+			//吹っ飛んだ先で動くようにする
+			m_MasterPosition = m_Position;
+		}
+		else {
+			//ベクトルに変えたので、攻撃された反対の方向に飛ぶ
+			m_Position.x += m_Vector.x;
+			m_Position.y += m_Vector.y;
+
+			m_HitBackCo++;
+		}
+	}
 
 }
 
-void CFairy::PlayerAttackHit(int Damage)
+void CFairy::PlayerAttackHit(int Damage, int Color)
 {
+	double Speed = 0.f;	//スピード
+
 	//攻撃が当たった
 	AttackHit = true;
-	//HPを減らす
-	HP -= Damage;
+	//もしプレイヤーの属性と一致していたら
+	if (Color == m_Color) {
+		//確実な死を贈る
+		HP = 0;
+
+		//属性が合っていたらめっちゃぶっ飛ばすように
+		Speed = m_HitBackSpeed.x * 5;
+	}
+	else {
+		//HPを減らす
+		HP -= Damage;
+
+		//普通のスピード
+		Speed = m_HitBackSpeed.x;
+	}
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;
 
-	//体力がなくなったら
-	if (HP <= 0) {
-		m_State = enState::Dead;
-	}
+	//ヒットバック準備
+	m_HitBack = true;
+	m_HitBackCo = 0;
+
+	//攻撃した方向と逆に行くように
+	m_Vector.x = cos(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
+	m_Vector.y = sin(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
 }
 
 void CFairy::Animation()
