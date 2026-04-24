@@ -39,6 +39,7 @@ CPlayer::CPlayer()
 	, m_MoveSpeed(0)
 	, WireTopPos(0,0)
 	, OldenActionState(false)
+	, AvoidanceCanCount(AvoidanceCan)
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -527,7 +528,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 									if (m_Rdash == true || m_Ldash == true) { m_Framesplit.x = ImageSize * 4; }
 								}
 								m_Jumping = false;
-							
+								AvoidanceCanCount = AvoidanceCan;
 								m_JumpRemove = false;
 								m_JumpAcc = 0;
 								m_Acceleration.y = 0;
@@ -724,13 +725,22 @@ void CPlayer::AirKeyInput()
 		else {
 			m_MoveState = enMoveState::Wait;
 		}
+		if (AvoidanceCanCount>0) {
+			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+				AvoidanceCanCount--;
+				enActionState = enActionState::AirAvoidance;
+				AirAvoidanceVECTSet();
+				if (AirAvoidanceVECT.x == 0&& AirAvoidanceVECT.y==0) {
+					AvoidanceCount = AvoidanceTime*3;
+				}
+				else {
+					AvoidanceCount = AvoidanceTime;
+				}
 
-		if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
-
-			enActionState = enActionState::AirAvoidance;
-			AirAvoidanceVECTSet();
-			AvoidanceCount = AvoidanceTime;
+			}
+			
 		}
+
 
 	}
 	//ワイヤー発射指示
