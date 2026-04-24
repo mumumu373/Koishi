@@ -160,7 +160,9 @@ private:
 	CCamera* m_pCamera;
 	int m_AnimationCount;
 	int m_OldSteta;
+	int OldenActionState;
 	double m_MoveSpeed;	//ˆÚ“®‘¬“x‚ð“ü‚ê‚é
 
 	VECTOR2_f WireTopPos;
+	
 };
