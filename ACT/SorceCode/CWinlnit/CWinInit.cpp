@@ -129,6 +129,24 @@ LRESULT CALLBACK WindowProc(
 		return 0;
 
 	case WM_CREATE:		//ウィンドウが生成される時.
+		if (SIZEMAX == true) {
+			//ウィンドウスタイル変更
+			SetWindowLong(hWnd, GWL_STYLE, WS_POPUP);
+			//フルスクリーン化
+			DEVMODE changWinSize;
+			ZeroMemory(&changWinSize, sizeof(changWinSize));//構造体はゼロクリア
+			changWinSize.dmSize = sizeof(changWinSize);//
+			changWinSize.dmPelsWidth = WND_W;
+			changWinSize.dmPelsHeight = WND_H;//dmPanningHeight
+			changWinSize.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+			LONG Result = ChangeDisplaySettingsEx(NULL, &changWinSize, NULL, 0, NULL);
+			SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
+			SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+			//画面フルスクリーン化したらマウスを消す処理
+			if (ShowCursor(false) >= 0) {while (1){if (ShowCursor(false) < 0) { break; }}}
+		}
+
+
 		//----------------------------------------------------------
 		//	スレッドの設定.
 		//----------------------------------------------------------
@@ -205,7 +223,7 @@ LRESULT CALLBACK WindowProc(
 		DestroyWindow(hWnd);
 		ChangeDisplaySettingsEx(NULL, NULL, NULL, 0, NULL);//画面サイズ戻す
 		return 0;
-
+	
 	case WM_SIZE:	//ウィンドウがサイズを変更した状態になったら
 
 		//最大化ボタンが押されたら
@@ -290,17 +308,28 @@ LRESULT CALLBACK WindowProc(
 				RECT SCRISIZE;
 				//サイズ取得
 				GetClientRect(hWnd, &SCRISIZE);
+
+				//横に合わせて縦のサイズを変更
+
+				SCRISIZE.right = WND_W;
+				SCRISIZE.bottom = WND_H;
+
 				//アジャスト
 				AdjustWindowRect(&SCRISIZE, WS_OVERLAPPEDWINDOW, FALSE);
-				//横に合わせて縦のサイズを変更
-				SCRISIZE.bottom = (int)(SCRISIZE.right * WND_H / WND_W);
-
 				//反映
 				SetWindowPos(hWnd, NULL, 0, 0, SCRISIZE.right - SCRISIZE.left, SCRISIZE.bottom - SCRISIZE.top,
 					SWP_NOMOVE | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 			}
 		}
-	case WM_PAINT:		//ウィンドウが更新された時.
+		return 0;
+	case WM_GETMINMAXINFO: {
+		MINMAXINFO* mmi = (MINMAXINFO*)lParam;
+		// 制限を非常に大きな値に書き換える（例: 10000ピクセル）
+		mmi->ptMaxTrackSize.x = 10000;
+		mmi->ptMaxTrackSize.y = 10000;
+		return 0;
+	}
+	case WM_MOUSEMOVE:
 		if (SIZEMAX == true) {
 			LONG STYLE;
 			POINT casorpos;
@@ -328,19 +357,20 @@ LRESULT CALLBACK WindowProc(
 					WSize.right = WND_W;	//右.
 					WSize.bottom = WND_H;	//下
 
-					//オーバーラップ分の画面サイズを取得
-					AdjustWindowRect(
-						&WSize,					//(in)画面サイズが入った矩形構造体.(out)計算結果.
-						WS_OVERLAPPEDWINDOW,	//ウィンドウスタイル.
-						FALSE);					//メニューを持つかどうかの指定.
+					////オーバーラップ分の画面サイズを取得
+					//AdjustWindowRect(
+					//	&WSize,					//(in)画面サイズが入った矩形構造体.(out)計算結果.
+					//	WS_OVERLAPPEDWINDOW,	//ウィンドウスタイル.
+					//	FALSE);					//メニューを持つかどうかの指定.
 
+					AdjustWindowRect(&WSize, WS_OVERLAPPEDWINDOW, FALSE);
 					//ウィンドウ幅高さを入れる
-					int w = WSize.right - WSize.left;
-					int h = WSize.bottom - WSize.top;
-
+					double w = WSize.right - WSize.left;
+					double h = WSize.bottom - WSize.top;
+		
 					//反映
-					SetWindowPos(hWnd, NULL, WSize.left, 0, w, h,
-						 SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+					SetWindowPos(hWnd, NULL, 0, 0, w, h,
+						SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
 					//カーソルを上に持ってきたら表示する
 					if (ShowCursor(true) < 0) {
@@ -355,7 +385,7 @@ LRESULT CALLBACK WindowProc(
 				if ((cap)) {
 					SetWindowLong(hWnd, GWL_STYLE, WS_POPUP);
 					SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
-						  SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+						SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 				}
 
 				//カーソルがゲームの邪魔をしないようにする
@@ -367,6 +397,10 @@ LRESULT CALLBACK WindowProc(
 				}
 			}
 		}
+		return 0;
+
+	case WM_PAINT:		//ウィンドウが更新された時.
+	
 
 		//描画開始.
 		hDC = BeginPaint( hWnd, &ps );
@@ -380,16 +414,25 @@ LRESULT CALLBACK WindowProc(
 			GetClientRect(hWnd, &rc);
 
 			// メモリDCの描画内容を、新しいサイズに拡大縮小してコピー
-			SetStretchBltMode(hDC, COLORONCOLOR); // 縮小時の品質設定
+			//SetStretchBltMode(hDC, COLORONCOLOR); // 縮小時の品質設定
 			StretchBlt(hDC,
+				0, 0,
+				rc.right+ rc.left,
+				rc.bottom + rc.top,
+				gameWnd.hScreenDC,
+				0, 0,
+				WND_W-1,
+				WND_H-1,
+				SRCCOPY);
+		/*	BitBlt(hDC,
 				0, 0,
 				rc.right,
 				rc.bottom,
 				gameWnd.hScreenDC,
 				0, 0,
-				WND_W,
-				WND_H,
-				SRCCOPY);
+				SRCCOPY);*/
+				  
+			//DwmFlush();
 		}
 
 		//描画終了.
@@ -597,3 +640,5 @@ HRESULT CWinInit::CreateMyWindow(
 
 	return S_OK;
 }
+
+

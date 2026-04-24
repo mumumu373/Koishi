@@ -37,6 +37,7 @@ CPlayer::CPlayer()
 	, m_AnimationCount(0)
 	, m_OldSteta(0)
 	, m_MoveSpeed(0)
+	, WireTopPos(0,0)
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -386,6 +387,13 @@ void CPlayer::Animation()
 	case enActionState::WirePointCatch:
 		m_Framesplit.y = ImageSize * 4;
 		m_Framesplit.x = 0;
+
+		if (m_Position.x < WireTopPos.x) {
+			m_Delection.y = 180;
+		}
+		else {
+			m_Delection.y = 0;
+		}
 		break;
 	case enActionState::Attack:
 		m_Framesplit.y = ImageSize * 3;
@@ -882,6 +890,11 @@ void CPlayer::Dash()
 		m_Ldash = false;
 		break;
 	}
+}
+
+void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
+{
+	WireTopPos = TopPos;
 }
 
 void CPlayer::PlayerColorChange()

@@ -431,6 +431,7 @@ void CGame::Draw()
 		m_pWire->Draw(m_upCamera);
 
 		//プレイヤーの描画
+		m_upPlayer->SetWireTopPos(m_pWire->GetTopPoint());
 		m_upPlayer->Draw(m_upCamera);
 		//ワイヤーの手の描画
 		m_pWire->WireHandDraw(m_upCamera);

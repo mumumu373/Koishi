@@ -113,6 +113,7 @@ public://パブリック
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
 
 	bool MoveSafeWrier(VECTOR2_f pos);
+	void SetWireTopPos(VECTOR2_f TopPos);
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 private:
@@ -160,4 +161,6 @@ private:
 	int m_AnimationCount;
 	int m_OldSteta;
 	double m_MoveSpeed;	//移動速度を入れる
+
+	VECTOR2_f WireTopPos;
 };
