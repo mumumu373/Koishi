@@ -73,4 +73,7 @@ private:
 
 	VECTOR2_f m_MemoryPos;		//ポジションを記憶しておく
 	VECTOR2_f m_BattleStartPos;	//ボスバトルのスタート位置
+private:
+	int m_AttackAnimCo;			//攻撃アニメーションのカウント
+	bool m_AttackAnimTime;		//攻撃アニメーション中
 };

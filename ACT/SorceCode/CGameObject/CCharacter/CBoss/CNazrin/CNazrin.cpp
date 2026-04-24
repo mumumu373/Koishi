@@ -3,6 +3,8 @@
 CNazrin::CNazrin()
 	: m_BulletShot(false)
 	, m_BulletShotCo(0)
+	, m_AttackAnimCo(0)
+	, m_AttackAnimTime(false)
 {
 	//m_Position = SetPos;
 	m_Position = { 400,400 };
@@ -172,7 +174,7 @@ void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
 	m_BattleStartPos = m_Position;
 
 	//スタンバイ状態を早めに解いておく
-	m_AttackMoveChangeCo = 240;
+	m_AttackMoveChangeCo = 160;
 
 	//青色の状態から始まるようにする
 	m_Color = enColor::Blue;
@@ -189,15 +191,48 @@ void CNazrin::MovieSceneUpdate()
 
 void CNazrin::Animation()
 {
-	m_AnimetionCo++;
-
-	if (m_AnimetionCo >= 15) {
-		m_Framesplit.x += 64;
-		//最後のアニメーションなら
-		if (m_Framesplit.x > 64*3) {
-			m_Framesplit.x = 0;
-		}
+	//攻撃アニメーション
+	if (m_AttackAnimTime == true) {
+		//ほかのアニメーションのカウントリセット
 		m_AnimetionCo = 0;
+
+		m_Framesplit.x = 0;
+		m_Framesplit.y = 128;
+		//15フレームたったら
+		if (m_AttackAnimCo >= 15) {
+			//アニメーションを変える
+			m_Framesplit.x = 64;
+		}
+		else {
+			m_AttackAnimCo++;
+		}
+	}
+	//ジャンプアニメーション
+	else if (m_GroundStand == false) {
+		m_Framesplit.x = 0;
+		m_Framesplit.y = 64;
+
+		//ほかのアニメーションのカウントリセット
+		m_AnimetionCo = 0;
+		m_AttackAnimCo = 0;
+	}
+	//待機アニメーション
+	else {
+		//ほかのアニメーションのカウントリセット
+		m_AttackAnimCo = 0;
+
+		m_Framesplit.x = 0;
+		m_Framesplit.y = 0;
+
+		m_AnimetionCo++;
+		if (m_AnimetionCo >= 15) {
+			m_Framesplit.x += 64;
+			//最後のアニメーションなら
+			if (m_Framesplit.x > 64 * 3) {
+				m_Framesplit.x = 0;
+			}
+			m_AnimetionCo = 0;
+		}
 	}
 }
 
@@ -230,9 +265,11 @@ void CNazrin::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 					if (std::abs(MoveRangeY) <= 1.0f) {
 						//地面の判定
 						if (MoveRangeY > 0) {
-							m_FallingSpeed = 0;
+							if (m_GroundStand == false) {
+								m_FallingSpeed = 0;
 
-							m_GroundStand = true;
+								m_GroundStand = true;
+							}
 						}
 						//天井の判定
 						else {
@@ -305,6 +342,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 			else {
 				m_BulletShotCo++;
 			}
+
+			//攻撃アニメーション中
+			m_AttackAnimTime = true;
 		}
 		//次の行動をする
 		else {
@@ -320,6 +360,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 
 						//地面から離れた
 						m_GroundStand = false;
+
+						//攻撃アニメーションではなくする
+						m_AttackAnimTime = false;
 					}
 
 					//地面にいない間だけ移動する
@@ -370,6 +413,8 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 					//ジャンプする前の場所を記憶
 					m_MemoryPos = m_Position;
 
+					//攻撃アニメーションではなくする
+					m_AttackAnimTime = false;
 				}
 			}
 			else {
