@@ -139,7 +139,7 @@ void CCollisionDetection::PlayerAttackToEnemyCollision(std::unique_ptr<CNormalAt
 					if (upEnemy[EnemyNo]->AttackHit == false) {
 						//‰~Œ`‚Æ‹éŒ`‚Ì”»’è‚ÅŒ©‚é
 						if (CircleToSquareDetection(EnemyPos, upNormalAttack->GetColion(AttackCollision)) == true) {
-							upEnemy[EnemyNo]->PlayerAttackHit(20);
+							upEnemy[EnemyNo]->PlayerAttackHit(20, upNormalAttack->m_PlayerColor);
 						}
 					}
 				}
