@@ -129,8 +129,8 @@ void CCamera::Update()
 	m_CameraSpeed = { 0,0 };
 
 	//カメラの中央から離れるほどスピードが上がる
-	m_CameraSpeed.x = (m_CameraMasterPos.x - m_Position.x) / 15;
-	m_CameraSpeed.y = (m_CameraMasterPos.y - m_Position.y) / 15;
+	m_CameraSpeed.x = (m_CameraMasterPos.x - m_Position.x) / 10;
+	m_CameraSpeed.y = (m_CameraMasterPos.y - m_Position.y) / 10;
 
 	//スピード分移動
 	m_Position.x += m_CameraSpeed.x;
