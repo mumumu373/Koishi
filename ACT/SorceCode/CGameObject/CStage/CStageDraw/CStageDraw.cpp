@@ -32,8 +32,8 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
             if (m_mapData[y][x] == 15) continue;
 
             CImageManager::SelectImg(CImageManager::enImgList::IMG_StageMain)->TransBlt(
-                (x * m_Chip.w + StagePos.x), // 表示x座標
-                (y * m_Chip.h + StagePos.y), // 表示y座標
+                (x * m_Chip.w + StagePos.x),      // 表示x座標
+                (y * m_Chip.h + StagePos.y),      // 表示y座標
                 m_Chip.w,                         // 切り取り幅
                 m_Chip.h,                         // 切り取り高さ
                 m_mapData[y][x] * m_Chip.w,       // 元画像x座標

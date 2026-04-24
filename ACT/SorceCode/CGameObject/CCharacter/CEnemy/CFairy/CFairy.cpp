@@ -49,7 +49,7 @@ void CFairy::StartSetting()
 
 	switch (m_Color) {
 	case enColor::NoColor:
-		m_Framesplit = { 0,32,32,32 };
+		m_Framesplit = { 32 * m_Color,32,32,32 };
 
 		//打ち出すタイミングを設定
 		m_BulletShotTiming = 2;
@@ -57,28 +57,28 @@ void CFairy::StartSetting()
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Red:
-		m_Framesplit = { 0,32,100,100 };
+		m_Framesplit = { 32 * m_Color,32,100,100 };
 
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Yellow:
-		m_Framesplit = { 32,32,32,32 };
+		m_Framesplit = { 32 * m_Color,32,32,32 };
 
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Green:
-		m_Framesplit = { 32,32,100,100 };
+		m_Framesplit = { 32 * m_Color,32,100,100 };
 
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Blue:
-		m_Framesplit = { 0,32,200,200 };
+		m_Framesplit = { 32 * m_Color,32,200,200 };
 
 		m_BulletShotTiming = 60;
 
@@ -187,6 +187,20 @@ void CFairy::Animation()
 	}
 	else {
 		m_Delection.y = 0;
+	}
+
+	if (m_AnimationCo >= m_AnimationTime) {
+		m_AnimationCo = 0;
+
+		//アニメーション
+		m_Framesplit.x += 160;
+		//繰り返す
+		if (m_Framesplit.x >= 320) {
+			m_Framesplit.x = 32 * m_Color;
+		}
+	}
+	else {
+		m_AnimationCo++;
 	}
 }
 

@@ -35,6 +35,9 @@ CKedama::CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower
 	//ムーブを変えるタイミングを決める
 	m_ChangeMoveTime = ChangeMoveTime;
 	m_ChangeMoveCo = 0;
+
+	//アニメーションカウントセット
+	m_AnimationCo = 0;
 }
 
 CKedama::~CKedama()
@@ -47,19 +50,19 @@ void CKedama::StartSetting()
 
 	switch (m_Color) {
 	case enColor::NoColor:
-		m_Framesplit = { 0,0,80,80 };
+		m_Framesplit = { 32 * m_Color,0,80,80 };
 		break;
 	case enColor::Red:
-		m_Framesplit = { 32,0,100,100 };
+		m_Framesplit = { 32 * m_Color,0,100,100 };
 		break;
 	case enColor::Yellow:
-		m_Framesplit = { 32,0,100,100 };
+		m_Framesplit = { 32 * m_Color,0,100,100 };
 		break;
 	case enColor::Green:
-		m_Framesplit = { 32,0,100,100 };
+		m_Framesplit = { 32 * m_Color,0,100,100 };
 		break;
 	case enColor::Blue:
-		m_Framesplit = { 0,0,200,200 };
+		m_Framesplit = { 32 * m_Color,0,200,200 };
 		break;
 	}
 	//元画像サイズ
@@ -196,6 +199,20 @@ void CKedama::Animation()
 	case enMoveState::MoveRight:
 		m_Delection.y = 180;
 		break;
+	}
+
+	if (m_AnimationCo >= m_AnimationTime) {
+		m_AnimationCo = 0;
+
+		//アニメーション
+		m_Framesplit.x += 160;
+		//繰り返す
+		if (m_Framesplit.x >= 320) {
+			m_Framesplit.x = 32 * m_Color;
+		}
+	}
+	else {
+		m_AnimationCo++;
 	}
 }
 
