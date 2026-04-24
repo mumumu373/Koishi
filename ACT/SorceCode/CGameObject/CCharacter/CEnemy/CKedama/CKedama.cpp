@@ -112,53 +112,54 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	switch (m_Color) {
-	case enColor::NoColor:
-		break;
-	case enColor::Red:
-		break;
-	case enColor::Yellow:
-		break;
-	case enColor::Green:
-		break;
-	case enColor::Blue:
-		break;
-	}
+	if (AttackHit == false) {
+		switch (m_Color) {
+		case enColor::NoColor:
+			break;
+		case enColor::Red:
+			break;
+		case enColor::Yellow:
+			break;
+		case enColor::Green:
+			break;
+		case enColor::Blue:
+			break;
+		}
 
-	switch (m_MoveState) {
-	case enMoveState::Wait:
-		break;
-	case enMoveState::MoveLeft:
-		//ステージに対してその場所に行けるか判定
-		m_Position.x -= m_Speed.x;
-		break;
-	case enMoveState::MoveRight:
-		m_Position.x += m_Speed.x;
-		break;
-	}
+		switch (m_MoveState) {
+		case enMoveState::Wait:
+			break;
+		case enMoveState::MoveLeft:
+			//ステージに対してその場所に行けるか判定
+			m_Position.x -= m_Speed.x;
+			break;
+		case enMoveState::MoveRight:
+			m_Position.x += m_Speed.x;
+			break;
+		}
 
-	//ジャンプをさせないなら
-	if (m_JumpingTime != 0) {
-		//地面に立っているなら
-		if (m_GroundStand == true) {
-			//ジャンプするタイミングなら
-			if (m_JumpingCo > m_JumpingTime) {
-				//ジャンプする
-				m_FallingSpeed = -m_JumpPower;
-				m_JumpingCo = 0;
-				m_Jumping = true;
+		//ジャンプをさせないなら
+		if (m_JumpingTime != 0) {
+			//地面に立っているなら
+			if (m_GroundStand == true) {
+				//ジャンプするタイミングなら
+				if (m_JumpingCo > m_JumpingTime) {
+					//ジャンプする
+					m_FallingSpeed = -m_JumpPower;
+					m_JumpingCo = 0;
+					m_Jumping = true;
 
-				//地面から離れた
-				m_GroundStand = false;
-			}
-			else {
-				m_JumpingCo++;
+					//地面から離れた
+					m_GroundStand = false;
+				}
+				else {
+					m_JumpingCo++;
+				}
 			}
 		}
 	}
-
 	//攻撃を受けたとき
-	if (AttackHit == true) {
+	else if (AttackHit == true) {
 		//半透明にする
 		m_Alpha = 150;
 		//攻撃が当たらない時間を過ぎたら
@@ -223,7 +224,7 @@ void CKedama::PlayerAttackHit(int Damage, int Color)
 
 		//属性が合っていたらめっちゃぶっ飛ばすように
 		m_HitBackSpeed.x *= 15;
-		m_HitBackSpeed.y += 5;
+		m_HitBackSpeed.y *= 3;
 	}
 	else {
 		//HPを減らす
