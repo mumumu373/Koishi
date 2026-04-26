@@ -156,8 +156,6 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 	//攻撃を受けたとき
 	else if (AttackHit == true) {
-		//半透明にする
-		m_Alpha = 150;
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
@@ -167,6 +165,17 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 		else {
 			NoHitAttackCo++;
+
+			//点滅するようにする
+			if (NoHitAttackCo % 7 == 0) {
+				if (m_Alpha == 0) {
+					//半透明にする
+					m_Alpha = 200;
+				}
+				else {
+					m_Alpha = 0;
+				}
+			}
 		}
 	}
 
@@ -180,7 +189,8 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			//ヒットバックが終わってから
 			//体力がなくなったら
 			if (HP <= 0) {
-				m_State = enState::Dead;
+				//エネミーが死んだときの処理
+				EnemyIsDead();
 			}
 
 			//吹っ飛んだ先で動くようにする
@@ -203,6 +213,9 @@ void CFairy::PlayerAttackHit(int Damage, int Color)
 
 	//攻撃が当たった
 	AttackHit = true;
+	//半透明にする
+	m_Alpha = 200;
+
 	//もしプレイヤーの属性と一致していたら
 	if (Color == m_Color) {
 		//確実な死を贈る

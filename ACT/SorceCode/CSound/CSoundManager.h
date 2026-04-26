@@ -15,13 +15,13 @@ public:
 	{
 		BGM_NoSound,		//無音
 
+		BGM_TitleStart,		//タイトルBGMの最初
+		BGM_Title,			//タイトルBGM
+
 		BGM_Stage1,			//ステージ1、2のステージBGM
 
 		BGM_Boss1,			//ナズーリンのBGM
 		BGM_Boss2,			//正邪のBGM
-
-		BGM_Boss5_Intro,	//ボス5のイントロ
-		BGM_Boss5,			//ボス5BGM
 
 		//音が増えたら「ここ」に追加
 		SingleSound_MAX,						//最大数

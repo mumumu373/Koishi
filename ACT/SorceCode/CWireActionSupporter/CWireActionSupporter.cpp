@@ -6,7 +6,7 @@ CWireActionSupporter::CWireActionSupporter()
 	, m_dpWire(nullptr)
 	, m_dpWirePoint(nullptr)
 	, m_dpPlayer(nullptr)
-	, m_dpEnemi(nullptr)
+	, m_pEnemy(nullptr)
 	, OldWallHit(false)
 {
 	for (int i = 0; i < 2; i++) {
@@ -73,13 +73,13 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 		m_dpPlayer->StartWirePointCatch();
 		//m_dpPlayer->StaratEnemiWire();
 		m_dpWire = m_DPWire;
-		m_dpEnemi = m_DPEnemi;
+		m_pEnemy = m_DPEnemi;
 
 		NawSpeed = m_DPlayer->GetWireStartSpeed();
 
 		VECTOR2_f TopPos;
-		TopPos.x = m_dpEnemi->GetCenterPosition().x - m_dpWire->GetSize() / 2;
-		TopPos.y = m_dpEnemi->GetCenterPosition().y- m_dpWire->GetSize() / 2;
+		TopPos.x = m_pEnemy->GetCenterPosition().x - m_dpWire->GetSize() / 2;
+		TopPos.y = m_pEnemy->GetCenterPosition().y- m_dpWire->GetSize() / 2;
 		m_dpWire->SetTopPoint(TopPos);
 		PlayerTurnaround();
 	}
@@ -94,7 +94,7 @@ void CWireActionSupporter::Update()
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
 		WirePointAction();
 	}
-	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpEnemi != nullptr) {
+	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_pEnemy != nullptr) {
 		EnemitoAction();
 	}
 }
@@ -122,8 +122,8 @@ void CWireActionSupporter::PlayerTurnaround()
 	if (m_dpWirePoint!=nullptr) {
 		m_dpPlayer->Turnaround(m_dpWirePoint->GetCenterPosition());
 	}
-	if (m_dpEnemi!= nullptr) {
-		m_dpPlayer->Turnaround(m_dpEnemi->GetCenterPosition());
+	if (m_pEnemy!= nullptr) {
+		m_dpPlayer->Turnaround(m_pEnemy->GetCenterPosition());
 	}
 
 }
@@ -310,7 +310,7 @@ void CWireActionSupporter::AllNullptr()
 	m_dpPlayer = nullptr;
 	m_dpWire = nullptr;
 	m_dpWirePoint = nullptr;
-	m_dpEnemi = nullptr;
+	m_pEnemy = nullptr;
 }
 
 
@@ -320,25 +320,25 @@ void CWireActionSupporter::EnemitoAction()
 	{
 		
 
-		m_dpEnemi->CatchWire();
+		m_pEnemy->CatchWire();
 		VECTOR2_f TopPos;
-		TopPos.x = m_dpEnemi->GetCenterPosition().x - m_dpWire->GetSize() / 2;
-		TopPos.y = m_dpEnemi->GetCenterPosition().y - m_dpWire->GetSize() / 2;
+		TopPos.x = m_pEnemy->GetCenterPosition().x - m_dpWire->GetSize() / 2;
+		TopPos.y = m_pEnemy->GetCenterPosition().y - m_dpWire->GetSize() / 2;
 		m_dpWire->SetTopPoint(TopPos);
 		//[1]がOldPositionらしい
 
 
-		double Long = GetHowToLong(m_dpPlayer->GetCenterPosition(), m_dpEnemi->GetCenterPosition());
+		double Long = GetHowToLong(m_dpPlayer->GetCenterPosition(), m_pEnemy->GetCenterPosition());
 
 	
 
 		Long -= EnemiReedPower;
-		double Radian = GetDelectionVect(m_dpPlayer->GetCenterPosition(), m_dpEnemi->GetCenterPosition());
+		double Radian = GetDelectionVect(m_dpPlayer->GetCenterPosition(), m_pEnemy->GetCenterPosition());
 
 
-		double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * Long) - m_dpEnemi->GetFrameSplit().w / 2;
-		double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * Long) - m_dpEnemi->GetFrameSplit().h / 2;
-		m_dpEnemi->SetPosition({ x,y });
+		double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * Long) - m_pEnemy->GetFrameSplit().w / 2;
+		double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * Long) - m_pEnemy->GetFrameSplit().h / 2;
+		m_pEnemy->SetPosition({ x,y });
 
 		if (Long < AttackEria) {
 			m_dpPlayer->StaratEnemiWire();
@@ -358,9 +358,9 @@ void CWireActionSupporter::EnemitoAction()
 			}
 
 
-			double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * AttackEria) - m_dpEnemi->GetFrameSplit().w / 2;
-			double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * AttackEria) - m_dpEnemi->GetFrameSplit().h / 2;
-			m_dpEnemi->SetPosition({ x,y });
+			double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * AttackEria) - m_pEnemy->GetFrameSplit().w / 2;
+			double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * AttackEria) - m_pEnemy->GetFrameSplit().h / 2;
+			m_pEnemy->SetPosition({ x,y });
 
 			if (CMouseInput::GetMouseRight(false, false)) {
 				EnemiActionEnd();
@@ -381,7 +381,12 @@ void CWireActionSupporter::EnemiActionEnd()
 	WireActioning = false;
 	m_dpWire->WireEnd();
 	//ここに敵を飛ばす処理を描く
-
+	if (m_pEnemy != nullptr) {
+		if (m_pEnemy->m_CatchWire == CEnemy::enCatchWire::Catch) {
+			//エネミーを飛ばします！
+			m_pEnemy->SetThrowEnemy();
+		}
+	}
 	///次にマウスを話すまで反応しない
 	CMouseInput::MouseRightStoopr();
 
@@ -390,5 +395,5 @@ void CWireActionSupporter::EnemiActionEnd()
 	//m_dpPlayer->WireEndEnemi();
 	m_dpPlayer = nullptr;
 	m_dpWire = nullptr;
-	m_dpEnemi = nullptr;
+	m_pEnemy = nullptr;
 }

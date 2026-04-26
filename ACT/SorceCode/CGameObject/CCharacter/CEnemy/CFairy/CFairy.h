@@ -31,6 +31,7 @@ public:
 
 	//プレイヤーの攻撃がヒットした時の動作
 	void PlayerAttackHit(int Damage, int Color) override;
+
 private:
 	void Animation() override;
 
@@ -51,8 +52,6 @@ private:
 	int m_MoveCo;			//ムーブの動作切り替えのカウント
 
 	VECTOR2_f m_MovingSpeed;	//ムーブのスピードを参照する変数
-
-	VECTOR2_f m_Vector;			//ベクトルを算出する
 
 	VECTOR2_f m_MasterPosition;	//呼び出された時の位置
 };

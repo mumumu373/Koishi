@@ -93,9 +93,13 @@ private:
 
 	//インスタンスを破棄する関数
 	void DeleteInstance();
-
 	//バレットを削除する関数
 	void DeleteBullet();
+	//エネミーを削除する関数
+	void DeleteEnemy(); 
+
+	//当たり判定をまとめる関数
+	void CollisionUpdate();
 
 	//タイトルからゲームメインに移行する関数
 	void TitleToGameMain();
@@ -125,22 +129,6 @@ private:
 	//														-ゲームシステム面のもの-
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
-
-	//														-ゲームシーン系-
-	//----------------------ブラックフェード-------------
-	 
-	//----------------------ゲームタイトル---------------
-	//CGameTitle* m_pGameTitle;
-
-	//----------------------リザルト--------------------
-	//CResult* m_pResult;
-
-	//														-ゲームUI系-
-	//----------------------ゲージ-----------------------
-	//CGaugeManager* m_pGaugeManager;
-
-	//----------------------プレイヤーUI-----------------
-	//CPlayerUIManager* m_pPlayerUIManager;
 
 	//														-ゲームオブジェクト系-
 	//----------------------プレイヤー-------------------

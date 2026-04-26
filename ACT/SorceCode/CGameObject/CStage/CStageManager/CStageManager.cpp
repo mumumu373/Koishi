@@ -37,7 +37,7 @@ void CStageManager::Update()
 {
 	if(GetAsyncKeyState('L') & 0x8000)
 	{
-		ChangeStage(enStage::Map02);
+		ChangeStage(enStage::MapBoss);
 	}
 }
 
@@ -60,6 +60,7 @@ void CStageManager::SetStageData()
 {
 	m_StageName[enStage::Map01] = "Data\\MapData\\Map01.csv";
 	m_StageName[enStage::Map02] = "Data\\MapData\\Map02.csv";
+	m_StageName[enStage::MapBoss] = "Data\\MapData\\MapBoss.csv";
 }
 
 //--------------------------------------------------------------------------------------------------------------

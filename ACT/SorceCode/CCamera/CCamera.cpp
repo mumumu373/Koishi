@@ -20,8 +20,7 @@ CCamera::~CCamera()
 }
 
 //ステージ上の座標をカメラ上の座標に変換
-VECTOR2_f CCamera::CalcToPositionInCamera(
-	const VECTOR2_f* Pos)
+VECTOR2_f CCamera::CalcToPositionInCamera(const VECTOR2_f* Pos)
 {
 	VECTOR2_f pos(0, 0);
 
@@ -93,9 +92,25 @@ void CCamera::CameraReset()
 void CCamera::SetBossBattleCamera_Nazrin(VECTOR2_f PlayerPos)
 {
 	//カメラポジションのベスト位置
-	m_CameraMasterPos.x = PlayerPos.x + (WND_W / 2) - 50;
-	//Y座標は指定して配置する(ブロックをロードすると手間が多い)
-	m_CameraMasterPos.y = 815 - 160;
+	m_CameraMasterPos.x = PlayerPos.x + (WND_W / 2) - 180;
+	m_CameraMasterPos.y = PlayerPos.y - (WND_H / 2) + 192;
+}
+
+void CCamera::SetChangeBossStageCamera(VECTOR2_f* PlayerPos, VECTOR2_f* BossPos)
+{
+	//カメラポジションのベスト位置と同じようにする
+	m_CameraMasterPos.y = (WND_H + 144) - (WND_H / 2) + 1;
+	//X座標は、ステージが始まる直前の場所にセットする
+	m_CameraMasterPos.x = WND_W;
+
+	PlayerPos->x = PlayerPos->x - (m_Position.x - m_CameraMasterPos.x);
+	PlayerPos->y = PlayerPos->y - (m_Position.y - m_CameraMasterPos.y);
+
+	BossPos->x = BossPos->x - (m_Position.x - m_CameraMasterPos.x);
+	BossPos->y = BossPos->y - (m_Position.y - m_CameraMasterPos.y);
+
+	m_Position.x = m_CameraMasterPos.x;
+	m_Position.y = m_CameraMasterPos.y;
 }
 
 void CCamera::BossBattleCamera()

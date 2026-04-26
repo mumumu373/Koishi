@@ -16,6 +16,7 @@ public:
 	{
 		Map01 = 0,
 		Map02,
+		MapBoss,	//ボスのマップ
 	};
 
 	CStageManager();

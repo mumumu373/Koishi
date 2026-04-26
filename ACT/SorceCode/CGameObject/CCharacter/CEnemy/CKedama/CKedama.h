@@ -24,6 +24,7 @@ public:
 
 	//プレイヤーの攻撃がヒットした時の動作
 	void PlayerAttackHit(int Damage, int Color) override;
+
 private:
 	void Animation() override;
 

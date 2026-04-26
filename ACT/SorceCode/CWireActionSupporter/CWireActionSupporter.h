@@ -31,7 +31,7 @@ private:
 	CPlayer* m_dpPlayer;//プレイヤーのダブルポインタ
 	CWire* m_dpWire;//ワイヤーのポインタ
 	CWirepoint* m_dpWirePoint;//ワイヤーポイントのダブルポインタ
-	CEnemy* m_dpEnemi;//エネミー
+	CEnemy* m_pEnemy;//エネミー
 	VECTOR2_f pos[2];
 	bool OldWallHit;
 };

@@ -27,6 +27,7 @@ public:
 		IMG_Bullet,			//全員のバレット
 		IMG_Effect,			//エフェクト
 		IMG_Slash,			//斬撃
+		IMG_DeadEffect,		//死んだときのエフェクト(エネミー)
 
 		IMG_Title,			//タイトルの画像
 		IMG_Cursor,			//カーソルの画像

@@ -21,6 +21,7 @@ public:
 
 	//プレイヤーの攻撃がヒットした時の動作
 	void PlayerAttackHit(int Damage, int Color) override;
+
 private:
 	void Animation() override;
 
@@ -35,8 +36,6 @@ private:
 	int m_AmountBullet;		//打ち出すバレットの量
 	double m_ShotBulletAngle;	//打ち出すバレットの角度
 	int m_ShotReleaseTime;	//バレットの持続時間
-
-	VECTOR2_f m_Vector;		//移動ベクトル
 
 	//装飾クラスをここで作る(装飾含めての陰陽玉)
 	std::vector<std::unique_ptr<CYinYangDeco>> m_upYinYangDeco;

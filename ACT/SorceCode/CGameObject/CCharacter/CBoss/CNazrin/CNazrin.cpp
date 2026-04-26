@@ -3,6 +3,8 @@
 CNazrin::CNazrin()
 	: m_BulletShot(false)
 	, m_BulletShotCo(0)
+	, m_AttackAnimCo(0)
+	, m_AttackAnimTime(false)
 {
 	//m_Position = SetPos;
 	m_Position = { 400,400 };
@@ -21,7 +23,7 @@ CNazrin::CNazrin()
 	m_AttackMove = enAttackMove::Standby;
 
 	//HPをセット
-	MAX_HP = 200;
+	MAX_HP = 50;
 	HP = MAX_HP;
 
 	StartSetting();
@@ -61,6 +63,12 @@ void CNazrin::StartSetting()
 	//攻撃の動作をカウントする
 	m_AttackMoveCo = 0;
 
+	//フェーズを変える変数初期化
+	m_PhaseChangeCo = 0;
+	m_NextPhaseSetting = false;
+	//アニメーション
+	m_PhaseChangeAniTime = false;
+
 	//元居た場所を記憶する
 	m_MemoryPos = m_Position;
 }
@@ -90,49 +98,72 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	switch (m_AttackMove) {
-	case enAttackMove::Standby:
-		//攻撃パターンを変えるとき
-		if (m_AttackMoveChangeCo >= 180) {
-			m_AttackMoveChangeCo = 0;
-
-			//パターン1に指定
-			m_AttackMove = enAttackMove::Move_01;
-
-			//ジャンプ力(ムーブ1用)をセット
-			m_JumpPower = 30;
-		}
-		else {
-			m_AttackMoveChangeCo++;
-		}
-		break;
-	case enAttackMove::Move_01:
-
-		//ムーブ1の動作を実行(フェーズ違いでも同じ関数が使えるように)
-		BossMove_1Update(m_BossPhase, upBullet);
-		
-		break;
-	case enAttackMove::Move_02:
-
-		//ムーブ2の動作を実行
-		BossMove_2Update(m_BossPhase, upBullet);
-		
-		break;
-	}
-
-	//攻撃を受けたとき
-	if (AttackHit == true) {
+	//次のフェーズの準備を行う
+	if (m_NextPhaseSetting == true) {
+		//準備完了まで無敵にする
+		AttackHit = true;
 		//半透明にする
 		m_Alpha = 150;
-		//攻撃が当たらない時間を過ぎたら
-		if (NoHitAttackCo >= NoHitAttackTime) {
-			NoHitAttackCo = 0;
-			AttackHit = false;
-			//表示する
-			m_Alpha = 255;
+
+		m_PhaseChangeCo++;
+		if (m_PhaseChangeCo >= 180) {
+
 		}
-		else {
-			NoHitAttackCo++;
+	}
+	else {
+		switch (m_AttackMove) {
+		case enAttackMove::Standby:
+			//攻撃パターンを変えるとき
+			if (m_AttackMoveChangeCo >= 180) {
+				m_AttackMoveChangeCo = 0;
+
+				//パターン1に指定
+				m_AttackMove = enAttackMove::Move_01;
+
+				//ジャンプ力(ムーブ1用)をセット
+				m_JumpPower = 30;
+			}
+			else {
+				m_AttackMoveChangeCo++;
+			}
+			break;
+		case enAttackMove::Move_01:
+
+			//ムーブ1の動作を実行(フェーズ違いでも同じ関数が使えるように)
+			BossMove_1Update(m_BossPhase, upBullet);
+
+			break;
+		case enAttackMove::Move_02:
+
+			//ムーブ2の動作を実行
+			BossMove_2Update(m_BossPhase, upBullet);
+
+			break;
+		}
+
+		//攻撃を受けたとき
+		if (AttackHit == true) {
+			//攻撃が当たらない時間を過ぎたら
+			if (NoHitAttackCo >= NoHitAttackTime) {
+				NoHitAttackCo = 0;
+				AttackHit = false;
+				//表示する
+				m_Alpha = 255;
+			}
+			else {
+				NoHitAttackCo++;
+
+				//点滅するようにする
+				if (NoHitAttackCo % 7 == 0) {
+					if (m_Alpha == 0) {
+						//半透明にする
+						m_Alpha = 200;
+					}
+					else {
+						m_Alpha = 0;
+					}
+				}
+			}
 		}
 	}
 
@@ -151,12 +182,17 @@ void CNazrin::PlayerAttackHit(int Damage)
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;
 
+	//半透明にする
+	m_Alpha = 200;
+
 	//HPがなくなったら
 	if (HP <= 0) {
 		//フェーズが1なら
 		if (m_BossPhase == enBossPhase::Phase_1) {
 			//フェーズ2に移行する
-			m_BossPhase = enBossPhase::Phase_2;
+			m_NextPhaseSetting = true;
+			//フェーズチェンジ時のアニメーションをする
+			m_PhaseChangeAniTime = true;
 		}
 	}
 }
@@ -172,7 +208,7 @@ void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
 	m_BattleStartPos = m_Position;
 
 	//スタンバイ状態を早めに解いておく
-	m_AttackMoveChangeCo = 240;
+	m_AttackMoveChangeCo = 160;
 
 	//青色の状態から始まるようにする
 	m_Color = enColor::Blue;
@@ -189,15 +225,54 @@ void CNazrin::MovieSceneUpdate()
 
 void CNazrin::Animation()
 {
-	m_AnimetionCo++;
-
-	if (m_AnimetionCo >= 15) {
-		m_Framesplit.x += 64;
-		//最後のアニメーションなら
-		if (m_Framesplit.x > 64*3) {
-			m_Framesplit.x = 0;
-		}
+	//攻撃アニメーション
+	if (m_AttackAnimTime == true) {
+		//ほかのアニメーションのカウントリセット
 		m_AnimetionCo = 0;
+
+		m_Framesplit.x = 0;
+		m_Framesplit.y = 128;
+		//15フレームたったら
+		if (m_AttackAnimCo >= 15) {
+			//アニメーションを変える
+			m_Framesplit.x = 64;
+		}
+		else {
+			m_AttackAnimCo++;
+		}
+	}
+	//ジャンプアニメーション
+	else if (m_GroundStand == false) {
+		m_Framesplit.x = 0;
+		m_Framesplit.y = 64;
+
+		//ほかのアニメーションのカウントリセット
+		m_AnimetionCo = 0;
+		m_AttackAnimCo = 0;
+	}
+	//待機アニメーション
+	else {
+		//ほかのアニメーションのカウントリセット
+		m_AttackAnimCo = 0;
+
+		m_Framesplit.y = 0;
+
+		m_AnimetionCo++;
+		if (m_AnimetionCo >= 15) {
+			m_Framesplit.x += 64;
+			//最後のアニメーションなら
+			if (m_Framesplit.x > 64 * 3) {
+				m_Framesplit.x = 0;
+			}
+			m_AnimetionCo = 0;
+		}
+	}
+
+	//優先してする
+	//フェーズチェンジ || 被弾アニメーション
+	if (m_PhaseChangeAniTime == true) {
+		m_Framesplit.x = 0;
+		m_Framesplit.y = 192;
 	}
 }
 
@@ -205,8 +280,8 @@ void CNazrin::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 {
 	VECTOR2_f offsetPos = { OffsetPos_X, OffsetPos_Y };
 
-	//ブロックに触れていないなら			判定のサイズをナズーリンの大きさに合わせる
-	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y, 60, 100, offsetPos) != true) {
+	//ブロックに触れていないなら				重力分も入れて判定する	判定のサイズをナズーリンの大きさに合わせる
+	if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_Position.y + Gravity, 60, 100, offsetPos) != true) {
 		m_GroundStand = false;
 
 		//常に動いているように見えるが、地面や天井の当たり判定の時に、目に見えないレベルで浮いている
@@ -230,9 +305,11 @@ void CNazrin::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 					if (std::abs(MoveRangeY) <= 1.0f) {
 						//地面の判定
 						if (MoveRangeY > 0) {
-							m_FallingSpeed = 0;
+							if (m_GroundStand == false) {
+								m_FallingSpeed = 0;
 
-							m_GroundStand = true;
+								m_GroundStand = true;
+							}
 						}
 						//天井の判定
 						else {
@@ -305,6 +382,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 			else {
 				m_BulletShotCo++;
 			}
+
+			//攻撃アニメーション中
+			m_AttackAnimTime = true;
 		}
 		//次の行動をする
 		else {
@@ -320,6 +400,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 
 						//地面から離れた
 						m_GroundStand = false;
+
+						//攻撃アニメーションではなくする
+						m_AttackAnimTime = false;
 					}
 
 					//地面にいない間だけ移動する
@@ -370,6 +453,8 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 					//ジャンプする前の場所を記憶
 					m_MemoryPos = m_Position;
 
+					//攻撃アニメーションではなくする
+					m_AttackAnimTime = false;
 				}
 			}
 			else {

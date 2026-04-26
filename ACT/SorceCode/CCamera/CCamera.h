@@ -46,6 +46,8 @@ public:
 
 	//ボスバトルのカメラをセット(ナズーリン)
 	void SetBossBattleCamera_Nazrin(VECTOR2_f PlayerPos);
+	//ボス戦用のステージに切り替えた時のカメラの位置
+	void SetChangeBossStageCamera(VECTOR2_f* PlayerPos, VECTOR2_f* BossPos);
 	//
 	void BossBattleCamera();
 
