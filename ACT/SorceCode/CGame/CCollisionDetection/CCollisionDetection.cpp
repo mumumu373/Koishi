@@ -21,6 +21,33 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 
 		//エネミー
 		for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+			//エネミーがワイヤーに掴まれた状態になったら
+			if (upEnemy[EnemyNo]->m_CatchWire == CEnemy::enCatchWire::Catch) {
+				//プレイヤーが投げたら
+				if (upEnemy[EnemyNo]->EnemyThrown == true) {
+					//投げられたエネミーの当たり判定のセット
+					ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
+
+					//投げられた奴に当たったエネミーを倒すようにする
+					for (int EnemyToEnemyNo = 0; EnemyToEnemyNo < upEnemy.size(); EnemyToEnemyNo++) {
+						//投げられたエネミーと被らないように
+						if (EnemyNo != EnemyToEnemyNo) {
+							//当たり判定のセット
+							ObjectInfo EnemyToEnemyPos = SetEnemyInfo(upEnemy[EnemyToEnemyNo], true);
+
+							//攻撃を始めて食らうなら
+							if (upEnemy[EnemyToEnemyNo]->AttackHit == false) {
+								if (CircleDetection(EnemyPos, EnemyToEnemyPos) == true) {
+									//投げられたエネミーのヒットストップをする
+									upEnemy[EnemyNo]->SetHitStop();
+									//投げられたエネミーに当たったエネミーの処理	ダメージと位置をセット
+									upEnemy[EnemyToEnemyNo]->ThrowEnemyHit(100, upEnemy[EnemyNo]->GetCenterPosition());
+								}
+							}
+						}
+					}
+				}
+			}
 			if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
 				//当たり判定のセット
 				ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
@@ -28,7 +55,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 				//当たったら
 				if (CircleDetection(PlayerPos, EnemyPos) == true) {
 					//プレイヤーがエネミーに当たったときの処理
-					upPlayer->EnemyHit(10);
+					//upPlayer->EnemyHit(10);
 				}
 			}
 		}

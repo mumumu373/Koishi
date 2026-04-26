@@ -24,6 +24,11 @@ public:
 	VECTOR2_f ThrowSpeed = { 30,15 };		//投げられる速度
 	bool EnemyThrown = false;		//投げらました！
 	const int ThrowDamage = 100;	//投げたエネミーのダメージ
+
+	const int HitEnemyStopTime = 10;//投げられたときにエネミーに当たったときのヒットストップの時間
+	bool HitStop = false;			//ヒットストップを発生させるか
+
+	const int ThrowEnemyDeadTime = 40;	//投げられたエネミーが死亡するまでの時間
 public:
 	CEnemy();
 	virtual ~CEnemy() {};	
@@ -39,7 +44,17 @@ public:
 	virtual void PlayerAttackHit(int Damage, int Color) = 0;
 
 	//プレイヤーに投げられた時の動作
-	virtual void ThrowEnemy() = 0;
+	void ThrowEnemy();
+
+	//投げられたエネミーにヒットした時の処理
+	void ThrowEnemyHit(int Damage, VECTOR2_f ThrowEnemyPos);
+
+	//投げられたときに別のエネミーに当たったときの処理
+	void SetHitStop()
+	{
+		HitStop = true;
+		m_HitStopCo = 0;
+	}
 
 	//プレイヤーの位置を取得
 	void SetPlayerPos(VECTOR2_f PlayerPos) { m_PlayerPos = PlayerPos; }
@@ -80,4 +95,10 @@ protected:
 	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
 
 	VECTOR2_f m_ThrowVect;		//投げたベクトルを見る
+
+	int m_HitStopCo;			//ヒットストップする時間をカウント
+
+	VECTOR2_f m_Vector;			//移動ベクトル
+
+	int m_ThrowTimeCo;				//投げられた時間をカウント
 };

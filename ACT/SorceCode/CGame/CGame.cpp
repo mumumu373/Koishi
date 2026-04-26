@@ -107,12 +107,12 @@ bool CGame::Create()
 	//エネミーを作るタイミングで良い
 
 	//エネミーを作っている
-	VECTOR2_f SetEnemy = { 200,400 };
+	VECTOR2_f SetEnemy = { 600,400 };
 	VECTOR2_f Speed = { 4,4 };
 	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 120));
-	SetEnemy.y -= 10;																//作るときにムーブタイプを決めておく
+	SetEnemy.y += 500;																//作るときにムーブタイプを決めておく
 	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy, Speed, CFairy::enMoveType::Rotation, 60, 120));
-	SetEnemy.x += 100;
+	SetEnemy.x += 400;
 	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
 
 	//ゲームシーン状態にしておく
@@ -204,10 +204,6 @@ void CGame::Update()
 
 	case enScene::GameMain:
 
-		if (GetAsyncKeyState('I') & 0x8000) {
-			m_upCamera->SetPos(4000, 100);
-		}
-
 		m_pWire->Update();
 
 		//プレイヤーの動作
@@ -229,6 +225,7 @@ void CGame::Update()
 				m_upEnemy[i]->Update(m_upBullet);
 			}
 			else {
+				//投げられたら
 				if (m_upEnemy[i]->EnemyThrown == true) {
 					m_upEnemy[i]->ThrowEnemy();
 				}
@@ -252,7 +249,7 @@ void CGame::Update()
 		m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 
 		//プレイヤーとエネミーの当たり判定処理
-		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+		m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
 		//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
@@ -269,9 +266,6 @@ void CGame::Update()
 
 		//ステージの更新
 		m_upStageManager->Update();
-
-		//バレットを消す処理を行う
-		DeleteBullet();
 
 		//プレイヤーにカメラが付くようにする
 		m_upCamera->SetPosition(m_upPlayer->GetCenterPosition());
@@ -299,10 +293,6 @@ void CGame::Update()
 
 		break;
 	case enScene::Movie:
-
-		if (GetAsyncKeyState('I') & 0x8000) {
-			m_upCamera->SetPos(4000, 100);
-		}
 
 		//プレイヤーのムービーシーン中の動作
 		m_upPlayer->MovieSceneUpdate();
@@ -344,9 +334,6 @@ void CGame::Update()
 		}
 		break;
 	case enScene::BossBattle:
-		if (GetAsyncKeyState('I') & 0x8000) {
-			m_upCamera->SetPos(4000, 100);
-		}
 
 		//ムービーシーン
 		m_upCamera->Update();
@@ -400,7 +387,7 @@ void CGame::Update()
 		m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
 
 		//プレイヤーとエネミーの当たり判定処理
-		//m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
+		m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
 
 		//ワイヤーと敵	
 		m_upCollisionDetection->WireToEnemyCollision(m_upEnemy, m_pWire, m_upPlayer, m_upWireActionSupporter);
@@ -422,14 +409,12 @@ void CGame::Update()
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
 		}
 
-		//インスタンスを破棄する関数
-		DeleteInstance();
 
-		//バレットを消す処理を行う
-		DeleteBullet();
 
 		break;
 	}
+	//インスタンスを破棄する関数
+	DeleteInstance();
 }
 
 //描画関数(画像の表示処理を行う)
@@ -491,7 +476,7 @@ void CGame::Draw()
 			//Nega->Draw(m_pGameWnd->hScreenDC);
 			int a = 0;
 		}
-		m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
+		//m_upPlayer->DrawH(m_pGameWnd->hScreenDC, m_pGameWnd->hWnd, m_upCamera);
 		//仮置き
 		CMouseInput::Draw();
 
@@ -504,6 +489,10 @@ void CGame::Draw()
 
 void CGame::DeleteInstance()
 {
+	//バレットを消す処理を行う
+	DeleteBullet();
+	//エネミーを消す処理を行う
+	DeleteEnemy();
 }
 
 void CGame::DeleteBullet()
@@ -527,6 +516,22 @@ void CGame::DeleteBullet()
 	}
 }
 
+void CGame::DeleteEnemy()
+{
+	//バレットと同じようにエネミーを消す
+	for (int i = 0; i < m_upEnemy.size(); i++) {
+		//エネミーが死んだら
+		if (m_upEnemy[i]->m_State == CEnemy::enState::Dead) {
+			m_upEnemy.erase(
+				std::remove_if(m_upEnemy.begin(), m_upEnemy.end(),
+					[](const std::unique_ptr<CEnemy>& Enemy) {
+						return Enemy->m_State == CEnemy::enState::Dead;
+					}),
+				m_upEnemy.end()
+			);
+		}
+	}
+}
 
 //---------タイトルの選択肢関数------------
 

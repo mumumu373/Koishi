@@ -256,14 +256,6 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 	m_Vector.y = sin(GetDelectionVect(GetCenterPosition(), m_PlayerPos)) * Speed;
 }
 
-void CYinYangBall::ThrowEnemy()
-{
-	m_Position.x += m_ThrowVect.x;
-	m_Position.y -= m_ThrowVect.y;
-
-	m_ThrowVect.y -= Gravity;
-}
-
 void CYinYangBall::Animation()
 {
 	//‚±‚Á‚¿‚Å‘•ü‚Ì“®ì‚ğ‚·‚é
