@@ -217,8 +217,8 @@ void CGame::Update()
 		//エネミーの動作
 		//ある分回す
 		for (int i = 0; i < m_upEnemy.size(); i++) {
-			//死亡中になっていなければ動かす
-			if (m_upEnemy[i]->m_State != CEnemy::enState::Dying) {
+			//生存中になっていれば動かす
+			if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
 				//プレイヤーの位置を取得する
 				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 
@@ -433,6 +433,7 @@ void CGame::Draw()
 				m_upEnemy[i]->DeadAnimationDraw(m_upCamera);
 			}
 		}
+
 		//ボスの描画
 		if (m_upBoss != nullptr) {
 			m_upBoss->Draw(m_upCamera);
