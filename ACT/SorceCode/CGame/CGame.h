@@ -96,7 +96,10 @@ private:
 	//バレットを削除する関数
 	void DeleteBullet();
 	//エネミーを削除する関数
-	void DeleteEnemy();
+	void DeleteEnemy(); 
+
+	//当たり判定をまとめる関数
+	void CollisionUpdate();
 
 	//タイトルからゲームメインに移行する関数
 	void TitleToGameMain();

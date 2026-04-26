@@ -73,13 +73,13 @@ bool CSoundManager::Load(HWND hWnd)
 	{
 		{enSingleSoundList::BGM_NoSound,"Data\\Sound\\BGM\\BGM_NoSound.mp3", "BGM_NoSound"},
 
+		{enSingleSoundList::BGM_TitleStart,"Data\\Sound\\BGM\\BGM_TitleStart.mp3", "BGM_TitleStart",},
+		{enSingleSoundList::BGM_Title,"Data\\Sound\\BGM\\BGM_Title.mp3", "BGM_Title",},
+
 		{enSingleSoundList::BGM_Stage1,"Data\\Sound\\BGM\\BGM_Stage1.mp3", "BGM_Stage1",},
 
 		{enSingleSoundList::BGM_Boss1,"Data\\Sound\\BGM\\BGM_Boss1.mp3", "BGM_Boss1",},
 		{enSingleSoundList::BGM_Boss2,"Data\\Sound\\BGM\\BGM_Boss2.mp3", "BGM_Boss2",},
-
-		{enSingleSoundList::BGM_Boss5_Intro,"Data\\Sound\\BGM\\BGM_Boss5_Intro.mp3", "BGM_Boss5_Intro",},
-		{enSingleSoundList::BGM_Boss5,"Data\\Sound\\BGM\\BGM_Boss5.mp3", "BGM_Boss5",},
 	};
 
 	//配列の最大要素数を算出(配列全体のサイズ/配列１つ分のサイズ)

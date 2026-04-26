@@ -27,10 +27,11 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_Wirepoint	,"Data\\Image\\WirePoint.bmp"			,"WirePoint"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
-		{enImgList::IMG_Nazrin		,"Data\\Image\\NazrinFull.bmp","Nazrin"} ,
+		{enImgList::IMG_Nazrin		,"Data\\Image\\Nazrin.bmp","Nazrin"} ,
 		{enImgList::IMG_Bullet		,"Data\\Image\\Bulletaa.bmp","Bullet"} ,
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
 		{enImgList::IMG_Slash		,"Data\\Image\\slash32x96.bmp"		,"IMG_Slash"} ,
+		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"IMG_DeadEffect"} ,
 		{enImgList::IMG_Title		,"Data\\Image\\Title.bmp"			,"IMG_Title"} ,
 		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"IMG_Cursor"} ,
 	};

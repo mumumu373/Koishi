@@ -25,10 +25,12 @@ public:
 	bool EnemyThrown = false;		//投げらました！
 	const int ThrowDamage = 100;	//投げたエネミーのダメージ
 
-	const int HitEnemyStopTime = 10;//投げられたときにエネミーに当たったときのヒットストップの時間
+	const int HitEnemyStopTime = 7;//投げられたときにエネミーに当たったときのヒットストップの時間
 	bool HitStop = false;			//ヒットストップを発生させるか
 
-	const int ThrowEnemyDeadTime = 40;	//投げられたエネミーが死亡するまでの時間
+	const int ThrowEnemyDeadTime = 50;	//投げられたエネミーが死亡するまでの時間
+
+	int DeadAnimChangeTime = 8;		//死んだときのアニメーションを変更する時間
 public:
 	CEnemy();
 	virtual ~CEnemy() {};	
@@ -48,6 +50,12 @@ public:
 
 	//投げられたエネミーにヒットした時の処理
 	void ThrowEnemyHit(int Damage, VECTOR2_f ThrowEnemyPos);
+
+	//死んだときの処理
+	void EnemyIsDead();
+
+	//死んだときのアニメーションを行う処理
+	void DeadAnimationDraw(std::unique_ptr<CCamera>& pCamera);
 
 	//投げられたときに別のエネミーに当たったときの処理
 	void SetHitStop()
@@ -100,5 +108,7 @@ protected:
 
 	VECTOR2_f m_Vector;			//移動ベクトル
 
-	int m_ThrowTimeCo;				//投げられた時間をカウント
+	int m_ThrowTimeCo;			//投げられた時間をカウント
+
+	int m_DeadAnimCo;			//死んだ時のアニメーションのカウント
 };

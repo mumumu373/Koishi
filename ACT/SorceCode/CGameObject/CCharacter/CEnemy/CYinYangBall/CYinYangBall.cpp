@@ -216,7 +216,8 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			//ヒットバックが終わってから
 			//体力がなくなったら
 			if (HP <= 0) {
-				m_State = enState::Dead;
+				//エネミーが死んだときの処理
+				EnemyIsDead();
 			}
 		}
 		else {
