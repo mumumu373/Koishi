@@ -161,7 +161,7 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//UŒ‚‚ðŽó‚¯‚½‚Æ‚«
 	else if (AttackHit == true) {
 		//”¼“§–¾‚É‚·‚é
-		m_Alpha = 150;
+		m_Alpha = 200;
 		//UŒ‚‚ª“–‚½‚ç‚È‚¢ŽžŠÔ‚ð‰ß‚¬‚½‚ç
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
