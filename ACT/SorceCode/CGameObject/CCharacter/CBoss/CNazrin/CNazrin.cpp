@@ -143,8 +143,6 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 		//攻撃を受けたとき
 		if (AttackHit == true) {
-			//半透明にする
-			m_Alpha = 150;
 			//攻撃が当たらない時間を過ぎたら
 			if (NoHitAttackCo >= NoHitAttackTime) {
 				NoHitAttackCo = 0;
@@ -154,6 +152,17 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			}
 			else {
 				NoHitAttackCo++;
+
+				//点滅するようにする
+				if (NoHitAttackCo % 7 == 0) {
+					if (m_Alpha == 0) {
+						//半透明にする
+						m_Alpha = 200;
+					}
+					else {
+						m_Alpha = 0;
+					}
+				}
 			}
 		}
 	}
@@ -172,6 +181,9 @@ void CNazrin::PlayerAttackHit(int Damage)
 	HP -= Damage;
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;
+
+	//半透明にする
+	m_Alpha = 200;
 
 	//HPがなくなったら
 	if (HP <= 0) {

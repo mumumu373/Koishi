@@ -160,8 +160,6 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 	//攻撃を受けたとき
 	else if (AttackHit == true) {
-		//半透明にする
-		m_Alpha = 200;
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
@@ -171,6 +169,17 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 		else {
 			NoHitAttackCo++;
+
+			//点滅するようにする
+			if (NoHitAttackCo % 7 == 0) {
+				if (m_Alpha == 0) {
+					//半透明にする
+					m_Alpha = 200;
+				}
+				else {
+					m_Alpha = 0;
+				}
+			}
 		}
 
 		//ヒットバック処理
@@ -217,6 +226,8 @@ void CKedama::PlayerAttackHit(int Damage, int Color)
 {
 	//攻撃が当たった
 	AttackHit = true;
+	//半透明に
+	m_Alpha = 200;
 	//もしプレイヤーの属性と一致していたら
 	if (Color == m_Color) {
 		//確実な死を贈る

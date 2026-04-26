@@ -53,6 +53,9 @@ void CEnemy::ThrowEnemyHit(int Damage, VECTOR2_f ThrowEnemyPos)
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;
 
+	//半透明に
+	m_Alpha = 200;
+
 	//ヒットバック準備
 	m_HitBack = true;
 	m_HitBackCo = 0;

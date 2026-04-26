@@ -183,8 +183,6 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 	//攻撃を受けたとき
 	if (AttackHit == true) {
-		//半透明にする
-		m_Alpha = 150;
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
@@ -194,6 +192,17 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 		else {
 			NoHitAttackCo++;
+
+			//点滅するようにする
+			if (NoHitAttackCo % 7 == 0) {
+				if (m_Alpha == 0) {
+					//半透明にする
+					m_Alpha = 200;
+				}
+				else {
+					m_Alpha = 0;
+				}
+			}
 		}
 	}
 
@@ -229,6 +238,9 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 
 	//攻撃が当たった
 	AttackHit = true;
+	//半透明にする
+	m_Alpha = 200;
+
 	//もしプレイヤーの属性と一致していたら
 	if (Color == m_Color) {
 		//確実な死を贈る
