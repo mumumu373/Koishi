@@ -32,6 +32,8 @@ public:
 
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
+
+	bool DAMAGE_KEDAMA_HIT;			//ダメージ毛玉に当たったら
 public:
 	//アクション状態
 	enum enActionState

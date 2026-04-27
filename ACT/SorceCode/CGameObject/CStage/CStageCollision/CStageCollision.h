@@ -37,6 +37,8 @@ public:
 
     bool GetHitEvent()const { return m_isEventChipHit; }
 
+    bool GetHitDamageKedama()const { return m_isDamageKedamaHit; }
+
 private:
     CStageCollision();
     CStageCollision(const CStageCollision& rhs) = delete;
@@ -44,6 +46,9 @@ private:
 
     // イベントチップに当たったかどうかのフラグ
 	bool m_isEventChipHit;
+
+    //ダメージ毛玉に当たったかどうかのフラグ
+    bool m_isDamageKedamaHit;
 
 	// 現在のマップデータを保持する変数
     std::vector<std::vector<int>> m_MapData;

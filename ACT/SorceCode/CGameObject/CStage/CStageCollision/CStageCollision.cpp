@@ -3,7 +3,10 @@
 
 CStageCollision::CStageCollision()
     : m_isEventChipHit  (false)
+    , m_isDamageKedamaHit(false)
 	, m_MapData()
+    , m_HitMapX()
+    , m_HitMapY()
 {
 }
 
@@ -37,6 +40,7 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
     };
 
     m_isEventChipHit = false;
+    m_isDamageKedamaHit = false;
 
     for (int i = 0; i < 4; ++i)
     {
@@ -73,7 +77,13 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
                     m_isEventChipHit = true;
                 }
                 break;
-
+            case 21:
+                //ダメージ毛玉に当たった
+                if (i == 0)
+                {
+                    m_isDamageKedamaHit = true;
+                }
+                break;
             default:
                 break;
             }

@@ -430,6 +430,7 @@ void CGame::Draw()
 				m_upEnemy[i]->Draw(m_upCamera);
 			}
 			else {
+				//Ž€‚ñ‚¾‚Æ‚«—p‚Ì•`‰æ‚É‚·‚é
 				m_upEnemy[i]->DeadAnimationDraw(m_upCamera);
 			}
 		}

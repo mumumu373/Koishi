@@ -108,6 +108,9 @@ void CPlayer::StartSetting()
 	EVENT_HIT = false;
 	//初期宣言だけはしておく
 	EVENT_START_POS = m_Position;
+
+	//ダメージ毛玉に触れたか
+	DAMAGE_KEDAMA_HIT = false;
 }
 
 void CPlayer::Attackmove()
@@ -570,10 +573,13 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 		}
 	}
 
-	//横方向の判定だけ見て、触れたか確認d
 	//イベントブロック(ボス戦突入イベント)に触れていたら
 	if (CStageCollision::GetInstance()->GetHitEvent() == true) {
 		EVENT_HIT = true;
+	}
+	//ダメージ毛玉に触れていたら
+	else if (CStageCollision::GetInstance()->GetHitDamageKedama() == true) {
+		DAMAGE_KEDAMA_HIT = true;
 	}
 	else {
 		EVENT_HIT = false;
