@@ -38,6 +38,8 @@ CPlayer::CPlayer()
 	, m_OldSteta(0)
 	, m_MoveSpeed(0)
 	, WireTopPos(0,0)
+	, OldenActionState(false)
+	, AvoidanceCanCount(AvoidanceCan)
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -106,6 +108,9 @@ void CPlayer::StartSetting()
 	EVENT_HIT = false;
 	//初期宣言だけはしておく
 	EVENT_START_POS = m_Position;
+
+	//ダメージ毛玉に触れたか
+	DAMAGE_KEDAMA_HIT = false;
 }
 
 void CPlayer::Attackmove()
@@ -302,13 +307,13 @@ void CPlayer::Animation()
 {
 	m_Alpha = 255;
 	m_Framesplit.y = 0;
-	if (m_OldSteta !=m_MoveState) {
+	if (m_OldSteta !=m_MoveState|| OldenActionState!= enActionState) {
 	
 		m_Framesplit.x = 0;
 		if ((m_MoveState== enMoveState::MoveLeft|| m_MoveState == enMoveState::MoveRight)&&(m_Rdash == true || m_Ldash == true)) { m_Framesplit.x = ImageSize * 4; }
 		m_AnimationCount = 0;
 	}
-
+	OldenActionState = enActionState;
 	m_OldSteta = m_MoveState;
 	m_AnimationCount++;
 	if (enActionState !=enActionState::WireObjectCatch) {
@@ -522,7 +527,11 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 						if (MoveRangeY > 0) {
 							if (GroundStand != true) {
 								GroundStand = true;
+								if (m_Jumping==true&&m_MoveState != enMoveState::Wait) {
+									if (m_Rdash == true || m_Ldash == true) { m_Framesplit.x = ImageSize * 4; }
+								}
 								m_Jumping = false;
+								AvoidanceCanCount = AvoidanceCan;
 								m_JumpRemove = false;
 								m_JumpAcc = 0;
 								m_Acceleration.y = 0;
@@ -564,10 +573,13 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 		}
 	}
 
-	//横方向の判定だけ見て、触れたか確認d
 	//イベントブロック(ボス戦突入イベント)に触れていたら
 	if (CStageCollision::GetInstance()->GetHitEvent() == true) {
 		EVENT_HIT = true;
+	}
+	//ダメージ毛玉に触れていたら
+	else if (CStageCollision::GetInstance()->GetHitDamageKedama() == true) {
+		DAMAGE_KEDAMA_HIT = true;
 	}
 	else {
 		EVENT_HIT = false;
@@ -624,7 +636,7 @@ void CPlayer::AvoidanceEnd()
 			enActionState = enActionState::None;
 			m_MoveState = enMoveState::Wait;
 			AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
-
+			m_JumpAcc = 0;
 			m_Acceleration = { 0,0 };//空中の加速度をリセットする
 
 			if (enActionState != enActionState::WirePointCatch) {
@@ -719,13 +731,22 @@ void CPlayer::AirKeyInput()
 		else {
 			m_MoveState = enMoveState::Wait;
 		}
+		if (AvoidanceCanCount>0) {
+			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+				AvoidanceCanCount--;
+				enActionState = enActionState::AirAvoidance;
+				AirAvoidanceVECTSet();
+				if (AirAvoidanceVECT.x == 0&& AirAvoidanceVECT.y==0) {
+					AvoidanceCount = AvoidanceTime*3;
+				}
+				else {
+					AvoidanceCount = AvoidanceTime;
+				}
 
-		if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
-
-			enActionState = enActionState::AirAvoidance;
-			AirAvoidanceVECTSet();
-			AvoidanceCount = AvoidanceTime;
+			}
+			
 		}
+
 
 	}
 	//ワイヤー発射指示

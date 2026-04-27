@@ -20,15 +20,20 @@ public:
 	static constexpr double AvoidanceDistance = 300;//回避の距離
 	static constexpr int AvoidanceTime = 10;//回避にかかる時間
 	static constexpr int AvoidancecoolTime = 30;//回避のクールタイム
-	static constexpr double PlayerGrobtyi = 0.4;
+	static constexpr double PlayerGrobtyi = 0.4;//プレイヤーの重力
 	static constexpr double ImageSize = 64;
-	static constexpr  double AirPower = 0.1;
-	static constexpr  int AirSpeedMAX = 15;
+	static constexpr  double AirPower = 0.1;//空中移動力
+	static constexpr  int AirSpeedMAX = 15;//空中最大速度
 	static constexpr int	AnimationSpeed = 5;//何フレームに一回動くか
-	static constexpr  double	NoSpeed = 10;
-	static constexpr  double	cathiSpeed = 5;
+	static constexpr  double	NoSpeed = 10;//ノーマルスピード
+	static constexpr  double	cathiSpeed = 5;//物持ち中のスピード
+
+	static constexpr int	AvoidanceCan = 3;//空中回避回数
+
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
+
+	bool DAMAGE_KEDAMA_HIT;			//ダメージ毛玉に当たったら
 public:
 	//アクション状態
 	enum enActionState
@@ -150,6 +155,7 @@ private:
 	bool m_Rdash;		//右ダッシュ中
 	int AvoidanceCount;	//回避にかかる時間を図る
 	int AvoidanceCoolCount;//回避のクールタイムを図る
+	int AvoidanceCanCount;//回避の残り回数
 	VECTOR2_f AirAvoidanceVECT;	//空中回避のベクトル
 
 	bool m_ChangeColor;		//属性を変更したか
@@ -160,7 +166,9 @@ private:
 	CCamera* m_pCamera;
 	int m_AnimationCount;
 	int m_OldSteta;
+	int OldenActionState;
 	double m_MoveSpeed;	//移動速度を入れる
 
 	VECTOR2_f WireTopPos;
+	
 };
