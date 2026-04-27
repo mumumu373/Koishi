@@ -9,24 +9,7 @@ class CNazrin
 	:public CBoss
 {
 public:
-	//攻撃のパターン
-	enum enAttackMove
-	{
-		Standby,	//待機
-		Move_01,	//行動1
-		Move_02,	//行動2
-	};
-
-	int m_AttackMove = enAttackMove::Standby;
-
-	//ナズーリンのフェーズ
-	enum enBossPhase
-	{
-		Phase_1,	//フェーズ1
-		Phase_2,	//フェーズ2
-	};
-
-	int m_BossPhase = enBossPhase::Phase_1;
+	bool NextSetPosBlock = false;
 public:
 	CNazrin();
 	~CNazrin();
@@ -41,10 +24,10 @@ public:
 	void PlayerAttackHit(int Damage) override;
 
 	//ボスとの戦闘フラグを踏んだ
-	virtual void BossBattleFlag(VECTOR2_f SetPos) override;
+	void BossBattleFlag(VECTOR2_f SetPos) override;
 
 	//会話などのムービーシーンの時に動作する関数
-	virtual void MovieSceneUpdate() override;
+	void MovieSceneUpdate() override;
 private:
 	void Animation() override;
 
@@ -75,6 +58,8 @@ private:
 
 	int m_PhaseChangeCo;		//フェーズを変えるタイミングをカウントする
 	bool m_NextPhaseSetting;	//フェーズを変える準備
+
+	bool m_NoHit;				//問答無用で無敵状態にする
 private:
 	int m_AttackAnimCo;			//攻撃アニメーションのカウント
 	bool m_AttackAnimTime;		//攻撃アニメーション中

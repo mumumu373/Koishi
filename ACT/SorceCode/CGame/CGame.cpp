@@ -316,8 +316,12 @@ void CGame::Update()
 		break;
 	case enScene::BossBattle:
 
-		//ムービーシーン
+		//カメラの動作
 		m_upCamera->Update();
+		//ボスのフェーズが2になったら
+		if (m_upBoss->m_BossPhase == CBoss::enBossPhase::Phase_2) {
+			m_upCamera->BossPhase2Camera();
+		}
 
 		//ワイヤーの動作
 		m_pWire->Update();

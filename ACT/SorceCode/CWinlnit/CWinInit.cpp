@@ -4,8 +4,8 @@
 //-------------------------------------------------
 //定数宣言
 //-------------------------------------------------
-const char APP_NAME[] = "UFO_STRYKER_BATTLE";		//アプリ名
-const char WND_TITLE[] = "UFO_STRYKER_BATTLE";		//ウィンドウタイトル
+const char APP_NAME[] = "あああああああああああああああ";		//アプリ名
+const char WND_TITLE[] = "aaaaaa";		//ウィンドウタイトル
 
 bool SIZEMAX = false;		//切り替えた時に画面が最大化したらtrueになる
 

@@ -69,6 +69,9 @@ void CNazrin::StartSetting()
 	//アニメーション
 	m_PhaseChangeAniTime = false;
 
+	//無敵状態変数初期化
+	m_NoHit = false;
+
 	//元居た場所を記憶する
 	m_MemoryPos = m_Position;
 }
@@ -102,42 +105,149 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	if (m_NextPhaseSetting == true) {
 		//準備完了まで無敵にする
 		AttackHit = true;
-		//半透明にする
-		m_Alpha = 150;
 
-		m_PhaseChangeCo++;
-		if (m_PhaseChangeCo >= 180) {
+		//フェーズチェンジを完了する時間
+		if (m_PhaseChangeCo < 300) {
+			//フェーズを変えるカウント
+			m_PhaseChangeCo++;
+			if (m_PhaseChangeCo >= 240) {
+				if (m_Jumping == false) {
+					m_JumpPower = 30;
 
+					//ジャンプするように
+					m_FallingSpeed = -m_JumpPower;
+					//ジャンプ中にする
+					m_Jumping = true;
+
+					//地面から離れた
+					m_GroundStand = false;
+				}
+
+				m_Position.x += 30;
+			}
+			else if (m_PhaseChangeCo >= 80) {
+				//ノーマル状態に戻す
+				m_PhaseChangeAniTime = false;
+			}
+		}
+		else {
+			//フェーズ2へ移行する
+			m_BossPhase = enBossPhase::Phase_2;
+
+			//準備完了
+			m_NextPhaseSetting = false;
+
+			//向きをもとに戻す
+			m_Delection.y = 0;
+
+			//スタンバイに指定
+			m_AttackMove = enAttackMove::Standby;
+
+			//攻撃回数カウントをリセット
+			m_AttackMoveCo = 0;
+			//撃った回数をリセットさせる
+			m_HowShotBullet = 0;
+			//カウントをリセットしておく
+			m_AttackMoveChangeCo = 0;
+			//バレットを撃つカウントをリセット
+			m_BulletShotCo = 0;
+			//バレットを撃たないように
+			m_BulletShot = false;
+		}
+
+		//点滅を直すために実行
+		if (AttackHit == true) {
+			//攻撃が当たらない時間を過ぎたら
+			if (NoHitAttackCo >= NoHitAttackTime) {
+				//カウントが増えないようにする
+				NoHitAttackCo = NoHitAttackTime;
+				//変身中とか攻撃する非道はいないっしょ
+				//AttackHit = false;
+				//表示する
+				m_Alpha = 255;			
+			}
+			else {
+				NoHitAttackCo++;
+
+				//点滅するようにする
+				if (NoHitAttackCo % 7 == 0) {
+					if (m_Alpha == 0) {
+						//半透明にする
+						m_Alpha = 200;
+					}
+					else {
+						m_Alpha = 0;
+					}
+				}
+			}
 		}
 	}
 	else {
-		switch (m_AttackMove) {
-		case enAttackMove::Standby:
-			//攻撃パターンを変えるとき
-			if (m_AttackMoveChangeCo >= 180) {
-				m_AttackMoveChangeCo = 0;
+		//ボスのフェーズごとの動き
+		switch (m_BossPhase) {
+			//フェーズ1
+		case enBossPhase::Phase_1:
+			//攻撃のパターン
+			switch (m_AttackMove) {
+			case enAttackMove::Standby:
+				//攻撃パターンを変えるとき
+				if (m_AttackMoveChangeCo >= 180) {
+					m_AttackMoveChangeCo = 0;
 
-				//パターン1に指定
-				m_AttackMove = enAttackMove::Move_01;
+					//パターン1に指定
+					m_AttackMove = enAttackMove::Move_01;
 
-				//ジャンプ力(ムーブ1用)をセット
-				m_JumpPower = 30;
-			}
-			else {
-				m_AttackMoveChangeCo++;
+					//ジャンプ力(ムーブ1用)をセット
+					m_JumpPower = 30;
+				}
+				else {
+					m_AttackMoveChangeCo++;
+				}
+				break;
+			case enAttackMove::Move_01:
+
+				//ムーブ1の動作を実行(フェーズ違いでも同じ関数が使えるように)
+				BossMove_1Update(m_BossPhase, upBullet);
+
+				break;
+			case enAttackMove::Move_02:
+
+				//ムーブ2の動作を実行
+				BossMove_2Update(m_BossPhase, upBullet);
+
+				break;
 			}
 			break;
-		case enAttackMove::Move_01:
+			//フェーズ2
+		case enBossPhase::Phase_2:
+			//攻撃のパターン
+			switch (m_AttackMove) {
+			case enAttackMove::Standby:
+				//ボスステージでの、ボスの配置場所に行っていないなら
+				if (NextSetPosBlock == false) {
+					//横に直線移動する
+					m_Position.x += 10;
+					m_Position.y = 0;
+				}
+				else {
+					//カメラで見える場所まで来たら
+					if (m_CameraPos.x + (WND_W / 3) >= m_Position.x) {
+						//ランダムで、ムーブ1か2を選ぶ
+						//m_AttackMove = (rand() & 1) + 1;
+						m_AttackMove = 1;
 
-			//ムーブ1の動作を実行(フェーズ違いでも同じ関数が使えるように)
-			BossMove_1Update(m_BossPhase, upBullet);
-
-			break;
-		case enAttackMove::Move_02:
-
-			//ムーブ2の動作を実行
-			BossMove_2Update(m_BossPhase, upBullet);
-
+						//カラーをランダムに変更する 0~4
+						m_Color = rand() & 4;
+					}
+				}
+				break;
+			case enAttackMove::Move_01:
+				//ムーブ1の動作を実行	(フェーズ2用の動作)
+				BossMove_1Update(m_BossPhase, upBullet);
+				break;
+			case enAttackMove::Move_02:
+				break;
+			}
 			break;
 		}
 
@@ -145,8 +255,15 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		if (AttackHit == true) {
 			//攻撃が当たらない時間を過ぎたら
 			if (NoHitAttackCo >= NoHitAttackTime) {
+				//カウント初期化
 				NoHitAttackCo = 0;
 				AttackHit = false;
+
+				//問答無用で無敵状態にする
+				if (m_NoHit == true) {
+					NoHitAttackCo = NoHitAttackTime;
+					AttackHit = true;
+				}
 				//表示する
 				m_Alpha = 255;
 			}
@@ -193,6 +310,16 @@ void CNazrin::PlayerAttackHit(int Damage)
 			m_NextPhaseSetting = true;
 			//フェーズチェンジ時のアニメーションをする
 			m_PhaseChangeAniTime = true;
+
+			//攻撃を中断させる
+			m_AttackAnimTime = false;
+
+			//もしジャンプしていたなら初期化する
+			m_Jumping = false;
+
+			//HPを入れる
+			MAX_HP = 250;
+			HP = MAX_HP;		
 		}
 	}
 }
@@ -345,11 +472,17 @@ void CNazrin::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 			}
 		}
 	}
+
+	//セットポスブロックの位置に来たら
+	if (CStageCollision::GetInstance()->GetBossSetPos() == true) {
+		NextSetPosBlock = true;
+	}
 }
 
 void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	switch (BossPhase) {
+		//フェーズ1
 	case enBossPhase::Phase_1:
 		//5発撃つまで続く
 		if (m_HowShotBullet < 5) {
@@ -376,8 +509,8 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 
 				m_BulletShotCo = 0;
 
-				//カラーを変更する
-				m_Color = rand() / 8191;
+				//カラーをランダムに変更する 0~4
+				m_Color = rand() & 4;
 			}
 			else {
 				m_BulletShotCo++;
@@ -463,7 +596,57 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 
 		}
 		break;
+		//フェーズ2
 	case enBossPhase::Phase_2:
+		if (MAX_HP - HP >= 50) {
+			//被弾アニメーション
+			m_PhaseChangeAniTime = true;
+			//被弾しないようにする
+			m_NoHit = true;
+
+			//次の攻撃する場所に移動する動作
+			m_AttackMoveChangeCo++;
+			if (m_AttackMoveChangeCo >= 120) {
+				m_Position.x += 20;
+			}
+			//外部からの干渉はないので==で見る
+			else if (m_AttackMoveChangeCo == 60) {
+
+				m_JumpPower = 30;
+				//ジャンプするように
+				m_FallingSpeed = -m_JumpPower;
+				//ジャンプ中にする
+				m_Jumping = true;
+
+				//地面から離れた
+				m_GroundStand = false;
+
+				//攻撃アニメーションではなくする
+				m_AttackAnimTime = false;
+			}
+		}
+		else {
+			//50発撃つまで続ける
+			if (m_HowShotBullet < 50) {
+				//撃つ感覚
+				if (m_BulletShotCo >= 50) {
+					upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 8, (60 * m_HowShotBullet), -70 + 5 * m_HowShotBullet, 80, 180, -6, false));
+
+					//撃ったバレットをカウント
+					m_HowShotBullet++;
+					//フロー対策
+					m_BulletShotCo = 50;
+				}
+				else {
+					m_BulletShotCo++;
+				}
+			}
+			else {
+				//もう一度撃つようにする
+				m_HowShotBullet = 0;
+				m_BulletShotCo = 0;
+			}
+		}
 		break;
 	}
 }

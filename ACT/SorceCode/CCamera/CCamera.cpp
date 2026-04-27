@@ -93,7 +93,7 @@ void CCamera::SetBossBattleCamera_Nazrin(VECTOR2_f PlayerPos)
 {
 	//カメラポジションのベスト位置
 	m_CameraMasterPos.x = PlayerPos.x + (WND_W / 2) - 180;
-	m_CameraMasterPos.y = PlayerPos.y - (WND_H / 2) + 192;
+	m_CameraMasterPos.y = PlayerPos.y - (WND_H / 2) + 192 + 1;	//スタック対策
 }
 
 void CCamera::SetChangeBossStageCamera(VECTOR2_f* PlayerPos, VECTOR2_f* BossPos)
@@ -113,8 +113,10 @@ void CCamera::SetChangeBossStageCamera(VECTOR2_f* PlayerPos, VECTOR2_f* BossPos)
 	m_Position.y = m_CameraMasterPos.y;
 }
 
-void CCamera::BossBattleCamera()
+void CCamera::BossPhase2Camera()
 {
+	//カメラの中心点を強制移動させる
+	m_CameraMasterPos.x += 2;
 }
 
 void CCamera::MoveRange()

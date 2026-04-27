@@ -39,6 +39,8 @@ public:
 
     bool GetHitDamageKedama()const { return m_isDamageKedamaHit; }
 
+    bool GetBossSetPos()const { return m_isBossSetPosHit; }
+
 private:
     CStageCollision();
     CStageCollision(const CStageCollision& rhs) = delete;
@@ -49,6 +51,9 @@ private:
 
     //ダメージ毛玉に当たったかどうかのフラグ
     bool m_isDamageKedamaHit;
+
+    //ボス(今回はナズーリンのみ)
+    bool m_isBossSetPosHit;
 
 	// 現在のマップデータを保持する変数
     std::vector<std::vector<int>> m_MapData;
