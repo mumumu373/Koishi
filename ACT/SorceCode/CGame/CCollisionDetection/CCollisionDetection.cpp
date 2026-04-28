@@ -62,6 +62,39 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 	}
 }
 
+void CCollisionDetection::BossToEnemyCollision(std::unique_ptr<CBoss>& upBoss, std::vector<std::unique_ptr<CEnemy>>& upEnemy)
+{
+	if (upBoss->m_State == CBoss::enState::Living) {
+		//当たり判定セット
+		ObjectInfo BossPos = SetBossInfo(upBoss, true);
+
+		//エネミー
+		for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+			//エネミーがワイヤーに掴まれた状態になったら
+			if (upEnemy[EnemyNo]->m_CatchWire == CEnemy::enCatchWire::Catch) {
+				//プレイヤーが投げたら
+				if (upEnemy[EnemyNo]->EnemyThrown == true) {
+					//投げられたエネミーの当たり判定のセット
+					ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
+
+					//攻撃をくらわない状態でなければ
+					if (upBoss->NoHit == false) {
+						//攻撃を始めて食らうなら
+						if (upBoss->AttackHit == false) {
+							if (CircleDetection(BossPos, EnemyPos) == true) {
+								//投げられたエネミーのヒットストップをする
+								upEnemy[EnemyNo]->SetHitStop();
+								//投げられたエネミーのダメージを受ける処理
+								upBoss->ThrowEnemyHit(75);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void CCollisionDetection::MouseToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CCamera>& Camera)
 {
 	//エネミー

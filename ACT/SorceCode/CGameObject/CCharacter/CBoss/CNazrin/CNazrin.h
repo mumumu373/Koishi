@@ -27,6 +27,9 @@ public:
 	//プレイヤーの攻撃がヒットした時の動作
 	void PlayerAttackHit(int Damage) override;
 
+	//投げられたエネミーにヒットした時の動作
+	void ThrowEnemyHit(int Damage) override;
+
 	//ボスとの戦闘フラグを踏んだ
 	void BossBattleFlag(VECTOR2_f SetPos) override;
 

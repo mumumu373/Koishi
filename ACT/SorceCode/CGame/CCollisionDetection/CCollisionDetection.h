@@ -23,12 +23,13 @@ public:
 
 	//プレイヤーとエネミーの当たり判定
 	void PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
+	//ボスとエネミーの当たり判定
+	void BossToEnemyCollision(std::unique_ptr<CBoss>& upBoss, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
+
 	//マウスとエネミーの当たり判定
 	void MouseToEnemyCollision(std::vector<std::unique_ptr<CEnemy>>& upEnemy, std::unique_ptr<CCamera>& Camera);
 
 	void MouseToWirePoint(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CCamera>& Camera);
-	//ワイヤーとエネミーの当たり判定
-	void WireToWirepointCollision(std::vector<std::unique_ptr<CWirepoint>>& upEnemy, std::unique_ptr<CWire>& pWire);
 
 	//プレイヤーとバレットの当たり判定
 	void PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet);
