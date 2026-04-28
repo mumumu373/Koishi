@@ -316,7 +316,7 @@ void CGame::Update()
 		break;
 	case enScene::BossBattle:
 
-		//ムービーシーン
+		//カメラの動作
 		m_upCamera->Update();
 
 		//ワイヤーの動作
@@ -340,13 +340,22 @@ void CGame::Update()
 			m_upBoss->SetCameraPos(m_upCamera->GetCameraPos());
 			//ボスの動作
 			m_upBoss->Update(m_upBullet);
+
+			//ボスのフェーズが2になったら
+			if (m_upBoss->m_BossPhase == CBoss::enBossPhase::Phase_2) {
+				//死亡状態になったらスクロールを止める
+				if (m_upBoss->m_State <= CBoss::enState::Dying) {
+					//強制スクロールにする
+					m_upCamera->BossPhase2Camera();
+				}
+			}
 		}
 
 		//エネミーの動作
 		//ある分回す
 		for (int i = 0; i < m_upEnemy.size(); i++) {
-			//死亡中になっていなければ動かす
-			if (m_upEnemy[i]->m_State != CEnemy::enState::Dying) {
+			//生存中になっていれば動かす
+			if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
 				//プレイヤーの位置を取得する
 				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 

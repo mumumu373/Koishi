@@ -9,7 +9,28 @@ class CBoss
 	:public CCharacter
 {
 public:
+	//攻撃のパターン
+	enum enAttackMove
+	{
+		Standby,	//待機
+		Move_01,	//行動1
+		Move_02,	//行動2
+	};
+
+	int m_AttackMove = enAttackMove::Standby;
+
+	//ナズーリンのフェーズ
+	enum enBossPhase
+	{
+		Phase_1,	//フェーズ1
+		Phase_2,	//フェーズ2
+	};
+
+	int m_BossPhase = enBossPhase::Phase_1;
+public:
 	bool AttackHit = false;	//攻撃をくらったか
+
+	bool NoHit = false;		//問答無用で無敵状態にする
 
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
 	const int NoHitAttackTime = 40;	//攻撃があたらない時間
@@ -43,7 +64,9 @@ protected:
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override{};
 protected:
-	VECTOR2_f m_PlayerPos;		//プレイヤーの位置	
+	VECTOR2_f m_PlayerPos = { 0,0 };		//プレイヤーの位置	
 
-	VECTOR2_f m_CameraPos;		//カメラの位置
+	VECTOR2_f m_CameraPos = { 0,0 };		//カメラの位置
+
+	int m_DeadAnimCo = 0;					//死んだ時のアニメーションのカウント
 };

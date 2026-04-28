@@ -9,24 +9,11 @@ class CNazrin
 	:public CBoss
 {
 public:
-	//攻撃のパターン
-	enum enAttackMove
-	{
-		Standby,	//待機
-		Move_01,	//行動1
-		Move_02,	//行動2
-	};
+	bool NextSetPosBlock = false;		//次の所定位置まで動く
 
-	int m_AttackMove = enAttackMove::Standby;
+	const int Phase2_HP_Decrease = 50;	//フェーズ2の時に減らせるHPを設定
 
-	//ナズーリンのフェーズ
-	enum enBossPhase
-	{
-		Phase_1,	//フェーズ1
-		Phase_2,	//フェーズ2
-	};
-
-	int m_BossPhase = enBossPhase::Phase_1;
+	bool GetingApple = false;			//倒した時のリンゴがとれるようにする設定
 public:
 	CNazrin();
 	~CNazrin();
@@ -41,10 +28,10 @@ public:
 	void PlayerAttackHit(int Damage) override;
 
 	//ボスとの戦闘フラグを踏んだ
-	virtual void BossBattleFlag(VECTOR2_f SetPos) override;
+	void BossBattleFlag(VECTOR2_f SetPos) override;
 
 	//会話などのムービーシーンの時に動作する関数
-	virtual void MovieSceneUpdate() override;
+	void MovieSceneUpdate() override;
 private:
 	void Animation() override;
 
@@ -55,6 +42,9 @@ private:
 	void BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet);
 	//ボスムーブ2のアップデート
 	void BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet);
+
+	//ボスのムーブを戻す動作
+	void RetuanMoveSet();
 private:
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingCo;		//ジャンプするタイミングをカウント
@@ -75,6 +65,13 @@ private:
 
 	int m_PhaseChangeCo;		//フェーズを変えるタイミングをカウントする
 	bool m_NextPhaseSetting;	//フェーズを変える準備
+
+	bool m_ReturnMove;			//ムーブを戻す
+	int m_DecreaseHP;			//減ったHPを数える
+
+	VECTOR2_f m_Vector;			//ベクトル
+
+	int m_GetAppleCo;			//リンゴが取れるようになるまでの時間
 private:
 	int m_AttackAnimCo;			//攻撃アニメーションのカウント
 	bool m_AttackAnimTime;		//攻撃アニメーション中
