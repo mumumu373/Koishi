@@ -30,6 +30,8 @@ public:
 public:
 	bool AttackHit = false;	//攻撃をくらったか
 
+	bool NoHit = false;		//問答無用で無敵状態にする
+
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
 	const int NoHitAttackTime = 40;	//攻撃があたらない時間
 public:
@@ -62,7 +64,9 @@ protected:
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override{};
 protected:
-	VECTOR2_f m_PlayerPos;		//プレイヤーの位置	
+	VECTOR2_f m_PlayerPos = { 0,0 };		//プレイヤーの位置	
 
-	VECTOR2_f m_CameraPos;		//カメラの位置
+	VECTOR2_f m_CameraPos = { 0,0 };		//カメラの位置
+
+	int m_DeadAnimCo = 0;					//死んだ時のアニメーションのカウント
 };

@@ -183,10 +183,12 @@ void CCollisionDetection::PlayerAttackToBossCollision(std::unique_ptr<CNormalAtt
 			if (upBoss->m_State == CCharacter::enState::Living) {
 				ObjectInfo BossPos = SetBossInfo(upBoss, true);
 
-				if (upBoss->AttackHit == false) {
-					//‰~Œ`‚Æ‹éŒ`‚ÅŒ©‚é
-					if (CircleToSquareDetection(BossPos, upNormalAttack->GetColion(AttackCollision)) == true) {
-						upBoss->PlayerAttackHit(20);
+				if (upBoss->NoHit == false) {
+					if (upBoss->AttackHit == false) {
+						//‰~Œ`‚Æ‹éŒ`‚ÅŒ©‚é
+						if (CircleToSquareDetection(BossPos, upNormalAttack->GetColion(AttackCollision)) == true) {
+							upBoss->PlayerAttackHit(20);
+						}
 					}
 				}
 			}

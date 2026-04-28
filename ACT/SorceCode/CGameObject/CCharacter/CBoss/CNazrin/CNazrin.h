@@ -10,6 +10,8 @@ class CNazrin
 {
 public:
 	bool NextSetPosBlock = false;
+
+	const int Phase2_HP_Decrease = 50;	//フェーズ2の時に減らせるHPを設定
 public:
 	CNazrin();
 	~CNazrin();
@@ -38,6 +40,9 @@ private:
 	void BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet);
 	//ボスムーブ2のアップデート
 	void BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBullet>>& upBullet);
+
+	//ボスのムーブを戻す動作
+	void RetuanMoveSet();
 private:
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingCo;		//ジャンプするタイミングをカウント
@@ -59,7 +64,8 @@ private:
 	int m_PhaseChangeCo;		//フェーズを変えるタイミングをカウントする
 	bool m_NextPhaseSetting;	//フェーズを変える準備
 
-	bool m_NoHit;				//問答無用で無敵状態にする
+	bool m_ReturnMove;			//ムーブを戻す
+	int m_DecreaseHP;			//減ったHPを数える
 private:
 	int m_AttackAnimCo;			//攻撃アニメーションのカウント
 	bool m_AttackAnimTime;		//攻撃アニメーション中

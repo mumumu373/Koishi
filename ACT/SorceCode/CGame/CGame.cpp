@@ -320,6 +320,7 @@ void CGame::Update()
 		m_upCamera->Update();
 		//ボスのフェーズが2になったら
 		if (m_upBoss->m_BossPhase == CBoss::enBossPhase::Phase_2) {
+			//強制スクロールにする
 			m_upCamera->BossPhase2Camera();
 		}
 
