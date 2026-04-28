@@ -23,6 +23,8 @@ public:
 
 	//プレイヤーとエネミーの当たり判定
 	void PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
+	//プレイヤーとボスの当たり判定
+	void PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlayer, std::unique_ptr<CBoss>& upBoss);
 	//ボスとエネミーの当たり判定
 	void BossToEnemyCollision(std::unique_ptr<CBoss>& upBoss, std::vector<std::unique_ptr<CEnemy>>& upEnemy);
 

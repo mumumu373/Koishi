@@ -551,6 +551,9 @@ void CGame::CollisionUpdate()
 
 	//ボスバトルになったら判定するもの
 	if (m_Scene == enScene::BossBattle) {
+		//プレイヤーとボスの当たり判定
+		m_upCollisionDetection->PlayerToBossCollision(m_upPlayer, m_upBoss);
+
 		//プレイヤーのアタックとボスの当たり判定	これはボス戦のみ動かす
 		m_upCollisionDetection->PlayerAttackToBossCollision(m_upPlayer->GetNormalAttack_p(), m_upBoss);
 
