@@ -17,7 +17,7 @@ CNazrin::CNazrin()
 	m_MyCamp = enMyCamp::EnemyCamp;
 
 	//生存中にする
-	m_State = enState::Living;
+	m_State = enState::Dying;
 
 	//スタンバイ中
 	m_AttackMove = enAttackMove::Standby;
@@ -74,29 +74,51 @@ void CNazrin::StartSetting()
 	//減ったHPを見る
 	m_DecreaseHP = 0;
 
+	//ベクトル変数
+	m_Vector = { 0,0 };
+
+	//リンゴをゲットできるまでのカウント
+	m_GetAppleCo = 0;
+
 	//元居た場所を記憶する
 	m_MemoryPos = m_Position;
 }
 
 void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 {
-	//アニメーション処理
-	Animation();
-
 	VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(&m_Position);
 
-	//CImageManagerがシングルトン化しているので、サウンドのように使える
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Nazrin)->TransAlBlendRotation3(
-		DispPos.x,				//表示位置x座標
-		DispPos.y,				//表示位置y座標
-		m_Framesplit.w,			//画像幅
-		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-		m_Framesplit.x,			//元画像x座標
-		m_Framesplit.y,			//元画像y座標
-		m_FrameSize.x,			//元画像xサイズ		
-		m_FrameSize.y,			//元画像yサイズ
-		m_Alpha, 
-		m_Delection.x, m_Delection.y, m_Delection.z);					//透明度、角度
+	if (m_State != enState::Dead) {
+		//アニメーション処理
+		Animation();
+
+		//CImageManagerがシングルトン化しているので、サウンドのように使える
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_Nazrin)->TransAlBlendRotation3(
+			DispPos.x,				//表示位置x座標
+			DispPos.y,				//表示位置y座標
+			m_Framesplit.w,			//画像幅
+			m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+			m_Framesplit.x,			//元画像x座標
+			m_Framesplit.y,			//元画像y座標
+			m_FrameSize.x,			//元画像xサイズ		
+			m_FrameSize.y,			//元画像yサイズ
+			m_Alpha,
+			m_Delection.x, m_Delection.y, m_Delection.z);					//透明度、角度
+	}
+	//死んだとき
+	else {
+		//リンゴを表示するようにする
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_Apple)->TransAlBlendRotation(
+			DispPos.x,				//表示位置x座標
+			DispPos.y,				//表示位置y座標
+			m_Framesplit.w,			//画像幅
+			m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+			m_Framesplit.x,			//元画像x座標
+			m_Framesplit.y,			//元画像y座標
+			m_FrameSize.x,			//元画像xサイズ		
+			m_FrameSize.y,			//元画像yサイズ
+			m_Alpha, 0);			//透明度、角度
+	}
 }
 
 void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
@@ -328,8 +350,54 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	case enState::Dying:
 		//回転する
 		m_Delection.z += 10;
+		//飛び上がって地面に激突したら
+		if (m_GroundStand == true) {
+			//死
+			m_State = enState::Dead;
+
+			//落ちないように
+			m_FallingSpeed = 0;
+
+			//リンゴを描画するようにする
+			m_FrameSize = { 32,32 };
+			m_Framesplit = { 0,0,32,32 };
+			//角度を初期化
+			m_Delection = { 0,0,0 };
+
+			//不透明に
+			m_Alpha = 255;
+
+			//少し浮かせて配置する
+			m_Position.y += 0;
+
+			//ベクトルを初期化
+			m_Vector = { 0,0 };
+
+			//Y方向にだけ動かす
+			m_Speed.x = 0;
+			m_Speed.y = 1;
+
+			//地上にいないようにする
+			m_GroundStand = false;
+
+			//倒された位置を記憶する
+			m_MemoryPos = m_Position;
+		}
 		break;
 	case enState::Dead:
+		m_Vector.y += m_Speed.y / 10;
+
+		m_Position.y = m_MemoryPos.y + 160 * sin(m_Vector.y);
+
+		m_FallingSpeed = 0;
+
+		//ボスを倒してからリンゴが取れるまでの時間
+		if (m_GetAppleCo >= 100) {
+			GetingApple = true;
+		}
+		else {
+			m_GetAppleCo++;
+		}
 		break;
 	}
 
@@ -383,8 +451,8 @@ void CNazrin::PlayerAttackHit(int Damage)
 			m_Jumping = false;
 
 			//HPを入れる
-			MAX_HP = 250;
-			HP = MAX_HP;		
+			MAX_HP = 20;
+			HP = MAX_HP;
 
 			//即落下するようにする
 			m_FallingSpeed = 0;
@@ -397,11 +465,14 @@ void CNazrin::PlayerAttackHit(int Damage)
 			m_PhaseChangeAniTime = true;
 
 			//演出で一瞬止める
-			Sleep(20);
+			Sleep(180);
 
 			//飛び上がるようにする
 			m_JumpPower = 30;
 			m_FallingSpeed = -m_JumpPower;
+
+			//地上から離れるように
+			m_GroundStand = false;
 		}
 	}
 }

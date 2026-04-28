@@ -9,9 +9,11 @@ class CNazrin
 	:public CBoss
 {
 public:
-	bool NextSetPosBlock = false;
+	bool NextSetPosBlock = false;		//次の所定位置まで動く
 
 	const int Phase2_HP_Decrease = 50;	//フェーズ2の時に減らせるHPを設定
+
+	bool GetingApple = false;			//倒した時のリンゴがとれるようにする設定
 public:
 	CNazrin();
 	~CNazrin();
@@ -66,6 +68,10 @@ private:
 
 	bool m_ReturnMove;			//ムーブを戻す
 	int m_DecreaseHP;			//減ったHPを数える
+
+	VECTOR2_f m_Vector;			//ベクトル
+
+	int m_GetAppleCo;			//リンゴが取れるようになるまでの時間
 private:
 	int m_AttackAnimCo;			//攻撃アニメーションのカウント
 	bool m_AttackAnimTime;		//攻撃アニメーション中

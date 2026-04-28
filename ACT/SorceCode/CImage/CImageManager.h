@@ -21,8 +21,9 @@ public:
 		IMG_String,			//ワイヤー	
 		IMG_Wirepoint,		//ワイヤーポイント
 		IMG_BackGround,		//背景
-		IMG_BackSky,			//空
+		IMG_BackSky,		//空
 		IMG_Nazrin,			//ナズーリン	1面ボス
+		IMG_Apple,			//リンゴ
 
 		IMG_Bullet,			//全員のバレット
 		IMG_Effect,			//エフェクト
