@@ -205,11 +205,11 @@ double CPlayer::GetWireStartSpeed()
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (DAMAGE_KEDAMA_HIT==true) {
-		PlayerMyHit();
+		PlayerDamegEriaHit();
 		DAMAGE_KEDAMA_HIT = false;
 	}
 	if (GetAsyncKeyState('Z') & 0x8000) {
-		PlayerMyHit1();
+		PlayerMyHit({0,0});
 	}
 	
 
@@ -1012,7 +1012,7 @@ void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
 	WireTopPos = TopPos;
 }
 
-void CPlayer::PlayerMyHit()
+void CPlayer::PlayerDamegEriaHit()
 {
 
 	//攻撃が当たった
@@ -1026,9 +1026,14 @@ void CPlayer::PlayerMyHit()
 	m_JumpAcc += m_HitBackCoPware;
 	m_Acceleration = { 0,0 };
 }
-void CPlayer::PlayerMyHit1()
+void CPlayer::PlayerMyHit(VECTOR2_f pos)
 {
-
+	if (pos.x> GetCenterPosition().x) {
+		m_Acceleration.x = -10;
+	}
+	else {
+		m_Acceleration.x = 10;
+	}
 	//攻撃が当たった
 	AttackHit = true;
 	//攻撃が当たらない時間のカウントをセット
@@ -1038,7 +1043,7 @@ void CPlayer::PlayerMyHit1()
 	//ヒットバック準備
 	m_HitBackBack = true;
 	m_HitBackBackCount = 10;
-	m_Acceleration.x = 10;
+
 	m_JumpAcc = 2;
 
 }

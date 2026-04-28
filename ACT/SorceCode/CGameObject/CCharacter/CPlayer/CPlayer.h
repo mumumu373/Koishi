@@ -123,8 +123,8 @@ public://パブリック
 	bool MoveSafeWrier(VECTOR2_f pos);
 	void SetWireTopPos(VECTOR2_f TopPos);
 
-	void PlayerMyHit();
-	void PlayerMyHit1();
+	void PlayerDamegEriaHit();
+	void PlayerMyHit(VECTOR2_f pos);
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }

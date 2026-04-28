@@ -55,7 +55,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 				//当たったら
 				if (CircleDetection(PlayerPos, EnemyPos) == true) {
 					//プレイヤーがエネミーに当たったときの処理
-					//upPlayer->EnemyHit(10);
+					upPlayer->PlayerMyHit(upEnemy[EnemyNo]->GetCenterPosition());
 				}
 			}
 		}
@@ -217,6 +217,7 @@ void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPl
 
 						//バレットがプレイヤーに当たった時の処理
 						upBullet[BulletNo]->CharacterHit();
+						//upPlayer->PlayerMyHit(upBullet[BulletNo]->GetCenterPosition());
 					}
 				}
 			}
