@@ -71,7 +71,7 @@ void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlay
 			ObjectInfo BossPos = SetBossInfo(upBoss, true);
 
 			if (CircleDetection(PlayerPos, BossPos) == true) {
-				upPlayer->PlayerMyHit1();
+				upPlayer->PlayerMyHit(upBoss->GetCenterPosition());
 			}
 		}
 	}
