@@ -229,6 +229,10 @@ void CWireActionSupporter::WirePointAction()
 		WireActionEnd();
 		return;
 	}
+	if (m_dpPlayer->GetMyHit()) {
+		EnemiActionEnd();
+		return;
+	}
 	OldWallHit = true;
 	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
 	{
@@ -318,7 +322,10 @@ void CWireActionSupporter::EnemitoAction()
 {
 	if (m_dpPlayer->GetStete() == CCharacter::enState::Living)
 	{
-		
+		if (m_dpPlayer->GetMyHit()) {
+			EnemiActionEnd();
+			return;
+		}
 
 		m_pEnemy->CatchWire();
 		VECTOR2_f TopPos;
@@ -396,4 +403,5 @@ void CWireActionSupporter::EnemiActionEnd()
 	m_dpPlayer = nullptr;
 	m_dpWire = nullptr;
 	m_pEnemy = nullptr;
+	m_dpWirePoint = nullptr;
 }

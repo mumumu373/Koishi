@@ -274,7 +274,24 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 		}
 		else {
-			JumpPlayer();
+			//空中回避状態なら
+			if (enActionState != enActionState::AirAvoidance) {
+				//最大落下速度
+				if (m_JumpAcc > MAX_FALLING_SPEED) {
+					m_Position.y = MAX_FALLING_SPEED;
+				}
+				else {
+					if (m_HitBack == true) {
+						m_JumpAcc -= Gravity;
+					}
+					else {
+						m_JumpAcc -= PlayerGrobtyi;
+					}
+
+					m_Position.y -= m_JumpAcc;
+				}
+			}
+			m_MoveState = enMoveState::Wait;
 			MovePlayerJump();
 			if (m_HitBackBack) {
 				if (m_HitBackBackCount<=0) {
@@ -1014,7 +1031,7 @@ void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
 
 void CPlayer::PlayerDamegEriaHit()
 {
-
+	m_JumpRemove = true;
 	//攻撃が当たった
 	AttackHit = true;
 	//攻撃が当たらない時間のカウントをセット
@@ -1028,6 +1045,7 @@ void CPlayer::PlayerDamegEriaHit()
 }
 void CPlayer::PlayerMyHit(VECTOR2_f pos)
 {
+	m_JumpRemove = true;
 	if (pos.x> GetCenterPosition().x) {
 		m_Acceleration.x = -10;
 	}

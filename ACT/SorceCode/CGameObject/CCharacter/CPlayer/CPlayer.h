@@ -128,6 +128,7 @@ public://パブリック
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }
+	bool GetMyHit() {if (m_HitBackBack|| m_HitBack) {return true;}return false;}
 private:
 	void AvoidanceEnd();
 	void KyeInput();
