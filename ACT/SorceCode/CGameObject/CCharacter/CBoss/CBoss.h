@@ -47,6 +47,9 @@ public:
 	//プレイヤーの攻撃がヒットした時の動作
 	virtual void PlayerAttackHit(int Damage) = 0;
 
+	//投げられたエネミーにヒットした時の動作
+	virtual void ThrowEnemyHit(int Damage) = 0;
+
 	//ボスとの戦闘フラグを踏んだ
 	virtual void BossBattleFlag(VECTOR2_f PlayerPos) = 0;
 

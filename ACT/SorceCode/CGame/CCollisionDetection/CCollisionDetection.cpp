@@ -15,7 +15,7 @@ void CCollisionDetection::Update()
 
 void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CEnemy>>& upEnemy)
 {
-	if (upPlayer->m_State == CCharacter::enState::Living) {
+	if (upPlayer->m_State == CPlayer::enState::Living) {
 		//当たり判定の位置情報セット
 		ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
 
@@ -48,7 +48,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 					}
 				}
 			}
-			if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
+			if (upEnemy[EnemyNo]->m_State == CPlayer::enState::Living) {
 				//当たり判定のセット
 				ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
 
@@ -56,6 +56,54 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 				if (CircleDetection(PlayerPos, EnemyPos) == true) {
 					//プレイヤーがエネミーに当たったときの処理
 					upPlayer->PlayerMyHit(upEnemy[EnemyNo]->GetCenterPosition());
+				}
+			}
+		}
+	}
+}
+
+void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlayer, std::unique_ptr<CBoss>& upBoss)
+{
+	if (upPlayer->m_State == CPlayer::enState::Living) {
+		if (upBoss->m_State == CBoss::enState::Living) {
+			//当たり判定の位置情報セット
+			ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
+			ObjectInfo BossPos = SetBossInfo(upBoss, true);
+
+			if (CircleDetection(PlayerPos, BossPos) == true) {
+				upPlayer->PlayerMyHit1();
+			}
+		}
+	}
+}
+
+void CCollisionDetection::BossToEnemyCollision(std::unique_ptr<CBoss>& upBoss, std::vector<std::unique_ptr<CEnemy>>& upEnemy)
+{
+	if (upBoss->m_State == CBoss::enState::Living) {
+		//当たり判定セット
+		ObjectInfo BossPos = SetBossInfo(upBoss, true);
+
+		//エネミー
+		for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
+			//エネミーがワイヤーに掴まれた状態になったら
+			if (upEnemy[EnemyNo]->m_CatchWire == CEnemy::enCatchWire::Catch) {
+				//プレイヤーが投げたら
+				if (upEnemy[EnemyNo]->EnemyThrown == true) {
+					//投げられたエネミーの当たり判定のセット
+					ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
+
+					//攻撃をくらわない状態でなければ
+					if (upBoss->NoHit == false) {
+						//攻撃を始めて食らうなら
+						if (upBoss->AttackHit == false) {
+							if (CircleDetection(BossPos, EnemyPos) == true) {
+								//投げられたエネミーのヒットストップをする
+								upEnemy[EnemyNo]->SetHitStop();
+								//投げられたエネミーのダメージを受ける処理
+								upBoss->ThrowEnemyHit(75);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -159,7 +207,7 @@ void CCollisionDetection::PlayerAttackToEnemyCollision(std::unique_ptr<CNormalAt
 	if (upNormalAttack->GetAttack() == true) {
 		for (int AttackCollision = 0; AttackCollision < upNormalAttack->GetMAX(); AttackCollision++) {
 			for (int EnemyNo = 0; EnemyNo < upEnemy.size(); EnemyNo++) {
-				if (upEnemy[EnemyNo]->m_State == CCharacter::enState::Living) {
+				if (upEnemy[EnemyNo]->m_State == CEnemy::enState::Living) {
 					//当たり判定のセット
 					ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
 
@@ -180,7 +228,7 @@ void CCollisionDetection::PlayerAttackToBossCollision(std::unique_ptr<CNormalAtt
 	//攻撃状態なら
 	if (upNormalAttack->GetAttack() == true) {
 		for (int AttackCollision = 0; AttackCollision < upNormalAttack->GetMAX(); AttackCollision++) {
-			if (upBoss->m_State == CCharacter::enState::Living) {
+			if (upBoss->m_State == CBoss::enState::Living) {
 				ObjectInfo BossPos = SetBossInfo(upBoss, true);
 
 				if (upBoss->NoHit == false) {
@@ -198,13 +246,13 @@ void CCollisionDetection::PlayerAttackToBossCollision(std::unique_ptr<CNormalAtt
 
 void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
-	if (upPlayer->m_State == CCharacter::enState::Living) {
+	if (upPlayer->m_State == CPlayer::enState::Living) {
 		//当たり判定の位置情報セット
 		ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
 
 		//バレット
 		for (int BulletNo = 0; BulletNo < upBullet.size(); BulletNo++) {
-			if (upBullet[BulletNo]->m_State == CCharacter::enState::Living) {
+			if (upBullet[BulletNo]->m_State == CBullet::enState::Living) {
 				//陣営が違うなら
 				if (upBullet[BulletNo]->m_MyCamp != upPlayer->m_MyCamp) {
 					//当たり判定のセット

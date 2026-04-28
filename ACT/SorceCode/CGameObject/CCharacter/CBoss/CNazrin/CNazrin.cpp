@@ -17,7 +17,7 @@ CNazrin::CNazrin()
 	m_MyCamp = enMyCamp::EnemyCamp;
 
 	//生存中にする
-	m_State = enState::Dying;
+	m_State = enState::Living;
 
 	//スタンバイ中
 	m_AttackMove = enAttackMove::Standby;
@@ -382,6 +382,9 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 			//倒された位置を記憶する
 			m_MemoryPos = m_Position;
+
+			//演出で一瞬止める
+			Sleep(180);
 		}
 		break;
 	case enState::Dead:
@@ -464,9 +467,6 @@ void CNazrin::PlayerAttackHit(int Damage)
 			//被弾アニメーション
 			m_PhaseChangeAniTime = true;
 
-			//演出で一瞬止める
-			Sleep(180);
-
 			//飛び上がるようにする
 			m_JumpPower = 30;
 			m_FallingSpeed = -m_JumpPower;
@@ -475,6 +475,12 @@ void CNazrin::PlayerAttackHit(int Damage)
 			m_GroundStand = false;
 		}
 	}
+}
+
+void CNazrin::ThrowEnemyHit(int Damage)
+{
+	//処理に違いはないので呼ぶ出すようにする
+	PlayerAttackHit(Damage);
 }
 
 //ボスバトルが始まった時の関数
