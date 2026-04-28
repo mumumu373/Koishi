@@ -124,8 +124,10 @@ public://パブリック
 	void SetWireTopPos(VECTOR2_f TopPos);
 
 	void PlayerMyHit();
+	void PlayerMyHit1();
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
+	int GetAlpha() { return m_Alpha; }
 private:
 	void AvoidanceEnd();
 	void KyeInput();
@@ -140,6 +142,7 @@ private:
 	void PlayerColorChange();
 
 	void Dash();
+
 
 private:
 	void AirAvoidanceVECTSet();
@@ -180,6 +183,10 @@ private:
 
 	bool m_HitBack;			//攻撃を受けたときのヒットバック中かを見る
 	int m_HitBackCo;		//ヒットバック中のカウント
+
+	bool m_HitBackBack;
+	int m_HitBackBackCount;
+
 	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
 
 

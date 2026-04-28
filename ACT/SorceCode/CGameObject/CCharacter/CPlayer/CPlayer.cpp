@@ -43,6 +43,8 @@ CPlayer::CPlayer()
 	, m_HitBack(0)
 	, m_HitBackCo(0)
 	, m_HitBackSpeed({0,0})
+	, m_HitBackBack(false)
+	, m_HitBackBackCount()
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -206,7 +208,10 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		PlayerMyHit();
 		DAMAGE_KEDAMA_HIT = false;
 	}
-
+	if (GetAsyncKeyState('Z') & 0x8000) {
+		PlayerMyHit1();
+	}
+	
 
 	m_MoveSpeed = NoSpeed;
 	if (enActionState == enActionState::WireObjectCatch){
@@ -225,7 +230,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	//常にfalseにする
 	GroundStand = false;
 	if (enActionState != enActionState::WirePointCatch) {
-		if (m_HitBack != true) {
+		if (m_HitBack != true&&m_HitBackBack!=true) {
 			//ワイヤーポイントを掴んでいないなら
 
 				//プレイヤーのジャンプの制御
@@ -270,10 +275,25 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 		else {
 			JumpPlayer();
+			MovePlayerJump();
+			if (m_HitBackBack) {
+				if (m_HitBackBackCount<=0) {
+					m_HitBackBack = false;
+					m_Acceleration = { 0,0 };
+				}
+				else {
+					m_HitBackBackCount--;
+				}
 		
-			if (m_Position.y>m_OldPosition.y) {
-				m_HitBack = false;
 			}
+			else {
+				if (m_Position.y > m_OldPosition.y) {
+					m_HitBack = false;
+					m_Acceleration.x = 0;
+
+				}
+			}
+		
 		
 
 
@@ -457,13 +477,13 @@ void CPlayer::Animation()
 
 		switch (m_MoveState) {
 		case enMoveState::Wait:
-
+			m_Framesplit.x = ImageSize*2;
 			break;
 		case enMoveState::MoveLeft:
 			if (m_AnimationCount > AnimationSpeed) {
 				m_AnimationCount = 0;
 				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 3) {
+				if (m_Framesplit.x > ImageSize * 4) {
 					m_Framesplit.x = ImageSize * 2;
 				}
 			}
@@ -472,7 +492,7 @@ void CPlayer::Animation()
 			if (m_AnimationCount > AnimationSpeed) {
 				m_AnimationCount = 0;
 				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 3) {
+				if (m_Framesplit.x > ImageSize * 4) {
 					m_Framesplit.x = ImageSize * 2;
 				}
 			}
@@ -497,7 +517,7 @@ void CPlayer::Animation()
 
 		break;
 	}
-	if (m_HitBack) {
+	if (m_HitBack|| m_HitBackBack) {
 		m_Framesplit.y = ImageSize * 5;
 		m_Framesplit.x = 0;
 	}
@@ -715,6 +735,7 @@ void CPlayer::KyeInput()
 
 	if (m_leftkey[0])
 	{
+	
 		m_MoveState = enMoveState::MoveLeft;
 		//シフトキーを押しているなら回避状態にする
 		if (enActionState != enActionState::WireShot && enActionState != enActionState::WirePointCatch&& enActionState != enActionState::WireObjectCatch) {
@@ -817,6 +838,13 @@ void CPlayer::MovePlayer()
 {
 	switch (m_MoveState) {
 	case enMoveState::Wait:
+		if (m_Rdash==true|| m_Ldash==true) {
+			m_Rdashcount = 0;
+			m_Rdash = false;
+
+			m_Ldash = false;
+			m_Ldashcount = 0;
+		}
 		break;
 	case enMoveState::MoveLeft:
 
@@ -995,8 +1023,24 @@ void CPlayer::PlayerMyHit()
 	m_JumpAcc = 0;
 	//ヒットバック準備
 	m_HitBack = true;
-	m_HitBackCo = m_HitBackCoMAX;
 	m_JumpAcc += m_HitBackCoPware;
+	m_Acceleration = { 0,0 };
+}
+void CPlayer::PlayerMyHit1()
+{
+
+	//攻撃が当たった
+	AttackHit = true;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = NoHitAttackTime;
+
+	m_JumpAcc = 0;
+	//ヒットバック準備
+	m_HitBackBack = true;
+	m_HitBackBackCount = 10;
+	m_Acceleration.x = 10;
+	m_JumpAcc = 2;
+
 }
 
 void CPlayer::PlayerColorChange()

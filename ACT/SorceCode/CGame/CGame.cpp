@@ -392,6 +392,7 @@ void CGame::Update()
 //描画関数(画像の表示処理を行う)
 void CGame::Draw()
 {
+	VECTOR2_f Senter ;
 	switch (m_Scene)
 	{
 	case enScene::Title:
@@ -417,8 +418,12 @@ void CGame::Draw()
 		//ワイヤーの描画
 		m_pWire->Draw(m_upCamera);
 
+
+		 Senter =m_pWire->GetTopPoint();
+		Senter.x += m_pWire->GetSize() / 2;
+		Senter.y += m_pWire->GetSize() / 2;
 		//プレイヤーの描画
-		m_upPlayer->SetWireTopPos(m_pWire->GetTopPoint());
+		m_upPlayer->SetWireTopPos(Senter);
 		m_upPlayer->Draw(m_upCamera);
 		//ワイヤーの手の描画
 		m_pWire->WireHandDraw(m_upCamera);

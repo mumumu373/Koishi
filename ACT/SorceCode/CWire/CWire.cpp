@@ -129,7 +129,7 @@ void CWire::WireHandDraw(std::unique_ptr<CCamera>& pCamera)
 			64 * 4,			//元画像y座標
 			64,			//元画像xサイズ		
 			64,			//元画像yサイズ
-			255,  (Radian * 180 / M_PI));					//透明度、角度
+			m_DpPlayer->GetAlpha(),  (Radian * 180 / M_PI));					//透明度、角度
 	}
 
 }
