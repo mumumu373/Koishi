@@ -27,9 +27,12 @@ public:
 	static constexpr int	AnimationSpeed = 5;//何フレームに一回動くか
 	static constexpr  double	NoSpeed = 10;//ノーマルスピード
 	static constexpr  double	cathiSpeed = 5;//物持ち中のスピード
-
 	static constexpr int	AvoidanceCan = 3;//空中回避回数
 
+
+	static constexpr int m_HitBackCoMAX = 30;//ヒットバック時間
+	static constexpr int NoHitAttackTime = 120;	//攻撃があたらない時間
+	static constexpr int m_HitBackCoPware = 25;//ノックバックパワー
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
 
@@ -119,6 +122,8 @@ public://パブリック
 
 	bool MoveSafeWrier(VECTOR2_f pos);
 	void SetWireTopPos(VECTOR2_f TopPos);
+
+	void PlayerMyHit();
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 private:
@@ -171,4 +176,15 @@ private:
 
 	VECTOR2_f WireTopPos;
 	
+
+
+	bool m_HitBack;			//攻撃を受けたときのヒットバック中かを見る
+	int m_HitBackCo;		//ヒットバック中のカウント
+	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
+
+
+	bool AttackHit = false;	//攻撃をくらったか
+
+	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
+
 };

@@ -8,7 +8,7 @@ const char APP_NAME[] = "UFO_STRYKER_BATTLE";		//アプリ名
 const char WND_TITLE[] = "UFO_STRYKER_BATTLE";		//ウィンドウタイトル
 
 bool SIZEMAX = false;		//切り替えた時に画面が最大化したらtrueになる
-
+MINMAXINFO* mmi;
 //スレッド関数.
 DWORD WINAPI ThreadFunc( LPVOID vdParam )
 {
@@ -78,7 +78,7 @@ DWORD WINAPI ThreadFunc( LPVOID vdParam )
 		}
 		frames++;	//フレーム数UP.
 
-		Sleep(3);	//画面ちらつき回避のため5ミリ秒待つ
+		Sleep(5);	//画面ちらつき回避のため5ミリ秒待つ
 	}
 
 	//----------------------------------------------------------
@@ -322,13 +322,13 @@ LRESULT CALLBACK WindowProc(
 			}
 		}
 		return 0;
-	case WM_GETMINMAXINFO: {
-		MINMAXINFO* mmi = (MINMAXINFO*)lParam;
+	case WM_GETMINMAXINFO: 
+	
+		mmi = (MINMAXINFO*)lParam;
 		// 制限を非常に大きな値に書き換える（例: 10000ピクセル）
-		mmi->ptMaxTrackSize.x = 10000;
-		mmi->ptMaxTrackSize.y = 10000;
+		mmi->ptMaxTrackSize.x = 2000;
+		mmi->ptMaxTrackSize.y = 2000;
 		return 0;
-	}
 	case WM_MOUSEMOVE:
 		if (SIZEMAX == true) {
 			LONG STYLE;
