@@ -14,6 +14,8 @@ public:
 	const int Phase2_HP_Decrease = 50;	//フェーズ2の時に減らせるHPを設定
 
 	bool GetingApple = false;			//倒した時のリンゴがとれるようにする設定
+
+	int Phase2_MAX_HP = 20;				//フェーズ2の最大HP
 public:
 	CNazrin();
 	~CNazrin();
@@ -35,6 +37,9 @@ public:
 
 	//会話などのムービーシーンの時に動作する関数
 	void MovieSceneUpdate() override;
+
+	//ボス攻略アイテムをゲットしたか
+	bool GetBossClearFlag() { return GetingApple; };
 private:
 	void Animation() override;
 

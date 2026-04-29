@@ -139,7 +139,7 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	if (AttackHit == false) {
+	if (m_AttackHit == false) {
 		//バレットを撃ちだす動作
 		m_BulletShotCo++;
 		if (m_BulletShot == true) {
@@ -182,11 +182,11 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 
 	//攻撃を受けたとき
-	if (AttackHit == true) {
+	if (m_AttackHit == true) {
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
-			AttackHit = false;
+			m_AttackHit = false;
 			//表示する
 			m_Alpha = 255;
 		}
@@ -238,7 +238,7 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 	double Speed = 0.f;	//スピード
 
 	//攻撃が当たった
-	AttackHit = true;
+	m_AttackHit = true;
 	//半透明にする
 	m_Alpha = 200;
 

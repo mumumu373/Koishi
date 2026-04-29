@@ -125,7 +125,7 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	m_OldPosition = m_Position;
 
 	//攻撃を受けていなければ
-	if (AttackHit == false) {
+	if (m_AttackHit == false) {
 		//属性によって撃つバレットを変える
 		switch (m_Color) {
 		case enColor::NoColor:
@@ -155,11 +155,11 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		MoveControl();
 	}
 	//攻撃を受けたとき
-	else if (AttackHit == true) {
+	else if (m_AttackHit == true) {
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
-			AttackHit = false;
+			m_AttackHit = false;
 			//表示する
 			m_Alpha = 255;
 		}
@@ -212,7 +212,7 @@ void CFairy::PlayerAttackHit(int Damage, int Color)
 	double Speed = 0.f;	//スピード
 
 	//攻撃が当たった
-	AttackHit = true;
+	m_AttackHit = true;
 	//半透明にする
 	m_Alpha = 200;
 

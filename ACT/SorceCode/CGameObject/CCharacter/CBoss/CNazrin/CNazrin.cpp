@@ -130,7 +130,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		//次のフェーズの準備を行う
 		if (m_NextPhaseSetting == true) {
 			//準備完了まで無敵にする
-			AttackHit = true;
+			NoHit = true;
 
 			//フェーズチェンジを完了する時間
 			if (m_PhaseChangeCo < 300) {
@@ -193,13 +193,13 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			}
 
 			//点滅を直すために実行
-			if (AttackHit == true) {
+			if (m_AttackHit == true) {
 				//攻撃が当たらない時間を過ぎたら
 				if (NoHitAttackCo >= NoHitAttackTime) {
 					//カウントが増えないようにする
-					NoHitAttackCo = NoHitAttackTime;
-					//変身中とか攻撃する非道はいないっしょ
-					//AttackHit = false;
+					NoHitAttackCo = 0;
+					
+					m_AttackHit = false;
 					//表示する
 					m_Alpha = 255;
 				}
@@ -320,12 +320,12 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			}
 
 			//攻撃を受けたとき
-			if (AttackHit == true) {
+			if (m_AttackHit == true) {
 				//攻撃が当たらない時間を過ぎたら
 				if (NoHitAttackCo >= NoHitAttackTime) {
 					//カウント初期化
 					NoHitAttackCo = 0;
-					AttackHit = false;
+					m_AttackHit = false;
 
 					//表示する
 					m_Alpha = 255;
@@ -375,7 +375,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 			//Y方向にだけ動かす
 			m_Speed.x = 0;
-			m_Speed.y = 1;
+			m_Speed.y = 5;
 
 			//地上にいないようにする
 			m_GroundStand = false;
@@ -388,9 +388,9 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 		break;
 	case enState::Dead:
-		m_Vector.y += m_Speed.y / 10;
+		m_Vector.y += m_Speed.y / 100;
 
-		m_Position.y = m_MemoryPos.y + 160 * sin(m_Vector.y);
+		m_Position.y = m_MemoryPos.y + 40 * sin(m_Vector.y);
 
 		m_FallingSpeed = 0;
 
@@ -404,16 +404,18 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		break;
 	}
 
-	//落下速度を入れる
-	m_Position.y += m_FallingSpeed;
+	if (m_State != enState::Dead) {
+		//落下速度を入れる
+		m_Position.y += m_FallingSpeed;
 
-	StageCollision(44, 44);
+		StageCollision(44, 44);
+	}
 }
 
 void CNazrin::PlayerAttackHit(int Damage)
 {
 	//攻撃が当たった
-	AttackHit = true;
+	m_AttackHit = true;
 	//HPを減らす
 	HP -= Damage;
 	//攻撃が当たらない時間のカウントをセット
@@ -454,8 +456,7 @@ void CNazrin::PlayerAttackHit(int Damage)
 			m_Jumping = false;
 
 			//HPを入れる
-			MAX_HP = 20;
-			HP = MAX_HP;
+			HP = Phase2_MAX_HP;
 
 			//即落下するようにする
 			m_FallingSpeed = 0;

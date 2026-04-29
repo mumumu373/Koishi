@@ -112,7 +112,7 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
 
-	if (AttackHit == false) {
+	if (m_AttackHit == false) {
 		switch (m_Color) {
 		case enColor::NoColor:
 			break;
@@ -159,11 +159,11 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 	}
 	//UŒ‚‚ğó‚¯‚½‚Æ‚«
-	else if (AttackHit == true) {
+	else if (m_AttackHit == true) {
 		//UŒ‚‚ª“–‚½‚ç‚È‚¢ŠÔ‚ğ‰ß‚¬‚½‚ç
 		if (NoHitAttackCo >= NoHitAttackTime) {
 			NoHitAttackCo = 0;
-			AttackHit = false;
+			m_AttackHit = false;
 			//•\¦‚·‚é
 			m_Alpha = 255;
 		}
@@ -226,7 +226,7 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 void CKedama::PlayerAttackHit(int Damage, int Color)
 {
 	//UŒ‚‚ª“–‚½‚Á‚½
-	AttackHit = true;
+	m_AttackHit = true;
 	//”¼“§–¾‚É
 	m_Alpha = 200;
 	//‚à‚µƒvƒŒƒCƒ„[‚Ì‘®«‚Æˆê’v‚µ‚Ä‚¢‚½‚ç
