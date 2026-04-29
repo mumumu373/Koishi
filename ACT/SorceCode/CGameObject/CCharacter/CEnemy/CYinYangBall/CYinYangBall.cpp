@@ -34,6 +34,9 @@ CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos, int Size)
 	m_Framesplit.w = Size;
 	m_Framesplit.h = Size;
 
+	//当たり判定
+	m_RealFrameSplit = { m_Framesplit.w,m_Framesplit.h };
+
 	//装飾クラスを作る
 	//それぞれの個数装飾を作る
 	for (int i = 0; i < m_AmountDeco; i++) {
@@ -106,9 +109,6 @@ void CYinYangBall::StartSetting()
 	}
 	//元画像サイズ
 	m_FrameSize = { 64,64 };
-
-	//当たり判定
-	m_RealFrameSplit = { m_Framesplit.w,m_Framesplit.h };
 
 	m_OldPosition = m_Position;
 }

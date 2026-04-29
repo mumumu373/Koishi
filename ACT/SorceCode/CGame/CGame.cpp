@@ -113,7 +113,7 @@ bool CGame::Create()
 	SetEnemy.y += 500;																//作るときにムーブタイプを決めておく
 	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy,80, Speed, CFairy::enMoveType::Rotation, 60, 120));
 	SetEnemy.x += 600;
-	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Red, SetEnemy,100));
+	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Red, SetEnemy,200));
 
 	//ゲームシーン状態にしておく
 	m_Scene = enScene::Title;
