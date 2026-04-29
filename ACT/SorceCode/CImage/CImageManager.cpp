@@ -23,7 +23,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_Heart		,"Data\\Image\\Heart.bmp","Heart"} ,
 		{enImgList::IMG_BreakeHeart	,"Data\\Image\\BreakeHeart.bmp","BreakeHeart"} ,
 		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp","Enemy"} ,
-		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"IMG_Mouse"} ,
+		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"Mouse"} ,
 		{enImgList::IMG_String		,"Data\\Image\\String.bmp"				,"String"} ,
 		{enImgList::IMG_Wirepoint	,"Data\\Image\\WirePoint.bmp"			,"WirePoint"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
@@ -33,11 +33,11 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 
 		{enImgList::IMG_Bullet		,"Data\\Image\\Bullet.bmp","Bullet"} ,
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
-		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"IMG_Slash"} ,
-		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"IMG_DeadEffect"} ,
+		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"Slash"} ,
+		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
 
-		{enImgList::IMG_Title		,"Data\\Image\\TitleImage.bmp"			,"IMG_Title"} ,
-		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"IMG_Cursor"} ,
+		{enImgList::IMG_Title		,"Data\\Image\\TitleImage.bmp"			,"Title"} ,
+		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"Cursor"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	

@@ -81,13 +81,6 @@ void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Alpha, 
 		m_Delection.x, m_Delection.y, m_Delection.z);	//“§–¾“xAŠp“x
 
-	RECT rect;
-	rect.left = DispPos.x;
-	rect.top = DispPos.y ;
-	rect.right = DispPos.x + m_RealFrameSplit.x ;
-	rect.bottom = DispPos.y + m_RealFrameSplit.y;
-	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
-
 }
 
 void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
