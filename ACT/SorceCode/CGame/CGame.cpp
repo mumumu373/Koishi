@@ -109,11 +109,11 @@ bool CGame::Create()
 	//エネミーを作っている
 	VECTOR2_f SetEnemy = { 600,400 };
 	VECTOR2_f Speed = { 4,4 };
-	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy,60, 5, 30, 120));
+	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy,150, 5, 30, 120));
 	SetEnemy.y += 500;																//作るときにムーブタイプを決めておく
 	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy,80, Speed, CFairy::enMoveType::Rotation, 60, 120));
 	SetEnemy.x += 600;
-	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy,100));
+	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Red, SetEnemy,100));
 
 	//ゲームシーン状態にしておく
 	m_Scene = enScene::Title;
