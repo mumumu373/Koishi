@@ -132,6 +132,7 @@ bool CGame::Create()
 		//ステージの幅と高さをセットする<w.h>
 		std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
 		m_upCamera->SetStageSize(MapSize.first,MapSize.second);
+		m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
 	}
 
 	//初期設定
