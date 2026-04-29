@@ -18,7 +18,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 	};
 	ImgList Img_List[]
 	{ 
-		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMaina.bmp","MainStage"} ,
+		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMain.bmp","MainStage"} ,
 		{enImgList::IMG_Koishi		,"Data\\Image\\Koishi.bmp","Koishi"} ,
 		{enImgList::IMG_Heart		,"Data\\Image\\Heart.bmp","Heart"} ,
 		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp","Enemy"} ,
@@ -32,10 +32,10 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 
 		{enImgList::IMG_Bullet		,"Data\\Image\\Bullet.bmp","Bullet"} ,
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
-		{enImgList::IMG_Slash		,"Data\\Image\\slash32x96.bmp"		,"IMG_Slash"} ,
+		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"IMG_Slash"} ,
 		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"IMG_DeadEffect"} ,
 
-		{enImgList::IMG_Title		,"Data\\Image\\Title.bmp"			,"IMG_Title"} ,
+		{enImgList::IMG_Title		,"Data\\Image\\TitleImage.bmp"			,"IMG_Title"} ,
 		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"IMG_Cursor"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
