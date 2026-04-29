@@ -51,7 +51,7 @@ void CEnemy::ThrowEnemyHit(int Damage, VECTOR2_f ThrowEnemyPos)
 	HP -= Damage;
 
 	//攻撃が当たった
-	AttackHit = true;
+	m_AttackHit = true;
 
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;

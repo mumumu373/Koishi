@@ -116,10 +116,10 @@ private:
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 public://パブリック
 	//エネミーに触れたなら
-	void EnemyHit(int Damage);
+	void EnemyHit(VECTOR2_f Pos, int Damage);
 
 	//バレットに触れたなら
-	void BulletHit(int Color, int Damage, bool NazrinBullet);
+	void BulletHit(VECTOR2_f Pos, int Color, int Damage, bool NazrinBullet);
 
 	//カメラの当たり判定(ボスバトルなどの)
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
@@ -127,8 +127,8 @@ public://パブリック
 	bool MoveSafeWrier(VECTOR2_f pos);
 	void SetWireTopPos(VECTOR2_f TopPos);
 
-	void PlayerDamegEriaHit();
-	void PlayerMyHit(VECTOR2_f pos);
+	//ダメージ毛玉に触れた動作
+	void PlayerDamegEriaHit(int Damage);
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }
@@ -148,6 +148,12 @@ private:
 	void PlayerColorChange();
 
 	void Dash();
+
+	//プレイヤーのヒットした時動作
+	void PlayerMyHit(VECTOR2_f Pos);
+
+	//ダメージを受けたとき、HPの残りを見る
+	void PlayerRestHP();
 
 	void Death();
 private:
@@ -194,9 +200,6 @@ private:
 	int m_HitBackBackCount;
 
 	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
-
-
-	bool AttackHit = false;	//攻撃をくらったか
 
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
 

@@ -204,22 +204,19 @@ double CPlayer::GetWireStartSpeed()
 }
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
-{
-	if (m_State == enState::Living) {
-		if (DAMAGE_KEDAMA_HIT == true) {
-			PlayerDamegEriaHit();
-			DAMAGE_KEDAMA_HIT = false;
-		}
-		if (GetAsyncKeyState('Z') & 0x8000) {
-			HP = 0;
-			Death();
-		}
+{	
+	//ダメージ毛玉に触れたなら
+	if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false) {
+		PlayerDamegEriaHit(15);
+	}
+	else {
+		DAMAGE_KEDAMA_HIT = false;
+	}
 
-
-		m_MoveSpeed = NoSpeed;
-		if (enActionState == enActionState::WireObjectCatch) {
-			m_MoveSpeed = cathiSpeed;
-		}
+	m_MoveSpeed = NoSpeed;
+	if (enActionState == enActionState::WireObjectCatch){
+		m_MoveSpeed = cathiSpeed;
+	}
 
 		//過去の自分
 		m_OldPosition = m_Position;
@@ -318,28 +315,22 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 
 
+		}
+	}
+	if (m_AttackHit == true) {
+		//攻撃が当たらない時間を過ぎたら
+		if (NoHitAttackCo == 0) {
+			NoHitAttackCo = -1;
+			m_AttackHit = false;
+			//表示する
+		}
+		else {
+			if (NoHitAttackCo > 0) {
+				NoHitAttackCo--;
 			}
 		}
-		if (AttackHit == true) {
-			//攻撃が当たらない時間を過ぎたら
-			if (NoHitAttackCo == 0) {
-				NoHitAttackCo = -1;
-				AttackHit = false;
-				//表示する
-
-			}
-			else {
-				if (NoHitAttackCo > 0) {
-					NoHitAttackCo--;
-				}
-
-
-
-
-			}
-
-		}
-		AvoidanceEnd();
+	}
+	AvoidanceEnd();
 
 		//プレイヤーの属性変更制御
 		PlayerColorChange();
@@ -725,7 +716,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 	}
 }
 
-void CPlayer::EnemyHit(int Damage)
+void CPlayer::EnemyHit(VECTOR2_f Pos, int Damage)
 {
 	HP -= Damage;
 
@@ -733,9 +724,12 @@ void CPlayer::EnemyHit(int Damage)
 	m_upHeart->PlayerHeartDamage(m_Color, HP);
 
 	m_Acceleration = { 0,0 };//空中の加速度をリセットする
+
+	//当たった場所を見る
+	PlayerMyHit(Pos);
 }
 
-void CPlayer::BulletHit(int Color, int Damage, bool NazrinBullet)
+void CPlayer::BulletHit(VECTOR2_f Pos, int Color, int Damage, bool NazrinBullet)
 {
 	//属性が違うならまたはナズーリンのバレットなら
 	if (m_Color != Color || NazrinBullet == true) {
@@ -744,6 +738,9 @@ void CPlayer::BulletHit(int Color, int Damage, bool NazrinBullet)
 
 		//減ったHPの属性を入れる
 		m_upHeart->PlayerHeartDamage(m_Color, HP);
+
+		//当たった場所を見る
+		PlayerMyHit(Pos);
 	}
 	//属性が一緒ならスルー出来る
 }
@@ -1079,36 +1076,17 @@ void CPlayer::Death()
 
 }
 
-void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
-{
-	WireTopPos = TopPos;
-}
-
-void CPlayer::PlayerDamegEriaHit()
+void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 {
 	m_JumpRemove = true;
-	//攻撃が当たった
-	AttackHit = true;
-	//攻撃が当たらない時間のカウントをセット
-	NoHitAttackCo = NoHitAttackTime;
-
-	m_JumpAcc = 0;
-	//ヒットバック準備
-	m_HitBack = true;
-	m_JumpAcc += m_HitBackCoPware;
-	m_Acceleration = { 0,0 };
-}
-void CPlayer::PlayerMyHit(VECTOR2_f pos)
-{
-	m_JumpRemove = true;
-	if (pos.x> GetCenterPosition().x) {
+	if (Pos.x > GetCenterPosition().x) {
 		m_Acceleration.x = -10;
 	}
 	else {
 		m_Acceleration.x = 10;
 	}
 	//攻撃が当たった
-	AttackHit = true;
+	m_AttackHit = true;
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = NoHitAttackTime;
 
@@ -1119,6 +1097,36 @@ void CPlayer::PlayerMyHit(VECTOR2_f pos)
 
 	m_JumpAcc = 2;
 
+}
+
+void CPlayer::PlayerRestHP()
+{
+	//HPが0以下になったら
+	if (HP <= 0) {
+
+	}
+}
+
+void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
+{
+	WireTopPos = TopPos;
+}
+
+void CPlayer::PlayerDamegEriaHit(int Damage)
+{
+	m_JumpRemove = true;
+	//攻撃が当たった
+	m_AttackHit = true;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = NoHitAttackTime;
+
+	m_JumpAcc = 0;
+	//ヒットバック準備
+	m_HitBack = true;
+	m_JumpAcc += m_HitBackCoPware;
+	m_Acceleration = { 0,0 };
+
+	HP -= Damage;
 }
 
 void CPlayer::PlayerColorChange()

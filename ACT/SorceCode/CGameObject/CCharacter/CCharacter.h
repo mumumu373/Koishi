@@ -77,6 +77,9 @@ public:
 	VECTOR2_f m_Speed;			//ˆÚ“®‘¬“x
 
 	VECTOR2 m_RealFrameSplit;	//ÀÛ‚Ì“–‚½‚è”»’è
+
+	bool m_AttackHit;	//UŒ‚‚ğ‚­‚ç‚Á‚½‚©
+
 public:
 	CCharacter();
 	virtual ~CCharacter(){}
