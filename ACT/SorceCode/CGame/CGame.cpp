@@ -196,17 +196,23 @@ void CGame::Update()
 	CTimeManager::GetInstance().Update();
 	m_BgmTimer += CTimeManager::GetInstance().GetDeltaTime();;
 	std::cout << m_BgmTimer << std::endl;
+	static bool ones = false;
 
 	//‰¼’u‚«
 	CMouseInput::Update();
 	switch (m_Scene) {
 	case enScene::Title:
 
-		CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1);
-		if (m_BgmTimer >= 50)
+		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss1);
+		if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd) && !ones)
 		{
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1);
-			m_BgmTimer = 0;
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd);
+			ones = true;
+		}
+
+		if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1))
+		{
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd);
 		}
 		MoveCursor();
 

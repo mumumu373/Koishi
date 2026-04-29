@@ -17,10 +17,13 @@ public:
 
 		BGM_TitleStart,		//タイトルBGMの最初
 		BGM_Title,			//タイトルBGM
+		BGM_Title_FastEnd,	
 
 		BGM_Stage1,			//ステージ1、2のステージBGM
+		BGM_Stage1_FastEnd,	
 
 		BGM_Boss1,			//ナズーリンのBGM
+		BGM_Boss1_FastEnd,	
 		BGM_Boss2,			//正邪のBGM
 
 		//音が増えたら「ここ」に追加
