@@ -109,11 +109,11 @@ bool CGame::Create()
 	//エネミーを作っている
 	VECTOR2_f SetEnemy = { 600,400 };
 	VECTOR2_f Speed = { 4,4 };
-	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 120));
+	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy,60, 5, 30, 120));
 	SetEnemy.y += 500;																//作るときにムーブタイプを決めておく
-	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy, Speed, CFairy::enMoveType::Rotation, 60, 120));
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy,80, Speed, CFairy::enMoveType::Rotation, 60, 120));
 	SetEnemy.x += 400;
-	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
+	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy,60));
 
 	//ゲームシーン状態にしておく
 	m_Scene = enScene::Title;
@@ -124,7 +124,7 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	m_upEnemy.push_back(CEnemySet::otamesi());
+	CEnemySet::LoadEnemies(m_upEnemy);
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成

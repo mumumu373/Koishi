@@ -21,6 +21,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMain.bmp","MainStage"} ,
 		{enImgList::IMG_Koishi		,"Data\\Image\\Koishi.bmp","Koishi"} ,
 		{enImgList::IMG_Heart		,"Data\\Image\\Heart.bmp","Heart"} ,
+		{enImgList::IMG_BreakeHeart	,"Data\\Image\\BreakeHeart.bmp","BreakeHeart"} ,
 		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp","Enemy"} ,
 		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"IMG_Mouse"} ,
 		{enImgList::IMG_String		,"Data\\Image\\String.bmp"				,"String"} ,

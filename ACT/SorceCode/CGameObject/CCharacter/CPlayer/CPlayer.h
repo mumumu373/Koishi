@@ -105,7 +105,7 @@ public:
 	void MovieSceneUpdate();
 
 	//プレイヤーのハートを描画する
-	void PlayerHeartDraw() { m_upHeart->Draw(); }
+	void PlayerHeartDraw() { m_upHeart->Draw(HP); }
 
 	void StaratEnemiWire();
 	void EndEnemiWire();

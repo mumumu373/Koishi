@@ -39,7 +39,7 @@ public:
 
 	virtual void Update() override;
 	//固定の位置に配置したい
-	void Draw();
+	void Draw(int PlayerHP);
 	virtual void Draw(std::unique_ptr<CCamera>& pCamera) override {};
 	//ハートを変更したときの
 	void HeartChangeDraw(std::unique_ptr<CCamera>& pCamera,VECTOR2_f PlayerPos);
@@ -58,4 +58,6 @@ private:
 
 	int m_ColorHP[enColor::MAX];	//属性ごとのHPを持つようにする
 	int m_HaveHP;					//HPを保持しておく変数
+private:
+	VECTOR2_f m_BreakeFramePos;		//破壊痕の描画元画像の位置
 };

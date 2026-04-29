@@ -16,6 +16,7 @@ public:
 		IMG_StageMain = 0,	//ステージのメイン画像(ブロック状の物達)
 		IMG_Koishi,			//こいし(プレイヤー)
 		IMG_Heart,			//ハート(体力)
+		IMG_BreakeHeart,	//ハートの亀裂
 		IMG_Enemy,			//エネミー
 		IMG_Mouse,			//マウス
 		IMG_String,			//ワイヤー	

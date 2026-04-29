@@ -12,8 +12,8 @@ public:
 	//最大落下速度
 	static constexpr double MAX_FALLING_SPEED = 25;
 public:
-	//呼び出すときに 種類		位置		スピード			ジャンプ力		ムーブを変えるタイミング	ジャンプするタイミング
-	CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower, int ChangeMoveTime, int JumpingTime);
+	//呼び出すときに 種類		位置			サイズ		スピード			ジャンプ力		ジャンプするタイミング
+	CKedama(int Kinds, VECTOR2_f SetPos,int Size, double MoveSpeed, double JumpPower, int JumpingTime);
 	~CKedama();
 
 	void StartSetting() override;
@@ -31,9 +31,6 @@ private:
 	//ステージとの当たり判定	
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 private:
-	int m_ChangeMoveTime;	//ムーブを変えるタイミング
-	int m_ChangeMoveCo;		//ムーブを変えるタイミングをカウント
-
 	double m_JumpPower;		//ジャンプ力
 	bool m_Jumping;			//今ジャンプしているか
 	int m_JumpingTime;		//ジャンプするタイミング

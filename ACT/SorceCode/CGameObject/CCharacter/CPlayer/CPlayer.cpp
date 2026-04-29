@@ -1091,7 +1091,7 @@ void CPlayer::PlayerRestHP()
 {
 	//HP‚ª0ˆÈ‰º‚É‚È‚Á‚½‚ç
 	if (HP <= 0) {
-
+		HP = 0;
 	}
 }
 

@@ -1,6 +1,6 @@
 #include "CFairy.h"
 
-CFairy::CFairy(int Kinds, VECTOR2_f SetPos, VECTOR2_f Speed, int MoveType, int MoveOp_1, int MoveOp_2)
+CFairy::CFairy(int Kinds, VECTOR2_f SetPos, int Size, VECTOR2_f Speed, int MoveType, int MoveOp_1, int MoveOp_2)
 {
 	//ステージに配置する
 	m_Position = SetPos;
@@ -13,6 +13,8 @@ CFairy::CFairy(int Kinds, VECTOR2_f SetPos, VECTOR2_f Speed, int MoveType, int M
 	m_MoveState = enMoveState::MoveLeft;
 	//エネミー陣営です
 	m_MyCamp = enMyCamp::EnemyCamp;
+
+	m_Framesplit = { 32 * m_Color,32,Size,Size };
 
 	//スピードをセット
 	m_Speed = Speed;
@@ -55,37 +57,27 @@ void CFairy::StartSetting()
 
 	switch (m_Color) {
 	case enColor::NoColor:
-		m_Framesplit = { 32 * m_Color,32,32,32 };
-
 		//打ち出すタイミングを設定
 		m_BulletShotTiming = 2;
 		//バレットの持続時間を設定
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Red:
-		m_Framesplit = { 32 * m_Color,32,100,100 };
-
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Yellow:
-		m_Framesplit = { 32 * m_Color,32,32,32 };
-
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Green:
-		m_Framesplit = { 32 * m_Color,32,100,100 };
-
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Blue:
-		m_Framesplit = { 32 * m_Color,32,200,200 };
-
 		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;

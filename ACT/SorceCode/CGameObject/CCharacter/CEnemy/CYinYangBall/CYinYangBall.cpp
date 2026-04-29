@@ -1,6 +1,6 @@
 #include "CYinYangBall.h"
 
-CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos)
+CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos, int Size)
 {
 	//ステージに配置する
 	m_Position = SetPos;
@@ -30,6 +30,10 @@ CYinYangBall::CYinYangBall(int Kinds, VECTOR2_f SetPos)
 
 	StartSetting();
 
+	//サイズを入れる
+	m_Framesplit.w = Size;
+	m_Framesplit.h = Size;
+
 	//装飾クラスを作る
 	//それぞれの個数装飾を作る
 	for (int i = 0; i < m_AmountDeco; i++) {
@@ -52,7 +56,7 @@ void CYinYangBall::StartSetting()
 		//NoColorはないが、もしなっていたら赤にする
 	case enColor::NoColor:
 	case enColor::Red:
-		m_Framesplit = { 0,64,80,80 };
+		m_Framesplit = { 0,64,0,0 };
 		m_Speed = { 0,0 };
 		//装飾の数
 		m_AmountDeco = 3;
@@ -64,7 +68,7 @@ void CYinYangBall::StartSetting()
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Yellow:
-		m_Framesplit = { 64,64,100,100 };
+		m_Framesplit = { 64,64,0,0 };
 		m_Speed = { 0,0 };
 
 		m_AmountDeco = 7;
@@ -76,7 +80,7 @@ void CYinYangBall::StartSetting()
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Green:
-		m_Framesplit = { 128,64,100,100 };
+		m_Framesplit = { 128,64,0,0 };
 		m_Speed = { 0,0 };
 
 		m_AmountDeco = 5;
@@ -88,7 +92,7 @@ void CYinYangBall::StartSetting()
 		m_ShotReleaseTime = 60;
 		break;
 	case enColor::Blue:
-		m_Framesplit = { 192,64,200,200 };
+		m_Framesplit = { 192,64,0,0 };
 		m_Speed = { 0,0 };
 
 		m_AmountDeco = 4;
