@@ -16,8 +16,6 @@ public:
 
 	int m_CatchWire = enCatchWire::No;
 
-	bool AttackHit = false;	//UŒ‚‚ğ‚­‚ç‚Á‚½‚©
-
 	int NoHitAttackCo = 0;	//UŒ‚‚ª‚ ‚½‚ç‚È‚¢ŠÔ‚ğƒJƒEƒ“ƒg
 	const int NoHitAttackTime = 40;	//UŒ‚‚ª‚ ‚½‚ç‚È‚¢ŠÔ
 

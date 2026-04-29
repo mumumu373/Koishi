@@ -28,8 +28,6 @@ public:
 
 	int m_BossPhase = enBossPhase::Phase_1;
 public:
-	bool AttackHit = false;	//攻撃をくらったか
-
 	bool NoHit = false;		//問答無用で無敵状態にする
 
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
@@ -61,6 +59,9 @@ public:
 
 	//カメラの場所をセット
 	void SetCameraPos(VECTOR2_f CameraPos) { m_CameraPos = CameraPos; }
+
+	//ボス攻略アイテムをゲットしたか
+	virtual bool GetBossClearFlag() = 0;
 protected:
 	void Animation() override {};
 

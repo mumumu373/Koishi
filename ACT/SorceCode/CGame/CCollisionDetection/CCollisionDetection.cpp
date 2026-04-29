@@ -36,7 +36,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 							ObjectInfo EnemyToEnemyPos = SetEnemyInfo(upEnemy[EnemyToEnemyNo], true);
 
 							//攻撃を始めて食らうなら
-							if (upEnemy[EnemyToEnemyNo]->AttackHit == false) {
+							if (upEnemy[EnemyToEnemyNo]->m_AttackHit == false) {
 								if (CircleDetection(EnemyPos, EnemyToEnemyPos) == true) {
 									//投げられたエネミーのヒットストップをする
 									upEnemy[EnemyNo]->SetHitStop();
@@ -48,14 +48,19 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 					}
 				}
 			}
-			if (upEnemy[EnemyNo]->m_State == CPlayer::enState::Living) {
-				//当たり判定のセット
-				ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
+			else {
+				//攻撃が当たった状態でないなら
+				if (upPlayer->m_AttackHit == false) {
+					if (upEnemy[EnemyNo]->m_State == CPlayer::enState::Living) {
+						//当たり判定のセット
+						ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
 
-				//当たったら
-				if (CircleDetection(PlayerPos, EnemyPos) == true) {
-					//プレイヤーがエネミーに当たったときの処理
-					upPlayer->PlayerMyHit(upEnemy[EnemyNo]->GetCenterPosition());
+						//当たったら
+						if (CircleDetection(PlayerPos, EnemyPos) == true) {
+							//プレイヤーがエネミーに当たったときの処理
+							upPlayer->EnemyHit(upEnemy[EnemyNo]->GetCenterPosition(), 20);
+						}
+					}
 				}
 			}
 		}
@@ -66,12 +71,26 @@ void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlay
 {
 	if (upPlayer->m_State == CPlayer::enState::Living) {
 		if (upBoss->m_State == CBoss::enState::Living) {
-			//当たり判定の位置情報セット
-			ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
-			ObjectInfo BossPos = SetBossInfo(upBoss, true);
+			//攻撃が当たった状態でないなら
+			if (upPlayer->m_AttackHit == false) {
+				//完全無敵で無ければ
+				if (upBoss->NoHit == false) {
+					//当たり判定の位置情報セット
+					ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
+					ObjectInfo BossPos = SetBossInfo(upBoss, true);
 
-			if (CircleDetection(PlayerPos, BossPos) == true) {
-				upPlayer->PlayerMyHit(upBoss->GetCenterPosition());
+					//ボスのボスクリア条件を達成していないなら
+					if (upBoss->GetBossClearFlag() == false) {
+						if (CircleDetection(PlayerPos, BossPos) == true) {
+							//ボスもエネミーの一種
+							upPlayer->EnemyHit(upBoss->GetCenterPosition(), 30);
+						}
+					}
+					//クリアの動き
+					else {
+
+					}
+				}
 			}
 		}
 	}
@@ -95,7 +114,7 @@ void CCollisionDetection::BossToEnemyCollision(std::unique_ptr<CBoss>& upBoss, s
 					//攻撃をくらわない状態でなければ
 					if (upBoss->NoHit == false) {
 						//攻撃を始めて食らうなら
-						if (upBoss->AttackHit == false) {
+						if (upBoss->m_AttackHit == false) {
 							if (CircleDetection(BossPos, EnemyPos) == true) {
 								//投げられたエネミーのヒットストップをする
 								upEnemy[EnemyNo]->SetHitStop();
@@ -211,7 +230,7 @@ void CCollisionDetection::PlayerAttackToEnemyCollision(std::unique_ptr<CNormalAt
 					//当たり判定のセット
 					ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
 
-					if (upEnemy[EnemyNo]->AttackHit == false) {
+					if (upEnemy[EnemyNo]->m_AttackHit == false) {
 						//円形と矩形の判定で見る
 						if (CircleToSquareDetection(EnemyPos, upNormalAttack->GetColion(AttackCollision)) == true) {
 							upEnemy[EnemyNo]->PlayerAttackHit(20, upNormalAttack->m_PlayerColor);
@@ -232,7 +251,7 @@ void CCollisionDetection::PlayerAttackToBossCollision(std::unique_ptr<CNormalAtt
 				ObjectInfo BossPos = SetBossInfo(upBoss, true);
 
 				if (upBoss->NoHit == false) {
-					if (upBoss->AttackHit == false) {
+					if (upBoss->m_AttackHit == false) {
 						//円形と矩形で見る
 						if (CircleToSquareDetection(BossPos, upNormalAttack->GetColion(AttackCollision)) == true) {
 							upBoss->PlayerAttackHit(20);
@@ -247,25 +266,28 @@ void CCollisionDetection::PlayerAttackToBossCollision(std::unique_ptr<CNormalAtt
 void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPlayer, std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (upPlayer->m_State == CPlayer::enState::Living) {
-		//当たり判定の位置情報セット
-		ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
+		//攻撃が当たった状態でないなら
+		if (upPlayer->m_AttackHit == false) {
+			//当たり判定の位置情報セット
+			ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
 
-		//バレット
-		for (int BulletNo = 0; BulletNo < upBullet.size(); BulletNo++) {
-			if (upBullet[BulletNo]->m_State == CBullet::enState::Living) {
-				//陣営が違うなら
-				if (upBullet[BulletNo]->m_MyCamp != upPlayer->m_MyCamp) {
-					//当たり判定のセット
-					ObjectInfo BulletPos = SetBulletInfo(upBullet[BulletNo]);
+			//バレット
+			for (int BulletNo = 0; BulletNo < upBullet.size(); BulletNo++) {
+				if (upBullet[BulletNo]->m_State == CBullet::enState::Living) {
+					//陣営が違うなら
+					if (upBullet[BulletNo]->m_MyCamp != upPlayer->m_MyCamp) {
+						//当たり判定のセット
+						ObjectInfo BulletPos = SetBulletInfo(upBullet[BulletNo]);
 
-					//当たったら
-					if (CircleDetection(PlayerPos, BulletPos) == true) {
-						//プレイヤーがバレットに当たったときの処理
-						upPlayer->BulletHit(upBullet[BulletNo]->m_Color, 20, upBullet[BulletNo]->m_NazrinBullet);
+						//当たったら
+						if (CircleDetection(PlayerPos, BulletPos) == true) {
+							//プレイヤーがバレットに当たったときの処理
+							upPlayer->BulletHit(upBullet[BulletNo]->GetCenterPosition(), upBullet[BulletNo]->m_Color,
+								20, upBullet[BulletNo]->m_NazrinBullet);
 
-						//バレットがプレイヤーに当たった時の処理
-						upBullet[BulletNo]->CharacterHit();
-						//upPlayer->PlayerMyHit(upBullet[BulletNo]->GetCenterPosition());
+							//バレットがプレイヤーに当たった時の処理
+							upBullet[BulletNo]->CharacterHit();
+						}
 					}
 				}
 			}

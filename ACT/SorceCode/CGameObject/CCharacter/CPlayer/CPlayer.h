@@ -33,6 +33,10 @@ public:
 	static constexpr int m_HitBackCoMAX = 30;//ヒットバック時間
 	static constexpr int NoHitAttackTime = 120;	//攻撃があたらない時間
 	static constexpr int m_HitBackCoPware = 25;//ノックバックパワー
+
+	static constexpr double DeathSpeed = 20;//死亡時の上に飛ぶ速度
+	static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
+	static constexpr double DeathRotationSpeedMAX = 2000;//死亡時の回転速度の最大値
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
 
@@ -112,10 +116,10 @@ private:
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
 public://パブリック
 	//エネミーに触れたなら
-	void EnemyHit(int Damage);
+	void EnemyHit(VECTOR2_f Pos, int Damage);
 
 	//バレットに触れたなら
-	void BulletHit(int Color, int Damage, bool NazrinBullet);
+	void BulletHit(VECTOR2_f Pos, int Color, int Damage, bool NazrinBullet);
 
 	//カメラの当たり判定(ボスバトルなどの)
 	void CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double OffsetPos_Y);
@@ -123,12 +127,13 @@ public://パブリック
 	bool MoveSafeWrier(VECTOR2_f pos);
 	void SetWireTopPos(VECTOR2_f TopPos);
 
-	void PlayerDamegEriaHit();
-	void PlayerMyHit(VECTOR2_f pos);
+	//ダメージ毛玉に触れた動作
+	void PlayerDamegEriaHit(int Damage);
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }
 	bool GetMyHit() {if (m_HitBackBack|| m_HitBack) {return true;}return false;}
+	void SetStegeUnder(double under) { m_StegeUnder = under; }
 private:
 	void AvoidanceEnd();
 	void KyeInput();
@@ -144,7 +149,13 @@ private:
 
 	void Dash();
 
+	//プレイヤーのヒットした時動作
+	void PlayerMyHit(VECTOR2_f Pos);
 
+	//ダメージを受けたとき、HPの残りを見る
+	void PlayerRestHP();
+
+	void Death();
 private:
 	void AirAvoidanceVECTSet();
 
@@ -190,9 +201,9 @@ private:
 
 	VECTOR2_f m_HitBackSpeed;	//ヒットバックする速度
 
-
-	bool AttackHit = false;	//攻撃をくらったか
-
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
 
+	double m_DeathRotation;		//死亡したときの回転
+
+	double m_StegeUnder;		//ステージの下の位置
 };

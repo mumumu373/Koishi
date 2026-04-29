@@ -37,14 +37,15 @@ CPlayer::CPlayer()
 	, m_AnimationCount(0)
 	, m_OldSteta(0)
 	, m_MoveSpeed(0)
-	, WireTopPos(0,0)
+	, WireTopPos(0, 0)
 	, OldenActionState(false)
 	, AvoidanceCanCount(AvoidanceCan)
 	, m_HitBack(0)
 	, m_HitBackCo(0)
-	, m_HitBackSpeed({0,0})
+	, m_HitBackSpeed({ 0,0 })
 	, m_HitBackBack(false)
 	, m_HitBackBackCount()
+	, m_DeathRotation()
 {
 	//初期設定でデフォルトにする
 	m_Color = enColor::NoColor;
@@ -204,17 +205,16 @@ double CPlayer::GetWireStartSpeed()
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
-	if (DAMAGE_KEDAMA_HIT==true) {
-		PlayerDamegEriaHit();
+	//ダメージ毛玉に触れたなら
+	if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false) {
+		PlayerDamegEriaHit(15);
+	}
+	else {
 		DAMAGE_KEDAMA_HIT = false;
 	}
-	if (GetAsyncKeyState('Z') & 0x8000) {
-		PlayerMyHit({0,0});
-	}
-	
 
 	m_MoveSpeed = NoSpeed;
-	if (enActionState == enActionState::WireObjectCatch){
+	if (enActionState == enActionState::WireObjectCatch) {
 		m_MoveSpeed = cathiSpeed;
 	}
 
@@ -224,13 +224,13 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 	NormalAttack->Update();
 
-	m_State = enState::Living;
+
 	m_WireShot = false;
 
 	//常にfalseにする
 	GroundStand = false;
 	if (enActionState != enActionState::WirePointCatch) {
-		if (m_HitBack != true&&m_HitBackBack!=true) {
+		if (m_HitBack != true && m_HitBackBack != true) {
 			//ワイヤーポイントを掴んでいないなら
 
 				//プレイヤーのジャンプの制御
@@ -263,7 +263,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				//プレイヤーの動きの制御
 				MovePlayer();
 			}
-			if (OldGroundStand==false) {
+			if (OldGroundStand == false) {
 				MovePlayerJump();
 			}
 			else {
@@ -294,14 +294,14 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			m_MoveState = enMoveState::Wait;
 			MovePlayerJump();
 			if (m_HitBackBack) {
-				if (m_HitBackBackCount<=0) {
+				if (m_HitBackBackCount <= 0) {
 					m_HitBackBack = false;
 					m_Acceleration = { 0,0 };
 				}
 				else {
 					m_HitBackBackCount--;
 				}
-		
+
 			}
 			else {
 				if (m_Position.y > m_OldPosition.y) {
@@ -310,40 +310,52 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 				}
 			}
-		
-		
+
+
 
 
 
 		}
 	}
-	if (AttackHit == true) {
+
+	if (m_AttackHit == true) {
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo == 0) {
 			NoHitAttackCo = -1;
-			AttackHit = false;
+			m_AttackHit = false;
 			//表示する
-
 		}
 		else {
 			if (NoHitAttackCo > 0) {
 				NoHitAttackCo--;
 			}
+		}
+	}
 
+	if (m_State == enState::Dying) {
+		//最大落下速度
+		if (m_JumpAcc > MAX_FALLING_SPEED) {
+			m_Position.y = MAX_FALLING_SPEED;
+		}
+		else {
+			if (m_HitBack == true) {
+				m_JumpAcc -= Gravity;
+			}
+			else {
+				m_JumpAcc -= PlayerGrobtyi;
+			}
 
-
+			m_Position.y -= m_JumpAcc;
+		}
+		if (m_StegeUnder < m_Position.y) {//ステージの下に落ちたら
+			m_State = enState::Dead;
 
 		}
-
 	}
 	AvoidanceEnd();
 
 	//プレイヤーの属性変更制御
 	PlayerColorChange();
-
-	if (GetAsyncKeyState('Y') & 0x0001) {
-		EnemyHit(10);
-	}
 
 	//ステージとの判定
 	StageCollision(44, 44);
@@ -386,66 +398,21 @@ void CPlayer::EndEnemiWire()
 void CPlayer::Animation()
 {
 	m_Alpha = 255;
-	m_Framesplit.y = 0;
-	if (m_OldSteta !=m_MoveState|| OldenActionState!= enActionState) {
-	
-		m_Framesplit.x = 0;
-		if ((m_MoveState== enMoveState::MoveLeft|| m_MoveState == enMoveState::MoveRight)&&(m_Rdash == true || m_Ldash == true)) { m_Framesplit.x = ImageSize * 4; }
-		m_AnimationCount = 0;
-	}
-	OldenActionState = enActionState;
-	m_OldSteta = m_MoveState;
-	m_AnimationCount++;
-	if (enActionState !=enActionState::WireObjectCatch) {
-		switch (m_MoveState) {
-		case enMoveState::Wait:
-			if (m_AnimationCount > AnimationSpeed) {
-				m_AnimationCount = 0;
-				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 3) {
-					m_Framesplit.x = 0;
-				}
-			}
+	if (m_State == enState::Living) {
 
-			break;
-		case enMoveState::MoveLeft:
-			m_Delection.y = 0;
-			m_Framesplit.y = ImageSize;
-			if (m_Ldash==true) {
-				if (m_AnimationCount > AnimationSpeed) {
-					m_AnimationCount = 0;
-					m_Framesplit.x += ImageSize;
-					if (m_Framesplit.x > ImageSize * 7) {
-						m_Framesplit.x = ImageSize * 4;
-					}
-					
-				}
-			}
-			else {
-				if (m_AnimationCount > AnimationSpeed) {
-					m_AnimationCount = 0;
-					m_Framesplit.x += ImageSize;
-					if (m_Framesplit.x > ImageSize * 3) {
-						m_Framesplit.x = ImageSize;
-					}
+		m_Framesplit.y = 0;
+		if (m_OldSteta != m_MoveState || OldenActionState != enActionState) {
 
-				}
-			}
-			
-			break;
-		case enMoveState::MoveRight:
-			m_Delection.y = 180;
-			m_Framesplit.y = ImageSize;
-			if (m_Rdash == true) {
-				if (m_AnimationCount > AnimationSpeed) {
-					m_AnimationCount = 0;
-					m_Framesplit.x += ImageSize;
-					if (m_Framesplit.x > ImageSize * 7) {
-						m_Framesplit.x = ImageSize*4;
-					}
-				}
-			}
-			else {
+			m_Framesplit.x = 0;
+			if ((m_MoveState == enMoveState::MoveLeft || m_MoveState == enMoveState::MoveRight) && (m_Rdash == true || m_Ldash == true)) { m_Framesplit.x = ImageSize * 4; }
+			m_AnimationCount = 0;
+		}
+		OldenActionState = enActionState;
+		m_OldSteta = m_MoveState;
+		m_AnimationCount++;
+		if (enActionState != enActionState::WireObjectCatch) {
+			switch (m_MoveState) {
+			case enMoveState::Wait:
 				if (m_AnimationCount > AnimationSpeed) {
 					m_AnimationCount = 0;
 					m_Framesplit.x += ImageSize;
@@ -453,104 +420,160 @@ void CPlayer::Animation()
 						m_Framesplit.x = 0;
 					}
 				}
+
+				break;
+			case enMoveState::MoveLeft:
+				m_Delection.y = 0;
+				m_Framesplit.y = ImageSize;
+				if (m_Ldash == true) {
+					if (m_AnimationCount > AnimationSpeed) {
+						m_AnimationCount = 0;
+						m_Framesplit.x += ImageSize;
+						if (m_Framesplit.x > ImageSize * 7) {
+							m_Framesplit.x = ImageSize * 4;
+						}
+
+					}
+				}
+				else {
+					if (m_AnimationCount > AnimationSpeed) {
+						m_AnimationCount = 0;
+						m_Framesplit.x += ImageSize;
+						if (m_Framesplit.x > ImageSize * 3) {
+							m_Framesplit.x = ImageSize;
+						}
+
+					}
+				}
+
+				break;
+			case enMoveState::MoveRight:
+				m_Delection.y = 180;
+				m_Framesplit.y = ImageSize;
+				if (m_Rdash == true) {
+					if (m_AnimationCount > AnimationSpeed) {
+						m_AnimationCount = 0;
+						m_Framesplit.x += ImageSize;
+						if (m_Framesplit.x > ImageSize * 7) {
+							m_Framesplit.x = ImageSize * 4;
+						}
+					}
+				}
+				else {
+					if (m_AnimationCount > AnimationSpeed) {
+						m_AnimationCount = 0;
+						m_Framesplit.x += ImageSize;
+						if (m_Framesplit.x > ImageSize * 3) {
+							m_Framesplit.x = 0;
+						}
+					}
+				}
+				break;
+			}
+		}
+
+
+		if (GroundStand == false && enActionState != enActionState::WireObjectCatch) {
+			m_Framesplit.y = ImageSize * 2;
+			if (m_Position.y < m_OldPosition.y) {
+				m_Framesplit.x = 0;
+			}
+			else {
+				m_Framesplit.x = ImageSize;
+
+			}
+		}
+		switch (enActionState) {
+		case enActionState::WireShot:
+		case enActionState::WirePointCatch:
+			m_Framesplit.y = ImageSize * 4;
+			m_Framesplit.x = 0;
+
+			if (m_Position.x < WireTopPos.x) {
+				m_Delection.y = 180;
+			}
+			else {
+				m_Delection.y = 0;
 			}
 			break;
-		}
-	}
-	
+		case enActionState::Attack:
+			m_Framesplit.y = ImageSize * 3;
+			m_Framesplit.x = 0;
+			break;
+		case enActionState::WireObjectCatch:
+			m_Framesplit.y = ImageSize * 3;
+			if (m_Framesplit.x == 0) {
+				m_Framesplit.x = ImageSize * 2;
+			}
 
-	if (GroundStand == false && enActionState!= enActionState:: WireObjectCatch) {
-		m_Framesplit.y = ImageSize*2;
-		if (m_Position.y<m_OldPosition.y) {
+			switch (m_MoveState) {
+			case enMoveState::Wait:
+				m_Framesplit.x = ImageSize * 2;
+				break;
+			case enMoveState::MoveLeft:
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 4) {
+						m_Framesplit.x = ImageSize * 2;
+					}
+				}
+				break;
+			case enMoveState::MoveRight:
+				if (m_AnimationCount > AnimationSpeed) {
+					m_AnimationCount = 0;
+					m_Framesplit.x += ImageSize;
+					if (m_Framesplit.x > ImageSize * 4) {
+						m_Framesplit.x = ImageSize * 2;
+					}
+				}
+				break;
+			}
+			break;
+		case enActionState::Avoidance:
+			m_Framesplit.y = ImageSize * 6;
+			m_Framesplit.x = 0;
+			m_Alpha = 100;
+			break;
+		case enActionState::AirAvoidance:
+			m_Framesplit.y = ImageSize * 6;
+			m_Framesplit.x = 0;
+			if (AirAvoidanceVECT.x == 0 && AirAvoidanceVECT.y == 0) {
+				m_Alpha = 10;
+			}
+			else {
+				m_Alpha = 100;
+			}
+
+
+			break;
+		}
+		if (m_HitBack || m_HitBackBack) {
+			m_Framesplit.y = ImageSize * 5;
 			m_Framesplit.x = 0;
 		}
-		else {
-			m_Framesplit.x = ImageSize;
-
-		}
-	}
-	switch (enActionState) {
-	case enActionState::WireShot:
-	case enActionState::WirePointCatch:
-		m_Framesplit.y = ImageSize * 4;
-		m_Framesplit.x = 0;
-
-		if (m_Position.x < WireTopPos.x) {
-			m_Delection.y = 180;
-		}
-		else {
-			m_Delection.y = 0;
-		}
-		break;
-	case enActionState::Attack:
-		m_Framesplit.y = ImageSize * 3;
-		m_Framesplit.x = 0;
-		break;
-	case enActionState::WireObjectCatch:
-		m_Framesplit.y = ImageSize * 3;
-		if (m_Framesplit.x == 0) {
-			m_Framesplit.x = ImageSize * 2;
-		}
-
-		switch (m_MoveState) {
-		case enMoveState::Wait:
-			m_Framesplit.x = ImageSize*2;
-			break;
-		case enMoveState::MoveLeft:
-			if (m_AnimationCount > AnimationSpeed) {
-				m_AnimationCount = 0;
-				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 4) {
-					m_Framesplit.x = ImageSize * 2;
-				}
+		//点滅するようにする
+		if (m_AttackHit == true) {
+			if (NoHitAttackCo % 28 <= 28 / 2) {
+				//半透明にする
+				m_Alpha = 255;
 			}
-			break;
-		case enMoveState::MoveRight:
-			if (m_AnimationCount > AnimationSpeed) {
-				m_AnimationCount = 0;
-				m_Framesplit.x += ImageSize;
-				if (m_Framesplit.x > ImageSize * 4) {
-					m_Framesplit.x = ImageSize * 2;
-				}
+			else {
+				m_Alpha = 0;
 			}
-			break;
-		}
-		break;
-	case enActionState::Avoidance:
-		m_Framesplit.y = ImageSize * 6;
-		m_Framesplit.x = 0;
-		m_Alpha = 100;
-		break;
-	case enActionState::AirAvoidance:
-		m_Framesplit.y = ImageSize * 6;
-		m_Framesplit.x = 0;
-		if (AirAvoidanceVECT.x==0&& AirAvoidanceVECT.y==0) {
-			m_Alpha = 10;
-		}
-		else {
-			m_Alpha = 100;
-		}
-
-
-		break;
-	}
-	if (m_HitBack|| m_HitBackBack) {
-		m_Framesplit.y = ImageSize * 5;
-		m_Framesplit.x = 0;
-	}
-	//点滅するようにする
-	if (AttackHit==true) {
-		if (NoHitAttackCo % 28 <= 28 / 2) {
-			//半透明にする
-			m_Alpha = 255;
-		}
-		else {
-			m_Alpha = 0;
 		}
 	}
-	
-
-
+	else {
+		if (m_State == enState::Dying) {
+			m_Framesplit.y = ImageSize * 5;
+			m_Framesplit.x = 0;
+			m_Delection.z += m_DeathRotation;
+			m_DeathRotation += DeathRotationSpeed;
+			if (m_DeathRotation >= DeathRotationSpeedMAX) {
+				m_DeathRotation = DeathRotationSpeedMAX;
+			}
+		}
+	}
 }
 
 
@@ -681,7 +704,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 	}
 }
 
-void CPlayer::EnemyHit(int Damage)
+void CPlayer::EnemyHit(VECTOR2_f Pos, int Damage)
 {
 	HP -= Damage;
 
@@ -689,9 +712,12 @@ void CPlayer::EnemyHit(int Damage)
 	m_upHeart->PlayerHeartDamage(m_Color, HP);
 
 	m_Acceleration = { 0,0 };//空中の加速度をリセットする
+
+	//当たった場所を見る
+	PlayerMyHit(Pos);
 }
 
-void CPlayer::BulletHit(int Color, int Damage, bool NazrinBullet)
+void CPlayer::BulletHit(VECTOR2_f Pos, int Color, int Damage, bool NazrinBullet)
 {
 	//属性が違うならまたはナズーリンのバレットなら
 	if (m_Color != Color || NazrinBullet == true) {
@@ -700,6 +726,9 @@ void CPlayer::BulletHit(int Color, int Damage, bool NazrinBullet)
 
 		//減ったHPの属性を入れる
 		m_upHeart->PlayerHeartDamage(m_Color, HP);
+
+		//当たった場所を見る
+		PlayerMyHit(Pos);
 	}
 	//属性が一緒ならスルー出来る
 }
@@ -1024,36 +1053,28 @@ void CPlayer::Dash()
 	}
 }
 
-void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
+void CPlayer::Death()
 {
-	WireTopPos = TopPos;
+	if (HP<=0) {
+		m_State = enState::Dying;
+		m_JumpAcc = DeathSpeed;
+		m_DeathRotation = 0;
+		m_Delection.z = 0;
+	}
+
 }
 
-void CPlayer::PlayerDamegEriaHit()
+void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 {
 	m_JumpRemove = true;
-	//攻撃が当たった
-	AttackHit = true;
-	//攻撃が当たらない時間のカウントをセット
-	NoHitAttackCo = NoHitAttackTime;
-
-	m_JumpAcc = 0;
-	//ヒットバック準備
-	m_HitBack = true;
-	m_JumpAcc += m_HitBackCoPware;
-	m_Acceleration = { 0,0 };
-}
-void CPlayer::PlayerMyHit(VECTOR2_f pos)
-{
-	m_JumpRemove = true;
-	if (pos.x> GetCenterPosition().x) {
+	if (Pos.x > GetCenterPosition().x) {
 		m_Acceleration.x = -10;
 	}
 	else {
 		m_Acceleration.x = 10;
 	}
 	//攻撃が当たった
-	AttackHit = true;
+	m_AttackHit = true;
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = NoHitAttackTime;
 
@@ -1064,6 +1085,36 @@ void CPlayer::PlayerMyHit(VECTOR2_f pos)
 
 	m_JumpAcc = 2;
 
+}
+
+void CPlayer::PlayerRestHP()
+{
+	//HPが0以下になったら
+	if (HP <= 0) {
+
+	}
+}
+
+void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
+{
+	WireTopPos = TopPos;
+}
+
+void CPlayer::PlayerDamegEriaHit(int Damage)
+{
+	m_JumpRemove = true;
+	//攻撃が当たった
+	m_AttackHit = true;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = NoHitAttackTime;
+
+	m_JumpAcc = 0;
+	//ヒットバック準備
+	m_HitBack = true;
+	m_JumpAcc += m_HitBackCoPware;
+	m_Acceleration = { 0,0 };
+
+	HP -= Damage;
 }
 
 void CPlayer::PlayerColorChange()
