@@ -1,6 +1,7 @@
 #pragma once
 #include "CGameObject/CCharacter/CBoss/CBoss.h"	//ボスクラス(継承)
 #include "CGame/CBulletFactory/CBulletFactory.h"//バレットを作るクラス
+#include "CGameObject/CCharacter/CBoss/CNazrin/CBanana/CBanana.h"	//バナナクラスを持つようにする
 
 /**********************************************************************************************************
 *		ナズーリン(1面ボス)
@@ -15,7 +16,9 @@ public:
 
 	bool GetingApple = false;			//倒した時のリンゴがとれるようにする設定
 
-	int Phase2_MAX_HP = 20;				//フェーズ2の最大HP
+	int Phase2_MAX_HP = 80;				//フェーズ2の最大HP
+
+	int BossAppears = 2;				//フェーズ2の時のボスの登場回数
 public:
 	CNazrin();
 	~CNazrin();
@@ -75,11 +78,16 @@ private:
 	bool m_NextPhaseSetting;	//フェーズを変える準備
 
 	bool m_ReturnMove;			//ムーブを戻す
+	bool m_SetYPosition;		//セットする時に、Yをいじるための変数
+	int m_SetBlockPosCo;		//配置場所に訪れた回数をカウント
+
 	int m_DecreaseHP;			//減ったHPを数える
 
 	VECTOR2_f m_Vector;			//ベクトル
 
 	int m_GetAppleCo;			//リンゴが取れるようになるまでの時間
+
+	std::unique_ptr<CBanana> m_upBanana;	//バナナクラス
 private:
 	int m_AttackAnimCo;			//攻撃アニメーションのカウント
 	bool m_AttackAnimTime;		//攻撃アニメーション中

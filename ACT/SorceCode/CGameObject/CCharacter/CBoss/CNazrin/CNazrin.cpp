@@ -31,6 +31,8 @@ CNazrin::CNazrin()
 
 CNazrin::~CNazrin()
 {
+	//バナナのメモリを開放
+	m_upBanana.reset();
 }
 
 void CNazrin::StartSetting()
@@ -71,6 +73,11 @@ void CNazrin::StartSetting()
 
 	//アタックムーブを戻す
 	m_ReturnMove = false;
+	//Yの位置をいじる用
+	m_SetYPosition = false;
+	//配置場所に訪れた回数をカウント
+	m_SetBlockPosCo = 0;
+
 	//減ったHPを見る
 	m_DecreaseHP = 0;
 
@@ -118,6 +125,14 @@ void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 			m_FrameSize.x,			//元画像xサイズ		
 			m_FrameSize.y,			//元画像yサイズ
 			m_Alpha, 0);			//透明度、角度
+	}
+
+	//ボスの登場回数が規定なら
+	if (m_SetBlockPosCo >= BossAppears) {
+		if (m_upBanana != nullptr) {
+			//バナナを描画
+			m_upBanana->Draw(pCamera);
+		}
 	}
 }
 
@@ -274,7 +289,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 						//ボスステージでの、ボスの配置場所に行っていないなら
 						if (NextSetPosBlock == false) {
 							//カメラの横について直線移動する
-							m_Position.x = m_CameraPos.x + (WND_W / 2) + 150;
+							m_Position.x = m_CameraPos.x + (WND_W / 2);
 							m_Position.y = 0;
 
 							//落下しないように
@@ -282,8 +297,26 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 							//攻撃が当たらないように
 							NoHit = true;
+
+							//配置場所までは初期化
+							m_SetYPosition = false;
 						}
 						else {
+							//配置する場所が決まって、Y座標をいじっていないなら
+							if (m_SetYPosition == false) {
+								//ボスの登場回数が規定になったら
+								if (m_SetBlockPosCo >= BossAppears) {
+									//自分の下にバナナを配置する
+									m_upBanana = std::make_unique<CBanana>(GetCenterPosition());
+								}
+								//上から来るようにする
+								m_Position.y -= 700;
+								m_SetYPosition = true;
+
+								//落下速度リセット
+								m_FallingSpeed = 0;
+							}
+
 							//カメラで見える場所まで来たら
 							if (m_CameraPos.x + (WND_W / 3) >= m_Position.x) {
 								//ランダムで、ムーブ1か2を選ぶ
@@ -311,12 +344,44 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 						break;
 					}
-					break;
 				}
 				else {
 					//ムーブを戻す動作
 					RetuanMoveSet();
 				}
+
+				//ボスの登場回数が規定になったら
+				if (m_SetBlockPosCo >= BossAppears) {
+					//地面についたら
+					if (m_GroundStand == true) {
+						//保険
+						if (m_upBanana != nullptr) {
+							//バナナを吹っ飛ばす準備
+							m_upBanana->SetBlowOffBanana();
+
+							//死亡中にする
+							m_State = enState::Dying;
+							//被弾アニメーション
+							m_PhaseChangeAniTime = true;
+
+							//飛び上がるようにする
+							m_JumpPower = 30;
+							m_FallingSpeed = -m_JumpPower;
+
+							//地上から離れるように
+							m_GroundStand = false;
+						}
+					}
+					//ボスがまだ地面についていないなら
+					else {
+						//保険
+						if (m_upBanana != nullptr) {
+							//バナナを地面に設置する
+							m_upBanana->Update();
+						}
+					}
+				}
+				break;
 			}
 
 			//攻撃を受けたとき
@@ -350,6 +415,16 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	case enState::Dying:
 		//回転する
 		m_Delection.z += 10;
+
+		//ボスの登場回数が規定なら
+		if (m_SetBlockPosCo >= BossAppears) {
+			//保険
+			if (m_upBanana != nullptr) {
+				//バナナを吹っ飛ばすようにする
+				m_upBanana->BlowOffBanana();
+			}
+		}
+
 		//飛び上がって地面に激突したら
 		if (m_GroundStand == true) {
 			//死
@@ -382,6 +457,9 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 			//倒された位置を記憶する
 			m_MemoryPos = m_Position;
+
+			//バナナのメモリを開放
+			m_upBanana.reset();
 
 			//演出で一瞬止める
 			Sleep(180);
@@ -490,6 +568,8 @@ void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
 	//ナズーリンの配置
 	m_Position = PlayerPos;
 	m_Position.x += WND_W - 300;
+	//埋まり対策
+	m_Position.y -= 1;
 
 	//バトルが始まった時の位置を保存
 	m_BattleStartPos = m_Position;
@@ -1177,6 +1257,9 @@ void CNazrin::RetuanMoveSet()
 		//アニメーションを戻す
 		m_PhaseChangeAniTime = false;
 		m_AttackAnimTime = false;
+
+		//ボスの登場した回数をカウント
+		m_SetBlockPosCo++;
 	}
 	else if (m_AttackMoveChangeCo >= 60) {
 
