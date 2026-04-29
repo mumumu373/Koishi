@@ -25,6 +25,8 @@
 #include "NEGA/NEGA.h"
 #include "CWireActionSupporter/CWireActionSupporter.h"
 
+#include "CTimeManager/CTimeManager.h"	//時間管理クラス
+
 /************************************************************
 *			ゲームクラス
 */
@@ -163,6 +165,6 @@ private:
 	int m_CursorAction;	//選択肢のどれを選んでいるか
 	
 	
-	int m_BgmTimer;	//BGMのタイマー
+	float m_BgmTimer;	//BGMのタイマー
 	int m_OldScene;	//前のシーンを保存する変数
 };
