@@ -113,6 +113,8 @@ private:
 	//タイトルの色々を設定する関数
 	void SetTitleInfo();	
 
+	//シーンが変更されたかどうかを確認する関数。BGMのタイマーを初期化するために作成
+	void IsChangeScene();
 private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 
@@ -160,4 +162,7 @@ private:
 	std::vector<VECTOR2_f>	m_CursorPosition;
 	int m_CursorAction;	//選択肢のどれを選んでいるか
 	
+	
+	int m_BgmTimer;	//BGMのタイマー
+	int m_OldScene;	//前のシーンを保存する変数
 };

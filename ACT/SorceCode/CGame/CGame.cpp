@@ -30,6 +30,8 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upBoss					(nullptr)
 , m_Action					()
 , m_CursorAction			()
+, m_BgmTimer				()
+, m_OldScene				()
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -187,16 +189,21 @@ void CGame::Destroy()
 void CGame::Update()
 {
 	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
-
+	IsChangeScene();
+	std::cout << m_BgmTimer << std::endl;
 	//仮置き
 	CMouseInput::Update();
 	switch (m_Scene) {
 	case enScene::Title:
 
+		m_BgmTimer++;
+		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
 		MoveCursor();
 
+		//選択肢を決定
 		if(GetAsyncKeyState(VK_RETURN) & 0x8000) 
 		{
+			//配列の中身にある関数を呼び出す
 			m_Action[m_CursorAction]();
 		}
 		break;
@@ -605,5 +612,14 @@ void CGame::SetTitleInfo()
 	m_CursorPosition.push_back({ 400,300 });
 	m_CursorPosition.push_back({ 400,500 });
 
+}
+void CGame::IsChangeScene()
+{
+	if (m_Scene != m_OldScene)
+	{
+		m_BgmTimer = 0;
+	}
+
+	m_OldScene = m_Scene;
 }
 //----------------------------------------

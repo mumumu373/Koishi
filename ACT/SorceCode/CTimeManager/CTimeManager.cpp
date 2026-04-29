@@ -1,0 +1,112 @@
+#include "CTimeManager.h"
+
+
+static constexpr int TIME_LIMIT = 60;	//制限時間(秒)
+
+CTimeManager::CTimeManager()
+	: m_PauseStateTime		()
+	, m_TimeLimit			()
+	, m_IsFinish			( false )
+{
+	Reset_Internal();	//初期化.
+}
+
+CTimeManager::~CTimeManager()
+{
+}
+
+//======================================================================
+// 	   内部で呼び出す関数.
+//======================================================================
+
+//--- リセット ---.
+void CTimeManager::Reset_Internal()
+{
+	m_StartTime = Clock::now();
+	m_PreviousTime = m_StartTime;
+
+	m_DeltaTime = 0.0;
+	m_TotalTime = 0.0;
+	m_PauseTime = 0.0;
+	m_TimeLimit = { 0,0 };
+
+	m_IsPaused = false;
+	m_IsFinish = false;
+}
+
+//--- 一時停止関数 ---.
+void CTimeManager::Pause_Internal()
+{
+	//一時停止中でない.
+	if (!m_IsPaused)
+	{
+		m_PauseStateTime = Clock::now();
+		m_IsPaused = true;	//一時停止開始.
+	}
+}
+
+//--- 再開関数 ---.
+void CTimeManager::Resume_Internal()
+{
+	//一時停止中.
+	if (m_IsPaused)
+	{
+		m_PreviousTime = Clock::now();
+
+		//現在の時刻からポーズ開始時間を引いて、ポーズの時間の統計を求める.
+		std::chrono::duration<double> pause = m_PreviousTime - m_PauseStateTime;
+		m_PauseTime += pause.count();	//秒単位のものを数値として取り出す.
+
+		m_IsPaused = false;	//一時停止解除.
+	}
+}
+
+//--- 更新処理 ---.
+void CTimeManager::Update_Internal()
+{
+	//一時停止中.
+	if (m_IsPaused)
+	{
+		m_DeltaTime = 0.0;	//デルタタイムを 0 に固定.
+		return;
+	}
+	
+	//現在の時間の時点.
+	TimePoint currentTime = Clock::now();
+
+	//以前のフレームからの経過時間 = 現在の時刻 - 以前の経過時間.
+	std::chrono::duration<double> delta = currentTime - m_PreviousTime;
+
+	m_DeltaTime = delta.count();	//秒単位のものを数値として取り出す.
+	if (m_DeltaTime < 0.0) m_DeltaTime = 0.0;	//負の数にしない.
+
+	m_PreviousTime = currentTime;
+
+	//経過時間 = 現在の時刻 - 開始時間.
+	std::chrono::duration<double> total = currentTime - m_StartTime;
+	m_TotalTime = total.count() - m_PauseTime;	//秒単位のものを数値として取り出す.
+
+	//終了していなければ
+	if (!m_IsFinish)
+	{
+		//制限時間を計算
+		Calculate_TimeLimit();
+	}
+}
+
+void CTimeManager::Calculate_TimeLimit()
+{
+	//経過時間
+	int RemainingTime = TIME_LIMIT - static_cast<int>(CTimeManager::GetInstance().GetTotalTime());
+
+	//firstに十の位、secondに一の位
+	m_TimeLimit.first = RemainingTime / 10, 0;
+	m_TimeLimit.second = RemainingTime % 10, 0;
+
+	if (RemainingTime < 0)
+	{
+		m_IsFinish = true;
+		m_TimeLimit.first = 0;
+		m_TimeLimit.second = 0;
+	}
+}

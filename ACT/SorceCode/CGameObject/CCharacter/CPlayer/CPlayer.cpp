@@ -175,7 +175,7 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 
 	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
 
-	std::cout << HP << std::endl;
+	//std::cout << HP << std::endl;
 }
 
 void CPlayer::WireEnd(VECTOR2_f Spead)
