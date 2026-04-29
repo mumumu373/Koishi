@@ -89,6 +89,12 @@ public:
 	{
 		CSoundManager::GetInstance()->m_pSound_BGM[list]->PlayLoop();
 	}
+	//çƒê∂Ç∑ÇÈ
+	static void Play(enSingleSoundList list)
+	{
+		CSoundManager::GetInstance()->m_pSound_BGM[list]->PlaySE();
+	}
+
 	//í‚é~Ç∑ÇÈ
 	static void Stop(enSingleSoundList list)
 	{

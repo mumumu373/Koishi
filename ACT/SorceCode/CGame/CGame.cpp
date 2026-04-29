@@ -188,16 +188,25 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	CTimeManager::GetInstance().Update();
+	//シーンが変更されたかどうかを確認
 	IsChangeScene();
+
+	//タイマの更新とBGMのタイマーの更新
+	CTimeManager::GetInstance().Update();
 	m_BgmTimer += CTimeManager::GetInstance().GetDeltaTime();;
 	std::cout << m_BgmTimer << std::endl;
+
 	//仮置き
 	CMouseInput::Update();
 	switch (m_Scene) {
 	case enScene::Title:
 
-		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
+		CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1);
+		if (m_BgmTimer >= 50)
+		{
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1);
+			m_BgmTimer = 0;
+		}
 		MoveCursor();
 
 		//選択肢を決定
