@@ -204,7 +204,7 @@ double CPlayer::GetWireStartSpeed()
 }
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
-{	
+{
 	//ダメージ毛玉に触れたなら
 	if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false) {
 		PlayerDamegEriaHit(15);
@@ -214,102 +214,102 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	}
 
 	m_MoveSpeed = NoSpeed;
-	if (enActionState == enActionState::WireObjectCatch){
+	if (enActionState == enActionState::WireObjectCatch) {
 		m_MoveSpeed = cathiSpeed;
 	}
 
-		//過去の自分
-		m_OldPosition = m_Position;
-		OldGroundStand = GroundStand;
+	//過去の自分
+	m_OldPosition = m_Position;
+	OldGroundStand = GroundStand;
 
-		NormalAttack->Update();
-
-		
-		m_WireShot = false;
-
-		//常にfalseにする
-		GroundStand = false;
-		if (enActionState != enActionState::WirePointCatch) {
-			if (m_HitBack != true && m_HitBackBack != true) {
-				//ワイヤーポイントを掴んでいないなら
-
-					//プレイヤーのジャンプの制御
-				JumpPlayer();
-				if (enActionState != enActionState::WireObjectCatch) {
-					Attackmove();//攻撃
-				}
+	NormalAttack->Update();
 
 
-				if (AvoidanceCoolCount > 0) {
+	m_WireShot = false;
 
-					AvoidanceCoolCount--;
+	//常にfalseにする
+	GroundStand = false;
+	if (enActionState != enActionState::WirePointCatch) {
+		if (m_HitBack != true && m_HitBackBack != true) {
+			//ワイヤーポイントを掴んでいないなら
+
+				//プレイヤーのジャンプの制御
+			JumpPlayer();
+			if (enActionState != enActionState::WireObjectCatch) {
+				Attackmove();//攻撃
+			}
+
+
+			if (AvoidanceCoolCount > 0) {
+
+				AvoidanceCoolCount--;
+			}
+			else {
+				if (enActionState != enActionState::Avoidance && OldGroundStand == true) {
+					KyeInput();
 				}
 				else {
-					if (enActionState != enActionState::Avoidance && OldGroundStand == true) {
-						KyeInput();
+					if (enActionState != enActionState::AirAvoidance && OldGroundStand == false) {
+						AirKeyInput();
+					}
+				}
+
+			}
+
+			//Attackmove();
+			Dash();
+			if (OldGroundStand == true) {
+				m_Acceleration = { 0,0 };
+				//プレイヤーの動きの制御
+				MovePlayer();
+			}
+			if (OldGroundStand == false) {
+				MovePlayerJump();
+			}
+			else {
+				MovePlayerGround();
+			}
+
+
+
+		}
+		else {
+			//空中回避状態なら
+			if (enActionState != enActionState::AirAvoidance) {
+				//最大落下速度
+				if (m_JumpAcc > MAX_FALLING_SPEED) {
+					m_Position.y = MAX_FALLING_SPEED;
+				}
+				else {
+					if (m_HitBack == true) {
+						m_JumpAcc -= Gravity;
 					}
 					else {
-						if (enActionState != enActionState::AirAvoidance && OldGroundStand == false) {
-							AirKeyInput();
-						}
+						m_JumpAcc -= PlayerGrobtyi;
 					}
 
+					m_Position.y -= m_JumpAcc;
 				}
-
-				//Attackmove();
-				Dash();
-				if (OldGroundStand == true) {
+			}
+			m_MoveState = enMoveState::Wait;
+			MovePlayerJump();
+			if (m_HitBackBack) {
+				if (m_HitBackBackCount <= 0) {
+					m_HitBackBack = false;
 					m_Acceleration = { 0,0 };
-					//プレイヤーの動きの制御
-					MovePlayer();
-				}
-				if (OldGroundStand == false) {
-					MovePlayerJump();
 				}
 				else {
-					MovePlayerGround();
+					m_HitBackBackCount--;
 				}
-
-
 
 			}
 			else {
-				//空中回避状態なら
-				if (enActionState != enActionState::AirAvoidance) {
-					//最大落下速度
-					if (m_JumpAcc > MAX_FALLING_SPEED) {
-						m_Position.y = MAX_FALLING_SPEED;
-					}
-					else {
-						if (m_HitBack == true) {
-							m_JumpAcc -= Gravity;
-						}
-						else {
-							m_JumpAcc -= PlayerGrobtyi;
-						}
-
-						m_Position.y -= m_JumpAcc;
-					}
-				}
-				m_MoveState = enMoveState::Wait;
-				MovePlayerJump();
-				if (m_HitBackBack) {
-					if (m_HitBackBackCount <= 0) {
-						m_HitBackBack = false;
-						m_Acceleration = { 0,0 };
-					}
-					else {
-						m_HitBackBackCount--;
-					}
+				if (m_Position.y > m_OldPosition.y) {
+					m_HitBack = false;
+					m_Acceleration.x = 0;
 
 				}
-				else {
-					if (m_Position.y > m_OldPosition.y) {
-						m_HitBack = false;
-						m_Acceleration.x = 0;
-
-					}
-				}
+			}
 
 
 
@@ -317,6 +317,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 		}
 	}
+
 	if (m_AttackHit == true) {
 		//攻撃が当たらない時間を過ぎたら
 		if (NoHitAttackCo == 0) {
@@ -330,19 +331,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			}
 		}
 	}
-	AvoidanceEnd();
 
-		//プレイヤーの属性変更制御
-		PlayerColorChange();
-
-		if (GetAsyncKeyState('Y') & 0x0001) {
-			EnemyHit(10);
-		}
-
-		//ステージとの判定
-		StageCollision(44, 44);
-	}
-else {
 	if (m_State == enState::Dying) {
 		//最大落下速度
 		if (m_JumpAcc > MAX_FALLING_SPEED) {
@@ -362,11 +351,14 @@ else {
 			m_State = enState::Dead;
 
 		}
-
 	}
+	AvoidanceEnd();
 
+	//プレイヤーの属性変更制御
+	PlayerColorChange();
 
-	}
+	//ステージとの判定
+	StageCollision(44, 44);
 }
 
 void CPlayer::MovieSceneUpdate()
@@ -561,7 +553,7 @@ void CPlayer::Animation()
 			m_Framesplit.x = 0;
 		}
 		//点滅するようにする
-		if (AttackHit == true) {
+		if (m_AttackHit == true) {
 			if (NoHitAttackCo % 28 <= 28 / 2) {
 				//半透明にする
 				m_Alpha = 255;
@@ -580,12 +572,8 @@ void CPlayer::Animation()
 			if (m_DeathRotation >= DeathRotationSpeedMAX) {
 				m_DeathRotation = DeathRotationSpeedMAX;
 			}
-		
-		
 		}
-
 	}
-
 }
 
 
