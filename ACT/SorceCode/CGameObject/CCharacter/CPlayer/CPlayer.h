@@ -123,8 +123,8 @@ public://パブリック
 	bool MoveSafeWrier(VECTOR2_f pos);
 	void SetWireTopPos(VECTOR2_f TopPos);
 
-	void PlayerDamegEriaHit();
-	void PlayerMyHit(VECTOR2_f Pos);
+	//ダメージ毛玉に触れた動作
+	void PlayerDamegEriaHit(int Damage);
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }
@@ -144,6 +144,11 @@ private:
 
 	void Dash();
 
+	//プレイヤーのヒットした時動作
+	void PlayerMyHit(VECTOR2_f Pos);
+
+	//ダメージを受けたとき、HPの残りを見る
+	void PlayerRestHP();
 
 private:
 	void AirAvoidanceVECTSet();

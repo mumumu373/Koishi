@@ -203,15 +203,14 @@ double CPlayer::GetWireStartSpeed()
 }
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
-{
-	if (DAMAGE_KEDAMA_HIT==true) {
-		PlayerDamegEriaHit();
+{	
+	//ダメージ毛玉に触れたなら
+	if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false) {
+		PlayerDamegEriaHit(15);
+	}
+	else {
 		DAMAGE_KEDAMA_HIT = false;
 	}
-	if (GetAsyncKeyState('Z') & 0x8000) {
-		PlayerMyHit({0,0});
-	}
-	
 
 	m_MoveSpeed = NoSpeed;
 	if (enActionState == enActionState::WireObjectCatch){
@@ -1020,29 +1019,10 @@ void CPlayer::Dash()
 	}
 }
 
-void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
-{
-	WireTopPos = TopPos;
-}
-
-void CPlayer::PlayerDamegEriaHit()
-{
-	m_JumpRemove = true;
-	//攻撃が当たった
-	m_AttackHit = true;
-	//攻撃が当たらない時間のカウントをセット
-	NoHitAttackCo = NoHitAttackTime;
-
-	m_JumpAcc = 0;
-	//ヒットバック準備
-	m_HitBack = true;
-	m_JumpAcc += m_HitBackCoPware;
-	m_Acceleration = { 0,0 };
-}
 void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 {
 	m_JumpRemove = true;
-	if (Pos.x> GetCenterPosition().x) {
+	if (Pos.x > GetCenterPosition().x) {
 		m_Acceleration.x = -10;
 	}
 	else {
@@ -1060,6 +1040,36 @@ void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 
 	m_JumpAcc = 2;
 
+}
+
+void CPlayer::PlayerRestHP()
+{
+	//HPが0以下になったら
+	if (HP <= 0) {
+
+	}
+}
+
+void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
+{
+	WireTopPos = TopPos;
+}
+
+void CPlayer::PlayerDamegEriaHit(int Damage)
+{
+	m_JumpRemove = true;
+	//攻撃が当たった
+	m_AttackHit = true;
+	//攻撃が当たらない時間のカウントをセット
+	NoHitAttackCo = NoHitAttackTime;
+
+	m_JumpAcc = 0;
+	//ヒットバック準備
+	m_HitBack = true;
+	m_JumpAcc += m_HitBackCoPware;
+	m_Acceleration = { 0,0 };
+
+	HP -= Damage;
 }
 
 void CPlayer::PlayerColorChange()
