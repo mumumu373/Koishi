@@ -103,9 +103,9 @@ void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 	}
 }
 
-void CWire::WireHandDraw(std::unique_ptr<CCamera>& pCamera)
+void CWire::WireHandDraw(std::unique_ptr<CCamera>& pCamera, CPlayer* m_DPlayer)
 {
-	if (m_ShotState != ShotSteto::no&& m_EnemiCatch==false) {
+	if (m_ShotState != ShotSteto::no&& m_EnemiCatch==false&& m_DPlayer->GetStete()==CPlayer::enState::Living) {
 		//ワイヤーの先端とプレイヤーの距離を測る
 		int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
 		if (pieces<1) {

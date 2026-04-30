@@ -50,7 +50,7 @@ void CCollisionDetection::PlayerToEnemyCollision(std::unique_ptr<CPlayer>& upPla
 			}
 			else {
 				//攻撃が当たった状態でないなら
-				if (upPlayer->m_AttackHit == false) {
+				if (upPlayer->m_AttackHit == false && upPlayer->AvoidanceCount < 0) {
 					if (upEnemy[EnemyNo]->m_State == CPlayer::enState::Living) {
 						//当たり判定のセット
 						ObjectInfo EnemyPos = SetEnemyInfo(upEnemy[EnemyNo], true);
@@ -72,7 +72,7 @@ void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlay
 	if (upPlayer->m_State == CPlayer::enState::Living) {
 		if (upBoss->m_State == CBoss::enState::Living) {
 			//攻撃が当たった状態でないなら
-			if (upPlayer->m_AttackHit == false) {
+			if (upPlayer->m_AttackHit == false && upPlayer->AvoidanceCount < 0) {
 				//完全無敵で無ければ
 				if (upBoss->NoHit == false) {
 					//当たり判定の位置情報セット
@@ -267,7 +267,7 @@ void CCollisionDetection::PlayerToBulletCollision(std::unique_ptr<CPlayer>& upPl
 {
 	if (upPlayer->m_State == CPlayer::enState::Living) {
 		//攻撃が当たった状態でないなら
-		if (upPlayer->m_AttackHit == false) {
+		if (upPlayer->m_AttackHit == false && upPlayer->AvoidanceCount < 0) {
 			//当たり判定の位置情報セット
 			ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
 

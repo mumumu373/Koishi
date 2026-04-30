@@ -307,6 +307,10 @@ void CWireActionSupporter::WirePointAction()
 		//ステージの当たり判定を行う
 		//StageCollision(40, 40);
 	}
+	else {
+		EnemiActionEnd();
+		return;
+	}
 }
 
 void CWireActionSupporter::AllNullptr()
@@ -378,6 +382,10 @@ void CWireActionSupporter::EnemitoAction()
 		
 		}
 
+	}
+	else {
+		EnemiActionEnd();
+		return;
 	}
 
 }

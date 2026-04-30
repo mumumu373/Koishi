@@ -135,6 +135,7 @@ public:
 	int GetAlpha() { return m_Alpha; }
 	bool GetMyHit() {if (m_HitBackBack|| m_HitBack) {return true;}return false;}
 	void SetStegeUnder(double under) { m_StegeUnder = under; }
+	int AvoidanceCount;	//回避にかかる時間を図る
 private:
 	void AvoidanceEnd();
 	void KyeInput();
@@ -152,9 +153,6 @@ private:
 
 	//プレイヤーのヒットした時動作
 	void PlayerMyHit(VECTOR2_f Pos);
-
-	//ダメージを受けたとき、HPの残りを見る
-	void PlayerRestHP();
 
 	void Death();
 private:
@@ -174,7 +172,7 @@ private:
 	int m_Rdashcount;
 	bool m_Ldash;		//左ダッシュ中
 	bool m_Rdash;		//右ダッシュ中
-	int AvoidanceCount;	//回避にかかる時間を図る
+
 	int AvoidanceCoolCount;//回避のクールタイムを図る
 	int AvoidanceCanCount;//回避の残り回数
 	VECTOR2_f AirAvoidanceVECT;	//空中回避のベクトル

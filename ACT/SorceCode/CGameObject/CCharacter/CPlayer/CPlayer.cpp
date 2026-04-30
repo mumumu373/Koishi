@@ -208,8 +208,9 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (m_State == enState::Living) {
 		//ダメージ毛玉に触れたなら
-		if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false) {
+		if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false&& AvoidanceCount<0) {
 			PlayerDamegEriaHit(15);
+			return ;
 		}
 		else {
 			DAMAGE_KEDAMA_HIT = false;
@@ -350,6 +351,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		StageCollision(44, 44);
 	}
 	else if (m_State == enState::Dying) {
+		m_WireShot = false;
 		Sleep(m_DeathStop);
 		m_DeathStop = 0;
 		//最大落下速度
@@ -727,6 +729,8 @@ void CPlayer::EnemyHit(VECTOR2_f Pos, int Damage)
 
 	//当たった場所を見る
 	PlayerMyHit(Pos);
+	//死んでいるなら上に飛ぶ
+	Death();
 }
 
 void CPlayer::BulletHit(VECTOR2_f Pos, int Color, int Damage, bool NazrinBullet)
@@ -741,6 +745,8 @@ void CPlayer::BulletHit(VECTOR2_f Pos, int Color, int Damage, bool NazrinBullet)
 
 		//当たった場所を見る
 		PlayerMyHit(Pos);
+		//死んでいるなら上に飛ぶ
+		Death();
 	}
 	//属性が一緒ならスルー出来る
 }
@@ -1102,13 +1108,7 @@ void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 
 }
 
-void CPlayer::PlayerRestHP()
-{
-	//HPが0以下になったら
-	if (HP <= 0) {
-		HP = 0;
-	}
-}
+
 
 void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
 {
