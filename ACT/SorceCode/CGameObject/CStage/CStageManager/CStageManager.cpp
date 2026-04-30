@@ -37,7 +37,7 @@ void CStageManager::Update()
 {
 	if(GetAsyncKeyState('L') & 0x8000)
 	{
-		ChangeStage(enStage::MapBoss);
+		ChangeStage(enStage::Map02);
 	}
 }
 

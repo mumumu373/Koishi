@@ -220,7 +220,7 @@ void CGame::Update()
 				}
 				//タイトル準備が完了してから
 				else {
-					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 40);
+					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 20);
 				}
 
 				//一回だけ押させる
@@ -240,6 +240,13 @@ void CGame::Update()
 		break;
 
 	case enScene::GameMain:
+
+		if (GetAsyncKeyState('T') & 0x0001) {
+			//ステージ2に移行
+			m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
+
+			m_upPlayer->SetStagePos({ 100,200 });
+		}
 
 		m_pWire->Update();
 
@@ -297,8 +304,18 @@ void CGame::Update()
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
 		}
 
+		//プレイヤーがステージチェンジブロックに触れたなら
+		if (m_upPlayer->STAGE_CHANGE_HIT == true) {
+			if (m_upPlayer->StageChangeTime == false) {
+				//ステージチェンジの遷移を行う
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Left, 40, 20);
+
+				//ステージチェンジ中
+				m_upPlayer->StageChangeTime = true;
+			}
+		}
 		//プレイヤーがイベントブロックに触れたなら
-		if (m_upPlayer->EVENT_HIT == true) {
+		else if (m_upPlayer->EVENT_HIT == true) {
 			//ムービーシーン(ボスとの会話などの)
 			m_Scene = enScene::Movie;
 
@@ -308,6 +325,21 @@ void CGame::Update()
 			//イベントが開始した位置を入れる
 			m_upPlayer->EVENT_START_POS = m_upPlayer->GetPosition();
 		
+		}
+
+		//ステージチェンジ中なら
+		if (m_upPlayer->StageChangeTime == true) {
+			//シーンが完全に覆いかぶさってから
+			if (m_upSceneChange->SceneSetComp == true) {
+				//ステージ2に移行
+				m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
+
+				//ステージ切り替え時のプレイヤーの配置
+				m_upPlayer->SetStagePos({ 100,200 });
+
+				//ステージチェンジ終了
+				m_upPlayer->StageChangeTime = false;
+			}
 		}
 
 		break;
