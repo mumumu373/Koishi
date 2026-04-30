@@ -230,6 +230,8 @@ void CGame::Update()
 		if (!ones)
 		{
 			CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Title_1);
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2);
+
 			ones = true;
 		}
 		//if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd) && !ones)
