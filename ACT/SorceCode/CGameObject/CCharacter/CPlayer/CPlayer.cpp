@@ -687,7 +687,7 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 					if (std::abs(MoveRangeX) <= 1.0f) {
 						MoveRangeX = 0; // 1pxˆÈ‰º‚È‚çˆÚ“®•s‰Â‚Æ‚µ‚ÄI—¹	•Ç‚É’£‚è•t‚¢‚Ä‚¢‚éŠ´‚¶
 						m_Position.x = m_OldPosition.x;
-						
+						m_Acceleration.x = 0;
 						break;
 					}
 
@@ -880,6 +880,12 @@ void CPlayer::SetStagePos(VECTOR2_f SetPos)
 	Initialization();
 	m_Position = SetPos;
 	
+}
+
+void CPlayer::EventMoov(enMoveState Moov)
+{
+
+
 }
 
 void CPlayer::AvoidanceEnd()

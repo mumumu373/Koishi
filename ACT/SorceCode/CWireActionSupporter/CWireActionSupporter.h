@@ -15,7 +15,7 @@ public:
 	void Update(VECTOR2_f CameraPos) ;
 	void WireActionEnd();//ワイヤーアクション終了
 
-	void WireEnd();
+	void WireEnd();//全部のワイヤーを辞める
 private:
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y);

@@ -147,6 +147,9 @@ public:
 	void SetStagePos(VECTOR2_f SetPos);
 
 	int AvoidanceCount;	//‰ñ”ğ‚É‚©‚©‚éŠÔ‚ğ}‚é
+
+
+	void EventMoov(enMoveState Moov);
 private:
 	void AvoidanceEnd();
 	void KyeInput();

@@ -88,7 +88,7 @@ void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlay
 					}
 					//クリアの動き
 					else {
-						upPlayer->GetApple(upBoss->GetCenterPosition());
+						
 					}
 				}
 			}
@@ -104,12 +104,13 @@ void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlay
 
 					//ボスのボスクリア条件を達成していないなら
 					if (upBoss->GetBossClearFlag() == false) {
-						if (CircleDetection(PlayerPos, BossPos) == true) {
-						}
+					
 					}
 					//クリアの動き
 					else {
-						upPlayer->GetApple(upBoss->GetCenterPosition());
+						if (CircleDetection(PlayerPos, BossPos) == true) {
+							upPlayer->GetApple(upBoss->GetCenterPosition());
+						}
 					}
 				}
 			}
