@@ -52,6 +52,7 @@ void CPlayer::Initialization()
 	m_HitBack = false;
 	m_HitBackBack = false;
 	m_Delection.y = 180;
+
 }
 
 
