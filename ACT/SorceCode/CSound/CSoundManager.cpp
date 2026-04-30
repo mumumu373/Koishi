@@ -74,7 +74,8 @@ bool CSoundManager::Load(HWND hWnd)
 		{enSingleSoundList::BGM_NoSound,"Data\\Sound\\BGM\\BGM_NoSound.mp3", "BGM_NoSound"},
 
 		{enSingleSoundList::BGM_TitleStart,		"Data\\Sound\\BGM\\BGM_TitleStart.mp3", "BGM_TitleStart",},
-		{enSingleSoundList::BGM_Title,			"Data\\Sound\\BGM\\BGM_Title.mp3", "BGM_Title",},
+		{enSingleSoundList::BGM_Title_1,			"Data\\Sound\\BGM\\BGM_Title.mp3", "BGM_Title_1",},
+		{enSingleSoundList::BGM_Title_2,			"Data\\Sound\\BGM\\BGM_Title.mp3", "BGM_Title_2",},
 		{enSingleSoundList::BGM_Title_FastEnd,	"Data\\Sound\\BGM\\BGM_Title_FastEnd.mp3", "BGM_Title_FastEnd",},
 
 		{enSingleSoundList::BGM_Boss1,			"Data\\Sound\\BGM\\BGM_Boss1.mp3", "BGM_Boss1",},

@@ -16,7 +16,8 @@ public:
 		BGM_NoSound,		//無音
 
 		BGM_TitleStart,		//タイトルBGMの最初
-		BGM_Title,			//タイトルBGM
+		BGM_Title_1,			//タイトルBGM
+		BGM_Title_2,			//タイトルBGM
 		BGM_Title_FastEnd,	
 
 		BGM_Stage1,			//ステージ1、2のステージBGM

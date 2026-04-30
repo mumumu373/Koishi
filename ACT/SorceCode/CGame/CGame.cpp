@@ -215,17 +215,33 @@ void CGame::Update()
 	switch (m_Scene) {
 	case enScene::Title:
 
-		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss1);
-		if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd) && !ones)
+		if (m_BgmTimer >= 31.05f)
 		{
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd);
-			ones = true;
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1);
+			CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_2);
+			m_BgmTimer = 0.f;
+		}
+		if (m_BgmTimer >= 15.52f)
+		{
+			if(CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Title_2))
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2);
 		}
 
-		if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1))
+		if (!ones)
 		{
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd);
+			CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Title_1);
+			ones = true;
 		}
+		//if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd) && !ones)
+		//{
+		//	CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd);
+		//	ones = true;
+		//}
+
+		//if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::BGM_Boss1))
+		//{
+		//	CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_FastEnd);
+		//}
 		MoveCursor();
 
 		m_upTitleImage->Update();
@@ -259,6 +275,9 @@ void CGame::Update()
 		break;
 
 	case enScene::GameMain:
+		CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_2);
+		CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_1);
+		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
 
 		m_pWire->Update();
 
