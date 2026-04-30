@@ -5,6 +5,7 @@ CStageDraw::CStageDraw()
     , m_MapMax()
     , m_mapData()
 	, m_Framesplit(0, 0, WND_W, WND_H)
+	, IsBossMap(false)
 {
 }
 
@@ -45,8 +46,14 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
 
 //--------------------------------------------------------------------------------------------------------------
 
-void CStageDraw::BackGroundDraw(VECTOR2_f CurrentStagePos)
+void CStageDraw::BackGroundDraw(VECTOR2_f& CurrentStagePos)
 {
+    if(IsBossMap)
+    {
+		CurrentStagePos = { 0,0 }; 
+        IsBossMap = false;
+    }
+
     //クランプ
     float SkyloopX = fmod(CurrentStagePos.x * 0.5f, m_Framesplit.w);
     float MountainloopX = fmod(CurrentStagePos.x, m_Framesplit.w);
