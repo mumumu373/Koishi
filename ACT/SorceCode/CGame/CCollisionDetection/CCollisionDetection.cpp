@@ -88,7 +88,28 @@ void CCollisionDetection::PlayerToBossCollision(std::unique_ptr<CPlayer>& upPlay
 					}
 					//クリアの動き
 					else {
+						upPlayer->GetApple(upBoss->GetCenterPosition());
+					}
+				}
+			}
+		}
+		else if( upBoss->m_State == CBoss::enState::Dead){
+			//攻撃が当たった状態でないなら
+			if (upPlayer->m_AttackHit == false && upPlayer->AvoidanceCount < 0) {
+				//完全無敵で無ければ
+				if (upBoss->NoHit == false) {
+					//当たり判定の位置情報セット
+					ObjectInfo PlayerPos = SetPlayerInfo(upPlayer, true);
+					ObjectInfo BossPos = SetBossInfo(upBoss, true);
 
+					//ボスのボスクリア条件を達成していないなら
+					if (upBoss->GetBossClearFlag() == false) {
+						if (CircleDetection(PlayerPos, BossPos) == true) {
+						}
+					}
+					//クリアの動き
+					else {
+						upPlayer->GetApple(upBoss->GetCenterPosition());
 					}
 				}
 			}

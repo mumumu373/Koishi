@@ -113,11 +113,14 @@ public:
 
 	void StaratEnemiWire();
 	void EndEnemiWire();
+	void GetApple(VECTOR2_f Centerpos);
 private:
 	void Animation() override;
 
 	//ステージとの当たり判定
-	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override; 
+
+	
 public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(VECTOR2_f Pos, int Damage);
@@ -140,7 +143,7 @@ public:
 	bool GetMyHit() {if (m_HitBackBack|| m_HitBack) {return true;}return false;}
 	void SetStegeUnder(double under) { m_StegeUnder = under; }
 
-	//ステージ最初の設定
+	//ステージ最初の設定(左上基準)
 	void SetStagePos(VECTOR2_f SetPos);
 
 	int AvoidanceCount;	//回避にかかる時間を図る
@@ -216,4 +219,6 @@ private:
 	double m_StegeUnder;		//ステージの下の位置
 
 	int m_DeathStop;
+
+	bool ClearGame;
 };
