@@ -87,16 +87,22 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 
 
 
-void CWireActionSupporter::Update()
+void CWireActionSupporter::Update(VECTOR2_f CameraPos)
 {
 
 
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
 		WirePointAction();
+		if (m_dpPlayer != nullptr) {
+			m_dpPlayer->m_WallHit = false;
+			m_dpPlayer->CameraCollision(CameraPos, 44, 44);
+		}
+	
 	}
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_pEnemy != nullptr) {
 		EnemitoAction();
 	}
+
 }
 
 void CWireActionSupporter::WireActionEnd()

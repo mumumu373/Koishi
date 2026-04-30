@@ -133,6 +133,7 @@ public://パブリック
 
 	//ダメージ毛玉に触れた動作
 	void PlayerDamegEriaHit(int Damage);
+	bool m_WallHit;
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }

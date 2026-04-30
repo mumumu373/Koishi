@@ -244,7 +244,7 @@ void CGame::Update()
 		for (int i = 0; i < m_pCWirepoint.size(); i++) {
 			m_pCWirepoint[i]->Update();
 		}
-		m_upWireActionSupporter->Update();
+		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 		
 		//当たり判定をまとめた関数
 		CollisionUpdate();
@@ -387,7 +387,7 @@ void CGame::Update()
 			m_pCWirepoint[i]->Update();
 		}
 		//ワイヤーのアクションの動作?
-		m_upWireActionSupporter->Update();
+		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 
 		//当たり判定の関数
 		CollisionUpdate();

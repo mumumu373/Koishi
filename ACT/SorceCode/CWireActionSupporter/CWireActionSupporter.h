@@ -12,7 +12,7 @@ public:
 	~CWireActionSupporter();
 	void StartWireAction(CPlayer*m_DPlayer, CWire* m_DPWire,CWirepoint* m_DPWirePoint);
 	void StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPWire, CEnemy* m_DPEnemi);
-	void Update() ;
+	void Update(VECTOR2_f CameraPos) ;
 	void WireActionEnd();//ワイヤーアクション終了
 
 	void WireEnd();

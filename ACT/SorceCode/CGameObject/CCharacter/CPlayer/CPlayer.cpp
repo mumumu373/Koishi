@@ -52,7 +52,7 @@ void CPlayer::Initialization()
 	m_HitBack = false;
 	m_HitBackBack = false;
 	m_Delection.y = 180;
-
+	m_WallHit = false;
 }
 
 
@@ -113,6 +113,7 @@ CPlayer::CPlayer()
 
 	//ハートクラス作成
 	m_upHeart = std::make_unique<CHeart>(HP);
+	m_WallHit = false;
 }
 
 CPlayer::~CPlayer()
@@ -381,6 +382,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		//プレイヤーの属性変更制御
 		PlayerColorChange();
 
+		m_WallHit = false;
 		//ステージとの判定
 		StageCollision(44, 44);
 	}
@@ -663,11 +665,13 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 
 				//X方向に動くことができるか						プレイヤーやキャラは画像の位置が少しずれているので指定して直す
 				if (CStageCollision::GetInstance()->IsHit(checkPos.x, m_OldPosition.y, 60, 100, offsetPos) == true) {
+	
 					//std::abs(数値)：絶対値（Absolute）
 					//これを使うことで、どれだけ移動するかの絶対値を見ることができるので、+や-の区分無く判定することができる
 					if (std::abs(MoveRangeX) <= 1.0f) {
 						MoveRangeX = 0; // 1px以下なら移動不可として終了	壁に張り付いている感じ
 						m_Position.x = m_OldPosition.x;
+						
 						break;
 					}
 
@@ -692,6 +696,12 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 					m_Position.x = checkPos.x;
 					break;
 				}
+			}
+		}
+		else {
+
+			if (CStageCollision::GetInstance()->IsHit(m_Position.x, m_OldPosition.y, 60, 100, offsetPos) == true) {
+				m_WallHit = true;
 			}
 		}
 
@@ -808,6 +818,10 @@ void CPlayer::CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double Of
 	//カメラの左側の枠外に出ようとしたら
 	if (m_Position.x < CameraPos.x - (WND_W / 2) - offsetPos.x) {
 		m_Position.x = CameraPos.x - (WND_W / 2) - offsetPos.x;
+		if (m_WallHit==true) {
+			HP = 0;
+			Death();
+		}
 	}
 	//カメラの右側の枠外に出ようとしたら
 	else if (m_Position.x > CameraPos.x + (WND_W / 2) - m_Framesplit.w + offsetPos.x) {
