@@ -4,11 +4,14 @@
 #include "CImage/CImageManager.h"							//イメージクラス
 #include "CCamera/CCamera.h"								//カメラクラス
 #include "CSound/CSoundManager.h"							//サウンドマネージャークラス
+
+#include "CGame/CTitleImage/CTitleImage.h"					//タイトルイメージクラス
+#include "CGame/CSceneChange/CSceneChange.h"				//シーンチェンジクラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
 //----------------------------------------------------------
-#include "CGame/CEnemyFactory/CEnemyFactory.h"				//エネミーを作るクラス
-#include "CGame/CBossFactory/CBossFactory.h"				//ボスを作るクラス
-#include "CGame/CBulletFactory/CBulletFactory.h"			//バレットを作るクラス
+#include "CGame/Factory/CEnemyFactory/CEnemyFactory.h"		//エネミーを作るクラス
+#include "CGame/Factory/CBossFactory/CBossFactory.h"		//ボスを作るクラス
+#include "CGame/Factory/CBulletFactory/CBulletFactory.h"	//バレットを作るクラス
 //----------------------------------------------------------この3つはまた別のところで呼び出す
 #include "CGameObject/CCharacter/CPlayer/CPlayer.h"			//プレイヤークラス
 #include "CGameObject/CCharacter/CEnemy/CEnemy.h"			//エネミークラス
@@ -127,6 +130,12 @@ private:
 	HFONT m_hFont;	//フォントハンドル.
 
 	//														-ゲームシステム面のもの-
+	//----------------------タイトルイメージ----------------
+	std::unique_ptr<CTitleImage> m_upTitleImage;
+
+	//----------------------シーンチェンジクラス------------
+	std::unique_ptr<CSceneChange> m_upSceneChange;
+	
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
 
@@ -159,5 +168,7 @@ private:
 	std::vector<std::function<void()>>	m_Action;
 	std::vector<VECTOR2_f>	m_CursorPosition;
 	int m_CursorAction;	//選択肢のどれを選んでいるか
+
+	bool m_OnePush;		//一回だけ押させる
 	
 };

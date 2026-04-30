@@ -30,14 +30,18 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
 		{enImgList::IMG_Nazrin		,"Data\\Image\\Nazrina.bmp","Nazrin"} ,
 		{enImgList::IMG_Apple		,"Data\\Image\\Apple.bmp","Apple"} ,
+		{enImgList::IMG_Banana		,"Data\\Image\\Banana.bmp","Banana"} ,
+
+		{enImgList::IMG_Title_BackSky		,"Data\\Image\\TitleImage\\Title_BackSky.bmp","Title_BackSky"} ,
+		{enImgList::IMG_Title_Ground		,"Data\\Image\\TitleImage\\Title_Ground.bmp","Title_Ground"} ,
 
 		{enImgList::IMG_Bullet		,"Data\\Image\\Bullet.bmp","Bullet"} ,
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
 		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"Slash"} ,
 		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
 
-		{enImgList::IMG_Title		,"Data\\Image\\TitleImage.bmp"			,"Title"} ,
 		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"Cursor"} ,
+		{enImgList::IMG_Black		,"Data\\Image\\Black.bmp"			,"Black"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	

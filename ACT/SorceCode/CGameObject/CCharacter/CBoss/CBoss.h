@@ -1,6 +1,6 @@
 #pragma once
 #include "CGameObject/CCharacter/CCharacter.h"	//キャラクタークラス
-#include "CGame/CBulletFactory/CBulletFactory.h"//バレットを作るクラス
+#include "CGame/Factory/CBulletFactory/CBulletFactory.h"//バレットを作るクラス
 
 /*************************************************************************************************
 *		ボスクラス(親)
