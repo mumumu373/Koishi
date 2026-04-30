@@ -220,8 +220,7 @@ void CGame::Update()
 				}
 				//タイトル準備が完了してから
 				else {
-					//ステージへ
-					m_Action[m_CursorAction]();
+					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 40);
 				}
 
 				//一回だけ押させる
@@ -233,8 +232,10 @@ void CGame::Update()
 			m_OnePush = false;
 		}
 
-		if (GetAsyncKeyState('T') & 0x0001) {
-			m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 30, 40);
+		//シーンが完全に覆いかぶさってから
+		if (m_upSceneChange->SceneSetComp == true) {
+			//ステージへ
+			m_Action[m_CursorAction]();
 		}
 		break;
 
