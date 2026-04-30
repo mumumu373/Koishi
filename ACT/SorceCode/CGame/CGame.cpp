@@ -234,7 +234,7 @@ void CGame::Update()
 		}
 
 		if (GetAsyncKeyState('T') & 0x0001) {
-			m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 12, 40);
+			m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 30, 40);
 		}
 		break;
 
