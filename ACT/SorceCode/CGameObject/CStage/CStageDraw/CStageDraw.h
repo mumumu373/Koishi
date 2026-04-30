@@ -21,7 +21,7 @@ public:
 	* @brief    背景描画関数
 	* @param   CurrentStagePos : 現在のステージの位置
 	*****************************************************************************************/
-	void BackGroundDraw(VECTOR2_f CurrentStagePos);
+	void BackGroundDraw(VECTOR2_f& CurrentStagePos);
 
 
 	/*****************************************************************************************
@@ -40,6 +40,12 @@ public:
 	{ 
 		m_mapData = MapData;
 	}
+
+	/*****************************************************************************************
+	* @brief    マップデータをセットする関数。Managerで受け取る
+	* @param    IsBoss : ボス戦に入るときにtrueにする。背景を合わせる
+	*****************************************************************************************/
+	void SetBossMap(bool IsBoss){ IsBossMap = IsBoss; }
 
 private:
 
@@ -60,4 +66,7 @@ private:
 	std::vector<std::vector<int>> m_mapData;
 
 	CImage::FRAMESPLIT m_Framesplit;//キャラクターの切り取り範囲
+
+	//ボスマップに変更されたときにtrueにする。背景を合わせる
+	bool IsBossMap;
 };

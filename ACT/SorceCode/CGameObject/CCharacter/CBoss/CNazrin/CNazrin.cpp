@@ -455,6 +455,9 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			//地上にいないようにする
 			m_GroundStand = false;
 
+			//真ん中からリンゴが出るようにする
+			m_Position = GetCenterPosition();
+
 			//倒された位置を記憶する
 			m_MemoryPos = m_Position;
 

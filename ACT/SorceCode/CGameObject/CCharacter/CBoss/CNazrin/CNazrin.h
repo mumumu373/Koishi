@@ -1,6 +1,6 @@
 #pragma once
 #include "CGameObject/CCharacter/CBoss/CBoss.h"	//ボスクラス(継承)
-#include "CGame/CBulletFactory/CBulletFactory.h"//バレットを作るクラス
+#include "CGame/Factory/CBulletFactory/CBulletFactory.h"//バレットを作るクラス
 #include "CGameObject/CCharacter/CBoss/CNazrin/CBanana/CBanana.h"	//バナナクラスを持つようにする
 
 /**********************************************************************************************************

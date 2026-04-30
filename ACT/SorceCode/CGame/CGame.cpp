@@ -23,6 +23,8 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hWorkDC2				(nullptr)
 , m_hWorkBmp2				(nullptr)
 , m_hFont					(nullptr)
+, m_upTitleImage			(nullptr)
+, m_upSceneChange			(nullptr)
 , m_upCollisionDetection	(nullptr)
 , m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
@@ -30,6 +32,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upBoss					(nullptr)
 , m_Action					()
 , m_CursorAction			()
+, m_OnePush					(false)
 , m_BgmTimer				()
 , m_OldScene				()
 {
@@ -91,6 +94,12 @@ bool CGame::Create()
 		if (CImageManager::GetInstance()->Load(m_pGameWnd->hWnd, m_pGameWnd->hScreenDC, m_hMemDC, m_hWorkDC, m_hWorkDC2) == false)return false;
 	}
 
+	//タイトルイメージのインスタンス生成
+	m_upTitleImage = std::make_unique<CTitleImage>();
+
+	//シーンチェンジのインスタンス生成
+	m_upSceneChange = std::make_unique<CSceneChange>();
+
 	//当たり判定のインスタンス生成
 	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
 
@@ -111,11 +120,11 @@ bool CGame::Create()
 	//エネミーを作っている
 	VECTOR2_f SetEnemy = { 600,400 };
 	VECTOR2_f Speed = { 4,4 };
-	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy, 5, 30, 60, 120));
+	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy,150, 5, 30, 120));
 	SetEnemy.y += 500;																//作るときにムーブタイプを決めておく
-	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy, Speed, CFairy::enMoveType::Rotation, 60, 120));
-	SetEnemy.x += 400;
-	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Blue, SetEnemy));
+	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy,80, Speed, CFairy::enMoveType::Rotation, 60, 120));
+	SetEnemy.x += 600;
+	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Red, SetEnemy,200));
 
 	//ゲームシーン状態にしておく
 	m_Scene = enScene::Title;
@@ -126,7 +135,7 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	m_upEnemy.push_back(CEnemySet::otamesi());
+	CEnemySet::LoadEnemies(m_upEnemy);
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
@@ -200,6 +209,9 @@ void CGame::Update()
 
 	//仮置き
 	CMouseInput::Update();
+
+	m_upSceneChange->Update();
+
 	switch (m_Scene) {
 	case enScene::Title:
 
@@ -216,14 +228,35 @@ void CGame::Update()
 		}
 		MoveCursor();
 
-		//選択肢を決定
+		m_upTitleImage->Update();
+
 		if(GetAsyncKeyState(VK_RETURN) & 0x8000) 
 		{
-			//配列の中身にある関数を呼び出す
-			m_Action[m_CursorAction]();
+			if (m_OnePush == false) {
+				//タイトルの準備が完了していないなら
+				if (m_upTitleImage->SetCompleted == false) {
+					//規定の場所にセットする
+					m_upTitleImage->SetInitializePos();
+				}
+				//タイトル準備が完了してから
+				else {
+					//ステージへ
+					m_Action[m_CursorAction]();
+				}
+
+				//一回だけ押させる
+				m_OnePush = true;
+			}
+		}
+		else {
+			//離すとリセット
+			m_OnePush = false;
+		}
+
+		if (GetAsyncKeyState('T') & 0x0001) {
+			m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 30, 40);
 		}
 		break;
-
 
 	case enScene::GameMain:
 
@@ -266,7 +299,7 @@ void CGame::Update()
 		for (int i = 0; i < m_pCWirepoint.size(); i++) {
 			m_pCWirepoint[i]->Update();
 		}
-		m_upWireActionSupporter->Update();
+		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 		
 		//当たり判定をまとめた関数
 		CollisionUpdate();
@@ -293,10 +326,14 @@ void CGame::Update()
 
 			//イベントが開始した位置を入れる
 			m_upPlayer->EVENT_START_POS = m_upPlayer->GetPosition();
+		
 		}
 
 		break;
 	case enScene::Movie:
+		m_upWireActionSupporter->WireEnd();
+		//ワイヤーの動作
+		m_pWire->Update();
 
 		//プレイヤーのムービーシーン中の動作
 		m_upPlayer->MovieSceneUpdate();
@@ -405,7 +442,7 @@ void CGame::Update()
 			m_pCWirepoint[i]->Update();
 		}
 		//ワイヤーのアクションの動作?
-		m_upWireActionSupporter->Update();
+		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 
 		//当たり判定の関数
 		CollisionUpdate();
@@ -428,12 +465,9 @@ void CGame::Draw()
 	switch (m_Scene)
 	{
 	case enScene::Title:
-		
-		CImageManager::SelectImg(CImageManager::enImgList::IMG_Title)->BBlt(
-			0, 0,
-			1280, 720,
-			0, 0);
 
+		m_upTitleImage->Draw();
+		
 		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
 			m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
 			128, 128,
@@ -458,7 +492,7 @@ void CGame::Draw()
 		m_upPlayer->SetWireTopPos(Senter);
 		m_upPlayer->Draw(m_upCamera);
 		//ワイヤーの手の描画
-		m_pWire->WireHandDraw(m_upCamera);
+		m_pWire->WireHandDraw(m_upCamera, m_upPlayer.get());
 
 		//エネミー描画
 		for (int i = 0; i < m_upEnemy.size(); i++) {
@@ -502,6 +536,8 @@ void CGame::Draw()
 	default:
 		break;
 	}
+
+	m_upSceneChange->Draw();
 }
 
 void CGame::DeleteInstance()

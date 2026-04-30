@@ -104,6 +104,10 @@ void CStageManager::ChangeStage(enStage stageNum)
 	CStageCollision::GetInstance()->SetCurrentMapData(m_upStageLoader->GetMapData());
 	m_upStageDraw->SetMapMax(m_upStageLoader->GetMapWidth(), m_upStageLoader->GetMapHeight());
 	m_upStageDraw->SetMapData(m_upStageLoader->GetMapData());
+
+	//ボスマップに変更されたときに背景を合わせる
+	if (stageNum == enStage::MapBoss) { m_upStageDraw->SetBossMap(true); }
+		 
 }
 
 //--------------------------------------------------------------------------------------------------------------

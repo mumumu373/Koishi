@@ -16,6 +16,7 @@ public:
 		IMG_StageMain = 0,	//ステージのメイン画像(ブロック状の物達)
 		IMG_Koishi,			//こいし(プレイヤー)
 		IMG_Heart,			//ハート(体力)
+		IMG_BreakeHeart,	//ハートの亀裂
 		IMG_Enemy,			//エネミー
 		IMG_Mouse,			//マウス
 		IMG_String,			//ワイヤー	
@@ -24,14 +25,19 @@ public:
 		IMG_BackSky,		//空
 		IMG_Nazrin,			//ナズーリン	1面ボス
 		IMG_Apple,			//リンゴ
+		IMG_Banana,			//バナナ
+
+		IMG_Title_BackSky,	//タイトルの背景
+		IMG_Title_Ground,	//タイトルの地面
 
 		IMG_Bullet,			//全員のバレット
 		IMG_Effect,			//エフェクト
 		IMG_Slash,			//斬撃
 		IMG_DeadEffect,		//死んだときのエフェクト(エネミー)
 
-		IMG_Title,			//タイトルの画像
 		IMG_Cursor,			//カーソルの画像
+
+		IMG_Black,			//黒画面
 	};
 public:
 	static CImageManager* GetInstance()

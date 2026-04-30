@@ -10,7 +10,7 @@ class CYinYangBall
 {
 public:
 	//ŒÄ‚Ño‚·‚Æ‚«‚Éí—Ş‚ğŒˆ‚ß‚é
-	CYinYangBall(int Kinds, VECTOR2_f SetPos);
+	CYinYangBall(int Kinds, VECTOR2_f SetPos, int Size);
 	~CYinYangBall();
 
 	void StartSetting() override;

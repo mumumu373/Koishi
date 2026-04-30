@@ -7,7 +7,34 @@
         "x": 400,
         "y": 400
       },
-      "Color": 1
+      "Color": 1,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 800,
+        "y": 600
+      },
+      "Color": 4,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 8,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 900,
+        "y": 800
+      },
+      "Color": 3,
+      "Size": 300
     }
   ]
 }

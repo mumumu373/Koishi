@@ -29,7 +29,7 @@ public:
 	void Shot(std::unique_ptr<CPlayer>& Player, VECTOR2_f Targetpoint) ;
 	void Update()override;
 	void Draw(std::unique_ptr<CCamera>& pCamera)override;
-	void WireHandDraw(std::unique_ptr<CCamera>& pCamera);
+	void WireHandDraw(std::unique_ptr<CCamera>& pCamera, CPlayer* m_DPlayer);
 	void StatoWire(VECTOR2_f pos);
 	bool Getcatch();
 	bool GetplayWire() {

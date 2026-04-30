@@ -87,16 +87,22 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 
 
 
-void CWireActionSupporter::Update()
+void CWireActionSupporter::Update(VECTOR2_f CameraPos)
 {
 
 
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_dpWirePoint != nullptr) {
 		WirePointAction();
+		if (m_dpPlayer != nullptr) {
+			m_dpPlayer->m_WallHit = false;
+			m_dpPlayer->CameraCollision(CameraPos, 44, 44);
+		}
+	
 	}
 	if (m_dpPlayer != nullptr && m_dpWire != nullptr && m_pEnemy != nullptr) {
 		EnemitoAction();
 	}
+
 }
 
 void CWireActionSupporter::WireActionEnd()
@@ -115,6 +121,29 @@ void CWireActionSupporter::WireActionEnd()
 		m_dpWire = nullptr;
 		m_dpWirePoint = nullptr;
 		NawSpeed = 0;
+}
+
+void CWireActionSupporter::WireEnd()
+{
+	if (m_dpWire!=nullptr) {
+		m_dpWire->WireEnd();
+		m_dpWire->EnemiCatchEND();
+		m_dpWire = nullptr;
+	}
+	if (m_dpPlayer!=nullptr) {
+		m_dpPlayer->EndEnemiWire();
+		m_dpPlayer = nullptr;
+	}
+		//ここに敵を飛ばす処理を描く
+		if (m_pEnemy != nullptr) {
+			if (m_pEnemy->m_CatchWire == CEnemy::enCatchWire::Catch) {
+				//エネミーを飛ばします！
+				m_pEnemy->SetThrowEnemy();
+			}
+			m_pEnemy = nullptr;
+		}
+	WireActioning = false;
+	m_dpWirePoint = nullptr;
 }
 
 void CWireActionSupporter::PlayerTurnaround()
@@ -307,6 +336,10 @@ void CWireActionSupporter::WirePointAction()
 		//ステージの当たり判定を行う
 		//StageCollision(40, 40);
 	}
+	else {
+		EnemiActionEnd();
+		return;
+	}
 }
 
 void CWireActionSupporter::AllNullptr()
@@ -378,6 +411,10 @@ void CWireActionSupporter::EnemitoAction()
 		
 		}
 
+	}
+	else {
+		EnemiActionEnd();
+		return;
 	}
 
 }

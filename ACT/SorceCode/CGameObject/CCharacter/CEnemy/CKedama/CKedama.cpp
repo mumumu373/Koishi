@@ -1,6 +1,6 @@
 #include "CKedama.h"
 
-CKedama::CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower, int ChangeMoveTime, int JumpingTime)
+CKedama::CKedama(int Kinds, VECTOR2_f SetPos, int Size, double MoveSpeed, double JumpPower, int JumpingTime)
 {
 	//ステージに配置する
 	m_Position = SetPos;
@@ -13,6 +13,9 @@ CKedama::CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower
 	m_MoveState = enMoveState::MoveLeft;
 	//エネミー陣営です
 	m_MyCamp = enMyCamp::EnemyCamp;
+
+	//色とサイズを入れる
+	m_Framesplit = { 32 * m_Color,0,Size,Size };
 
 	//スピード
 	m_Speed = { MoveSpeed, MoveSpeed };
@@ -38,10 +41,6 @@ CKedama::CKedama(int Kinds, VECTOR2_f SetPos, double MoveSpeed, double JumpPower
 
 	StartSetting();
 
-	//ムーブを変えるタイミングを決める
-	m_ChangeMoveTime = ChangeMoveTime;
-	m_ChangeMoveCo = 0;
-
 	//アニメーションカウントセット
 	m_AnimationCo = 0;
 }
@@ -54,23 +53,6 @@ void CKedama::StartSetting()
 {
 	m_State = enState::Living;
 
-	switch (m_Color) {
-	case enColor::NoColor:
-		m_Framesplit = { 32 * m_Color,0,80,80 };
-		break;
-	case enColor::Red:
-		m_Framesplit = { 32 * m_Color,0,100,100 };
-		break;
-	case enColor::Yellow:
-		m_Framesplit = { 32 * m_Color,0,100,100 };
-		break;
-	case enColor::Green:
-		m_Framesplit = { 32 * m_Color,0,100,100 };
-		break;
-	case enColor::Blue:
-		m_Framesplit = { 32 * m_Color,0,200,200 };
-		break;
-	}
 	//元画像サイズ
 	m_FrameSize = { 32,32 };
 
@@ -99,13 +81,6 @@ void CKedama::Draw(std::unique_ptr<CCamera>& pCamera)
 		m_Alpha, 
 		m_Delection.x, m_Delection.y, m_Delection.z);	//透明度、角度
 
-	RECT rect;
-	rect.left = DispPos.x;
-	rect.top = DispPos.y ;
-	rect.right = DispPos.x + m_RealFrameSplit.x ;
-	rect.bottom = DispPos.y + m_RealFrameSplit.y;
-	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
-
 }
 
 void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
@@ -113,19 +88,6 @@ void CKedama::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 	m_OldPosition = m_Position;
 
 	if (m_AttackHit == false) {
-		switch (m_Color) {
-		case enColor::NoColor:
-			break;
-		case enColor::Red:
-			break;
-		case enColor::Yellow:
-			break;
-		case enColor::Green:
-			break;
-		case enColor::Blue:
-			break;
-		}
-
 		switch (m_MoveState) {
 		case enMoveState::Wait:
 			break;

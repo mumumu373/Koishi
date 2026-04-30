@@ -35,7 +35,8 @@ public:
 	static constexpr int m_HitBackCoPware = 25;//ノックバックパワー
 
 	static constexpr double DeathSpeed = 20;//死亡時の上に飛ぶ速度
-	static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
+	//static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
+	static constexpr double DeathRotationSpeed = 25;//死亡時の回転速度
 	static constexpr double DeathRotationSpeedMAX = 2000;//死亡時の回転速度の最大値
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
@@ -62,11 +63,14 @@ public:
 	bool GroundStand = false;		//地面に立っています
 	bool OldGroundStand = false;		//前フレームの地面に立っている状態
 public:
+
+	CPlayer();
+	~CPlayer();
 	void Turnaround(VECTOR2_f Pos);
 
 	void DrawH(HDC c, HWND h, std::unique_ptr<CCamera>& pCamera);//後で消す
-	CPlayer();
-	~CPlayer();
+
+	void Initialization();//初期設定
 	//ワイヤーポイントを掴む状態にする
 	void StartWirePointCatch();
 	void StartSetting() override;
@@ -105,15 +109,18 @@ public:
 	void MovieSceneUpdate();
 
 	//プレイヤーのハートを描画する
-	void PlayerHeartDraw() { m_upHeart->Draw(); }
+	void PlayerHeartDraw() { m_upHeart->Draw(HP); }
 
 	void StaratEnemiWire();
 	void EndEnemiWire();
+	void GetApple(VECTOR2_f Centerpos);
 private:
 	void Animation() override;
 
 	//ステージとの当たり判定
-	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override;
+	void StageCollision(double OffsetPos_X, double OffsetPos_Y) override; 
+
+	
 public://パブリック
 	//エネミーに触れたなら
 	void EnemyHit(VECTOR2_f Pos, int Damage);
@@ -129,11 +136,17 @@ public://パブリック
 
 	//ダメージ毛玉に触れた動作
 	void PlayerDamegEriaHit(int Damage);
+	bool m_WallHit;
 public:
 	std::unique_ptr<CNormalAttack> &GetNormalAttack_p() { return NormalAttack; }
 	int GetAlpha() { return m_Alpha; }
 	bool GetMyHit() {if (m_HitBackBack|| m_HitBack) {return true;}return false;}
 	void SetStegeUnder(double under) { m_StegeUnder = under; }
+
+	//ステージ最初の設定(左上基準)
+	void SetStagePos(VECTOR2_f SetPos);
+
+	int AvoidanceCount;	//回避にかかる時間を図る
 private:
 	void AvoidanceEnd();
 	void KyeInput();
@@ -152,10 +165,8 @@ private:
 	//プレイヤーのヒットした時動作
 	void PlayerMyHit(VECTOR2_f Pos);
 
-	//ダメージを受けたとき、HPの残りを見る
-	void PlayerRestHP();
-
 	void Death();
+
 private:
 	void AirAvoidanceVECTSet();
 
@@ -173,7 +184,7 @@ private:
 	int m_Rdashcount;
 	bool m_Ldash;		//左ダッシュ中
 	bool m_Rdash;		//右ダッシュ中
-	int AvoidanceCount;	//回避にかかる時間を図る
+
 	int AvoidanceCoolCount;//回避のクールタイムを図る
 	int AvoidanceCanCount;//回避の残り回数
 	VECTOR2_f AirAvoidanceVECT;	//空中回避のベクトル
@@ -206,4 +217,8 @@ private:
 	double m_DeathRotation;		//死亡したときの回転
 
 	double m_StegeUnder;		//ステージの下の位置
+
+	int m_DeathStop;
+
+	bool ClearGame;
 };
