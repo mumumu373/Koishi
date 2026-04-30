@@ -35,7 +35,8 @@ public:
 	static constexpr int m_HitBackCoPware = 25;//ノックバックパワー
 
 	static constexpr double DeathSpeed = 20;//死亡時の上に飛ぶ速度
-	static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
+	//static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
+	static constexpr double DeathRotationSpeed = 25;//死亡時の回転速度
 	static constexpr double DeathRotationSpeedMAX = 2000;//死亡時の回転速度の最大値
 	bool EVENT_HIT;		//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
@@ -206,4 +207,6 @@ private:
 	double m_DeathRotation;		//死亡したときの回転
 
 	double m_StegeUnder;		//ステージの下の位置
+
+	int m_DeathStop;
 };
