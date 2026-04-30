@@ -15,7 +15,7 @@ public:
 	void Update() ;
 	void WireActionEnd();//ワイヤーアクション終了
 
-
+	void WireEnd();
 private:
 	//ステージとの当たり判定
 	void StageCollision(double OffsetPos_X, double OffsetPos_Y);

@@ -117,6 +117,29 @@ void CWireActionSupporter::WireActionEnd()
 		NawSpeed = 0;
 }
 
+void CWireActionSupporter::WireEnd()
+{
+	if (m_dpWire!=nullptr) {
+		m_dpWire->WireEnd();
+		m_dpWire->EnemiCatchEND();
+		m_dpWire = nullptr;
+	}
+	if (m_dpPlayer!=nullptr) {
+		m_dpPlayer->EndEnemiWire();
+		m_dpPlayer = nullptr;
+	}
+		//ここに敵を飛ばす処理を描く
+		if (m_pEnemy != nullptr) {
+			if (m_pEnemy->m_CatchWire == CEnemy::enCatchWire::Catch) {
+				//エネミーを飛ばします！
+				m_pEnemy->SetThrowEnemy();
+			}
+			m_pEnemy = nullptr;
+		}
+	WireActioning = false;
+	m_dpWirePoint = nullptr;
+}
+
 void CWireActionSupporter::PlayerTurnaround()
 {
 	if (m_dpWirePoint!=nullptr) {

@@ -63,11 +63,14 @@ public:
 	bool GroundStand = false;		//地面に立っています
 	bool OldGroundStand = false;		//前フレームの地面に立っている状態
 public:
+
+	CPlayer();
+	~CPlayer();
 	void Turnaround(VECTOR2_f Pos);
 
 	void DrawH(HDC c, HWND h, std::unique_ptr<CCamera>& pCamera);//後で消す
-	CPlayer();
-	~CPlayer();
+
+	void Initialization();//初期設定
 	//ワイヤーポイントを掴む状態にする
 	void StartWirePointCatch();
 	void StartSetting() override;
@@ -135,6 +138,10 @@ public:
 	int GetAlpha() { return m_Alpha; }
 	bool GetMyHit() {if (m_HitBackBack|| m_HitBack) {return true;}return false;}
 	void SetStegeUnder(double under) { m_StegeUnder = under; }
+
+	//ステージ最初の設定
+	void SetStagePos(VECTOR2_f SetPos);
+
 	int AvoidanceCount;	//回避にかかる時間を図る
 private:
 	void AvoidanceEnd();
@@ -155,6 +162,7 @@ private:
 	void PlayerMyHit(VECTOR2_f Pos);
 
 	void Death();
+
 private:
 	void AirAvoidanceVECTSet();
 

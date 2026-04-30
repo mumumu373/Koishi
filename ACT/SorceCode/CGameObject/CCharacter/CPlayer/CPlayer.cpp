@@ -1,5 +1,10 @@
 #include "CPlayer.h"
 #include "CMouseInput//CMouseInput.h"
+#include<iostream>
+
+constexpr float PlayerCollisionW = 60.f;
+constexpr float PlayerCollisionH = 100.0f;
+
 
 void CPlayer::Turnaround(VECTOR2_f Pos)
 {
@@ -17,10 +22,39 @@ void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
 	NormalAttack->DrawColion(c,h, pCamera);
 }
 
-#include<iostream>
+void CPlayer::Initialization()
+{
+	m_Position = { 0,0 };
+	//初期設定でデフォルトにする
+	m_Color = enColor::NoColor;
+	NormalAttack = nullptr;
+	NormalAttack = std::make_unique<CNormalAttack>();
+	//プレイヤーのカラーをセットする
+	NormalAttack->SetPlayerColor(m_Color);
+	//HP
+	HP = MAX_HP;
+	//ハートクラス作成
+	m_upHeart = nullptr;
+	m_upHeart = std::make_unique<CHeart>(HP);
 
-constexpr float PlayerCollisionW = 60.f;
-constexpr float PlayerCollisionH = 100.0f;
+	enActionState = enActionState::None;
+	m_MoveState = enMoveState::Wait;
+	m_State=enState::Living;
+	m_Delection = { 0,0,0 };
+	m_JumpAcc = 0;
+	m_Acceleration = {0,0};
+
+	AvoidanceCount = -1;//回避状態を終わらせる
+	AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
+
+	NoHitAttackCo = 0;
+	m_AttackHit = false;
+	m_HitBack = false;
+	m_HitBackBack = false;
+	m_Delection.y = 180;
+}
+
+
 
 
 CPlayer::CPlayer()
@@ -90,7 +124,7 @@ void CPlayer::StartWirePointCatch()
 	
 	m_JumpAcc = 0;
 	m_Acceleration = { 0,0 };
-	m_MoveState = enActionState::None;
+	m_MoveState = enMoveState::Wait;
 }
 
 void CPlayer::StartSetting()
@@ -216,8 +250,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			DAMAGE_KEDAMA_HIT = false;
 		}
 		if (GetAsyncKeyState('Z')) {
-			HP = 0;
-			Death();
+			SetStagePos({ 100,100 });
 		}
 
 
@@ -375,6 +408,7 @@ void CPlayer::MovieSceneUpdate()
 {
 	m_OldPosition = m_Position;
 
+	
 	//落下だけするように
 	//最大落下速度
 	if (m_JumpAcc > MAX_FALLING_SPEED) {
@@ -388,7 +422,21 @@ void CPlayer::MovieSceneUpdate()
 	//目的位置よりも手前にいるなら
 	if (m_Position.x <= EVENT_START_POS.x + 100) {
 		//目的地まで移動
+		m_MoveState = enMoveState::MoveRight;
+		AvoidanceCount = -1;//回避状態を終わらせる
+		enActionState = enActionState::None;
 		m_Position.x += m_MoveSpeed;
+	}
+	else {
+		{
+
+		
+			m_MoveState = enMoveState::Wait;
+			AvoidanceCoolCount = 0;
+			//m_JumpAcc = 0;
+			m_Acceleration = { 0,0 };//空中の加速度をリセットする
+
+		}
 	}
 
 	//ステージとの判定
@@ -764,6 +812,13 @@ void CPlayer::CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double Of
 	else if (m_Position.x > CameraPos.x + (WND_W / 2) - m_Framesplit.w + offsetPos.x) {
 		m_Position.x = CameraPos.x + (WND_W / 2) - m_Framesplit.w + offsetPos.x;
 	}
+}
+
+void CPlayer::SetStagePos(VECTOR2_f SetPos)
+{
+	Initialization();
+	m_Position = SetPos;
+	
 }
 
 void CPlayer::AvoidanceEnd()

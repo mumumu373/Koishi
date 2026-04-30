@@ -271,10 +271,14 @@ void CGame::Update()
 
 			//イベントが開始した位置を入れる
 			m_upPlayer->EVENT_START_POS = m_upPlayer->GetPosition();
+		
 		}
 
 		break;
 	case enScene::Movie:
+		m_upWireActionSupporter->WireEnd();
+		//ワイヤーの動作
+		m_pWire->Update();
 
 		//プレイヤーのムービーシーン中の動作
 		m_upPlayer->MovieSceneUpdate();
