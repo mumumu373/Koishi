@@ -25,14 +25,19 @@ public:
 		IMG_BackSky,		//空
 		IMG_Nazrin,			//ナズーリン	1面ボス
 		IMG_Apple,			//リンゴ
+		IMG_Banana,			//バナナ
+
+		IMG_Title_BackSky,	//タイトルの背景
+		IMG_Title_Ground,	//タイトルの地面
 
 		IMG_Bullet,			//全員のバレット
 		IMG_Effect,			//エフェクト
 		IMG_Slash,			//斬撃
 		IMG_DeadEffect,		//死んだときのエフェクト(エネミー)
 
-		IMG_Title,			//タイトルの画像
 		IMG_Cursor,			//カーソルの画像
+
+		IMG_Black,			//黒画面
 	};
 public:
 	static CImageManager* GetInstance()
