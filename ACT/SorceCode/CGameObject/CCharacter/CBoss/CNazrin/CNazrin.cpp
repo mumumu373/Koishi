@@ -6,8 +6,19 @@ CNazrin::CNazrin()
 	, m_AttackAnimCo(0)
 	, m_AttackAnimTime(false)
 {
-	//m_Position = SetPos;
-	m_Position = { 400,400 };
+	StartSetting();
+}
+
+CNazrin::~CNazrin()
+{
+	//バナナのメモリを開放
+	m_upBanana.reset();
+}
+
+void CNazrin::StartSetting()
+{
+	//見えないように
+	m_Position = { -200,-200 };
 
 	//デフォルトにしておく
 	m_Color = enColor::NoColor;
@@ -26,17 +37,6 @@ CNazrin::CNazrin()
 	MAX_HP = 50;
 	HP = MAX_HP;
 
-	StartSetting();
-}
-
-CNazrin::~CNazrin()
-{
-	//バナナのメモリを開放
-	m_upBanana.reset();
-}
-
-void CNazrin::StartSetting()
-{
 	//元画像サイズ
 	m_FrameSize = { 64,64 };
 	m_Framesplit = { 0,0,144,144 };
@@ -65,6 +65,9 @@ void CNazrin::StartSetting()
 	//攻撃の動作をカウントする
 	m_AttackMoveCo = 0;
 
+	//バトルが始まった位置初期化
+	m_BattleStartPos = { 0,0 };
+
 	//フェーズを変える変数初期化
 	m_PhaseChangeCo = 0;
 	m_NextPhaseSetting = false;
@@ -89,6 +92,34 @@ void CNazrin::StartSetting()
 
 	//元居た場所を記憶する
 	m_MemoryPos = m_Position;
+
+	//次のブロックまでを初期化
+	NextSetPosBlock = false;
+
+	//リンゴをとれるか初期化
+	GetingApple = false;
+
+	//バレット関連初期化
+	m_BulletShot = false;
+	m_BulletShotCo = 0;
+	//攻撃アニメーション初期化
+	m_AttackAnimCo = 0;
+	m_AttackAnimTime = false;
+
+	//スタンバイから始まるように
+	m_AttackMove = enAttackMove::Standby;
+	//フェーズ1から始まるように
+	m_BossPhase = enBossPhase::Phase_1;
+
+	//無敵初期化
+	NoHit = false;
+	//無敵状態のカウント
+	NoHitAttackCo = 0;
+
+	//ボスの死亡演出初期化
+	BossDeadEffect = false;
+	//死亡アニメーション初期化
+	m_DeadAnimCo = 0;
 }
 
 void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
@@ -306,8 +337,8 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 							if (m_SetYPosition == false) {
 								//ボスの登場回数が規定になったら
 								if (m_SetBlockPosCo >= BossAppears) {
-									//自分の下にバナナを配置する
-									m_upBanana = std::make_unique<CBanana>(GetCenterPosition());
+									//自分の下にバナナを配置する	位置は都度変える
+									m_upBanana = std::make_unique<CBanana>(m_Position);
 								}
 								//上から来るようにする
 								m_Position.y -= 700;
@@ -320,8 +351,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 							//カメラで見える場所まで来たら
 							if (m_CameraPos.x + (WND_W / 3) >= m_Position.x) {
 								//ランダムで、ムーブ1か2を選ぶ
-								//m_AttackMove = (rand() & 1) + 1;
-								m_AttackMove = 2;
+								m_AttackMove = (rand() & 1) + 1;
 
 								//カラーをランダムに変更する 0~4
 								m_Color = rand() / 8191;
@@ -450,7 +480,7 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 			//Y方向にだけ動かす
 			m_Speed.x = 0;
-			m_Speed.y = 5;
+			m_Speed.y = 4;
 
 			//地上にいないようにする
 			m_GroundStand = false;

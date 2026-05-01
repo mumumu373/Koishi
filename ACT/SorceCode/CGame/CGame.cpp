@@ -39,6 +39,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_OnePush					(false)
 , m_TitleSceneSet			(false)
 , m_GameStartCo				(0)
+, m_ClearCo					(0)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -132,6 +133,9 @@ bool CGame::Create()
 	//ステージマネージャーのインスタンス生成
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
+
+	//初期状態でマップ1から始まる
+	m_PlayerInStage = enInMap::Map01;
 
 	//カメラのインスタンス生成
 	m_upCamera = std::make_unique<CCamera>();
@@ -419,6 +423,14 @@ void CGame::Update()
 				//ステージ2の時のエネミーを配置する
 				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
 
+				//プレイヤーがいるところを更新
+				m_PlayerInStage = enInMap::Map02;
+
+				//ステージの幅と高さをセットする<w.h>
+				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
+				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
+
 				//ステージチェンジ終了
 				m_upPlayer->StageChangeTime = false;
 			}
@@ -464,12 +476,16 @@ void CGame::Update()
 				//ボスの時のエネミーを配置する
 				CEnemySet::LoadEnemies_Boss(m_upEnemy);
 
+				//プレイヤーがいるところを更新
+				m_PlayerInStage = enInMap::MapBoss;
+
 				//カメラの場所を変更したところと同じ位置になるようにする
 				m_upCamera->SetChangeBossStageCamera(m_upPlayer->GetPositionadd(), m_upBoss->GetPositionadd());
 
 				//ステージの幅と高さをセットする<w.h>
 				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
 				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
+				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
 			}
 		}
 		else {
@@ -570,9 +586,8 @@ void CGame::Update()
 		}
 
 		if (m_upPlayer->ClearGame == true) {
-			static int ClearCo = 0;
-			if (ClearCo >= 60) {
-				ClearCo = 60;
+			if (m_ClearCo >= 180) {
+				m_ClearCo = 180;
 
 				if (m_upSceneChange->SceneChangeStart == false) {
 					//シーンチェンジ
@@ -582,16 +597,84 @@ void CGame::Update()
 				}
 			}
 			else {
-				ClearCo++;
+				m_ClearCo++;
 			}
 
 			//シーンが完全に覆いかぶさってから
 			if (m_upSceneChange->SceneSetComp == true) {
 				//シーンクリアに移動する
 				m_Scene = enScene::Clear;
+
+				//カウントを初期化
+				m_ClearCo = 0;
 			}
 		}
 
+		break;
+	case enScene::PlayerDeath:
+		//プレイヤーのみ動作させる
+		m_upPlayer->Update(m_upBullet);
+
+		//こいしが画面外にでたら
+		if (m_upPlayer->m_State == CPlayer::enState::Dead) {
+			if (m_upSceneChange->SceneChangeStart == false) {
+				//フェード開始
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 20, 60, false);
+			}
+		}
+
+		//シーンが完全に覆いかぶさってから
+		if (m_upSceneChange->SceneSetComp == true) {
+			//復活処理
+
+			//現在存在するバレットとエネミーのインスタンスをすべて空ける
+			DeleteInstance_Bullet();
+			DeleteInstance_Enemy();
+
+			//プレイヤーの初期化
+			m_upPlayer->HaveInstanceDelete();	//ハートなどの持っているインスタンスを削除
+			m_upPlayer->StartSetting();
+			m_upPlayer->Initialization();
+
+			//どのマップにいたかを見る
+			switch (m_PlayerInStage) {
+			case enInMap::Map01:
+				//ステージ1の最初からプレイヤーを配置する
+				m_upPlayer->SetStagePos({ 100, 500 });
+
+				//ステージ1のエネミーをセットする
+				CEnemySet::LoadEnemies_Stage1(m_upEnemy);
+				break;
+			case enInMap::Map02:
+				//ステージ2の最初からプレイヤーを配置する
+				m_upPlayer->SetStagePos({ 100,200 });
+
+				//ステージ2の時のエネミーを配置する
+				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				break;
+			case enInMap::MapBoss:
+				//ステージ2に戻すようにする
+				m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
+
+				//ステージの幅と高さをセットする<w.h>
+				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
+				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
+
+				//ボスは、ボスの1つ前のステージの直前からはじまるようにする
+				m_upPlayer->SetStagePos({ 100,200 });
+
+				//ボスも初期化する
+				m_upBoss->StartSetting();
+
+				//ステージ2の時のエネミーを配置する
+				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				break;
+			}
+
+			//ボスバトルには入らないのでメインでOK
+			m_Scene = enScene::GameMain;
+		}
 		break;
 	case enScene::Clear:
 		if (m_upClearImage->FadeCompleted == false) {
@@ -633,6 +716,13 @@ void CGame::Update()
 		}
 		break;
 	}
+
+	//スイッチの外にプレイヤーが死亡中になったかを入れる
+	if (m_upPlayer->m_State == CPlayer::enState::Dying) {
+		//プレイヤーが倒された動作をする
+		m_Scene = enScene::PlayerDeath;
+	}
+
 	//インスタンスを破棄する関数
 	DeleteInstance();
 }
@@ -660,6 +750,7 @@ void CGame::Draw()
 	case enScene::GameMain:
 	case enScene::Movie:
 	case enScene::BossBattle:
+	case enScene::PlayerDeath:
 		
 		//ステージの描画
 		m_upStageManager->Draw(m_upCamera);

@@ -17,10 +17,6 @@ void CPlayer::Turnaround(VECTOR2_f Pos)
 	}
 
 }
-void CPlayer::DrawH(HDC c,HWND h,  std::unique_ptr<CCamera>& pCamera)
-{
-	NormalAttack->DrawColion(c,h, pCamera);
-}
 
 void CPlayer::Initialization()
 {
@@ -84,45 +80,14 @@ CPlayer::CPlayer()
 	, m_DeathRotation(0)
 	, m_DeathStop(0)
 {
-	//初期設定でデフォルトにする
-	m_Color = enColor::NoColor;
-	//自分はプレイヤーです
-	m_MyCharacter = enMyCharacter::Player;
-	//プレイヤー陣営です
-	m_MyCamp = enMyCamp::PlayerCamp;
-	//動きの状態
-	m_MoveState = enMoveState::Wait;
-
 	StartSetting();
 
-	{
-		m_leftkey[0] = false;
-		m_rightkey[0] = false;
-		m_leftkey[1] = false;
-		m_rightkey[1] = false;
-		m_Ldashcount = 0;
-		m_Rdashcount = 0;
-		m_Ldash = false;
-		m_Rdash = false;
-	}
-	NormalAttack = std::make_unique<CNormalAttack>();
-	//プレイヤーのカラーをセットする
-	NormalAttack->SetPlayerColor(m_Color);
-
-	m_Delection.y = 180;
-
-	//最大HP
-	MAX_HP = 200;	
-	//HP
-	HP = MAX_HP;	
-
-	//ハートクラス作成
-	m_upHeart = std::make_unique<CHeart>(HP);
-	m_WallHit = false;
 }
 
 CPlayer::~CPlayer()
 {
+	m_upHeart.reset();
+	NormalAttack.reset();
 }
 
 void CPlayer::StartWirePointCatch()
@@ -143,11 +108,44 @@ void CPlayer::StartSetting()
 	m_Position = { 50,50 };
 
 	//実際の当たり判定
-	m_RealFrameSplit = { 104,104 };
-
-	
+	m_RealFrameSplit = { 88,88 };
 
 	m_OldPosition = m_Position;
+
+	//初期設定でデフォルトにする
+	m_Color = enColor::NoColor;
+	//自分はプレイヤーです
+	m_MyCharacter = enMyCharacter::Player;
+	//プレイヤー陣営です
+	m_MyCamp = enMyCamp::PlayerCamp;
+	//動きの状態
+	m_MoveState = enMoveState::Wait;
+
+
+	{
+		m_leftkey[0] = false;
+		m_rightkey[0] = false;
+		m_leftkey[1] = false;
+		m_rightkey[1] = false;
+		m_Ldashcount = 0;
+		m_Rdashcount = 0;
+		m_Ldash = false;
+		m_Rdash = false;
+	}
+	NormalAttack = std::make_unique<CNormalAttack>();
+	//プレイヤーのカラーをセットする
+	NormalAttack->SetPlayerColor(m_Color);
+
+	m_Delection.y = 180;
+
+	//最大HP
+	MAX_HP = 200;
+	//HP
+	HP = MAX_HP;
+
+	//ハートクラス作成
+	m_upHeart = std::make_unique<CHeart>(HP);
+	m_WallHit = false;
 
 	//属性を変えたかを確認
 	m_ChangeColor = false;
@@ -161,6 +159,12 @@ void CPlayer::StartSetting()
 
 	//ダメージ毛玉に触れたか
 	DAMAGE_KEDAMA_HIT = false;
+}
+
+void CPlayer::HaveInstanceDelete()
+{
+	m_upHeart.reset();
+	NormalAttack.reset();
 }
 
 void CPlayer::Attackmove()
@@ -1286,7 +1290,7 @@ void CPlayer::Death()
 			m_JumpAcc = DeathSpeed;
 			m_DeathRotation = 0;
 			m_Delection.z = 0;
-			m_DeathStop = 500;
+			m_DeathStop = 700;
 		}
 	}
 

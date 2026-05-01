@@ -16,9 +16,9 @@ public:
 
 	bool GetingApple = false;			//倒した時のリンゴがとれるようにする設定
 
-	int Phase2_MAX_HP = 80;				//フェーズ2の最大HP
+	int Phase2_MAX_HP = 250;				//フェーズ2の最大HP
 
-	int BossAppears = 2;				//フェーズ2の時のボスの登場回数
+	int BossAppears = 4;				//フェーズ2の時のボスの登場回数
 public:
 	CNazrin();
 	~CNazrin();
