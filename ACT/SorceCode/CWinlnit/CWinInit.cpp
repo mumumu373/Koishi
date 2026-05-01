@@ -141,9 +141,10 @@ LRESULT CALLBACK WindowProc(
 			changWinSize.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
 			LONG Result = ChangeDisplaySettingsEx(NULL, &changWinSize, NULL, 0, NULL);
 			SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
-			SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+			SWP_FRAMECHANGED | SWP_SHOWWINDOW| SWP_NOACTIVATE);
 			//画面フルスクリーン化したらマウスを消す処理
 			if (ShowCursor(false) >= 0) {while (1){if (ShowCursor(false) < 0) { break; }}}
+
 		}
 
 
@@ -183,6 +184,7 @@ LRESULT CALLBACK WindowProc(
 			0,					//0:作成と同時に実行.
 			&dwID );			//(out)スレッドID.
 
+		
 		return 0;
 
 	case WM_KEYDOWN:
@@ -203,7 +205,7 @@ LRESULT CALLBACK WindowProc(
 		//ウィンドウ閉じるフラグ有効.
 		//※スレッド側で確認するためのフラグ.
 		gameWnd.isWndClose = TRUE;
-
+	
 		//ゲーム終了するときの描画ラグが無くなる
 		WaitForSingleObject(hThread, INFINITE);		//爆速で閉じるようになる
 
@@ -402,6 +404,7 @@ LRESULT CALLBACK WindowProc(
 	case WM_PAINT:		//ウィンドウが更新された時.
 	
 
+		SetActiveWindow(hWnd);
 		//描画開始.
 		hDC = BeginPaint( hWnd, &ps );
 
