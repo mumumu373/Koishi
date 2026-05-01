@@ -7,7 +7,7 @@
 const char APP_NAME[] = "あああああああああああああああ";		//アプリ名
 const char WND_TITLE[] = "aaaaaa";		//ウィンドウタイトル
 
-bool SIZEMAX = false;		//切り替えた時に画面が最大化したらtrueになる
+bool SIZEMAX = true;		//切り替えた時に画面が最大化したらtrueになる
 MINMAXINFO* mmi;
 //スレッド関数.
 DWORD WINAPI ThreadFunc( LPVOID vdParam )
@@ -330,73 +330,73 @@ LRESULT CALLBACK WindowProc(
 		mmi->ptMaxTrackSize.y = 2000;
 		return 0;
 	case WM_MOUSEMOVE:
-		if (SIZEMAX == true) {
-			LONG STYLE;
-			POINT casorpos;
+		//if (SIZEMAX == true) {
+		//	LONG STYLE;
+		//	POINT casorpos;
 
-			/**！ディスプレイのカーソル位置を獲得*/
-			GetCursorPos(&casorpos);
-			//スクリーン基準にする
-			//ScreenToClient(hWnd, &casorpos);
+		//	/**！ディスプレイのカーソル位置を獲得*/
+		//	GetCursorPos(&casorpos);
+		//	//スクリーン基準にする
+		//	//ScreenToClient(hWnd, &casorpos);
 
-			//いまのウィンドウスタイル獲得
-			STYLE = GetWindowLongPtr(hWnd, GWL_STYLE);
-			//ウィンドウスタイルに上のバーが含まれているならtrue
-			bool cap = (STYLE & WS_CAPTION);
-			//スクリーンからの高さ
-			if (casorpos.y < 50) {
+		//	//いまのウィンドウスタイル獲得
+		//	STYLE = GetWindowLongPtr(hWnd, GWL_STYLE);
+		//	//ウィンドウスタイルに上のバーが含まれているならtrue
+		//	bool cap = (STYLE & WS_CAPTION);
+		//	//スクリーンからの高さ
+		//	if (casorpos.y < 50) {
 
-				if ((!cap)) {
-					//ウィンドウスタイル変更
-					SetWindowLong(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+		//		if ((!cap)) {
+		//			//ウィンドウスタイル変更
+		//			SetWindowLong(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 
-					//rectとはまた違うRECT型の変数が必要
-					RECT WSize;
-					WSize.top = 0;			//上.
-					WSize.left = 0;			//左.
-					WSize.right = WND_W;	//右.
-					WSize.bottom = WND_H;	//下
+		//			//rectとはまた違うRECT型の変数が必要
+		//			RECT WSize;
+		//			WSize.top = 0;			//上.
+		//			WSize.left = 0;			//左.
+		//			WSize.right = WND_W;	//右.
+		//			WSize.bottom = WND_H;	//下
 
-					////オーバーラップ分の画面サイズを取得
-					//AdjustWindowRect(
-					//	&WSize,					//(in)画面サイズが入った矩形構造体.(out)計算結果.
-					//	WS_OVERLAPPEDWINDOW,	//ウィンドウスタイル.
-					//	FALSE);					//メニューを持つかどうかの指定.
+		//			////オーバーラップ分の画面サイズを取得
+		//			//AdjustWindowRect(
+		//			//	&WSize,					//(in)画面サイズが入った矩形構造体.(out)計算結果.
+		//			//	WS_OVERLAPPEDWINDOW,	//ウィンドウスタイル.
+		//			//	FALSE);					//メニューを持つかどうかの指定.
 
-					AdjustWindowRect(&WSize, WS_OVERLAPPEDWINDOW, FALSE);
-					//ウィンドウ幅高さを入れる
-					double w = WSize.right - WSize.left;
-					double h = WSize.bottom - WSize.top;
-		
-					//反映
-					SetWindowPos(hWnd, NULL, 0, 0, w, h,
-						SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+		//			AdjustWindowRect(&WSize, WS_OVERLAPPEDWINDOW, FALSE);
+		//			//ウィンドウ幅高さを入れる
+		//			double w = WSize.right - WSize.left;
+		//			double h = WSize.bottom - WSize.top;
+		//
+		//			//反映
+		//			SetWindowPos(hWnd, NULL, 0, 0, w, h,
+		//				SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
-					//カーソルを上に持ってきたら表示する
-					if (ShowCursor(true) < 0) {
-						while (1)
-						{
-							if (ShowCursor(true) >= 0) { break; }
-						}
-					}
-				}
-			}
-			else {
-				if ((cap)) {
-					SetWindowLong(hWnd, GWL_STYLE, WS_POPUP);
-					SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
-						SWP_FRAMECHANGED | SWP_SHOWWINDOW);
-				}
+		//			//カーソルを上に持ってきたら表示する
+		//			if (ShowCursor(true) < 0) {
+		//				while (1)
+		//				{
+		//					if (ShowCursor(true) >= 0) { break; }
+		//				}
+		//			}
+		//		}
+		//	}
+		//	else {
+		//		if ((cap)) {
+		//			SetWindowLong(hWnd, GWL_STYLE, WS_POPUP);
+		//			SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
+		//				SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+		//		}
 
-				//カーソルがゲームの邪魔をしないようにする
-				if (ShowCursor(false) >= 0) {
-					while (1)
-					{
-						if (ShowCursor(false) < 0) { break; }
-					}
-				}
-			}
-		}
+		//		//カーソルがゲームの邪魔をしないようにする
+		//		if (ShowCursor(false) >= 0) {
+		//			while (1)
+		//			{
+		//				if (ShowCursor(false) < 0) { break; }
+		//			}
+		//		}
+		//	}
+		//}
 		return 0;
 
 	case WM_PAINT:		//ウィンドウが更新された時.

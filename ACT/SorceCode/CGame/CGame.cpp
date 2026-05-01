@@ -210,7 +210,7 @@ void CGame::Update()
 
 		m_upTitleImage->Update();
 
-		if(GetAsyncKeyState(VK_RETURN) & 0x8000) 
+		if(GetAsyncKeyState(VK_RETURN) & 0x8000 || CMouseInput::GetMouseLeft(true, true) || CMouseInput::GetMouseRight(true, true) || CMouseInput::GetMouseWheel(true, true))
 		{
 			if (m_OnePush == false) {
 				//タイトルの準備が完了していないなら
@@ -366,7 +366,7 @@ void CGame::Update()
 			}
 
 			//エンターキーまたはマウスで進行できる
-			if (GetAsyncKeyState(VK_RETURN) & 0x8000) {
+			if (GetAsyncKeyState(VK_RETURN) & 0x8000 || CMouseInput::GetMouseLeft(true, true)|| CMouseInput::GetMouseRight(true, true)|| CMouseInput::GetMouseWheel(true, true)) {
 				//ボスバトルに移行
 				m_Scene = enScene::BossBattle;
 

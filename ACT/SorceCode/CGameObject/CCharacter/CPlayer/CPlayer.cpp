@@ -287,11 +287,11 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 						AvoidanceCoolCount--;
 					}
 					else {
-						if (enActionState != enActionState::Avoidance && OldGroundStand == true) {
+						if ((enActionState != enActionState::Avoidance&& enActionState != enActionState::AirAvoidance) && OldGroundStand == true) {
 							KyeInput();
 						}
 						else {
-							if (enActionState != enActionState::AirAvoidance && OldGroundStand == false) {
+							if ((enActionState != enActionState::AirAvoidance&& enActionState != enActionState::Avoidance) && OldGroundStand == false) {
 								AirKeyInput();
 							}
 						}
@@ -1002,6 +1002,7 @@ void CPlayer::AirKeyInput()
 				}
 				else {
 					AvoidanceCount = AvoidanceTime;
+			
 				}
 
 			}
