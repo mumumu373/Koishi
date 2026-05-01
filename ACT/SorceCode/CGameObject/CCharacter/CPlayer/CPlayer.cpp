@@ -468,6 +468,8 @@ void CPlayer::Animation()
 	m_Alpha = 255;
 	if (m_State == enState::Living) {
 
+
+
 		m_Framesplit.y = 0;
 		if (m_OldSteta != m_MoveState || OldenActionState != enActionState) {
 
@@ -478,6 +480,25 @@ void CPlayer::Animation()
 		OldenActionState = enActionState;
 		m_OldSteta = m_MoveState;
 		m_AnimationCount++;
+		if (ClearGame==true) 
+		{
+			m_Framesplit.x = 0;
+			m_Framesplit.y = 0;
+			if (m_AnimationCount > AnimationSpeed*2) {
+				
+				m_Framesplit.y = ImageSize*7;
+				if (m_AnimationCount > AnimationSpeed*4) {
+					m_AnimationCount = 0;
+				
+		}
+			}
+			return;
+
+		}
+
+
+
+
 		if (enActionState != enActionState::WireObjectCatch) {
 			switch (m_MoveState) {
 			case enMoveState::Wait:
@@ -812,6 +833,7 @@ void CPlayer::GetApple(VECTOR2_f Centerpos)
 			m_HitBackBack = false;
 			m_Delection.y = 180;
 			m_WallHit = false;
+			
 		}
 	}
 
