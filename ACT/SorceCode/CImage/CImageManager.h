@@ -38,6 +38,7 @@ public:
 		IMG_Cursor,			//ƒJ[ƒ\ƒ‹‚Ì‰æ‘œ
 
 		IMG_Black,			//•‰æ–Ê
+		IMG_White,			//”’‰æ–Ê
 	};
 public:
 	static CImageManager* GetInstance()

@@ -70,9 +70,59 @@ public:
 	//	}
 	//}
 
-	static inline void LoadEnemies(std::vector<std::unique_ptr<CEnemy>>& upEnemy)
+	static inline void LoadEnemies_Stage1(std::vector<std::unique_ptr<CEnemy>>& upEnemy)
 	{
-		std::ifstream file("EnemyState.json");
+		std::ifstream file("Stage_01_Enemies.json");
+		if (!file.is_open()) {
+			MessageBoxA(NULL, "ファイルが見つかりません！", "エラー", MB_OK);
+			return;
+		}
+
+		json data;
+		try {
+			file >> data;
+		}
+		catch (const nlohmann::json::parse_error& e) {
+			// ここで具体的なエラー内容を表示する
+			std::string errMsg = "JSONの書き方がおかしいです:\n";
+			errMsg += e.what();
+			MessageBoxA(NULL, errMsg.c_str(), "パースエラー", MB_OK);
+			return;
+		}
+
+		// "Enemies" 配列の中身を1つずつ取り出して処理する
+		// これなら敵が何人いても、このループだけで全員生成できます
+		for (const auto& item : data["Enemies"])
+		{
+			// 1. データの読み取り
+			double x = item["Pos"]["x"].get<double>();
+			double y = item["Pos"]["y"].get<double>();
+			int color = item["Color"].get<int>();
+			int Size = item["Size"].get<int>();
+			std::string type = item["Type"].get<std::string>();
+
+			VECTOR2_f pos = { x, y };
+
+			// 2. Typeに合わせて作るクラスを変える（ここがスマート！）
+			if (type == "Kedama") {
+				upEnemy.push_back(CEnemyFactory::CreateKedama(color, pos, Size, item["Speed"].get<double>(),
+					item["JumpPower"].get<double>(), item["JumpTime"].get<int>()));
+			}
+			else if (type == "Fairy") {
+				upEnemy.push_back(CEnemyFactory::CreateFairy(color, pos, Size,
+					{ item["Speed_X"].get<double>(),item["Speed_Y"].get<double>() },
+					item["MoveType"].get<int>(), item["MoveOption1"].get<int>(), item["MoveOption2"].get<int>()));
+			}
+			else if (type == "YinYangBall") {
+				upEnemy.push_back(CEnemyFactory::CreateYinYangBall(color, pos, Size));
+			}
+		}
+
+	}
+
+	static inline void LoadEnemies_Stage2(std::vector<std::unique_ptr<CEnemy>>& upEnemy)
+	{
+		std::ifstream file("Stage_02_Enemies.json");
 		if (!file.is_open()) {
 			MessageBoxA(NULL, "ファイルが見つかりません！", "エラー", MB_OK);
 			return;

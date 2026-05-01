@@ -106,13 +106,10 @@
       <Filter>SorceCode\CImageManager</Filter>
     </ClCompile>
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.cpp" />
-    <ClCompile Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.cpp" />
-    <ClCompile Include="SorceCode\CGame\CBossFactory\CBossFactory.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.cpp" />
-    <ClCompile Include="SorceCode\CGame\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.cpp" />
@@ -146,6 +143,11 @@
     <ClCompile Include="SorceCode\CGameObject\CBullet\CRockOnBullet\CRockOnBullet.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CPlayer\CHeart\CHeart.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CBanana\CBanana.cpp" />
+    <ClCompile Include="SorceCode\CGame\CSceneChange\CSceneChange.cpp" />
+    <ClCompile Include="SorceCode\CGame\CTitleImage\CTitleImage.cpp" />
+    <ClCompile Include="SorceCode\CGame\Factory\CBossFactory\CBossFactory.cpp" />
+    <ClCompile Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.cpp" />
+    <ClCompile Include="SorceCode\CGame\Factory\CEnemyFactory\CEnemyFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -194,13 +196,10 @@
       <Filter>SorceCode\CImageManager</Filter>
     </ClInclude>
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CKedama\CKedama.h" />
-    <ClInclude Include="SorceCode\CGame\CEnemyFactory\CEnemyFactory.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CBoss.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CNazrin.h" />
-    <ClInclude Include="SorceCode\CGame\CBossFactory\CBossFactory.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CBullet\CRotateBullet\CRotateBullet.h" />
-    <ClInclude Include="SorceCode\CGame\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CFairy\CFairy.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangBall.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CEnemy\CYinYangBall\CYinYangDeco\CYinYangDeco.h" />
@@ -234,5 +233,14 @@
     <ClInclude Include="SorceCode\CGameObject\CBullet\CRockOnBullet\CRockOnBullet.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CPlayer\CHeart\CHeart.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CBoss\CNazrin\CBanana\CBanana.h" />
+    <ClInclude Include="SorceCode\CGame\CSceneChange\CSceneChange.h" />
+    <ClInclude Include="SorceCode\CGame\CTitleImage\CTitleImage.h" />
+    <ClInclude Include="SorceCode\CGame\Factory\CBossFactory\CBossFactory.h" />
+    <ClInclude Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.h" />
+    <ClInclude Include="SorceCode\CGame\Factory\CEnemyFactory\CEnemyFactory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Stage_01_Enemies.json" />
+    <None Include="Stage_02_Enemies.json" />
   </ItemGroup>
 </Project>
