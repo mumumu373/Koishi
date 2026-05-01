@@ -8,6 +8,7 @@ const char APP_NAME[] = "あああああああああああああああ";		//アプリ名
 const char WND_TITLE[] = "aaaaaa";		//ウィンドウタイトル
 
 bool SIZEMAX = true;		//切り替えた時に画面が最大化したらtrueになる
+bool Akutyib = false;
 MINMAXINFO* mmi;
 //スレッド関数.
 DWORD WINAPI ThreadFunc( LPVOID vdParam )
@@ -123,7 +124,7 @@ LRESULT CALLBACK WindowProc(
 	//メッセージ別の処理.
 	switch( uMsg ){
 	case WM_DESTROY:	//ウィンドウが破棄された時.
-
+	
 		//アプリケーションの終了をWindowsに通知する.
 		PostQuitMessage( 0 );
 		return 0;
@@ -188,6 +189,7 @@ LRESULT CALLBACK WindowProc(
 		return 0;
 
 	case WM_KEYDOWN:
+
 		//キー別の処理.
 		switch( wParam ){
 		case VK_ESCAPE:	//ESCキー.
@@ -205,7 +207,7 @@ LRESULT CALLBACK WindowProc(
 		//ウィンドウ閉じるフラグ有効.
 		//※スレッド側で確認するためのフラグ.
 		gameWnd.isWndClose = TRUE;
-	
+
 		//ゲーム終了するときの描画ラグが無くなる
 		WaitForSingleObject(hThread, INFINITE);		//爆速で閉じるようになる
 
@@ -227,7 +229,7 @@ LRESULT CALLBACK WindowProc(
 		return 0;
 	
 	case WM_SIZE:	//ウィンドウがサイズを変更した状態になったら
-
+		
 		//最大化ボタンが押されたら
 		if (wParam == SIZE_MAXIMIZED) {
 			if (SIZEMAX != true) {
@@ -402,11 +404,16 @@ LRESULT CALLBACK WindowProc(
 		return 0;
 
 	case WM_PAINT:		//ウィンドウが更新された時.
-	
+		if (Akutyib==false) {
+			Akutyib = true;
+			SetActiveWindow(hWnd);
+		}
+		
 
-		SetActiveWindow(hWnd);
+
 		//描画開始.
 		hDC = BeginPaint( hWnd, &ps );
+	
 
 		/*------------------------------*/
 		/*画面サイズをいじれるようにする 64マリオのびよーん*/
