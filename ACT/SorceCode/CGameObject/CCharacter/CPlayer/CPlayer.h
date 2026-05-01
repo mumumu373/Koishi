@@ -66,6 +66,8 @@ public:
 	bool OldGroundStand = false;	//前フレームの地面に立っている状態
 
 	bool StageChangeTime = false;	//ステージチェンジ中であれば
+
+	bool ClearGame = false;			//ゲームをクリアしたか
 public:
 
 	CPlayer();
@@ -236,6 +238,4 @@ private:
 	double m_StegeUnder;		//ステージの下の位置
 
 	int m_DeathStop;
-
-	bool ClearGame;
 };

@@ -35,6 +35,8 @@ public:
 		IMG_Slash,			//斬撃
 		IMG_DeadEffect,		//死んだときのエフェクト(エネミー)
 
+		IMG_Clear,			//クリア
+
 		IMG_Cursor,			//カーソルの画像
 
 		IMG_Black,			//黒画面
