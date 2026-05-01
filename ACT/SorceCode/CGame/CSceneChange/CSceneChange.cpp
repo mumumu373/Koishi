@@ -185,17 +185,30 @@ void CSceneChange::Update()
 
 void CSceneChange::Draw()
 {
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Black)->TransAlBlend(
-		m_Position.x,	//表示位置x座標
-		m_Position.y,	//表示位置y座標
-		WND_W,			//画像幅
-		WND_H,			//高さ	<-拡大して表示するサイズ		
-		0,				//元画像x座標
-		0,				//元画像y座標
-		m_Alpha);		//透明度
+	//白画面か黒画面を映す
+	if (UseWhiteIMG == true) {
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_White)->TransAlBlend(
+			m_Position.x,	//表示位置x座標
+			m_Position.y,	//表示位置y座標
+			WND_W,			//画像幅
+			WND_H,			//高さ	<-拡大して表示するサイズ		
+			0,				//元画像x座標
+			0,				//元画像y座標
+			m_Alpha);		//透明度
+	}
+	else {
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_Black)->TransAlBlend(
+			m_Position.x,	//表示位置x座標
+			m_Position.y,	//表示位置y座標
+			WND_W,			//画像幅
+			WND_H,			//高さ	<-拡大して表示するサイズ		
+			0,				//元画像x座標
+			0,				//元画像y座標
+			m_Alpha);		//透明度
+	}
 }
 
-void CSceneChange::SetSceneChangeType(int SceneType, double Speed, int WaitTime)
+void CSceneChange::SetSceneChangeType(int SceneType, double Speed, int WaitTime, bool WhiteIMG)
 {
 	//シーンセットが完了したか
 	SceneSetComp = false;		
@@ -212,6 +225,9 @@ void CSceneChange::SetSceneChangeType(int SceneType, double Speed, int WaitTime)
 	//待つ時間
 	m_WaitTime = WaitTime;
 	m_WaitTimeCo = 0;
+
+	//白画面かを入れる
+	UseWhiteIMG = WhiteIMG;
 
 	//透明度
 	m_Alpha = 255;

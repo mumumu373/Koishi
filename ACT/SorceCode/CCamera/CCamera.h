@@ -70,4 +70,8 @@ private:
 	VECTOR2_f m_FranceSize;		//画像をx,y方向に拡大できる
 
 	VECTOR2_f m_StageSize;		//ステージの大きさ
+
+	bool m_SnakeCamera;			//カメラを揺らすか
+	VECTOR2_f m_SnakeCameraSpeed;	//カメラの揺れるスピード
+	VECTOR2_f m_MemorySnakeSpeed;	//スピードを記憶する
 };

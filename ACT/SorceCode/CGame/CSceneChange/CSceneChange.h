@@ -25,6 +25,8 @@ public:
 	bool NextSceneSetComp = false;	//シーンを終了する方のセットが完了したか
 
 	bool SceneWait = false;			//シーンが待ち状態なら
+
+	bool UseWhiteIMG = false;		//白画面で映すか
 public:
 	CSceneChange();
 	~CSceneChange();
@@ -33,7 +35,7 @@ public:
 	void Draw();
 
 	//何のシーンタイプをやるか、速度、待機時間を決める
-	void SetSceneChangeType(int SceneType, double Speed, int WaitTime);
+	void SetSceneChangeType(int SceneType, double Speed, int WaitTime, bool WhiteIMG);
 
 private:
 	VECTOR2_f m_Position;

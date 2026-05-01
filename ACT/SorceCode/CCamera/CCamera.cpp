@@ -11,6 +11,9 @@ CCamera::CCamera()
 	, m_Alpha(255)
 	, m_Delection(0)
 	, m_FranceSize()
+	, m_SnakeCamera(false)
+	, m_SnakeCameraSpeed(0,0)
+	, m_MemorySnakeSpeed(0,0)
 {
 	
 }
@@ -71,8 +74,15 @@ VECTOR2_f CCamera::CalcToStagePosition()
 
 void CCamera::SnakeCamera(int x, int y)
 {
-	m_Position.x = x;
-	m_Position.y = y;
+	//揺れるスピードを入れる
+	m_SnakeCameraSpeed.x = x;
+	m_SnakeCameraSpeed.y = y;
+
+	//スピードを記憶させる
+	m_MemorySnakeSpeed = m_SnakeCameraSpeed;
+
+	//カメラを揺らす
+	m_SnakeCamera = true;
 }
 
 //カメラリセット
@@ -152,4 +162,47 @@ void CCamera::Update()
 	//スピード分移動
 	m_Position.x += m_CameraSpeed.x;
 	m_Position.y += m_CameraSpeed.y;
+
+	//カメラを揺らすなら
+	if (m_SnakeCamera == true) {
+		//スピード分カメラを移動させる
+		m_Position.x += m_SnakeCameraSpeed.x;
+		m_Position.y += m_SnakeCameraSpeed.y;
+
+		//スピードが１より大きいなら
+		if (m_SnakeCameraSpeed.x > 1 && m_SnakeCameraSpeed.y > 1) {
+			//-の数字にする
+			m_SnakeCameraSpeed.x -= m_MemorySnakeSpeed.x * 2;
+			m_SnakeCameraSpeed.y -= m_MemorySnakeSpeed.y * 2;
+
+			//速度を減らす
+			m_SnakeCameraSpeed.x += 1;
+			m_SnakeCameraSpeed.y += 1;
+
+			//変わった速度を渡す
+			m_MemorySnakeSpeed.x = m_SnakeCameraSpeed.x * -1;
+			m_MemorySnakeSpeed.y = m_SnakeCameraSpeed.y * -1;
+		}
+		else if (m_SnakeCameraSpeed.x < -1 && m_SnakeCameraSpeed.y < -1) {
+			//＋の数字にする
+			m_SnakeCameraSpeed.x += m_MemorySnakeSpeed.x * 2;
+			m_SnakeCameraSpeed.y += m_MemorySnakeSpeed.y * 2;
+
+			//速度を減らす
+			m_SnakeCameraSpeed.x -= 1;
+			m_SnakeCameraSpeed.y -= 1;
+
+			//変わった速度を渡す
+			m_MemorySnakeSpeed.x = m_SnakeCameraSpeed.x;
+			m_MemorySnakeSpeed.y = m_SnakeCameraSpeed.y;
+		}
+		//速度が1未満になったら
+		else {
+			//初期化
+			m_SnakeCamera = false;
+
+			m_SnakeCameraSpeed = { 0,0 };
+			m_MemorySnakeSpeed = { 0,0 };
+		}
+	}
 }

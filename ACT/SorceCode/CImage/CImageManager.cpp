@@ -41,7 +41,9 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
 
 		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"Cursor"} ,
+
 		{enImgList::IMG_Black		,"Data\\Image\\Black.bmp"			,"Black"} ,
+		{enImgList::IMG_White		,"Data\\Image\\White.bmp"			,"White"} ,
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	
