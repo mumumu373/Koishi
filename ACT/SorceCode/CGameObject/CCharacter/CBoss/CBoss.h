@@ -32,6 +32,8 @@ public:
 
 	int NoHitAttackCo = 0;	//攻撃があたらない時間をカウント
 	const int NoHitAttackTime = 40;	//攻撃があたらない時間
+
+	bool BossDeadEffect = false;		//ボスが死亡したときのエフェクトを入れたか
 public:
 	CBoss() {};
 	virtual ~CBoss() {};

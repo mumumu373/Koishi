@@ -133,7 +133,7 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	CEnemySet::LoadEnemies(m_upEnemy);
+	CEnemySet::LoadEnemies_Stage1(m_upEnemy);
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
@@ -220,7 +220,10 @@ void CGame::Update()
 				}
 				//タイトル準備が完了してから
 				else {
-					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 20);
+					//シーンチェンジが始まっていないなら
+					if (m_upSceneChange->SceneChangeStart == false) {
+						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 20, false);
+					}
 				}
 
 				//一回だけ押させる
@@ -242,10 +245,7 @@ void CGame::Update()
 	case enScene::GameMain:
 
 		if (GetAsyncKeyState('T') & 0x0001) {
-			//ステージ2に移行
-			m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
-
-			m_upPlayer->SetStagePos({ 100,200 });
+			
 		}
 
 		m_pWire->Update();
@@ -308,7 +308,7 @@ void CGame::Update()
 		if (m_upPlayer->STAGE_CHANGE_HIT == true) {
 			if (m_upPlayer->StageChangeTime == false) {
 				//ステージチェンジの遷移を行う
-				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Left, 40, 20);
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Left, 40, 40, false);
 
 				//ステージチェンジ中
 				m_upPlayer->StageChangeTime = true;
@@ -336,6 +336,13 @@ void CGame::Update()
 
 				//ステージ切り替え時のプレイヤーの配置
 				m_upPlayer->SetStagePos({ 100,200 });
+
+				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				DeleteInstance_Bullet();
+				DeleteInstance_Enemy();
+
+				//ステージ2の時のエネミーを配置する
+				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
 
 				//ステージチェンジ終了
 				m_upPlayer->StageChangeTime = false;
@@ -420,6 +427,21 @@ void CGame::Update()
 				if (m_upBoss->m_State <= CBoss::enState::Dying) {
 					//強制スクロールにする
 					m_upCamera->BossPhase2Camera();
+				}
+			}
+
+			//ボスが死亡したら
+			if (m_upBoss->m_State == CBoss::enState::Dead) {
+				if (m_upSceneChange->SceneChangeStart == false) {
+					if (m_upBoss->BossDeadEffect == false) {
+						//ピカっと光るようにする
+						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeFinish, 30, 10, true);
+
+						//ボスが死亡したときの演出入りました
+						m_upBoss->BossDeadEffect = true;
+
+						m_upCamera->SnakeCamera(30, 30);
+					}
 				}
 			}
 		}
@@ -596,6 +618,22 @@ void CGame::DeleteEnemy()
 				m_upEnemy.end()
 			);
 		}
+	}
+}
+
+void CGame::DeleteInstance_Bullet()
+{
+	//すべてのバレットのインスタンスを削除
+	for (int BulletNo = 0; BulletNo < m_upBullet.size(); BulletNo++) {
+		m_upBullet[BulletNo] = nullptr;
+	}
+}
+
+void CGame::DeleteInstance_Enemy()
+{
+	//すべてのエネミーのインスタンスを削除
+	for (int EnemyNo = 0; EnemyNo < m_upEnemy.size(); EnemyNo++) {
+		m_upEnemy[EnemyNo] = nullptr;
 	}
 }
 

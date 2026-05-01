@@ -47,16 +47,30 @@ void CHeart::Draw(int PlayerHP)
 		m_FrameSize.y,			//元画像yサイズ
 		255);					//透明度
 
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_BreakeHeart)->TransAlBlendPlas(
-		m_Position.x,			//表示位置x座標
-		m_Position.y,			//表示位置y座標
-		m_Framesplit.w,			//画像幅
-		m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
-		m_BreakeFramePos.x + ((PlayerHP + 50) / 50) * 64,		//元画像x座標(残りHPが少なくなれば、亀裂が入る)
-		m_BreakeFramePos.y,		//元画像y座標
-		m_FrameSize.x,			//元画像xサイズ		
-		m_FrameSize.y,			//元画像yサイズ
-		255);					//透明度
+	if (PlayerHP > 0) {
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_BreakeHeart)->TransAlBlendPlas(
+			m_Position.x,			//表示位置x座標
+			m_Position.y,			//表示位置y座標
+			m_Framesplit.w,			//画像幅
+			m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+			m_BreakeFramePos.x + ((PlayerHP + 50) / 50) * 64,		//元画像x座標(残りHPが少なくなれば、亀裂が入る)
+			m_BreakeFramePos.y,		//元画像y座標
+			m_FrameSize.x,			//元画像xサイズ		
+			m_FrameSize.y,			//元画像yサイズ
+			255);					//透明度
+	}
+	else {
+		CImageManager::SelectImg(CImageManager::enImgList::IMG_BreakeHeart)->TransAlBlendPlas(
+			m_Position.x,			//表示位置x座標
+			m_Position.y,			//表示位置y座標
+			m_Framesplit.w,			//画像幅
+			m_Framesplit.h,			//高さ	<-拡大して表示するサイズ
+			m_BreakeFramePos.x * 0,		//元画像x座標(1つ目の亀裂を映す)
+			m_BreakeFramePos.y,		//元画像y座標
+			m_FrameSize.x,			//元画像xサイズ		
+			m_FrameSize.y,			//元画像yサイズ
+			255);					//透明度
+	}
 }
 
 void CHeart::HeartChangeDraw(std::unique_ptr<CCamera>& pCamera, VECTOR2_f PlayerPos)

@@ -215,6 +215,10 @@
     <ClInclude Include="SorceCode\MyMath.h" />
     <ClInclude Include="SorceCode\NEGA\NEGA.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Stage_01_Enemies.json" />
+    <None Include="Stage_02_Enemies.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
