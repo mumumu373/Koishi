@@ -6,6 +6,7 @@
 #include "CSound/CSoundManager.h"							//サウンドマネージャークラス
 
 #include "CGame/CTitleImage/CTitleImage.h"					//タイトルイメージクラス
+#include "CGame/CClearImage/CClearImage.h"					//クリアイメージクラス
 #include "CGame/CSceneChange/CSceneChange.h"				//シーンチェンジクラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
 //----------------------------------------------------------
@@ -45,6 +46,7 @@ enum enScene
 	Death,		//デス中
 	Movie,		//ムービーシーン
 	BossBattle,	//ボスバトルシーン(カメラの制御などを変更するので専用のシーンを用意する)
+	Clear,		//ゲームクリアシーン
 };
 
 int m_Scene;	//ゲームシーン
@@ -137,6 +139,9 @@ private:
 	//														-ゲームシステム面のもの-
 	//----------------------タイトルイメージ----------------
 	std::unique_ptr<CTitleImage> m_upTitleImage;
+
+	//----------------------クリアイメージ------------------
+	std::unique_ptr< CClearImage> m_upClearImage;
 
 	//----------------------シーンチェンジクラス------------
 	std::unique_ptr<CSceneChange> m_upSceneChange;

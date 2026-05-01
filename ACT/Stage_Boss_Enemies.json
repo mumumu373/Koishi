@@ -1,0 +1,39 @@
+{
+  "Enemies": [
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 1500,
+        "y": 200
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 1600,
+        "y": 200
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 8,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 1800,
+        "y": 500
+      },
+      "Color": 2,
+      "Size": 300
+    }
+  ]
+}

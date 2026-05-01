@@ -6,6 +6,7 @@ CSceneChange::CSceneChange()
 	, m_WaitTime()
 	, m_WaitTimeCo()
 	, m_Alpha(0)
+	, m_StopScene(false)
 {
 }
 
@@ -20,7 +21,6 @@ void CSceneChange::Update()
 		switch (m_SceneType) {
 		case enSceneType::FadeStart:
 		case enSceneType::FadeFinish:
-			//最初のセットは終わっているので待つところから
 			if (SceneSetComp == false || SceneWait == false) {
 				if (SceneSetComp == false) {
 					m_Alpha += m_Speed;
@@ -35,6 +35,9 @@ void CSceneChange::Update()
 						m_Alpha = 255;
 
 						SceneSetComp = true;
+
+						//画面が完全に覆いかぶさった
+						BlackScreenTime = true;
 					}
 				}
 				else {
@@ -164,8 +167,15 @@ void CSceneChange::Update()
 			if (SceneSetComp == true) {
 				//時間になったら
 				if (m_WaitTimeCo >= m_WaitTime) {
-					//待機状態を解除
-					SceneWait = false;
+					//シーンストップ状態でなければ
+					if (m_StopScene == false) {
+						//待機状態を解除
+						SceneWait = false;
+
+						//覆いかぶさってはいなくなりました
+						BlackScreenTime = false;
+					}
+					//シーンストップをオンにしているなら、if分を通さないようにだけする
 				}
 				else {
 					m_WaitTimeCo++;
@@ -178,6 +188,17 @@ void CSceneChange::Update()
 			if (NextSceneSetComp == true) {
 				//動作をやめる
 				SceneChangeStart = false;
+
+				//シーンセットが完了したか
+				SceneSetComp = false;
+				//シーンを終了する方のセットが完了したか
+				NextSceneSetComp = false;
+
+				//シーンを待ち状態にする
+				SceneWait = true;
+
+				//シーンを止めるか
+				m_StopScene = false;
 			}
 		}
 	}
@@ -231,6 +252,9 @@ void CSceneChange::SetSceneChangeType(int SceneType, double Speed, int WaitTime,
 
 	//透明度
 	m_Alpha = 255;
+
+	//シーンを止めるか
+	m_StopScene = false;
 
 	//初期位置
 	m_Position = { 0,0 };

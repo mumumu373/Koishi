@@ -148,6 +148,7 @@
     <ClCompile Include="SorceCode\CGame\Factory\CBossFactory\CBossFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\Factory\CEnemyFactory\CEnemyFactory.cpp" />
+    <ClCompile Include="SorceCode\CGame\CClearImage\CClearImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -238,9 +239,11 @@
     <ClInclude Include="SorceCode\CGame\Factory\CBossFactory\CBossFactory.h" />
     <ClInclude Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGame\Factory\CEnemyFactory\CEnemyFactory.h" />
+    <ClInclude Include="SorceCode\CGame\CClearImage\CClearImage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stage_01_Enemies.json" />
     <None Include="Stage_02_Enemies.json" />
+    <None Include="Stage_Boss_Enemies.json" />
   </ItemGroup>
 </Project>

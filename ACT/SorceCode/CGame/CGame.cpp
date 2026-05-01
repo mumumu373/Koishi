@@ -24,11 +24,15 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hWorkBmp2				(nullptr)
 , m_hFont					(nullptr)
 , m_upTitleImage			(nullptr)
+, m_upClearImage			(nullptr)
 , m_upSceneChange			(nullptr)
 , m_upCollisionDetection	(nullptr)
 , m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
+, m_pWire					(nullptr)
 , m_upCamera				(nullptr)
+, Nega						(nullptr)
+, m_upWireActionSupporter	(nullptr)
 , m_upBoss					(nullptr)
 , m_Action					()
 , m_CursorAction			()
@@ -41,6 +45,9 @@ CGame::CGame(GameWindow* pGameWnd)
 	}
 	for (int i = 0; i < m_upBullet.size(); i++) {
 		m_upBullet[i] = nullptr;
+	}
+	for (int i = 0; i < m_pCWirepoint.size(); i++) {
+		m_pCWirepoint[i] = nullptr;
 	}
 }
 
@@ -97,6 +104,9 @@ bool CGame::Create()
 	//タイトルイメージのインスタンス生成
 	m_upTitleImage = std::make_unique<CTitleImage>();
 
+	//クリアイメージのインスタンス生成
+	m_upClearImage = std::make_unique<CClearImage>();
+
 	//シーンチェンジのインスタンス生成
 	m_upSceneChange = std::make_unique<CSceneChange>();
 
@@ -114,18 +124,6 @@ bool CGame::Create()
 	//ボスを作る
 	m_upBoss = CBossFactory::CreateNazrin();
 
-	//エネミーのインスタンス生成
-	//エネミーを作るタイミングで良い
-
-	//エネミーを作っている
-	VECTOR2_f SetEnemy = { 600,400 };
-	VECTOR2_f Speed = { 4,4 };
-	m_upEnemy.push_back(CEnemyFactory::CreateKedama(CKedama::enColor::Blue, SetEnemy,150, 5, 30, 120));
-	SetEnemy.y += 500;																//作るときにムーブタイプを決めておく
-	m_upEnemy.push_back(CEnemyFactory::CreateFairy(CFairy::enColor::NoColor, SetEnemy,80, Speed, CFairy::enMoveType::Rotation, 60, 120));
-	SetEnemy.x += 600;
-	m_upEnemy.push_back(CEnemyFactory::CreateYinYangBall(CYinYangBall::enColor::Red, SetEnemy,200));
-
 	//ゲームシーン状態にしておく
 	m_Scene = enScene::Title;
 	//----------------------------------------------------------------------------
@@ -135,17 +133,16 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	if (NoCreateInstance != true) {
-		//カメラのインスタンス生成
-		m_upCamera = std::make_unique<CCamera>();
-		//ステージの幅と高さをセットする<w.h>
-		std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
-		m_upCamera->SetStageSize(MapSize.first,MapSize.second);
-		m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
-	}
+	//カメラのインスタンス生成
+	m_upCamera = std::make_unique<CCamera>();
+	//ステージの幅と高さをセットする<w.h>
+	std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+	m_upCamera->SetStageSize(MapSize.first,MapSize.second);
+	m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
 
 	//初期設定
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
+
 	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 300, 800 }));
 	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 600, 700 }));
 	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 600 }));
@@ -169,6 +166,42 @@ bool CGame::Create()
 void CGame::Destroy()
 {
 	//stdの破棄用の関数をまた追加する
+	//----------------------タイトルイメージ----------------
+	m_upTitleImage.reset();
+
+	//----------------------クリアイメージ------------------
+	m_upClearImage.reset();
+
+	//----------------------シーンチェンジクラス------------
+	m_upSceneChange.reset();
+
+	//----------------------当たり判定----------------------
+	m_upCollisionDetection.reset();
+
+	//														-ゲームオブジェクト系-
+	//----------------------プレイヤー-------------------
+	m_upPlayer.reset();
+	m_pWire.reset();
+	m_pCWirepoint.clear();
+
+	//----------------------エネミー---------------------
+	m_upEnemy.clear();
+
+	//----------------------ボス------------------------
+	m_upBoss.reset();
+
+	//----------------------バレット---------------------
+	m_upBullet.clear();
+
+	//----------------------ステージ--------------------
+	m_upStageManager.reset();
+
+
+	//----------------------カメラ-----------------------
+	m_upCamera.reset();
+
+	Nega.reset();	//ネガポジ反転クラス
+	m_upWireActionSupporter.reset();	//ワイヤーアクションをサポートするクラス
 
 	//BITMAPの解放.--------------------------------------------------重要---------------------------
 
@@ -424,6 +457,13 @@ void CGame::Update()
 				//ボス用のステージに変更する
 				m_upStageManager->ChangeStage(CStageManager::enStage::MapBoss);
 
+				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				DeleteInstance_Bullet();
+				DeleteInstance_Enemy();
+
+				//ボスの時のエネミーを配置する
+				CEnemySet::LoadEnemies_Boss(m_upEnemy);
+
 				//カメラの場所を変更したところと同じ位置になるようにする
 				m_upCamera->SetChangeBossStageCamera(m_upPlayer->GetPositionadd(), m_upBoss->GetPositionadd());
 
@@ -529,6 +569,68 @@ void CGame::Update()
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
 		}
 
+		if (m_upPlayer->ClearGame == true) {
+			static int ClearCo = 0;
+			if (ClearCo >= 60) {
+				ClearCo = 60;
+
+				if (m_upSceneChange->SceneChangeStart == false) {
+					//シーンチェンジ
+					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 4, 60, false);
+					//次の入力があるまで黒画面で待機するようにする
+					m_upSceneChange->StopScene(true);
+				}
+			}
+			else {
+				ClearCo++;
+			}
+
+			//シーンが完全に覆いかぶさってから
+			if (m_upSceneChange->SceneSetComp == true) {
+				//シーンクリアに移動する
+				m_Scene = enScene::Clear;
+			}
+		}
+
+		break;
+	case enScene::Clear:
+		if (m_upClearImage->FadeCompleted == false) {
+			m_upClearImage->Update();
+
+			//1回だけ押せるように
+			if (GetAsyncKeyState(VK_RETURN) & 0x8000 || CMouseInput::GetMouseLeft(true, true) || CMouseInput::GetMouseRight(true, true) || CMouseInput::GetMouseWheel(true, true))
+			{
+				if (m_OnePush == false) {
+					//クリア画面が表示されたら
+					if (m_upClearImage->DrawClearImage == true) {
+						//フェードアウトを開始する
+						m_upClearImage->FadeOutStart();
+					}
+
+					//一回だけ押させる
+					m_OnePush = true;
+				}
+			}
+			else {
+				//離すとリセット
+				m_OnePush = false;
+			}
+		}
+		//フェードが終わったら
+		else {
+			//タイトルへ
+			m_Scene = enScene::Title;
+
+			NoCreateInstance = true;	//インスタンスを作らないようにする
+			NoDeleteInstance = true;	//インスタンスを消さないようにする
+
+			Destroy();		//一度メモリを解放する
+
+			Create();		//インスタンスを作る
+
+			NoCreateInstance = false;	//初期化
+			NoDeleteInstance = false;
+		}
 		break;
 	}
 	//インスタンスを破棄する関数
@@ -616,12 +718,15 @@ void CGame::Draw()
 		CMouseInput::Draw();
 
 		break;
-
 	default:
 		break;
 	}
 
 	m_upSceneChange->Draw();
+	//クリアシーンだけ映す
+	if (m_Scene == enScene::Clear) {
+		m_upClearImage->Draw();
+	}
 }
 
 void CGame::DeleteInstance()

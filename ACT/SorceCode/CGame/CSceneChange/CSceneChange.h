@@ -27,6 +27,8 @@ public:
 	bool SceneWait = false;			//シーンが待ち状態なら
 
 	bool UseWhiteIMG = false;		//白画面で映すか
+
+	bool BlackScreenTime = false;		//画面が完全に覆いかぶさったか
 public:
 	CSceneChange();
 	~CSceneChange();
@@ -37,6 +39,9 @@ public:
 	//何のシーンタイプをやるか、速度、待機時間を決める
 	void SetSceneChangeType(int SceneType, double Speed, int WaitTime, bool WhiteIMG);
 
+	//覆いかぶさったところで入力で解除したい時の関数
+	void StopScene(bool InputKey) { m_StopScene = InputKey; }
+
 private:
 	VECTOR2_f m_Position;
 
@@ -46,4 +51,6 @@ private:
 	int m_WaitTimeCo;	//待つ時間をカウント
 
 	int m_Alpha;		//透明度
+
+	bool m_StopScene;	//シーンをストップさせる
 };

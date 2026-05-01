@@ -40,6 +40,8 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"Slash"} ,
 		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
 
+		{enImgList::IMG_Clear	,"Data\\Image\\Clear.bmp"		,"Clear"} ,
+
 		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"Cursor"} ,
 
 		{enImgList::IMG_Black		,"Data\\Image\\Black.bmp"			,"Black"} ,
