@@ -2,7 +2,8 @@
 #include <iostream>
 
 CStageCollision::CStageCollision()
-    : m_isEventChipHit  (false)
+    : m_isStageChangeHit(false)
+    , m_isEventChipHit  (false)
     , m_isDamageKedamaHit(false)
     , m_isBossSetPosHit (false)
 	, m_MapData()
@@ -40,6 +41,7 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
         startY + h - 1.0f
     };
 
+    m_isStageChangeHit = false;
     m_isEventChipHit = false;
     m_isDamageKedamaHit = false;
     m_isBossSetPosHit = false;
@@ -76,7 +78,7 @@ bool CStageCollision::IsHit(const double& PosX, const double& PosY, float w, flo
                 // i == 0 ならば、checkX[0] (一番左側) の判定点である
                 if (i == 0)
                 {
-                    m_isEventChipHit = true;
+                    m_isStageChangeHit = true;
                 }
                 break;
             case 21:

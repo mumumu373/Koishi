@@ -38,7 +38,9 @@ public:
 	//static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
 	static constexpr double DeathRotationSpeed = 25;//死亡時の回転速度
 	static constexpr double DeathRotationSpeedMAX = 2000;//死亡時の回転速度の最大値
-	bool EVENT_HIT;		//イベントブロックに当たったら
+
+	bool STAGE_CHANGE_HIT;			//ステージチェンジブロックに当たったら
+	bool EVENT_HIT;					//イベントブロックに当たったら
 	VECTOR2_f EVENT_START_POS;		//イベントが始まったときの位置
 
 	bool DAMAGE_KEDAMA_HIT;			//ダメージ毛玉に当たったら
@@ -61,7 +63,9 @@ public:
 	int enActionState = enActionState::None;
 public:
 	bool GroundStand = false;		//地面に立っています
-	bool OldGroundStand = false;		//前フレームの地面に立っている状態
+	bool OldGroundStand = false;	//前フレームの地面に立っている状態
+
+	bool StageChangeTime = false;	//ステージチェンジ中であれば
 public:
 
 	CPlayer();

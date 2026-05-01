@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "Nlohmann/json.hpp"
-#include "CGame/CEnemyFactory/CEnemyFactory.h"
+#include "CGame/Factory/CEnemyFactory/CEnemyFactory.h"
 #include <Windows.h> // ’Ç‰Á
 #include <string>
 

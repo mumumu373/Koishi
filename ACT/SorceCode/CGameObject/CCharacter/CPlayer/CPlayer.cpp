@@ -148,6 +148,8 @@ void CPlayer::StartSetting()
 	//属性を変えたかを確認
 	m_ChangeColor = false;
 
+	//ステージチェンジに触れたか
+	STAGE_CHANGE_HIT = false;
 	//イベントに触れたか
 	EVENT_HIT = false;
 	//初期宣言だけはしておく
@@ -245,18 +247,13 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	if (m_State == enState::Living) {
 		//ダメージ毛玉に触れたなら
-		if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false&& AvoidanceCount<0) {
+		if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false && AvoidanceCount < 0) {
 			PlayerDamegEriaHit(15);
-			return ;
+			return;
 		}
 		else {
 			DAMAGE_KEDAMA_HIT = false;
 		}
-		if (GetAsyncKeyState('Z')) {
-			SetStagePos({ 100,100 });
-		}
-
-
 
 		m_MoveSpeed = NoSpeed;
 		if (enActionState == enActionState::WireObjectCatch) {
@@ -269,9 +266,8 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 		NormalAttack->Update();
 
-
 		m_WireShot = false;
-		if (ClearGame==false) {
+		if (ClearGame == false) {
 			//常にfalseにする
 			GroundStand = false;
 			if (enActionState != enActionState::WirePointCatch) {
@@ -315,9 +311,6 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 					else {
 						MovePlayerGround();
 					}
-
-
-
 				}
 				else {
 					//空中回避状態なら
@@ -378,29 +371,27 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				}
 			}
 
-		
-		AvoidanceEnd();
 
-		//プレイヤーの属性変更制御
-		PlayerColorChange();
+			AvoidanceEnd();
 
-		m_WallHit = false;
-		//ステージとの判定
-		StageCollision(44, 44);
+			//プレイヤーの属性変更制御
+			PlayerColorChange();
+
+			m_WallHit = false;
+			//ステージとの判定
+			StageCollision(44, 44);
 		}
-else {
-	if (m_JumpAcc > MAX_FALLING_SPEED) {
-		m_Position.y = MAX_FALLING_SPEED;
-	}
-	else {
-		m_JumpAcc -= PlayerGrobtyi;
+		else {
+			if (m_JumpAcc > MAX_FALLING_SPEED) {
+				m_Position.y = MAX_FALLING_SPEED;
+			}
+			else {
+				m_JumpAcc -= PlayerGrobtyi;
 
-		m_Position.y -= m_JumpAcc;
-	}
-	StageCollision(44, 44);
-
-
-	}
+				m_Position.y -= m_JumpAcc;
+			}
+			StageCollision(44, 44);
+		}
 	}
 	else if (m_State == enState::Dying) {
 		m_WireShot = false;
@@ -780,16 +771,21 @@ void CPlayer::StageCollision(double OffsetPos_X, double OffsetPos_Y)
 		}
 	}
 
+	//イベントブロックを初期化
+	EVENT_HIT = false;
+	STAGE_CHANGE_HIT = false;
+
+	//イベントブロック(ステージチェンジイベント)に触れていたら
+	if (CStageCollision::GetInstance()->GetHitStageChange() == true) {
+		STAGE_CHANGE_HIT = true;
+	}
 	//イベントブロック(ボス戦突入イベント)に触れていたら
-	if (CStageCollision::GetInstance()->GetHitEvent() == true) {
+	else if (CStageCollision::GetInstance()->GetHitEvent() == true) {
 		EVENT_HIT = true;
 	}
 	//ダメージ毛玉に触れていたら
 	else if (CStageCollision::GetInstance()->GetHitDamageKedama() == true) {
 		DAMAGE_KEDAMA_HIT = true;
-	}
-	else {
-		EVENT_HIT = false;
 	}
 }
 

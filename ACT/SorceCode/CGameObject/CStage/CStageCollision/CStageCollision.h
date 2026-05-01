@@ -35,6 +35,8 @@ public:
     int GetHitMapX() const { return m_HitMapX; }
     int GetHitMapY() const { return m_HitMapY; }
 
+    bool GetHitStageChange()const { return m_isStageChangeHit; }
+
     bool GetHitEvent()const { return m_isEventChipHit; }
 
     bool GetHitDamageKedama()const { return m_isDamageKedamaHit; }
@@ -45,6 +47,9 @@ private:
     CStageCollision();
     CStageCollision(const CStageCollision& rhs) = delete;
     CStageCollision& operator=(CStageCollision& rhs) = delete;
+
+    //ステージチェンジチップに当たったかどうかのフラグ
+    bool m_isStageChangeHit;
 
     // イベントチップに当たったかどうかのフラグ
 	bool m_isEventChipHit;

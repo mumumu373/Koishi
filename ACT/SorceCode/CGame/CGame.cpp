@@ -23,6 +23,8 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_hWorkDC2				(nullptr)
 , m_hWorkBmp2				(nullptr)
 , m_hFont					(nullptr)
+, m_upTitleImage			(nullptr)
+, m_upSceneChange			(nullptr)
 , m_upCollisionDetection	(nullptr)
 , m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
@@ -30,6 +32,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upBoss					(nullptr)
 , m_Action					()
 , m_CursorAction			()
+, m_OnePush					(false)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -88,6 +91,12 @@ bool CGame::Create()
 		//イメージを読み込む
 		if (CImageManager::GetInstance()->Load(m_pGameWnd->hWnd, m_pGameWnd->hScreenDC, m_hMemDC, m_hWorkDC, m_hWorkDC2) == false)return false;
 	}
+
+	//タイトルイメージのインスタンス生成
+	m_upTitleImage = std::make_unique<CTitleImage>();
+
+	//シーンチェンジのインスタンス生成
+	m_upSceneChange = std::make_unique<CSceneChange>();
 
 	//当たり判定のインスタンス生成
 	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
@@ -191,19 +200,53 @@ void CGame::Update()
 
 	//仮置き
 	CMouseInput::Update();
+
+	m_upSceneChange->Update();
+
 	switch (m_Scene) {
 	case enScene::Title:
 
 		MoveCursor();
 
+		m_upTitleImage->Update();
+
 		if(GetAsyncKeyState(VK_RETURN) & 0x8000) 
 		{
+			if (m_OnePush == false) {
+				//タイトルの準備が完了していないなら
+				if (m_upTitleImage->SetCompleted == false) {
+					//規定の場所にセットする
+					m_upTitleImage->SetInitializePos();
+				}
+				//タイトル準備が完了してから
+				else {
+					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 20);
+				}
+
+				//一回だけ押させる
+				m_OnePush = true;
+			}
+		}
+		else {
+			//離すとリセット
+			m_OnePush = false;
+		}
+
+		//シーンが完全に覆いかぶさってから
+		if (m_upSceneChange->SceneSetComp == true) {
+			//ステージへ
 			m_Action[m_CursorAction]();
 		}
 		break;
 
-
 	case enScene::GameMain:
+
+		if (GetAsyncKeyState('T') & 0x0001) {
+			//ステージ2に移行
+			m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
+
+			m_upPlayer->SetStagePos({ 100,200 });
+		}
 
 		m_pWire->Update();
 
@@ -261,8 +304,18 @@ void CGame::Update()
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
 		}
 
+		//プレイヤーがステージチェンジブロックに触れたなら
+		if (m_upPlayer->STAGE_CHANGE_HIT == true) {
+			if (m_upPlayer->StageChangeTime == false) {
+				//ステージチェンジの遷移を行う
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Left, 40, 20);
+
+				//ステージチェンジ中
+				m_upPlayer->StageChangeTime = true;
+			}
+		}
 		//プレイヤーがイベントブロックに触れたなら
-		if (m_upPlayer->EVENT_HIT == true) {
+		else if (m_upPlayer->EVENT_HIT == true) {
 			//ムービーシーン(ボスとの会話などの)
 			m_Scene = enScene::Movie;
 
@@ -272,6 +325,21 @@ void CGame::Update()
 			//イベントが開始した位置を入れる
 			m_upPlayer->EVENT_START_POS = m_upPlayer->GetPosition();
 		
+		}
+
+		//ステージチェンジ中なら
+		if (m_upPlayer->StageChangeTime == true) {
+			//シーンが完全に覆いかぶさってから
+			if (m_upSceneChange->SceneSetComp == true) {
+				//ステージ2に移行
+				m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
+
+				//ステージ切り替え時のプレイヤーの配置
+				m_upPlayer->SetStagePos({ 100,200 });
+
+				//ステージチェンジ終了
+				m_upPlayer->StageChangeTime = false;
+			}
 		}
 
 		break;
@@ -410,12 +478,9 @@ void CGame::Draw()
 	switch (m_Scene)
 	{
 	case enScene::Title:
-		
-		CImageManager::SelectImg(CImageManager::enImgList::IMG_Title)->BBlt(
-			0, 0,
-			1280, 720,
-			0, 0);
 
+		m_upTitleImage->Draw();
+		
 		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
 			m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
 			128, 128,
@@ -484,6 +549,8 @@ void CGame::Draw()
 	default:
 		break;
 	}
+
+	m_upSceneChange->Draw();
 }
 
 void CGame::DeleteInstance()
