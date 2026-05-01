@@ -109,6 +109,8 @@ public:
 	void SetPos_Y(double Pos_Y) { m_Position.y = Pos_Y; }
 
 	void Update(std::vector<std::unique_ptr<CBullet>>& upBullet) override;
+	//タイトルシーンのアップデート
+	void TitleSceneUpdate();
 	//ムービーシーンのアップデート
 	void MovieSceneUpdate();
 
