@@ -174,6 +174,7 @@ void CPlayer::Attackmove()
 	else {
 		if (NormalAttack->GetAttack() == false) {
 			if (CMouseInput::GetMouseLeft(true, true)) {
+				////**音	 攻撃
 				NormalAttack->Strat(GetDelectionVect(GetCenterPosition(), CMouseInput::GetMousePosCamera(m_pCamera)), GetCenterPosition());
 				enActionState = enActionState::Attack;
 			}
@@ -253,6 +254,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		//ダメージ毛玉に触れたなら
 		if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false && AvoidanceCount < 0) {
 			PlayerDamegEriaHit(15);
+
 			return;
 		}
 		else {
@@ -865,6 +867,9 @@ void CPlayer::GetApple(VECTOR2_f Centerpos)
 	if (ClearGame==false) {
 		ClearGame = true;
 		{
+			//**音	クリア
+
+
 			enActionState = enActionState::None;
 			m_MoveState = enMoveState::Wait;
 			m_State = enState::Living;
@@ -994,6 +999,7 @@ void CPlayer::KyeInput()
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {			
 				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
+				//**音	回避
 			}
 		}
 		if (m_leftkey[1] == false) {
@@ -1015,6 +1021,7 @@ void CPlayer::KyeInput()
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {		
 				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
+				//**音	回避
 			}
 		}
 		if (m_rightkey[1] ==false) {
@@ -1064,6 +1071,7 @@ void CPlayer::AirKeyInput()
 		}
 		if (AvoidanceCanCount>0) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+				//**音	回避
 				AvoidanceCanCount--;
 				enActionState = enActionState::AirAvoidance;
 				AirAvoidanceVECTSet();
@@ -1200,6 +1208,8 @@ void CPlayer::JumpPlayer()
 
 				//押している時間を図る
 				if (m_JumpRemoveCo >= 10) {
+					//**音	ジャンプ
+
 					m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
 					m_JumpRemoveCo = 0;
 				}
@@ -1209,6 +1219,9 @@ void CPlayer::JumpPlayer()
 			}
 			//ジャンプボタンを離したなら
 			else {
+				//**音	ジャンプ
+
+
 				m_JumpRemove = true;
 				m_JumpRemoveCo = 0;
 			}
@@ -1264,6 +1277,8 @@ void CPlayer::Death()
 {
 	if (HP<=0) {
 		if (m_State == enState::Living) {
+			//**音	死
+
 			m_State = enState::Dying;
 			m_JumpAcc = DeathSpeed;
 			m_DeathRotation = 0;
@@ -1283,6 +1298,10 @@ void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 	else {
 		m_Acceleration.x = 10;
 	}
+	//**音	被弾（球）
+
+
+
 	//攻撃が当たった
 	m_AttackHit = true;
 	//攻撃が当たらない時間のカウントをセット
@@ -1306,6 +1325,8 @@ void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
 
 void CPlayer::PlayerDamegEriaHit(int Damage)
 {
+	//**音	被弾（地面）
+
 	m_JumpRemove = true;
 	//攻撃が当たった
 	m_AttackHit = true;

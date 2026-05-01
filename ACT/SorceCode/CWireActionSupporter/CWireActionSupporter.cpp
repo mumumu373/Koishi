@@ -23,6 +23,8 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 
 	if (WireActioning == false) {
 	
+		//**音	ワイヤーキャッチ
+
 		WireActioning = true;
 		AllNullptr();
 		pos[0] = m_DPlayer->GetCenterPosition();
@@ -63,6 +65,7 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPWire, CEnemy* m_DPEnemi)
 {
 	if (WireActioning == false) {
+		//**音	ワイヤーキャッチ
 		WireActioning = true;
 		AllNullptr();
 		pos[0] = m_DPlayer->GetCenterPosition();
