@@ -90,6 +90,8 @@ CPlayer::CPlayer()
 	m_MyCharacter = enMyCharacter::Player;
 	//プレイヤー陣営です
 	m_MyCamp = enMyCamp::PlayerCamp;
+	//動きの状態
+	m_MoveState = enMoveState::Wait;
 
 	StartSetting();
 
@@ -106,6 +108,8 @@ CPlayer::CPlayer()
 	NormalAttack = std::make_unique<CNormalAttack>();
 	//プレイヤーのカラーをセットする
 	NormalAttack->SetPlayerColor(m_Color);
+
+	m_Delection.y = 180;
 
 	//最大HP
 	MAX_HP = 200;	
@@ -412,6 +416,50 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		}
 	}
 
+}
+
+void CPlayer::TitleSceneSet()
+{
+	m_JumpAcc = m_JumpPower;
+
+	GroundStand = false;
+}
+
+void CPlayer::TitleSceneUpdate(VECTOR2_f GroundPos)
+{
+	//地面に合わせる
+	m_Position.x = GroundPos.x + 300;
+	m_Position.y = GroundPos.y + 180;
+
+	//地面にいるぞ
+	GroundStand = true;
+}
+
+void CPlayer::TitleSceneUpdate()
+{
+	m_OldPosition = m_Position;
+
+	m_Position.x += 5;
+	m_Position.y += -m_JumpAcc;
+
+	m_JumpAcc -= PlayerGrobtyi;
+}
+
+void CPlayer::TitleSceneDraw()
+{
+	//アニメーション処理
+	Animation();
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation3(
+		m_Position.x,				//表示位置x座標
+		m_Position.y,				//表示位置y座標
+		m_Framesplit.h + 40,		//画像幅	少し大きめに描画する
+		m_Framesplit.w + 40,		//高さ	<-拡大して表示するサイズ		
+		m_Framesplit.x,			//元画像x座標
+		m_Framesplit.y,			//元画像y座標
+		m_FrameSize.x,			//元画像xサイズ		
+		m_FrameSize.y,			//元画像yサイズ
+		m_Alpha, m_Delection.x, m_Delection.y, m_Delection.z);					//透明度、角度
 }
 
 void CPlayer::MovieSceneUpdate()

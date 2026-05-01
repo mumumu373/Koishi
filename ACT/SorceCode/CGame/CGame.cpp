@@ -33,6 +33,8 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_Action					()
 , m_CursorAction			()
 , m_OnePush					(false)
+, m_TitleSceneSet			(false)
+, m_GameStartCo				(0)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -133,8 +135,6 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	CEnemySet::LoadEnemies_Stage1(m_upEnemy);
-
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
 		m_upCamera = std::make_unique<CCamera>();
@@ -210,6 +210,26 @@ void CGame::Update()
 
 		m_upTitleImage->Update();
 
+		//タイトルシーンの動作を開始したら
+		if (m_TitleSceneSet == true) {
+			//ゲームが始まるまでの時間になったら
+			if (m_GameStartCo >= 60) {
+				//シーンチェンジが始まっていないなら
+				if (m_upSceneChange->SceneChangeStart == false) {
+					//シーンチェンジ
+					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 20, false);
+				}
+			}
+
+			//ジャンプする動作に切り替える
+			m_upPlayer->TitleSceneUpdate();
+
+			m_GameStartCo++;
+		}
+		else {
+			m_upPlayer->TitleSceneUpdate(m_upTitleImage->GetPosition());
+		}
+
 		if(GetAsyncKeyState(VK_RETURN) & 0x8000 || CMouseInput::GetMouseLeft(true, true) || CMouseInput::GetMouseRight(true, true) || CMouseInput::GetMouseWheel(true, true))
 		{
 			if (m_OnePush == false) {
@@ -220,9 +240,13 @@ void CGame::Update()
 				}
 				//タイトル準備が完了してから
 				else {
-					//シーンチェンジが始まっていないなら
-					if (m_upSceneChange->SceneChangeStart == false) {
-						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 50, 20, false);
+					//タイトルシーンの動作を始める
+					if (m_TitleSceneSet == false) {
+						m_TitleSceneSet = true;
+						m_GameStartCo = 0;
+
+						//タイトルシーンのアップデートをするときの準備
+						m_upPlayer->TitleSceneSet();
 					}
 				}
 
@@ -239,6 +263,18 @@ void CGame::Update()
 		if (m_upSceneChange->SceneSetComp == true) {
 			//ステージへ
 			m_Action[m_CursorAction]();
+
+			//ステージ1のエネミーをセットする
+			CEnemySet::LoadEnemies_Stage1(m_upEnemy);
+
+			//プレイヤーを初期化
+			m_upPlayer->Initialization();
+
+			//ステージでのプレイヤーの配置
+			m_upPlayer->SetStagePos({ 100, 500 });
+
+			//タイトルシーンの動作を完了
+			m_TitleSceneSet = false;
 		}
 		break;
 
@@ -261,19 +297,21 @@ void CGame::Update()
 		//エネミーの動作
 		//ある分回す
 		for (int i = 0; i < m_upEnemy.size(); i++) {
-			//生存中になっていれば動かす
-			if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
-				//プレイヤーの位置を取得する
-				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
+			if (m_upEnemy[i] != nullptr) {
+				//生存中になっていれば動かす
+				if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
+					//プレイヤーの位置を取得する
+					m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 
-				//キャッチされていなければ
-				if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
-					m_upEnemy[i]->Update(m_upBullet);
-				}
-				else {
-					//投げられたら
-					if (m_upEnemy[i]->EnemyThrown == true) {
-						m_upEnemy[i]->ThrowEnemy();
+					//キャッチされていなければ
+					if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
+						m_upEnemy[i]->Update(m_upBullet);
+					}
+					else {
+						//投げられたら
+						if (m_upEnemy[i]->EnemyThrown == true) {
+							m_upEnemy[i]->ThrowEnemy();
+						}
 					}
 				}
 			}
@@ -281,11 +319,15 @@ void CGame::Update()
 
 		//バレットの動作
 		for (int i = 0; i < m_upBullet.size(); i++) {
-			m_upBullet[i]->Update();
+			if (m_upBullet[i] != nullptr) {
+				m_upBullet[i]->Update();
+			}
 		}
 
 		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			m_pCWirepoint[i]->Update();
+			if (m_pCWirepoint[i] != nullptr) {
+				m_pCWirepoint[i]->Update();
+			}
 		}
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 		
@@ -502,6 +544,9 @@ void CGame::Draw()
 	case enScene::Title:
 
 		m_upTitleImage->Draw();
+
+		//タイトルシーンようの描画
+		m_upPlayer->TitleSceneDraw();
 		
 		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
 			m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
@@ -531,13 +576,15 @@ void CGame::Draw()
 
 		//エネミー描画
 		for (int i = 0; i < m_upEnemy.size(); i++) {
-			//エネミーが死亡中になっていなければ
-			if (m_upEnemy[i]->m_State != CEnemy::enState::Dying) {
-				m_upEnemy[i]->Draw(m_upCamera);
-			}
-			else {
-				//死んだとき用の描画にする
-				m_upEnemy[i]->DeadAnimationDraw(m_upCamera);
+			if (m_upEnemy[i] != nullptr) {
+				//エネミーが死亡中になっていなければ
+				if (m_upEnemy[i]->m_State != CEnemy::enState::Dying) {
+					m_upEnemy[i]->Draw(m_upCamera);
+				}
+				else {
+					//死んだとき用の描画にする
+					m_upEnemy[i]->DeadAnimationDraw(m_upCamera);
+				}
 			}
 		}
 
@@ -548,7 +595,9 @@ void CGame::Draw()
 
 		//バレットの描画
 		for (int i = 0; i < m_upBullet.size(); i++) {
-			m_upBullet[i]->Draw(m_upCamera);
+			if (m_upBullet[i] != nullptr) {
+				m_upBullet[i]->Draw(m_upCamera);
+			}
 		}
 
 		//プレイヤーのハートを描画する
@@ -587,19 +636,21 @@ void CGame::DeleteBullet()
 {
 	//バレットのインスタンスを消す
 	for (int i = 0; i < m_upBullet.size(); i++) {
-		//バレットが死んだら
-		if (m_upBullet[i]->m_State == CBullet::enState::Dead) {
-			//erase は、ここから後ろの物はすべて消しますというものとなる	引数に remove_if があるということは？
-			m_upBullet.erase(
-				//remove_ifだけでは削除はしない	begin と end はそれぞれ、先頭、末尾を見てください。というものになる
-				std::remove_if(m_upBullet.begin(), m_upBullet.end(),
-					//[]->ラムダ式を開始します ()
-					[](const std::unique_ptr<CBullet>& Bullet) {
-						//この場合の条件は、バレットがデッド状態なら末尾に追いやる
-						return Bullet->m_State == CBullet::enState::Dead;
-					}),
-				m_upBullet.end()
-			);
+		if (m_upBullet[i] != nullptr) {
+			//バレットが死んだら
+			if (m_upBullet[i]->m_State == CBullet::enState::Dead) {
+				//erase は、ここから後ろの物はすべて消しますというものとなる	引数に remove_if があるということは？
+				m_upBullet.erase(
+					//remove_ifだけでは削除はしない	begin と end はそれぞれ、先頭、末尾を見てください。というものになる
+					std::remove_if(m_upBullet.begin(), m_upBullet.end(),
+						//[]->ラムダ式を開始します ()
+						[](const std::unique_ptr<CBullet>& Bullet) {
+							//この場合の条件は、バレットがデッド状態なら末尾に追いやる
+							return Bullet->m_State == CBullet::enState::Dead;
+						}),
+					m_upBullet.end()
+				);
+			}
 		}
 	}
 }
@@ -608,32 +659,52 @@ void CGame::DeleteEnemy()
 {
 	//バレットと同じようにエネミーを消す
 	for (int i = 0; i < m_upEnemy.size(); i++) {
-		//エネミーが死んだら
-		if (m_upEnemy[i]->m_State == CEnemy::enState::Dead) {
-			m_upEnemy.erase(
-				std::remove_if(m_upEnemy.begin(), m_upEnemy.end(),
-					[](const std::unique_ptr<CEnemy>& Enemy) {
-						return Enemy->m_State == CEnemy::enState::Dead;
-					}),
-				m_upEnemy.end()
-			);
+		if (m_upEnemy[i] != nullptr) {
+			//エネミーが死んだら
+			if (m_upEnemy[i]->m_State == CEnemy::enState::Dead) {
+				m_upEnemy.erase(
+					std::remove_if(m_upEnemy.begin(), m_upEnemy.end(),
+						[](const std::unique_ptr<CEnemy>& Enemy) {
+							return Enemy->m_State == CEnemy::enState::Dead;
+						}),
+					m_upEnemy.end()
+				);
+			}
 		}
 	}
 }
 
 void CGame::DeleteInstance_Bullet()
 {
-	//すべてのバレットのインスタンスを削除
-	for (int BulletNo = 0; BulletNo < m_upBullet.size(); BulletNo++) {
-		m_upBullet[BulletNo] = nullptr;
+	//バレットのインスタンスを消す
+	//
+	for (int i = 0; i < m_upBullet.size(); i++) {
+		if (m_upBullet[i] != nullptr) {
+			m_upBullet.erase(
+				std::remove_if(m_upBullet.begin(), m_upBullet.end(),
+					[](const std::unique_ptr<CBullet>& Bullet) {
+						return Bullet != nullptr;
+					}),
+				m_upBullet.end()
+			);
+		}
 	}
 }
 
 void CGame::DeleteInstance_Enemy()
 {
 	//すべてのエネミーのインスタンスを削除
-	for (int EnemyNo = 0; EnemyNo < m_upEnemy.size(); EnemyNo++) {
-		m_upEnemy[EnemyNo] = nullptr;
+	//インスタンスがあるエネミーのメモリを空ける
+	for (int i = 0; i < m_upEnemy.size(); i++) {
+		if (m_upEnemy[i] != nullptr) {
+			m_upEnemy.erase(
+				std::remove_if(m_upEnemy.begin(), m_upEnemy.end(),
+					[](const std::unique_ptr<CEnemy>& Enemy) {
+						return Enemy != nullptr;
+					}),
+				m_upEnemy.end()
+			);
+		}
 	}
 }
 

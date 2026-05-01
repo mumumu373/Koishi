@@ -15,7 +15,7 @@ CTitleImage::~CTitleImage()
 void CTitleImage::Update()
 {
 	//規定の場所まで移動したら
-	if (m_Position.x >= SetGroundPos) {
+	if (m_Position.x >= SetGroundPos - 1) {
 		//必ず左から入るので、ポジションを入れて動作を止める
 		m_Position.x = SetGroundPos;
 
@@ -27,7 +27,7 @@ void CTitleImage::Update()
 		m_Speed = 0;
 
 		//中央から離れるほどスピードが上がる
-		m_Speed = (SetGroundPos - m_Position.x) / 30;
+		m_Speed = (SetGroundPos - m_Position.x) / 25;
 
 		//スピード分移動
 		m_Position.x += m_Speed;

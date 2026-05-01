@@ -175,5 +175,7 @@ private:
 	int m_CursorAction;	//選択肢のどれを選んでいるか
 
 	bool m_OnePush;		//一回だけ押させる
-	
+
+	bool m_TitleSceneSet;	//タイトルシーンの切り替えタイミングなどのセットを行うか
+	int m_GameStartCo;		//ゲームが始まる時間をカウント
 };
