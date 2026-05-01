@@ -468,7 +468,9 @@ void CPlayer::MovieSceneUpdate()
 {
 	m_OldPosition = m_Position;
 
-	
+	m_AttackHit = false;	
+	NoHitAttackCo =  0;
+
 	//—Ž‰º‚¾‚¯‚·‚é‚æ‚¤‚É
 	//Å‘å—Ž‰º‘¬“x
 	if (m_JumpAcc > MAX_FALLING_SPEED) {
@@ -647,7 +649,8 @@ void CPlayer::Animation()
 
 			switch (m_MoveState) {
 			case enMoveState::Wait:
-				m_Framesplit.x = ImageSize * 2;
+				m_Framesplit.x = ImageSize * 3;
+
 				break;
 			case enMoveState::MoveLeft:
 				if (m_AnimationCount > AnimationSpeed) {
