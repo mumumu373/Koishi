@@ -1,13 +1,12 @@
 {
-  "Stage": "Stage1",
   "Enemies": [
     {
       "Type": "Kedama",
       "Pos": {
-        "x": 400,
+        "x": 500,
         "y": 400
       },
-      "Color": 1,
+      "Color": 4,
       "Size": 90,
       "Speed": 6,
       "JumpPower": 6,
@@ -19,7 +18,7 @@
         "x": 800,
         "y": 600
       },
-      "Color": 4,
+      "Color": 2,
       "Size": 150,
       "Speed_X": 8,
       "Speed_Y": 8,
@@ -33,7 +32,7 @@
         "x": 900,
         "y": 800
       },
-      "Color": 3,
+      "Color": 2,
       "Size": 300
     }
   ]

@@ -101,6 +101,11 @@ private:
 	//エネミーを削除する関数
 	void DeleteEnemy(); 
 
+	//バレットのインスタンスを強制削除
+	void DeleteInstance_Bullet();
+	//エネミーのインスタンスを強制削除
+	void DeleteInstance_Enemy();
+
 	//当たり判定をまとめる関数
 	void CollisionUpdate();
 

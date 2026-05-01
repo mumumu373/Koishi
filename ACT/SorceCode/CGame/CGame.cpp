@@ -133,7 +133,7 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
-	CEnemySet::LoadEnemies(m_upEnemy);
+	CEnemySet::LoadEnemies_Stage1(m_upEnemy);
 
 	if (NoCreateInstance != true) {
 		//カメラのインスタンス生成
@@ -336,6 +336,13 @@ void CGame::Update()
 
 				//ステージ切り替え時のプレイヤーの配置
 				m_upPlayer->SetStagePos({ 100,200 });
+
+				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				DeleteInstance_Bullet();
+				DeleteInstance_Enemy();
+
+				//ステージ2の時のエネミーを配置する
+				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
 
 				//ステージチェンジ終了
 				m_upPlayer->StageChangeTime = false;
@@ -611,6 +618,22 @@ void CGame::DeleteEnemy()
 				m_upEnemy.end()
 			);
 		}
+	}
+}
+
+void CGame::DeleteInstance_Bullet()
+{
+	//すべてのバレットのインスタンスを削除
+	for (int BulletNo = 0; BulletNo < m_upBullet.size(); BulletNo++) {
+		m_upBullet[BulletNo] = nullptr;
+	}
+}
+
+void CGame::DeleteInstance_Enemy()
+{
+	//すべてのエネミーのインスタンスを削除
+	for (int EnemyNo = 0; EnemyNo < m_upEnemy.size(); EnemyNo++) {
+		m_upEnemy[EnemyNo] = nullptr;
 	}
 }
 
