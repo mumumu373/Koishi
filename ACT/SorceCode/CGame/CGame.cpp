@@ -424,6 +424,13 @@ void CGame::Update()
 				//ボス用のステージに変更する
 				m_upStageManager->ChangeStage(CStageManager::enStage::MapBoss);
 
+				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				DeleteInstance_Bullet();
+				DeleteInstance_Enemy();
+
+				//ボスの時のエネミーを配置する
+				CEnemySet::LoadEnemies_Boss(m_upEnemy);
+
 				//カメラの場所を変更したところと同じ位置になるようにする
 				m_upCamera->SetChangeBossStageCamera(m_upPlayer->GetPositionadd(), m_upBoss->GetPositionadd());
 
