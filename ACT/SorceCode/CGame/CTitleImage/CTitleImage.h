@@ -20,6 +20,8 @@ public:
 	//画面配置を規定のものにする関数
 	void SetInitializePos();
 
+	//位置を贈る
+	VECTOR2_f GetPosition() { return m_Position; }
 private:
 	VECTOR2_f m_Position;	
 
