@@ -469,6 +469,7 @@ void CPlayer::MovieSceneUpdate()
 	m_OldPosition = m_Position;
 
 	m_AttackHit = false;	
+	m_Alpha = 255;
 	NoHitAttackCo =  0;
 
 	//—Ž‰º‚¾‚¯‚·‚é‚æ‚¤‚É

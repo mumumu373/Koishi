@@ -314,7 +314,7 @@ void CGame::Update()
 	case enScene::GameMain:
 
 		if (GetAsyncKeyState('T') & 0x0001) {
-			
+
 		}
 
 		m_pWire->Update();
@@ -363,9 +363,14 @@ void CGame::Update()
 			}
 		}
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
-		
+
 		//当たり判定をまとめた関数
 		CollisionUpdate();
+
+		if (m_upPlayer->GetStete()==CPlayer::enState::Dying){
+			m_pWire->DayEnd();
+		}
+
 
 		//ステージの更新
 		m_upStageManager->Update();
@@ -564,6 +569,9 @@ void CGame::Update()
 		//当たり判定の関数
 		CollisionUpdate();
 
+		if (m_upPlayer->GetStete() == CPlayer::enState::Dying) {
+			m_pWire->DayEnd();
+		}
 		//ワイヤーを撃つ処理
 		if (m_upPlayer->GetWireShot()) {
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
