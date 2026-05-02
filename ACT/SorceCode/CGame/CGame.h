@@ -133,6 +133,8 @@ private:
 	//タイトルの色々を設定する関数
 	void SetTitleInfo();	
 
+	//タイトルの画像関連を描画する関数
+	void DrawTitleImg();
 private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 

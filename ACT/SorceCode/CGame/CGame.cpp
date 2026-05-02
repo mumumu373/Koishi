@@ -785,11 +785,8 @@ void CGame::Draw()
 		//タイトルシーンようの描画
 		m_upPlayer->TitleSceneDraw();
 		
-		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
-			m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
-			128, 128,
-			0, 0,
-			255);
+		//タイトル関連の画像を描画
+		DrawTitleImg();
 
 		break;
 	case enScene::GameMain:
@@ -1029,8 +1026,29 @@ void CGame::SetTitleInfo()
 	};
 
 	//タイトルでのカーソルの位置
-	m_CursorPosition.push_back({ 400,300 });
-	m_CursorPosition.push_back({ 400,500 });
+	m_CursorPosition.push_back({ 150, 430, });
+	m_CursorPosition.push_back({ 150, 555, });
 
+}
+
+void CGame::DrawTitleImg()
+{
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
+		m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
+		128, 128,
+		0, 0,
+		255);
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Makasero)->TransAlBlend(
+		305, 457,
+		307, 75,
+		0, 0,
+		255);
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Kaerimasu)->TransAlBlend(
+		300, 585,
+		340, 75,
+		0, 0,
+		255);
 }
 //----------------------------------------
