@@ -8,8 +8,8 @@ class CNormalAttack
 	static constexpr int CollisionMAX = 2;
 	static constexpr int imageW = 64;
 	static constexpr int imageH = 32;
-	static constexpr int Time = 6;//継続時間
-	static constexpr int AtakuSize = 120;
+	static constexpr int Time = 3;//継続時間
+	static constexpr int AtakuSize = 100;
 
 public:
 	int m_PlayerColor = 0;	//プレイヤーの属性をセット

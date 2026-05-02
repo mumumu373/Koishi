@@ -8,6 +8,7 @@
 #include "CGame/CTitleImage/CTitleImage.h"					//タイトルイメージクラス
 #include "CGame/CClearImage/CClearImage.h"					//クリアイメージクラス
 #include "CGame/CSceneChange/CSceneChange.h"				//シーンチェンジクラス
+#include "CGame/CMovieScene/CMovieScene.h"					//ムービーシーン動作クラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
 //----------------------------------------------------------
 #include "CGame/Factory/CEnemyFactory/CEnemyFactory.h"		//エネミーを作るクラス
@@ -43,9 +44,9 @@ enum enScene
 {
 	Title,		//タイトル
 	GameMain,	//ゲーム中
-	Death,		//デス中
 	Movie,		//ムービーシーン
 	BossBattle,	//ボスバトルシーン(カメラの制御などを変更するので専用のシーンを用意する)
+	PlayerDeath,//デス中
 	Clear,		//ゲームクリアシーン
 };
 
@@ -60,6 +61,15 @@ enum enWorldState
 
 int m_WorldState = enWorldState::Normal;
 
+//プレイヤーがどのマップにいるかを見る
+enum enInMap
+{
+	Map01,
+	Map02,
+	MapBoss,
+};
+
+	int m_PlayerInStage = 0;					//プレイヤーはどのマップにいるか
 public:
 	bool NoCreateInstance = false;	//作りたくないものは作らない
 	bool NoDeleteInstance = false;	//消したくないものは消さない
@@ -143,8 +153,11 @@ private:
 	//----------------------クリアイメージ------------------
 	std::unique_ptr< CClearImage> m_upClearImage;
 
-	//----------------------シーンチェンジクラス------------
+	//----------------------シーンチェンジクラス-------------
 	std::unique_ptr<CSceneChange> m_upSceneChange;
+
+	//----------------------ムービーシーンクラス-------------
+	std::unique_ptr<CMovieScene> m_upMovieScene;
 	
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
@@ -183,4 +196,6 @@ private:
 
 	bool m_TitleSceneSet;	//タイトルシーンの切り替えタイミングなどのセットを行うか
 	int m_GameStartCo;		//ゲームが始まる時間をカウント
+
+	int m_ClearCo;			//ゲームをクリアした時の遷移の時間を図る
 };

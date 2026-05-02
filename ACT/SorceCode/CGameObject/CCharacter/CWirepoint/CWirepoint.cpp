@@ -21,7 +21,6 @@ void CWirepoint::StartSetting()
 
 void CWirepoint::Update()
 {
-	m_Position.x += 1;
 }
 
 void CWirepoint::Draw(std::unique_ptr<CCamera>& pCamera)
