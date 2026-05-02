@@ -1050,5 +1050,11 @@ void CGame::DrawTitleImg()
 		340, 75,
 		0, 0,
 		255);
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Title)->TransAlBlend(
+		500, 0,
+		641, 341,
+		0, 0,
+		255);
 }
 //----------------------------------------

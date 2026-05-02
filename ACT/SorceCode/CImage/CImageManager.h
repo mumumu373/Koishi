@@ -46,6 +46,7 @@ public:
 
 		IMG_Makasero,		//選択肢「まかせろ」
 		IMG_Kaerimasu,		//選択肢「かえります」
+		IMG_Title,			//タイトル画像
 	};
 public:
 	static CImageManager* GetInstance()
