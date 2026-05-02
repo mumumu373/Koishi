@@ -944,9 +944,25 @@ void CPlayer::CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double Of
 
 void CPlayer::SetStagePos(VECTOR2_f SetPos)
 {
-	Initialization();
 	m_Position = SetPos;
 	
+	enActionState = enActionState::None;
+	m_MoveState = enMoveState::Wait;
+	m_State = enState::Living;
+	m_Delection = { 0,0,0 };
+	m_JumpAcc = 0;
+	m_Acceleration = { 0,0 };
+
+	AvoidanceCount = -1;//回避状態を終わらせる
+	AvoidanceCoolCount = AvoidancecoolTime;//回避のクールタイムを開始する
+
+	NoHitAttackCo = 0;
+	m_AttackHit = false;
+	m_HitBack = false;
+	m_HitBackBack = false;
+	m_Delection.y = 180;
+	m_WallHit = false;
+	ClearGame = false;
 }
 
 void CPlayer::EventMoov(enMoveState Moov)

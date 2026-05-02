@@ -16,7 +16,9 @@ public:
 		BGM_NoSound,		//無音
 
 		BGM_TitleStart,		//タイトルBGMの最初
-		BGM_Title,			//タイトルBGM
+		BGM_Title_1,		//タイトルBGM1
+		BGM_Title_2,		//タイトルBGM2
+		BGM_Title_FastEnd,	//早めに終わるタイトルBGM
 
 		BGM_Stage1,			//ステージ1、2のステージBGM
 
@@ -84,10 +86,20 @@ public:
 	{
 		CSoundManager::GetInstance()->m_pSound_BGM[list]->PlaySE();
 	}
-	//ループ再生する
-	static void PlayLoop(enSingleSoundList list)
+	//サウンドを再生する
+	static void Play(enSingleSoundList list, bool bNotify)
 	{
-		CSoundManager::GetInstance()->m_pSound_BGM[list]->PlayLoop();
+		CSoundManager::GetInstance()->m_pSound_BGM[list]->Play(bNotify);
+	}
+	//ループ再生する
+	static bool PlayLoop(enSingleSoundList list)
+	{
+		//ループして、いったんBGMが終わったなら
+		if (CSoundManager::GetInstance()->m_pSound_BGM[list]->PlayLoop() == true) {
+			return true;
+		}
+
+		return false;
 	}
 	//停止する
 	static void Stop(enSingleSoundList list)

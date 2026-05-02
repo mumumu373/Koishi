@@ -41,6 +41,9 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_TitleSceneSet			(false)
 , m_GameStartCo				(0)
 , m_ClearCo					(0)
+, TitleStartSound			(false)
+, TitleStartSoundCo			(0)
+, TitleBGMSwitch			(false)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -237,8 +240,6 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
-
 	//仮置き
 	CMouseInput::Update();
 
@@ -246,6 +247,49 @@ void CGame::Update()
 
 	switch (m_Scene) {
 	case enScene::Title:
+		//タイトルのBGMの開始BGMを流していないなら
+		if (TitleStartSound == false) {
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_TitleStart, true);
+
+			TitleStartSound = true;
+
+			TitleStartSoundCo = 0;
+		}
+		else {
+			//規定のフレームになったら
+			if (TitleStartSoundCo >= 150) {
+				//BGMをループして、最初から流したなら
+				if (TitleBGMSwitchCo <= 0) {
+					//一緒に流すようにする
+					if (TitleBGMSwitch == false) {
+						//BGM1を再生	
+						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
+
+						//タイトルBGM1を流したので次は2を流す
+						TitleBGMSwitch = true;
+					}
+					//一緒に流すようにする
+					else if (TitleBGMSwitch == true) {
+						//BGM2を再生
+						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
+
+						//タイトルBGM1を流したので次は2を流す
+						TitleBGMSwitch = false;
+					}
+
+					//ループするタイミングをセット
+					TitleBGMSwitchCo = 60 * 15 + 32;
+				}
+				else {
+					//最初に通ってから次のやつを流すようにしたいので--
+					TitleBGMSwitchCo--;
+				}
+			}
+			else {
+				//タイトルカウント
+				TitleStartSoundCo++;
+			}
+		}
 
 		MoveCursor();
 

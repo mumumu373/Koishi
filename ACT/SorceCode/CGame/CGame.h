@@ -198,4 +198,11 @@ private:
 	int m_GameStartCo;		//ゲームが始まる時間をカウント
 
 	int m_ClearCo;			//ゲームをクリアした時の遷移の時間を図る
+
+	//サウンド関連の制御
+	bool TitleStartSound;		//タイトルのBGMが始まったか
+	int TitleStartSoundCo;		//タイトルのBGMの流した時間を計測
+
+	bool TitleBGMSwitch;		//タイトルのBGMをもう一つのBGMに切り替え
+	int TitleBGMSwitchCo;		//タイトルのBGMを切り替える時をカウント
 };
