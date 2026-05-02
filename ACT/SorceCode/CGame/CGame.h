@@ -106,6 +106,9 @@ public:
 
 private:
 
+	//タイトルサウンド処理
+	void TitleSoundUpdate();
+
 	//インスタンスを破棄する関数
 	void DeleteInstance();
 	//バレットを削除する関数

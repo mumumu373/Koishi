@@ -247,49 +247,9 @@ void CGame::Update()
 
 	switch (m_Scene) {
 	case enScene::Title:
-		//タイトルのBGMの開始BGMを流していないなら
-		if (TitleStartSound == false) {
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_TitleStart, true);
 
-			TitleStartSound = true;
-
-			TitleStartSoundCo = 0;
-		}
-		else {
-			//規定のフレームになったら
-			if (TitleStartSoundCo >= 150) {
-				//BGMをループして、最初から流したなら
-				if (TitleBGMSwitchCo <= 0) {
-					//一緒に流すようにする
-					if (TitleBGMSwitch == false) {
-						//BGM1を再生	
-						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
-
-						//タイトルBGM1を流したので次は2を流す
-						TitleBGMSwitch = true;
-					}
-					//一緒に流すようにする
-					else if (TitleBGMSwitch == true) {
-						//BGM2を再生
-						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
-
-						//タイトルBGM1を流したので次は2を流す
-						TitleBGMSwitch = false;
-					}
-
-					//ループするタイミングをセット
-					TitleBGMSwitchCo = 60 * 15 + 32;
-				}
-				else {
-					//最初に通ってから次のやつを流すようにしたいので--
-					TitleBGMSwitchCo--;
-				}
-			}
-			else {
-				//タイトルカウント
-				TitleStartSoundCo++;
-			}
-		}
+		//タイトルサウンドの動作
+		TitleSoundUpdate();
 
 		MoveCursor();
 
@@ -911,6 +871,53 @@ void CGame::Draw()
 	//クリアシーンだけ映す
 	if (m_Scene == enScene::Clear) {
 		m_upClearImage->Draw();
+	}
+}
+
+void CGame::TitleSoundUpdate()
+{
+	//タイトルのBGMの開始BGMを流していないなら
+	if (TitleStartSound == false) {
+		CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_TitleStart, true);
+
+		TitleStartSound = true;
+
+		TitleStartSoundCo = 0;
+	}
+	else {
+		//規定のフレームになったら
+		if (TitleStartSoundCo >= 150) {
+			//BGMをループして、最初から流したなら
+			if (TitleBGMSwitchCo <= 0) {
+				//一緒に流すようにする
+				if (TitleBGMSwitch == false) {
+					//BGM1を再生	
+					CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
+
+					//タイトルBGM1を流したので次は2を流す
+					TitleBGMSwitch = true;
+				}
+				//一緒に流すようにする
+				else if (TitleBGMSwitch == true) {
+					//BGM2を再生
+					CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
+
+					//タイトルBGM1を流したので次は2を流す
+					TitleBGMSwitch = false;
+				}
+
+				//ループするタイミングをセット
+				TitleBGMSwitchCo = 60 * 15 + 32;
+			}
+			else {
+				//最初に通ってから次のやつを流すようにしたいので--
+				TitleBGMSwitchCo--;
+			}
+		}
+		else {
+			//タイトルカウント
+			TitleStartSoundCo++;
+		}
 	}
 }
 
