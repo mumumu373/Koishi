@@ -371,9 +371,7 @@ void CGame::Update()
 		//当たり判定をまとめた関数
 		CollisionUpdate();
 
-		if (m_upPlayer->GetStete()==CPlayer::enState::Dying){
-			m_pWire->DayEnd();
-		}
+
 
 
 		//ステージの更新
@@ -622,9 +620,7 @@ void CGame::Update()
 		//当たり判定の関数
 		CollisionUpdate();
 
-		if (m_upPlayer->GetStete() == CPlayer::enState::Dying) {
-			m_pWire->DayEnd();
-		}
+
 		//ワイヤーを撃つ処理
 		if (m_upPlayer->GetWireShot()) {
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
@@ -659,7 +655,8 @@ void CGame::Update()
 	case enScene::PlayerDeath:
 		//プレイヤーのみ動作させる
 		m_upPlayer->Update(m_upBullet);
-
+		m_pWire->DayEnd();
+		
 		//こいしが画面外にでたら
 		if (m_upPlayer->m_State == CPlayer::enState::Dead) {
 			if (m_upSceneChange->SceneChangeStart == false) {

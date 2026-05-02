@@ -59,7 +59,7 @@ public:
 	void EnemiCatch();
 	void EnemiCatchEND();
 
-	void DayEnd() { if (m_ShotState != ShotSteto::no) { m_ShotState = ShotSteto::back; } }
+	void DayEnd() { if (m_ShotState != ShotSteto::no) { m_ShotState = ShotSteto::no; } }
 private:
 	int m_ShotState = ShotSteto::no;//ワイヤーの状態
 	CWirepoint* m_CatchWirepoint;//掴んだワイヤーポイントのポインタ
