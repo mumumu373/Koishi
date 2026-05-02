@@ -609,6 +609,9 @@ void CNazrin::BossBattleFlag(VECTOR2_f PlayerPos)
 	//スタンバイ状態を早めに解いておく
 	m_AttackMoveChangeCo = 160;
 
+	//左に向くようにする
+	m_Delection.y = 0;
+
 	//青色の状態から始まるようにする
 	m_Color = enColor::Blue;
 }

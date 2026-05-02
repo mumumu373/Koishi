@@ -709,6 +709,9 @@ void CGame::Update()
 				break;
 			}
 
+			//ムービーシーンの初期化
+			m_upMovieScene->StartSetting();
+
 			//ボスバトルには入らないのでメインでOK
 			m_Scene = enScene::GameMain;
 		}
