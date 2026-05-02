@@ -43,6 +43,9 @@ public:
 
 		IMG_Black,			//黒画面
 		IMG_White,			//白画面
+
+		IMG_Makasero,		//選択肢「まかせろ」
+		IMG_Kaerimasu,		//選択肢「かえります」
 	};
 public:
 	static CImageManager* GetInstance()
