@@ -26,6 +26,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upTitleImage			(nullptr)
 , m_upClearImage			(nullptr)
 , m_upSceneChange			(nullptr)
+, m_upMovieScene			(nullptr)
 , m_upCollisionDetection	(nullptr)
 , m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
@@ -110,6 +111,9 @@ bool CGame::Create()
 
 	//シーンチェンジのインスタンス生成
 	m_upSceneChange = std::make_unique<CSceneChange>();
+
+	//ムービーシーンのインスタンス生成
+	m_upMovieScene = std::make_unique<CMovieScene>();
 
 	//当たり判定のインスタンス生成
 	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
@@ -317,10 +321,6 @@ void CGame::Update()
 
 	case enScene::GameMain:
 
-		if (GetAsyncKeyState('T') & 0x0001) {
-			
-		}
-
 		m_pWire->Update();
 
 		//プレイヤーの動作
@@ -450,6 +450,20 @@ void CGame::Update()
 
 		//プレイヤーが地面についてからうごかしたい
 		if (m_MovieSceneCameraMoveCo >= 20 && m_upPlayer->GroundStand == true) {
+			//ボスとプレイヤーの位置を渡す
+			m_upMovieScene->SetPlayerPos(m_upPlayer->GetPosition());
+			m_upMovieScene->SetBossPos(m_upBoss->GetPosition());
+
+			//ムービーシーンをスタートさせる
+			if (m_upMovieScene->StartMovie == false) {
+				//ボスのムービーシーンスタート
+				m_upMovieScene->BossMovieSceneStart();
+			}
+			//ムービーシーンが始まったら
+			else {
+				//ムービーシーン(ボス用ムービー)の動作
+				m_upMovieScene->BossMovieSceneUpdate();
+			}
 			//ムービーシーン
 			m_upCamera->Update();
 
@@ -461,6 +475,29 @@ void CGame::Update()
 
 			//エンターキーまたはマウスで進行できる
 			if (GetAsyncKeyState(VK_RETURN) & 0x8000 || CMouseInput::GetMouseLeft(true, true)|| CMouseInput::GetMouseRight(true, true)|| CMouseInput::GetMouseWheel(true, true)) {
+				if (m_OnePush == false) {
+					//シーンのセットが完了したら
+					if (m_upMovieScene->SceneSetComp == true) {
+						//シーンチェンジが始まっていないなら
+						if (m_upSceneChange->SceneChangeStart == false) {
+							//シーンチェンジ
+							m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 80, 10, false);
+						}					
+					}
+					else {
+						//次のシーンに
+						m_upMovieScene->NextMessage();
+					}
+				}
+
+				m_OnePush = true;
+			}
+			else {
+				m_OnePush = false;
+			}
+
+			//画面を覆ったらボス戦へ
+			if (m_upSceneChange->SceneSetComp) {
 				//ボスバトルに移行
 				m_Scene = enScene::BossBattle;
 
@@ -791,6 +828,11 @@ void CGame::Draw()
 			if (m_upBullet[i] != nullptr) {
 				m_upBullet[i]->Draw(m_upCamera);
 			}
+		}
+
+		//ムービーシーン中の時だけ描画
+		if (m_upMovieScene->StartMovie == true) {
+			m_upMovieScene->Draw(m_upCamera);
 		}
 
 		//プレイヤーのハートを描画する

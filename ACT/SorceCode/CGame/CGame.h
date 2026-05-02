@@ -8,6 +8,7 @@
 #include "CGame/CTitleImage/CTitleImage.h"					//タイトルイメージクラス
 #include "CGame/CClearImage/CClearImage.h"					//クリアイメージクラス
 #include "CGame/CSceneChange/CSceneChange.h"				//シーンチェンジクラス
+#include "CGame/CMovieScene/CMovieScene.h"					//ムービーシーン動作クラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
 //----------------------------------------------------------
 #include "CGame/Factory/CEnemyFactory/CEnemyFactory.h"		//エネミーを作るクラス
@@ -152,8 +153,11 @@ private:
 	//----------------------クリアイメージ------------------
 	std::unique_ptr< CClearImage> m_upClearImage;
 
-	//----------------------シーンチェンジクラス------------
+	//----------------------シーンチェンジクラス-------------
 	std::unique_ptr<CSceneChange> m_upSceneChange;
+
+	//----------------------ムービーシーンクラス-------------
+	std::unique_ptr<CMovieScene> m_upMovieScene;
 	
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス

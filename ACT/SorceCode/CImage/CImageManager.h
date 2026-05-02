@@ -34,6 +34,8 @@ public:
 		IMG_Effect,			//エフェクト
 		IMG_Slash,			//斬撃
 		IMG_DeadEffect,		//死んだときのエフェクト(エネミー)
+		IMG_Emoji,			//絵文字
+		IMG_SpeechBubble,	//吹き出し
 
 		IMG_Clear,			//クリア
 

@@ -39,6 +39,8 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
 		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"Slash"} ,
 		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
+		{enImgList::IMG_Emoji	,"Data\\Image\\Emoji.bmp"		,"Emoji"} ,
+		{enImgList::IMG_SpeechBubble	,"Data\\Image\\SpeechBubble.bmp"		,"SpeechBubble"} ,
 
 		{enImgList::IMG_Clear	,"Data\\Image\\Clear.bmp"		,"Clear"} ,
 
