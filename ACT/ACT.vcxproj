@@ -148,6 +148,7 @@
     <ClCompile Include="SorceCode\CGame\CMovieScene\CMovieScene.cpp" />
     <ClCompile Include="SorceCode\CGame\CSceneChange\CSceneChange.cpp" />
     <ClCompile Include="SorceCode\CGame\CTitleImage\CTitleImage.cpp" />
+    <ClCompile Include="SorceCode\CGame\CWirePointSet\CWirePointSet.cpp" />
     <ClCompile Include="SorceCode\CGame\Factory\CBossFactory\CBossFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="SorceCode\CGame\CMovieScene\CMovieScene.h" />
     <ClInclude Include="SorceCode\CGame\CSceneChange\CSceneChange.h" />
     <ClInclude Include="SorceCode\CGame\CTitleImage\CTitleImage.h" />
+    <ClInclude Include="SorceCode\CGame\CWirePointSet\CWirePointSet.h" />
     <ClInclude Include="SorceCode\CGame\Factory\CBossFactory\CBossFactory.h" />
     <ClInclude Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGameObject\CCharacter\CWirepoint\CWirepoint.h" />
@@ -221,8 +223,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Stage_01_Enemies.json" />
+    <None Include="Stage_01_WirePoints.json" />
     <None Include="Stage_02_Enemies.json" />
+    <None Include="Stage_02_WirePoints.json" />
     <None Include="Stage_Boss_Enemies.json" />
+    <None Include="Stage_Boss_WirePoints.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

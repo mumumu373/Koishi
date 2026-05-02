@@ -20,7 +20,9 @@
 #include "CGameObject/CCharacter/CBoss/CBoss.h"				//ボスクラス
 #include "CGameObject/CBullet/CBullet.h"					//バレットクラス
 
-#include "CEnemySet/CEnemySet.h"
+#include "CEnemySet/CEnemySet.h"							//エネミーセットクラス
+#include "CWirePointSet/CWirePointSet.h"					//ワイヤーポイントセットクラス
+
 #include "CGameObject/CStage/CStageManager/CStageManager.h"		//ステージクラス
 
 #include "CMouseInput//CMouseInput.h"//マウス入力クラス
@@ -130,6 +132,8 @@ private:
 	void DeleteInstance_Bullet();
 	//エネミーのインスタンスを強制削除
 	void DeleteInstance_Enemy();
+	//ワイヤーポイントのインスタンスを強制削除
+	void DeleteInstance_WirePoint();
 
 	//当たり判定をまとめる関数
 	void CollisionUpdate();
@@ -179,7 +183,7 @@ private:
 	//----------------------プレイヤー-------------------
 	std::unique_ptr<CPlayer> m_upPlayer; 
 	std::unique_ptr<CWire >m_pWire;
-	std::vector<std::unique_ptr<CWirepoint>> m_pCWirepoint;
+	std::vector<std::unique_ptr<CWirepoint>> m_upCWirepoint;
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく

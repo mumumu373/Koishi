@@ -149,6 +149,8 @@
     <ClCompile Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\Factory\CEnemyFactory\CEnemyFactory.cpp" />
     <ClCompile Include="SorceCode\CGame\CClearImage\CClearImage.cpp" />
+    <ClCompile Include="SorceCode\CGame\CMovieScene\CMovieScene.cpp" />
+    <ClCompile Include="SorceCode\CGame\CWirePointSet\CWirePointSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SorceCode\Global.h">
@@ -240,10 +242,15 @@
     <ClInclude Include="SorceCode\CGame\Factory\CBulletFactory\CBulletFactory.h" />
     <ClInclude Include="SorceCode\CGame\Factory\CEnemyFactory\CEnemyFactory.h" />
     <ClInclude Include="SorceCode\CGame\CClearImage\CClearImage.h" />
+    <ClInclude Include="SorceCode\CGame\CMovieScene\CMovieScene.h" />
+    <ClInclude Include="SorceCode\CGame\CWirePointSet\CWirePointSet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Stage_01_Enemies.json" />
     <None Include="Stage_02_Enemies.json" />
     <None Include="Stage_Boss_Enemies.json" />
+    <None Include="Stage_01_WirePoints.json" />
+    <None Include="Stage_02_WirePoints.json" />
+    <None Include="Stage_Boss_WirePoints.json" />
   </ItemGroup>
 </Project>

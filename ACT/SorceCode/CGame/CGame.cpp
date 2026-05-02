@@ -56,8 +56,8 @@ CGame::CGame(GameWindow* pGameWnd)
 	for (int i = 0; i < m_upBullet.size(); i++) {
 		m_upBullet[i] = nullptr;
 	}
-	for (int i = 0; i < m_pCWirepoint.size(); i++) {
-		m_pCWirepoint[i] = nullptr;
+	for (int i = 0; i < m_upCWirepoint.size(); i++) {
+		m_upCWirepoint[i] = nullptr;
 	}
 }
 
@@ -159,14 +159,6 @@ bool CGame::Create()
 	//初期設定
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
 
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 300, 800 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 600, 700 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 600 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 1500, 800 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 2000, 600 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 2500, 400 }));
-
-
 	Nega =std::make_unique<NEGA>(); 
 	m_upWireActionSupporter = std::make_unique<CWireActionSupporter>();
 
@@ -198,7 +190,7 @@ void CGame::Destroy()
 	//----------------------プレイヤー-------------------
 	m_upPlayer.reset();
 	m_pWire.reset();
-	m_pCWirepoint.clear();
+	m_upCWirepoint.clear();
 
 	//----------------------エネミー---------------------
 	m_upEnemy.clear();
@@ -321,6 +313,8 @@ void CGame::Update()
 
 			//ステージ1のエネミーをセットする
 			CEnemySet::LoadEnemies_Stage1(m_upEnemy);
+			//ワイヤーポイント
+			CWirePointSet::LoadWirePoints_Stage1(m_upCWirepoint);
 
 			//プレイヤーを初期化
 			m_upPlayer->Initialization();
@@ -385,9 +379,9 @@ void CGame::Update()
 			}
 		}
 
-		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			if (m_pCWirepoint[i] != nullptr) {
-				m_pCWirepoint[i]->Update();
+		for (int i = 0; i < m_upCWirepoint.size(); i++) {
+			if (m_upCWirepoint[i] != nullptr) {
+				m_upCWirepoint[i]->Update();
 			}
 		}
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
@@ -440,12 +434,15 @@ void CGame::Update()
 				//ステージ切り替え時のプレイヤーの配置
 				m_upPlayer->SetStagePos({ 100,200 });
 
-				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				//現在存在するバレットとエネミーとワイヤーポイントのインスタンスをすべて空ける
 				DeleteInstance_Bullet();
 				DeleteInstance_Enemy();
+				DeleteInstance_WirePoint();
 
 				//ステージ2の時のエネミーを配置する
 				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage2(m_upCWirepoint);
 
 				//プレイヤーがいるところを更新
 				m_PlayerInStage = enInMap::Map02;
@@ -538,12 +535,15 @@ void CGame::Update()
 				//ボス用のステージに変更する
 				m_upStageManager->ChangeStage(CStageManager::enStage::MapBoss);
 
-				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				//現在存在するバレットとエネミーとワイヤーポイントのインスタンスをすべて空ける
 				DeleteInstance_Bullet();
 				DeleteInstance_Enemy();
+				DeleteInstance_WirePoint();
 
 				//ボスの時のエネミーを配置する
 				CEnemySet::LoadEnemies_Boss(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Boss(m_upCWirepoint);
 
 				//プレイヤーがいるところを更新
 				m_PlayerInStage = enInMap::MapBoss;
@@ -656,8 +656,8 @@ void CGame::Update()
 		}
 
 		//ワイヤーポイントの動作
-		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			m_pCWirepoint[i]->Update();
+		for (int i = 0; i < m_upCWirepoint.size(); i++) {
+			m_upCWirepoint[i]->Update();
 		}
 		//ワイヤーのアクションの動作?
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
@@ -712,7 +712,7 @@ void CGame::Update()
 		if (m_upPlayer->m_State == CPlayer::enState::Dead) {
 			if (m_upSceneChange->SceneChangeStart == false) {
 				//フェード開始
-				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 5, 60, false);
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 2, 60, false);
 			}
 		}
 
@@ -720,9 +720,10 @@ void CGame::Update()
 		if (m_upSceneChange->SceneSetComp == true) {
 			//復活処理
 
-			//現在存在するバレットとエネミーのインスタンスをすべて空ける
+			//現在存在するバレットとエネミーとワイヤーポイントのインスタンスをすべて空ける
 			DeleteInstance_Bullet();
 			DeleteInstance_Enemy();
+			DeleteInstance_WirePoint();
 
 			//プレイヤーの初期化
 			m_upPlayer->HaveInstanceDelete();	//ハートなどの持っているインスタンスを削除
@@ -737,6 +738,8 @@ void CGame::Update()
 
 				//ステージ1のエネミーをセットする
 				CEnemySet::LoadEnemies_Stage1(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage1(m_upCWirepoint);
 				break;
 			case enInMap::Map02:
 				//ステージ2の最初からプレイヤーを配置する
@@ -744,6 +747,8 @@ void CGame::Update()
 
 				//ステージ2の時のエネミーを配置する
 				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage2(m_upCWirepoint);
 				break;
 			case enInMap::MapBoss:
 				//ステージ2に戻すようにする
@@ -762,6 +767,8 @@ void CGame::Update()
 
 				//ステージ2の時のエネミーを配置する
 				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage2(m_upCWirepoint);
 
 				//ボスサウンドの初期化
 				InitializeBossSound();
@@ -916,8 +923,8 @@ void CGame::Draw()
 			m_upMovieScene->Draw(m_upCamera);
 		}
 
-		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			m_pCWirepoint[i]->Draw(m_upCamera);
+		for (int i = 0; i < m_upCWirepoint.size(); i++) {
+			m_upCWirepoint[i]->Draw(m_upCamera);
 		}
 
 		//プレイヤーのハートを描画する
@@ -1158,12 +1165,29 @@ void CGame::DeleteInstance_Enemy()
 	}
 }
 
+void CGame::DeleteInstance_WirePoint()
+{
+	//すべてのワイヤーポイントのインスタンスを削除
+	//インスタンスがあるワイヤーポイントのメモリを空ける
+	for (int i = 0; i < m_upCWirepoint.size(); i++) {
+		if (m_upCWirepoint[i] != nullptr) {
+			m_upCWirepoint.erase(
+				std::remove_if(m_upCWirepoint.begin(), m_upCWirepoint.end(),
+					[](const std::unique_ptr<CWirepoint>& upCWirepoint) {
+						return upCWirepoint != nullptr;
+					}),
+				m_upCWirepoint.end()
+			);
+		}
+	}
+}
+
 void CGame::CollisionUpdate()
 {
 	//マウスとエネミーの当たり判定処理
 	m_upCollisionDetection->MouseToEnemyCollision(m_upEnemy, m_upCamera);
 	//マウスとワイヤーポイント
-	m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
+	m_upCollisionDetection->MouseToWirePoint(m_upCWirepoint, m_upCamera);
 
 	//プレイヤーとエネミーの当たり判定処理
 	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
@@ -1175,7 +1199,7 @@ void CGame::CollisionUpdate()
 	m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
 
 	//ワイヤーとワイヤーポイントの当たり判定処理
-	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
+	m_upCollisionDetection->WireToWirepointCollision(m_upCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
 	//プレイヤーのアタックとエネミーの当たり判定
 	m_upCollisionDetection->PlayerAttackToEnemyCollision(m_upPlayer->GetNormalAttack_p(), m_upEnemy);
