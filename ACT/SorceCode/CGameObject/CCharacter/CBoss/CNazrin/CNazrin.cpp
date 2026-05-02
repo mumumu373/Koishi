@@ -18,7 +18,7 @@ CNazrin::~CNazrin()
 void CNazrin::StartSetting()
 {
 	//見えないように
-	m_Position = { -200,-200 };
+	m_Position = { -400,-400 };
 
 	//デフォルトにしておく
 	m_Color = enColor::NoColor;
@@ -33,9 +33,8 @@ void CNazrin::StartSetting()
 	//スタンバイ中
 	m_AttackMove = enAttackMove::Standby;
 
-	//HPをセット
-	MAX_HP = 50;
-	HP = MAX_HP;
+	//フェーズ1のHPをセット
+	HP = Phase1_Max_HP;
 
 	//元画像サイズ
 	m_FrameSize = { 64,64 };

@@ -497,7 +497,7 @@ void CGame::Update()
 			}
 
 			//画面を覆ったらボス戦へ
-			if (m_upSceneChange->SceneSetComp) {
+			if (m_upSceneChange->SceneSetComp == true) {
 				//ボスバトルに移行
 				m_Scene = enScene::BossBattle;
 

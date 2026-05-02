@@ -108,7 +108,7 @@ void CPlayer::StartSetting()
 	m_Position = { 50,50 };
 
 	//é¿ç€ÇÃìñÇΩÇËîªíË
-	m_RealFrameSplit = { 88,88 };
+	m_RealFrameSplit = { 80,80 };
 
 	m_OldPosition = m_Position;
 
@@ -214,18 +214,6 @@ void CPlayer::Draw(std::unique_ptr<CCamera>& pCamera)
 	if (m_upHeart->ChangeHeartEnd == false) {
 		m_upHeart->HeartChangeDraw(pCamera, { GetPosition().x,GetPosition().y + 10 });
 	}
-
-	VECTOR2_f offsetPos = { 40.f,40.f };
-
-	RECT rect;
-	rect.left = DispPos.x + offsetPos.x;
-	rect.top = DispPos.y + offsetPos.y;
-	rect.right = DispPos.x + PlayerCollisionW + offsetPos.x;
-	rect.bottom = DispPos.y + PlayerCollisionH + offsetPos.y	;
-
-	CStageCollisionDraw::GetInstance()->CollisionDraw(rect);
-
-	std::cout << HP << std::endl;
 }
 
 void CPlayer::WireEnd(VECTOR2_f Spead)
