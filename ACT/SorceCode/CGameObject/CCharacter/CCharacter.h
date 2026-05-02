@@ -3,6 +3,7 @@
 #include "CGame/Factory/CBulletFactory/CBulletFactory.h"	//バレットを作るクラス
 #include "CGameObject/CStage/CStageCollisionDraw/CStageCollisionDraw.h"		//ステージとの判定描画クラス
 #include "CGameObject/CStage/CStageCollision/CStageCollision.h"	//ステージ当たり判定クラス
+#include "CSound/CSoundManager.h"								//サウンドマネージャークラス
 
 /***********************************************
 *			キャラクタークラス

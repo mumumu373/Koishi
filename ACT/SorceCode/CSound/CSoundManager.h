@@ -20,10 +20,16 @@ public:
 		BGM_Title_2,		//タイトルBGM2
 		BGM_Title_FastEnd,	//早めに終わるタイトルBGM
 
-		BGM_Stage1,			//ステージ1、2のステージBGM
+		BGM_Stage1_1,		//ステージ1、2のステージBGM
+		BGM_Stage1_2,		//ステージ1の2個目
 
-		BGM_Boss1,			//ナズーリンのBGM
+		BGM_Boss1_1,		//ナズーリンのBGM
+		BGM_Boss1_2,		//ナズーリンのBGM2個目
+
 		BGM_Boss2,			//正邪のBGM
+
+		SE_Dead,			//プレイヤーがやられた時
+		SE_Clear,			//クリアした時
 
 		//音が増えたら「ここ」に追加
 		SingleSound_MAX,						//最大数
@@ -107,10 +113,15 @@ public:
 		CSoundManager::GetInstance()->m_pSound_BGM[list]->Stop();
 	}
 	//音が止まっているならを返す
-	static bool SingleSoundIsStopped(enSingleSoundList List)
+	static bool SingleSoundIsStopped(enSingleSoundList list)
 	{
 		//曲が止まっているなら
-		return CSoundManager::GetInstance()->m_pSound_BGM[List]->IsStopped();
+		return CSoundManager::GetInstance()->m_pSound_BGM[list]->IsStopped();
+	}
+	//曲の最初から再生する
+	static void SingleSoundSeekToStart(enSingleSoundList list)
+	{
+		CSoundManager::GetInstance()->m_pSound_BGM[list]->SeekToStart();
 	}
 	//すべての音を止める
 	static void AllSoundStopped()

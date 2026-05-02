@@ -105,9 +105,19 @@ public:
 	HWND GetWnd() const { return m_pGameWnd->hWnd; }
 
 private:
+	//タイトルサウンド初期化
+	void InitializeTitleSound();
+	//ステージメインサウンドの初期化
+	void InitializeStageMainSound();
+	//ボスサウンドの初期化
+	void InitializeBossSound();
 
 	//タイトルサウンド処理
 	void TitleSoundUpdate();
+	//ステージメインの処理
+	void StageMainSoundUpdate();
+	//ボスサウンドの処理
+	void BossSoundUpdate();
 
 	//インスタンスを破棄する関数
 	void DeleteInstance();
@@ -203,9 +213,18 @@ private:
 	int m_ClearCo;			//ゲームをクリアした時の遷移の時間を図る
 
 	//サウンド関連の制御
+	//タイトル
 	bool TitleStartSound;		//タイトルのBGMが始まったか
 	int TitleStartSoundCo;		//タイトルのBGMの流した時間を計測
 
 	bool TitleBGMSwitch;		//タイトルのBGMをもう一つのBGMに切り替え
 	int TitleBGMSwitchCo;		//タイトルのBGMを切り替える時をカウント
+
+	//ステージ
+	bool StageBGMSwitch;		//ステージのBGMをもう一つのBGMに切り替え
+	int StageBGMSwitchCo;		//ステージのBGMを切り替える時をカウント
+
+	//ボス
+	bool BossBGMSwitch;		//ボスのBGMをもう一つのBGMに切り替え
+	int BossBGMSwitchCo;		//ボスのBGMを切り替える時をカウント
 };

@@ -34,7 +34,7 @@ public:
 	static constexpr int NoHitAttackTime = 120;	//攻撃があたらない時間
 	static constexpr int m_HitBackCoPware = 25;//ノックバックパワー
 
-	static constexpr double DeathSpeed = 20;//死亡時の上に飛ぶ速度
+	static constexpr double DeathSpeed = 30;//死亡時の上に飛ぶ速度
 	//static constexpr double DeathRotationSpeed = 0.5;//死亡時の回転速度
 	static constexpr double DeathRotationSpeed = 25;//死亡時の回転速度
 	static constexpr double DeathRotationSpeedMAX = 2000;//死亡時の回転速度の最大値

@@ -395,12 +395,18 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		m_WireShot = false;
 		Sleep(m_DeathStop);
 		m_DeathStop = 0;
+
+		//死亡したとき、SEがながれていないなら
+		if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::SE_Dead) == true) {
+			//何回も回るので対策している
+			CSoundManager::Play(CSoundManager::enSingleSoundList::SE_Dead, true);
+		}
 		//最大落下速度
 		if (m_JumpAcc > MAX_FALLING_SPEED) {
 			m_Position.y = MAX_FALLING_SPEED;
 		}
 		else {
-				m_JumpAcc -= PlayerGrobtyi;
+			m_JumpAcc -= PlayerGrobtyi;
 
 			m_Position.y -= m_JumpAcc;
 		}
@@ -864,7 +870,7 @@ void CPlayer::GetApple(VECTOR2_f Centerpos)
 		ClearGame = true;
 		{
 			//**音	クリア
-
+			CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_Clear);
 
 			enActionState = enActionState::None;
 			m_MoveState = enMoveState::Wait;
@@ -1295,7 +1301,7 @@ void CPlayer::Death()
 			m_JumpAcc = DeathSpeed;
 			m_DeathRotation = 0;
 			m_Delection.z = 0;
-			m_DeathStop = 700;
+			m_DeathStop =1400;
 		}
 	}
 

@@ -78,10 +78,16 @@ bool CSoundManager::Load(HWND hWnd)
 		{enSingleSoundList::BGM_Title_2,"Data\\Sound\\BGM\\BGM_Title.mp3", "BGM_Title_2",},
 		{enSingleSoundList::BGM_Title_FastEnd,"Data\\Sound\\BGM\\BGM_Title_FastEnd.mp3", "BGM_Title_FastEnd",},
 
-		{enSingleSoundList::BGM_Stage1,"Data\\Sound\\BGM\\BGM_Stage1.mp3", "BGM_Stage1",},
+		{enSingleSoundList::BGM_Stage1_1,"Data\\Sound\\BGM\\BGM_Stage1.mp3", "BGM_Stage1_1",},
+		{enSingleSoundList::BGM_Stage1_2,"Data\\Sound\\BGM\\BGM_Stage1.mp3", "BGM_Stage1_2",},
 
-		{enSingleSoundList::BGM_Boss1,"Data\\Sound\\BGM\\BGM_Boss1.mp3", "BGM_Boss1",},
+		{enSingleSoundList::BGM_Boss1_1,"Data\\Sound\\BGM\\BGM_Boss1.mp3", "BGM_Boss1_1",},
+		{enSingleSoundList::BGM_Boss1_2,"Data\\Sound\\BGM\\BGM_Boss1.mp3", "BGM_Boss1_2",},
+
 		{enSingleSoundList::BGM_Boss2,"Data\\Sound\\BGM\\BGM_Boss2.mp3", "BGM_Boss2",},
+
+		{enSingleSoundList::SE_Dead,"Data\\Sound\\SE\\SE_Dead.mp3", "SE_Dead",},
+		{enSingleSoundList::SE_Clear,"Data\\Sound\\SE\\SE_Clear.mp3", "SE_Clear",},
 	};
 
 	//配列の最大要素数を算出(配列全体のサイズ/配列１つ分のサイズ)
