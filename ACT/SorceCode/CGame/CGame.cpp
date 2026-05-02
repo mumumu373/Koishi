@@ -41,6 +41,14 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_TitleSceneSet			(false)
 , m_GameStartCo				(0)
 , m_ClearCo					(0)
+, TitleStartSound			(false)
+, TitleStartSoundCo			(0)
+, TitleBGMSwitch			(false)
+, TitleBGMSwitchCo			(0)
+, StageBGMSwitch			(false)
+, StageBGMSwitchCo			(0)
+, BossBGMSwitch				(false)
+, BossBGMSwitchCo			(0)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -237,8 +245,6 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
-
 	//仮置き
 	CMouseInput::Update();
 
@@ -246,6 +252,9 @@ void CGame::Update()
 
 	switch (m_Scene) {
 	case enScene::Title:
+
+		//タイトルサウンドの動作
+		TitleSoundUpdate();
 
 		MoveCursor();
 
@@ -288,6 +297,11 @@ void CGame::Update()
 
 						//タイトルシーンのアップデートをするときの準備
 						m_upPlayer->TitleSceneSet();
+
+						//BGM1をストップ
+						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_1);
+						//BGM2をストップ
+						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_2);
 					}
 				}
 
@@ -314,12 +328,22 @@ void CGame::Update()
 			//ステージでのプレイヤーの配置
 			m_upPlayer->SetStagePos({ 100, 500 });
 
+			//タイトルサウンドの変数を初期化
+			InitializeTitleSound();
+			//曲のはじめから流すように
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_TitleStart);
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Title_1);
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Title_2);
+
 			//タイトルシーンの動作を完了
 			m_TitleSceneSet = false;
 		}
 		break;
 
 	case enScene::GameMain:
+
+		//ステージサウンドの動作
+		StageMainSoundUpdate();
 
 		m_pWire->Update();
 
@@ -370,9 +394,6 @@ void CGame::Update()
 
 		//当たり判定をまとめた関数
 		CollisionUpdate();
-
-
-
 
 		//ステージの更新
 		m_upStageManager->Update();
@@ -441,6 +462,9 @@ void CGame::Update()
 
 		break;
 	case enScene::Movie:
+		//ステージサウンドの動作
+		StageMainSoundUpdate();
+
 		m_upWireActionSupporter->WireEnd();
 		//ワイヤーの動作
 		m_pWire->Update();
@@ -485,6 +509,11 @@ void CGame::Update()
 						if (m_upSceneChange->SceneChangeStart == false) {
 							//シーンチェンジ
 							m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 80, 10, false);
+
+							//ステージBGM1をストップ
+							CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+							//ステージBGM2をストップ
+							CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_2);						
 						}					
 					}
 					else {
@@ -526,6 +555,13 @@ void CGame::Update()
 				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
 				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
 				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
+
+				//ステージメインのサウンド変数初期化
+				InitializeStageMainSound();
+
+				//曲のはじめから流すように
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_2);
 			}
 		}
 		else {
@@ -533,6 +569,11 @@ void CGame::Update()
 		}
 		break;
 	case enScene::BossBattle:
+		//ボスが死亡したときの演出入っていないなら
+		if (m_upBoss->BossDeadEffect == false) {
+			//ボスのサウンド動作
+			BossSoundUpdate();
+		}
 
 		//カメラの動作
 		m_upCamera->Update();
@@ -573,12 +614,16 @@ void CGame::Update()
 				if (m_upSceneChange->SceneChangeStart == false) {
 					if (m_upBoss->BossDeadEffect == false) {
 						//ピカっと光るようにする
-						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeFinish, 30, 10, true);
+						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeFinish, 20, 10, true);
 
 						//ボスが死亡したときの演出入りました
 						m_upBoss->BossDeadEffect = true;
 
-						m_upCamera->SnakeCamera(30, 30);
+						m_upCamera->SnakeCamera(50, 50);
+
+						//曲を止める
+						CSoundManager::Stop(CSoundManager::BGM_Boss1_1);
+						CSoundManager::Stop(CSoundManager::BGM_Boss1_2);
 					}
 				}
 			}
@@ -635,6 +680,12 @@ void CGame::Update()
 					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 4, 60, false);
 					//次の入力があるまで黒画面で待機するようにする
 					m_upSceneChange->StopScene(true);
+
+					//ボスサウンドの初期化
+					InitializeBossSound();
+					//曲のはじめから流すように
+					CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_1);
+					CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_2);
 				}
 			}
 			else {
@@ -661,7 +712,7 @@ void CGame::Update()
 		if (m_upPlayer->m_State == CPlayer::enState::Dead) {
 			if (m_upSceneChange->SceneChangeStart == false) {
 				//フェード開始
-				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 20, 60, false);
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 5, 60, false);
 			}
 		}
 
@@ -711,11 +762,24 @@ void CGame::Update()
 
 				//ステージ2の時のエネミーを配置する
 				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+
+				//ボスサウンドの初期化
+				InitializeBossSound();
+				//曲のはじめから流すように
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_1);
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_2);
 				break;
 			}
 
 			//ムービーシーンの初期化
 			m_upMovieScene->StartSetting();
+
+			//ステージサウンドの変数初期化
+			InitializeStageMainSound();
+
+			//曲のはじめから流すように
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_2);
 
 			//ボスバトルには入らないのでメインでOK
 			m_Scene = enScene::GameMain;
@@ -766,6 +830,15 @@ void CGame::Update()
 	if (m_upPlayer->m_State == CPlayer::enState::Dying) {
 		//プレイヤーが倒された動作をする
 		m_Scene = enScene::PlayerDeath;
+
+		//ステージBGM1をストップ
+		CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+		//ステージBGM2をストップ
+		CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_2);
+
+		//曲を止める
+		CSoundManager::Stop(CSoundManager::BGM_Boss1_1);
+		CSoundManager::Stop(CSoundManager::BGM_Boss1_2);
 	}
 
 	//インスタンスを破棄する関数
@@ -843,12 +916,12 @@ void CGame::Draw()
 			m_upMovieScene->Draw(m_upCamera);
 		}
 
-		//プレイヤーのハートを描画する
-		m_upPlayer->PlayerHeartDraw();
-
 		for (int i = 0; i < m_pCWirepoint.size(); i++) {
 			m_pCWirepoint[i]->Draw(m_upCamera);
 		}
+
+		//プレイヤーのハートを描画する
+		m_upPlayer->PlayerHeartDraw();
 		if (CMouseInput::GetMouseLeft(true, false)) {
 			//
 			//Nega->Draw(m_pGameWnd->hScreenDC);
@@ -867,6 +940,137 @@ void CGame::Draw()
 	//クリアシーンだけ映す
 	if (m_Scene == enScene::Clear) {
 		m_upClearImage->Draw();
+	}
+}
+
+void CGame::InitializeTitleSound()
+{
+	//初期化
+	TitleStartSound = false;
+	TitleStartSoundCo = 0;
+
+	TitleBGMSwitch = false;
+	TitleBGMSwitchCo = 0;
+}
+
+void CGame::InitializeStageMainSound()
+{
+	//初期化
+	StageBGMSwitch = false;
+	StageBGMSwitchCo = 0;
+}
+
+void CGame::InitializeBossSound()
+{
+	//初期化
+	BossBGMSwitch = false;
+	BossBGMSwitchCo = 0;
+}
+
+void CGame::TitleSoundUpdate()
+{
+	//タイトルのBGMの開始BGMを流していないなら
+	if (TitleStartSound == false) {
+		CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_TitleStart, true);
+
+		TitleStartSound = true;
+
+		TitleStartSoundCo = 0;
+	}
+	else {
+		//規定のフレームになったら
+		if (TitleStartSoundCo >= 120) {
+			//BGMをループして、最初から流したなら
+			if (TitleBGMSwitchCo <= 0) {
+				//1度目
+				if (TitleBGMSwitch == false) {
+					//BGM1を再生	
+					CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
+
+					//タイトルBGM1を流したので次は2を流す
+					TitleBGMSwitch = true;
+				}
+				//2度目	以降繰り返し
+				else if (TitleBGMSwitch == true) {
+					//BGM2を再生
+					CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
+
+					//タイトルBGM1を流したので次は2を流す
+					TitleBGMSwitch = false;
+				}
+
+				//ループするタイミングをセット
+				TitleBGMSwitchCo = 60 * 15 + 38;
+			}
+			else {
+				//最初に通ってから次のやつを流すようにしたいので--
+				TitleBGMSwitchCo--;
+			}
+		}
+		else {
+			//タイトルカウント
+			TitleStartSoundCo++;
+		}
+	}
+}
+
+void CGame::StageMainSoundUpdate()
+{
+	//BGMをループして、最初から流したなら
+	if (StageBGMSwitchCo <= 0) {
+		//1度目
+		if (StageBGMSwitch == false) {
+			//BGM1を再生	
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Stage1_1, true);
+
+			//ステージBGM1を流したので次は2を流す
+			StageBGMSwitch = true;
+		}
+		//2度目	以降繰り返し
+		else if (StageBGMSwitch == true) {
+			//ステージBGM2を再生
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Stage1_2, true);
+
+			//タイトルBGM1を流したので次は2を流す
+			StageBGMSwitch = false;
+		}
+
+		//ループするタイミングをセット
+		StageBGMSwitchCo = 60 * 111 - 40;
+	}
+	else {
+		//最初に通ってから次のやつを流すようにしたいので--
+		StageBGMSwitchCo--;
+	}
+}
+
+void CGame::BossSoundUpdate()
+{
+	//BGMをループして、最初から流したなら
+	if (BossBGMSwitchCo <= 0) {
+		//1度目
+		if (BossBGMSwitch == false) {
+			//ボスBGM1を再生	
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_1, true);
+
+			//ステージBGM1を流したので次は2を流す
+			BossBGMSwitch = true;
+		}
+		//2度目	以降繰り返し
+		else if (BossBGMSwitch == true) {
+			//ボスBGM2を再生
+			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_2, true);
+
+			//タイトルBGM1を流したので次は2を流す
+			BossBGMSwitch = false;
+		}
+
+		//ループするタイミングをセット
+		BossBGMSwitchCo = 60 * 39;
+	}
+	else {
+		//最初に通ってから次のやつを流すようにしたいので--
+		BossBGMSwitchCo--;
 	}
 }
 

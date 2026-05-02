@@ -119,6 +119,9 @@ void CNazrin::StartSetting()
 	BossDeadEffect = false;
 	//死亡アニメーション初期化
 	m_DeadAnimCo = 0;
+
+	//不透明に
+	m_Alpha = 255;
 }
 
 void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
