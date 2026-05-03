@@ -37,9 +37,93 @@
       "JumpTime": 40
     },
     {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 14000,
+        "y": 500
+      },
+      "Color": 3,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10500,
+        "y": 500
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10600,
+        "y": 500
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10600,
+        "y": 500
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 13580,
+        "y": 500
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 13380,
+        "y": 500
+      },
+      "Color": 3,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 13480,
+        "y": 500
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
       "Type": "Fairy",
       "Pos": {
-        "x": 9000,
+        "x": 15000,
         "y": 600
       },
       "Color": 4,
@@ -51,13 +135,32 @@
       "MoveOption2": 80
     },
     {
-      "Type": "YinYangBall",
+      "Type": "Fairy",
       "Pos": {
-        "x": 9000,
-        "y": 300
+        "x": 15500,
+        "y": 500
       },
       "Color": 3,
-      "Size": 300
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 8,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 16500,
+        "y": 500
+      },
+      "Color": 1,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 8,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
     }
   ]
 }
