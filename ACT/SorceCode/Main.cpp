@@ -29,7 +29,7 @@ int WINAPI WinMain(
 	if (hConsole != NULL)
 	{
 		SetWindowPos(hConsole, NULL,
-			1280, 0,      // X, Y ç¿ïW
+			0, 0,      // X, Y ç¿ïW
 			600, 400,  // ïù, çÇÇ≥
 			SWP_NOZORDER);
 	}

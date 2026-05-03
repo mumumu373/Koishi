@@ -3,7 +3,31 @@
     {
       "Type": "Kedama",
       "Pos": {
-        "x": 400,
+        "x": 1500,
+        "y": 400
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 6000,
+        "y": 400
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 6300,
         "y": 400
       },
       "Color": 1,
@@ -15,7 +39,7 @@
     {
       "Type": "Fairy",
       "Pos": {
-        "x": 800,
+        "x": 9000,
         "y": 600
       },
       "Color": 4,
@@ -29,7 +53,7 @@
     {
       "Type": "YinYangBall",
       "Pos": {
-        "x": 1900,
+        "x": 9000,
         "y": 300
       },
       "Color": 3,
