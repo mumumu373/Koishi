@@ -1095,7 +1095,7 @@ void CGame::BossSoundUpdate()
 		}
 
 		//ループするタイミングをセット
-		BossBGMSwitchCo = 60 * 39;
+		BossBGMSwitchCo = 60 * 38;
 	}
 	else {
 		//最初に通ってから次のやつを流すようにしたいので--
