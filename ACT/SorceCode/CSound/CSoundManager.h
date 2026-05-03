@@ -53,6 +53,8 @@ public:
 
 		SE_AvoidancePlayer,	//プレイヤーの回避音
 
+		SE_BulletShot,		//バレットの音
+
 		//音が増えたら「ここ」に追加
 		MultiSound_MAX,		//最大数
 	};

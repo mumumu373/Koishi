@@ -56,6 +56,8 @@ bool CSoundManager::Load(HWND hWnd)
 		{enMultiSoundList::SE_EnemyThrow,"Data\\Sound\\SE\\SE_EnemyThrow.mp3", "SE_EnemyThrow",},
 
 		{enMultiSoundList::SE_AvoidancePlayer,"Data\\Sound\\SE\\SE_AvoidancePlayer.mp3", "SE_AvoidancePlayer",},
+
+		{enMultiSoundList::SE_BulletShot,"Data\\Sound\\SE\\SE_BulletShot.mp3", "SE_BulletShot",},
 	};
 
 	//配列の最大要素数を算出(配列全体のサイズ/配列１つ分のサイズ)

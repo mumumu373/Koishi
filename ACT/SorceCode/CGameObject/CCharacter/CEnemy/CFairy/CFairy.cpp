@@ -129,6 +129,9 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				m_BulletShotCo = 0;
 				//まっすぐ進むバレット
 				upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 10, 0, m_Delection.y, 64, m_ShotReleaseTime, 0, false));
+
+				//バレット効果音
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 			}
 			if (m_BulletShotCo >= m_BulletShotTiming) {
 				m_BulletShot = true;
@@ -142,6 +145,9 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				m_BulletShotCo = 0;
 				//プレイヤーを狙うバレット
 				upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 7, m_PlayerPos, 64, m_ShotReleaseTime, false));
+
+				//バレット効果音
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 			}
 			if (m_BulletShotCo >= m_BulletShotTiming) {
 				m_BulletShot = true;
@@ -160,6 +166,9 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 				//撃った回数をカウント
 				m_BulletCo++;
+
+				//バレット効果音
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 			}
 			if (m_BulletShotCo >= m_BulletShotTiming) {
 				m_BulletShot = true;
@@ -173,6 +182,9 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 				m_BulletShotCo = 0;
 				//プレイヤーを狙うバレット
 				upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 3, m_PlayerPos, 150, m_ShotReleaseTime, false));
+
+				//バレット効果音
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 			}
 			if (m_BulletShotCo >= m_BulletShotTiming) {
 				m_BulletShot = true;
@@ -191,6 +203,9 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 
 				//撃った回数をカウント
 				m_BulletCo++;
+
+				//バレット効果音
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 			}
 			if (m_BulletShotCo >= m_BulletShotTiming) {
 				m_BulletShot = true;

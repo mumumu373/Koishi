@@ -784,6 +784,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (-20 * m_HowShotBullet), -100, 80, 300, 0, false));
 					}
 					upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, -5, (-20 * m_HowShotBullet), -100, 80, 60, 0, false));
+
+					//バレット効果音
+					CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 				}
 				//2回目
 				else if (m_AttackMoveCo == 1) {
@@ -792,6 +795,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5 * i, (20 * m_HowShotBullet), -80, 80, 300, 0, false));
 					}
 					upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, -5, (20 * m_HowShotBullet), -80, 80, 60, 0, false));
+
+					//バレット効果音
+					CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 				}
 				//何発(何回)バレットを撃った動作をしたか
 				m_HowShotBullet++;
@@ -918,6 +924,9 @@ void CNazrin::BossMove_1Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 
 				//攻撃アニメーション中
 				m_AttackAnimTime = true;
+
+				//バレット効果音
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 			}
 			else {
 				m_BulletShotCo++;
@@ -993,6 +1002,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						m_AttackMoveCo++;
 						//クールタイム
 						m_BulletShotCo = 0;
+
+						//バレット効果音
+						CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 						break;
 					case 1:
 						//四隅から斜めにバレットを飛ばす
@@ -1028,6 +1040,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						m_AttackMoveCo++;
 						//クールタイム
 						m_BulletShotCo = 0;
+
+						//バレット効果音
+						CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 						break;
 					case 2:
 						//上からバレットを飛ばす
@@ -1057,6 +1072,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						m_AttackMoveCo++;
 						//クールタイム
 						m_BulletShotCo = 0;
+
+						//バレット効果音
+						CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 						break;
 					case 3:
 						//円形に回るバレットが上下からくる
@@ -1100,6 +1118,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						m_AttackMoveCo++;
 						//クールタイム
 						m_BulletShotCo = 0;
+
+						//バレット効果音
+						CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 						break;
 					case 4:
 						//円形に回るバレットが上下からくる
@@ -1143,6 +1164,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						m_AttackMoveCo++;
 						//クールタイム
 						m_BulletShotCo = 0;
+
+						//バレット効果音
+						CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 						break;
 					case 5:
 						//円形に回るバレットが上下からくる
@@ -1186,6 +1210,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 						m_AttackMoveCo++;
 						//クールタイム
 						m_BulletShotCo = 0;
+
+						//バレット効果音
+						CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 						break;
 					}
 				}
@@ -1231,7 +1258,7 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 				m_AttackMoveChangeCo++;
 			}
 		}
-		//50発撃つまで続ける
+		//4発撃つまで続ける
 		else if (m_HowShotBullet < 4) {
 			//撃つ感覚
 			if (m_BulletShotCo >= 3) {
@@ -1260,6 +1287,9 @@ void CNazrin::BossMove_2Update(int BossPhase, std::vector<std::unique_ptr<CBulle
 
 			//攻撃した回数をカウント
 			m_AttackMoveCo++;
+
+			//バレット効果音
+			CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 		}
 		break;
 	}
