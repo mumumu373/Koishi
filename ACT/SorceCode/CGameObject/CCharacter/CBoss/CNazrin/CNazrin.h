@@ -19,7 +19,7 @@ public:
 	int Phase1_Max_HP = 150;			//フェーズ1の最大HP
 	int Phase2_MAX_HP = 250;			//フェーズ2の最大HP
 
-	int BossAppears = 7;				//フェーズ2の時のボスの登場回数
+	int BossAppears = 6;				//フェーズ2の時のボスの登場回数
 public:
 	CNazrin();
 	~CNazrin();

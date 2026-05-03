@@ -1138,7 +1138,7 @@ void CPlayer::MovePlayer()
 	case enMoveState::MoveLeft:
 
 		if (m_Ldash == true) {
-			m_Acceleration.x -= m_MoveSpeed*2;
+			m_Acceleration.x -= m_MoveSpeed*1.5;
 		}
 		else {
 			m_Acceleration.x -= m_MoveSpeed;
@@ -1146,7 +1146,7 @@ void CPlayer::MovePlayer()
 		break;
 	case enMoveState::MoveRight:
 		if (m_Rdash == true) {
-			m_Acceleration.x += m_MoveSpeed *2;
+			m_Acceleration.x += m_MoveSpeed *1.5;
 		}
 		else {
 			m_Acceleration.x += m_MoveSpeed;

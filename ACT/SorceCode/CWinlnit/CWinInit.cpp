@@ -4,8 +4,8 @@
 //-------------------------------------------------
 //定数宣言
 //-------------------------------------------------
-const char APP_NAME[] = "あああああああああああああああ";		//アプリ名
-const char WND_TITLE[] = "aaaaaa";		//ウィンドウタイトル
+const char APP_NAME[] = "まかせて！お姉ちゃん！";		//アプリ名
+const char WND_TITLE[] = "まかせて！お姉ちゃん！";		//ウィンドウタイトル
 
 bool SIZEMAX = true;		//切り替えた時に画面が最大化したらtrueになる
 bool Akutyib = false;
@@ -73,9 +73,7 @@ DWORD WINAPI ThreadFunc( LPVOID vdParam )
 
 		if( progress >= 1000 )	//1秒経過.
 		{
-			wsprintf( MsgFPS, "FPS[%03d]", frames );
-			beforeTime = nowTime;	//現在の時間に更新.
-			frames = 0;
+			
 		}
 		frames++;	//フレーム数UP.
 
