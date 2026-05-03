@@ -245,12 +245,6 @@ double CPlayer::GetWireStartSpeed()
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
-	static int cnt = 0;
-	cnt++;
-	if(cnt == 10) {
-		cnt = 0;
-		std::cout << "PlayerPos:" << m_Position.x << "," << m_Position.y << std::endl;
-	}
 
 	if (m_State == enState::Living) {
 		//ƒ_ƒ[ƒW–Ñ‹Ê‚ÉG‚ê‚½‚È‚ç
