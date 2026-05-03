@@ -18,7 +18,6 @@ public:
 		BGM_TitleStart,		//タイトルBGMの最初
 		BGM_Title_1,		//タイトルBGM1
 		BGM_Title_2,		//タイトルBGM2
-		BGM_Title_FastEnd,	//早めに終わるタイトルBGM
 
 		BGM_Stage1_1,		//ステージ1、2のステージBGM
 		BGM_Stage1_2,		//ステージ1の2個目
@@ -26,8 +25,11 @@ public:
 		BGM_Boss1_1,		//ナズーリンのBGM
 		BGM_Boss1_2,		//ナズーリンのBGM2個目
 
-		BGM_Boss2,			//正邪のBGM
+		SE_Decision,		//何かを決定する音
 
+		SE_PlayerHit,		//プレイヤーがダメージを受けた
+
+		SE_BossDead,		//ボスが死んだときの音
 		SE_Dead,			//プレイヤーがやられた時
 		SE_Clear,			//クリアした時
 
@@ -38,7 +40,18 @@ public:
 	//重複させる音
 	enum enMultiSoundList
 	{
-		SE_Select,				//カーソル選択
+		SE_TitleSelect,		//タイトルセレクト時の音
+
+		SE_PlayerAttack,	//プレイヤーの攻撃音
+		SE_AttackHit,		//攻撃をした
+		SE_AttackCritkal,	//クリティカル
+		SE_Jump,			//ジャンプ
+		SE_PlayerHeart,		//プレイヤーのハートの切り替え
+
+		SE_WireCatch,		//ワイヤーで捕まえた
+		SE_EnemyThrow,		//エネミーを投げた
+
+		SE_AvoidancePlayer,	//プレイヤーの回避音
 
 		//音が増えたら「ここ」に追加
 		MultiSound_MAX,		//最大数

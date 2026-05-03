@@ -290,10 +290,14 @@ void CGame::Update()
 						//タイトルシーンのアップデートをするときの準備
 						m_upPlayer->TitleSceneSet();
 
+						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_TitleStart);
 						//BGM1をストップ
 						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_1);
 						//BGM2をストップ
 						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_2);
+
+						//決定音を鳴らす
+						CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_Decision);
 					}
 				}
 
@@ -712,7 +716,7 @@ void CGame::Update()
 		if (m_upPlayer->m_State == CPlayer::enState::Dead) {
 			if (m_upSceneChange->SceneChangeStart == false) {
 				//フェード開始
-				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 2, 60, false);
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 5, 60, false);
 			}
 		}
 
@@ -982,38 +986,41 @@ void CGame::TitleSoundUpdate()
 		TitleStartSoundCo = 0;
 	}
 	else {
-		//規定のフレームになったら
-		if (TitleStartSoundCo >= 120) {
-			//BGMをループして、最初から流したなら
-			if (TitleBGMSwitchCo <= 0) {
-				//1度目
-				if (TitleBGMSwitch == false) {
-					//BGM1を再生	
-					CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
+		//タイトルシーンがまだ開始していないなら
+		if (m_TitleSceneSet == false) {
+			//規定のフレームになったら
+			if (TitleStartSoundCo >= 120) {
+				//BGMをループして、最初から流したなら
+				if (TitleBGMSwitchCo <= 0) {
+					//1度目
+					if (TitleBGMSwitch == false) {
+						//BGM1を再生	
+						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
 
-					//タイトルBGM1を流したので次は2を流す
-					TitleBGMSwitch = true;
+						//タイトルBGM1を流したので次は2を流す
+						TitleBGMSwitch = true;
+					}
+					//2度目	以降繰り返し
+					else if (TitleBGMSwitch == true) {
+						//BGM2を再生
+						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
+
+						//タイトルBGM1を流したので次は2を流す
+						TitleBGMSwitch = false;
+					}
+
+					//ループするタイミングをセット
+					TitleBGMSwitchCo = 60 * 15 + 38;
 				}
-				//2度目	以降繰り返し
-				else if (TitleBGMSwitch == true) {
-					//BGM2を再生
-					CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
-
-					//タイトルBGM1を流したので次は2を流す
-					TitleBGMSwitch = false;
+				else {
+					//最初に通ってから次のやつを流すようにしたいので--
+					TitleBGMSwitchCo--;
 				}
-
-				//ループするタイミングをセット
-				TitleBGMSwitchCo = 60 * 15 + 38;
 			}
 			else {
-				//最初に通ってから次のやつを流すようにしたいので--
-				TitleBGMSwitchCo--;
+				//タイトルカウント
+				TitleStartSoundCo++;
 			}
-		}
-		else {
-			//タイトルカウント
-			TitleStartSoundCo++;
 		}
 	}
 }
@@ -1235,12 +1242,18 @@ void CGame::MoveCursor()
 	{
 		m_CursorAction--;
 		if (m_CursorAction < 0) m_CursorAction = m_Action.size() - 1;
+
+		//タイトルセレクト音を出す
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_TitleSelect);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x0001)
 	{
 		m_CursorAction++;
 		if (m_CursorAction >= m_Action.size()) m_CursorAction = 0;
+
+		//タイトルセレクト音を出す
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_TitleSelect);
 	}
 }
 

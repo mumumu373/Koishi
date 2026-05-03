@@ -78,6 +78,9 @@ void CEnemy::ThrowEnemyHit(int Damage, VECTOR2_f ThrowEnemyPos)
 	m_Vector = m_HitBackSpeed;
 	//ベクトルを反対方向にする
 	m_Vector.y *= -1;
+
+	//クリティカルヒット音をだす
+	CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackCritkal);
 }
 
 void CEnemy::EnemyIsDead()

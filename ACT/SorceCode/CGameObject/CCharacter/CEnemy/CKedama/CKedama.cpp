@@ -199,10 +199,16 @@ void CKedama::PlayerAttackHit(int Damage, int Color)
 		//属性が合っていたらめっちゃぶっ飛ばすように
 		m_HitBackSpeed.x *= 15;
 		m_HitBackSpeed.y *= 3;
+
+		//クリティカルヒット音をだす
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackCritkal);
 	}
 	else {
 		//HPを減らす
 		HP -= Damage;
+
+		//ヒット音をだす
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackHit);
 	}
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;

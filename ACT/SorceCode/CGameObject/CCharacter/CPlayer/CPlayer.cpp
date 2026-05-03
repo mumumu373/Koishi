@@ -50,6 +50,7 @@ void CPlayer::Initialization()
 	m_Delection.y = 180;
 	m_WallHit = false;
 	ClearGame = false;
+	m_Jumping = false;
 }
 
 
@@ -179,6 +180,8 @@ void CPlayer::Attackmove()
 		if (NormalAttack->GetAttack() == false) {
 			if (CMouseInput::GetMouseLeft(true, true)) {
 				////**音	 攻撃
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_PlayerAttack);
+
 				NormalAttack->Strat(GetDelectionVect(GetCenterPosition(), CMouseInput::GetMousePosCamera(m_pCamera)), GetCenterPosition());
 				enActionState = enActionState::Attack;
 			}
@@ -946,6 +949,8 @@ void CPlayer::CameraCollision(VECTOR2_f CameraPos, double OffsetPos_X, double Of
 		m_Position.x = CameraPos.x - (WND_W / 2) - offsetPos.x;
 		if (m_WallHit==true) {
 			HP = 0;
+			//壁に挟まれた音を出す
+			CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_PlayerHit);
 			Death();
 		}
 	}
@@ -1025,6 +1030,7 @@ void CPlayer::KyeInput()
 				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
 				//**音	回避
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AvoidancePlayer);
 			}
 		}
 		if (m_leftkey[1] == false) {
@@ -1047,6 +1053,7 @@ void CPlayer::KyeInput()
 				enActionState = enActionState::Avoidance;
 				AvoidanceCount = AvoidanceTime;
 				//**音	回避
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AvoidancePlayer);
 			}
 		}
 		if (m_rightkey[1] ==false) {
@@ -1097,6 +1104,8 @@ void CPlayer::AirKeyInput()
 		if (AvoidanceCanCount>0) {
 			if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
 				//**音	回避
+				CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AvoidancePlayer);
+
 				AvoidanceCanCount--;
 				enActionState = enActionState::AirAvoidance;
 				AirAvoidanceVECTSet();
@@ -1219,7 +1228,12 @@ void CPlayer::JumpPlayer()
 	if (m_JumpRemove == false) {
 		if (enActionState != enActionState::Avoidance) {
 			if (GetAsyncKeyState('W') & 0x8000) {
-				m_Jumping = true;	//ジャンプ中
+				if (m_Jumping == false) {
+					//**音	ジャンプ
+					CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_Jump);
+
+					m_Jumping = true;	//ジャンプ中
+				}
 
 				if (enActionState == enActionState::WireObjectCatch) {
 					m_JumpAcc = m_JumpPower/2;
@@ -1230,11 +1244,8 @@ void CPlayer::JumpPlayer()
 			
 				m_Position.y -= m_JumpAcc;
 
-
 				//押している時間を図る
 				if (m_JumpRemoveCo >= 10) {
-					//**音	ジャンプ
-
 					m_JumpRemove = true;	//強制的にジャンプボタンを離すようにする
 					m_JumpRemoveCo = 0;
 				}
@@ -1245,7 +1256,7 @@ void CPlayer::JumpPlayer()
 			//ジャンプボタンを離したなら
 			else {
 				//**音	ジャンプ
-
+				
 
 				m_JumpRemove = true;
 				m_JumpRemoveCo = 0;
@@ -1302,7 +1313,6 @@ void CPlayer::Death()
 {
 	if (HP<=0) {
 		if (m_State == enState::Living) {
-			//**音	死
 
 			m_State = enState::Dying;
 			m_JumpAcc = DeathSpeed;
@@ -1324,7 +1334,7 @@ void CPlayer::PlayerMyHit(VECTOR2_f Pos)
 		m_Acceleration.x = 10;
 	}
 	//**音	被弾（球）
-
+	CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_PlayerHit);
 
 
 	//攻撃が当たった
@@ -1351,6 +1361,7 @@ void CPlayer::SetWireTopPos(VECTOR2_f TopPos)
 void CPlayer::PlayerDamegEriaHit(int Damage)
 {
 	//**音	被弾（地面）
+	CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_PlayerHit);
 
 	m_JumpRemove = true;
 	//攻撃が当たった
@@ -1389,6 +1400,9 @@ void CPlayer::PlayerColorChange()
 
 			//攻撃の属性も変える
 			NormalAttack->SetPlayerColor(m_Color);
+
+			//属性切り替え時の音
+			CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_PlayerHeart);
 		}
 	}
 	else if (GetAsyncKeyState('E') & 0x8000) {
@@ -1406,6 +1420,9 @@ void CPlayer::PlayerColorChange()
 
 			//攻撃の属性も変える
 			NormalAttack->SetPlayerColor(m_Color);
+
+			//属性切り替え時の音
+			CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_PlayerHeart);
 		}
 	}
 	//離したら

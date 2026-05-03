@@ -33,7 +33,6 @@ void CNormalAttack::Strat(double rag,VECTOR2_f PlayerCenterPos)
 		Collision[i].y = PlayerCenterPos.y + -sin(rag) * AtakuSize*(i+1) - AtakuSize / 2;
 	}
 	Imagerag = rag * 180  / M_PI + 180;
-
 }
 
 

@@ -496,8 +496,8 @@ void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			//バナナのメモリを開放
 			m_upBanana.reset();
 
-			//演出で一瞬止める
-			Sleep(180);
+			//ボス撃破音をだす
+			CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_BossDead);
 		}
 		break;
 	case enState::Dead:
@@ -587,8 +587,14 @@ void CNazrin::PlayerAttackHit(int Damage)
 
 			//地上から離れるように
 			m_GroundStand = false;
+
+			//演出で一瞬止める
+			Sleep(180);
 		}
 	}
+
+	//ヒット音をだす
+	CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackHit);
 }
 
 void CNazrin::ThrowEnemyHit(int Damage)
