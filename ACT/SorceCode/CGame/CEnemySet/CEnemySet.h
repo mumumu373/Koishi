@@ -78,7 +78,7 @@ public:
 			MessageBoxA(NULL, "ファイルが見つかりません！", "エラー", MB_OK);
 			return;
 		}
-
+		
 		json data;
 		try {
 			file >> data;
