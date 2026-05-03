@@ -253,6 +253,9 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 
 		//属性が合っていたらめっちゃぶっ飛ばすように
 		Speed = m_HitBackSpeed.x * 5;
+
+		//クリティカルヒット音をだす
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackCritkal);
 	}
 	else {
 		//HPを減らす
@@ -260,6 +263,9 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 
 		//普通のスピード
 		Speed = m_HitBackSpeed.x;
+
+		//ヒット音をだす
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackHit);
 	}
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;

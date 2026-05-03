@@ -67,6 +67,9 @@ public:
 
 	void SetPosition(VECTOR2_f pos) { m_Position = pos; }
 
+	//透明度をセットする
+	void SetAlpha(int Alpha) { m_Alpha = Alpha; }
+
 	//エネミーを飛ばす準備
 	void SetThrowEnemy() { 
 		EnemyThrown = true; 
