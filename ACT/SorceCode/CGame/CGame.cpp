@@ -1033,28 +1033,32 @@ void CGame::SetTitleInfo()
 
 void CGame::DrawTitleImg()
 {
+	VECTOR2_f StagePos = m_upTitleImage->GetPosition();
+
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
-		m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
+		StagePos.x + m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
 		128, 128,
 		0, 0,
 		255);
 
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Makasero)->TransAlBlend(
-		305, 457,
+		StagePos.x + 305, 457,
 		307, 75,
 		0, 0,
 		255);
 
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Kaerimasu)->TransAlBlend(
-		300, 585,
+		StagePos.x + 300, 585,
 		340, 75,
 		0, 0,
 		255);
 
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Title)->TransAlBlend(
-		500, 0,
-		641, 341,
+	//====================ƒ^ƒCƒgƒ‹=======================
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Makasero)->TransAlBlend(
+		800, 100,
+		307, 75,
 		0, 0,
 		255);
+	//====================================================
 }
 //----------------------------------------
