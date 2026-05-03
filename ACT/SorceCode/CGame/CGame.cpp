@@ -1007,33 +1007,9 @@ void CGame::TitleSoundUpdate()
 		//タイトルシーンがまだ開始していないなら
 		if (m_TitleSceneSet == false) {
 			//規定のフレームになったら
-			if (TitleStartSoundCo >= 120) {
-				//BGMをループして、最初から流したなら
-				if (TitleBGMSwitchCo <= 0) {
-					//1度目
-					if (TitleBGMSwitch == false) {
-						//BGM1を再生	
-						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_1, true);
-
-						//タイトルBGM1を流したので次は2を流す
-						TitleBGMSwitch = true;
-					}
-					//2度目	以降繰り返し
-					else if (TitleBGMSwitch == true) {
-						//BGM2を再生
-						CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Title_2, true);
-
-						//タイトルBGM1を流したので次は2を流す
-						TitleBGMSwitch = false;
-					}
-
-					//ループするタイミングをセット
-					TitleBGMSwitchCo = 60 * 15 + 38;
-				}
-				else {
-					//最初に通ってから次のやつを流すようにしたいので--
-					TitleBGMSwitchCo--;
-				}
+			if (TitleStartSoundCo >= 150) {
+				//タイトルを流す
+				CSoundManager::PlayLoop(CSoundManager::BGM_Title_1);
 			}
 			else {
 				//タイトルカウント
@@ -1045,62 +1021,17 @@ void CGame::TitleSoundUpdate()
 
 void CGame::StageMainSoundUpdate()
 {
-	//BGMをループして、最初から流したなら
-	if (StageBGMSwitchCo <= 0) {
-		//1度目
-		if (StageBGMSwitch == false) {
-			//BGM1を再生	
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Stage1_1, true);
-
-			//ステージBGM1を流したので次は2を流す
-			StageBGMSwitch = true;
-		}
-		//2度目	以降繰り返し
-		else if (StageBGMSwitch == true) {
-			//ステージBGM2を再生
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Stage1_2, true);
-
-			//タイトルBGM1を流したので次は2を流す
-			StageBGMSwitch = false;
-		}
-
-		//ループするタイミングをセット
-		StageBGMSwitchCo = 60 * 111 - 40;
-	}
-	else {
-		//最初に通ってから次のやつを流すようにしたいので--
-		StageBGMSwitchCo--;
+	//シーンチェンジが終わってから流すように
+	if (m_upSceneChange->SceneChangeStart == true) {
+		//BGM1を再生	
+		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1_1);
 	}
 }
 
 void CGame::BossSoundUpdate()
 {
-	//BGMをループして、最初から流したなら
-	if (BossBGMSwitchCo <= 0) {
-		//1度目
-		if (BossBGMSwitch == false) {
-			//ボスBGM1を再生	
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_1, true);
-
-			//ステージBGM1を流したので次は2を流す
-			BossBGMSwitch = true;
-		}
-		//2度目	以降繰り返し
-		else if (BossBGMSwitch == true) {
-			//ボスBGM2を再生
-			CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_Boss1_2, true);
-
-			//タイトルBGM1を流したので次は2を流す
-			BossBGMSwitch = false;
-		}
-
-		//ループするタイミングをセット
-		BossBGMSwitchCo = 60 * 38;
-	}
-	else {
-		//最初に通ってから次のやつを流すようにしたいので--
-		BossBGMSwitchCo--;
-	}
+	//ボスBGM1を再生	
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss1_1);
 }
 
 void CGame::DeleteInstance()
