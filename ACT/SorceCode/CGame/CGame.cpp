@@ -1313,9 +1313,9 @@ void CGame::DrawTitleImg()
 		255);
 
 	//====================ƒ^ƒCƒgƒ‹=======================
-	CImageManager::SelectImg(CImageManager::enImgList::IMG_Makasero)->TransAlBlend(
-		StagePos.x + 800, 100,
-		307, 75,
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_TitleLogo)->TransAlBlend(
+		StagePos.x + 600, 50,
+		640, 360,
 		0, 0,
 		255);
 	//====================================================

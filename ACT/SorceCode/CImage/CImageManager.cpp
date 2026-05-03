@@ -51,7 +51,7 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 
 		{enImgList::IMG_Makasero	,"Data\\Image\\TitleImage\\Makasero.bmp"	,"Makasero"} ,
 		{enImgList::IMG_Kaerimasu	,"Data\\Image\\TitleImage\\Kaerimasu.bmp"	,"Kaerimasu"} ,
-		//{enImgList::IMG_Title		,"Data\\Image\\TitleImage\\Huttoba.bmp"	,"Huttoba"} ,
+		{enImgList::IMG_TitleLogo		,"Data\\Image\\TitleImage\\TitleLogo2.bmp"	,"TitleLogo"} ,
 
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
