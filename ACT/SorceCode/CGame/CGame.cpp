@@ -1283,7 +1283,7 @@ void CGame::DrawTitleImg()
 
 	//====================ƒ^ƒCƒgƒ‹=======================
 	CImageManager::SelectImg(CImageManager::enImgList::IMG_Makasero)->TransAlBlend(
-		800, 100,
+		StagePos.x + 800, 100,
 		307, 75,
 		0, 0,
 		255);
