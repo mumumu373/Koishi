@@ -238,4 +238,6 @@ private:
 	double m_StegeUnder;		//ステージの下の位置
 
 	int m_DeathStop;
+
+	bool m_SoundPlay;			//サウンド再生
 };

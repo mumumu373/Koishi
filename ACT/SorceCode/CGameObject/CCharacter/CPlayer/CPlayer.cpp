@@ -51,6 +51,8 @@ void CPlayer::Initialization()
 	m_WallHit = false;
 	ClearGame = false;
 	m_Jumping = false;
+
+	m_SoundPlay = false;
 }
 
 
@@ -160,6 +162,8 @@ void CPlayer::StartSetting()
 
 	//ダメージ毛玉に触れたか
 	DAMAGE_KEDAMA_HIT = false;
+
+	m_SoundPlay = false;
 }
 
 void CPlayer::HaveInstanceDelete()
@@ -406,9 +410,11 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		m_DeathStop = 0;
 
 		//死亡したとき、SEがながれていないなら
-		if (CSoundManager::SingleSoundIsStopped(CSoundManager::enSingleSoundList::SE_Dead) == true) {
+		if (m_SoundPlay == false) {
 			//何回も回るので対策している
-			CSoundManager::Play(CSoundManager::enSingleSoundList::SE_Dead, true);
+			CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_Dead);
+
+			m_SoundPlay = true;
 		}
 		//最大落下速度
 		if (m_JumpAcc > MAX_FALLING_SPEED) {
@@ -422,6 +428,7 @@ void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 		if (m_StegeUnder < m_Position.y) {//ステージの下に落ちたら
 			m_State = enState::Dead;
 
+			m_SoundPlay = false;
 		}
 	}
 
