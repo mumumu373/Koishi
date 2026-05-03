@@ -183,6 +183,9 @@ void CGame::Destroy()
 	//----------------------シーンチェンジクラス------------
 	m_upSceneChange.reset();
 
+	//----------------------ムービーシーンクラス-------------
+	m_upMovieScene.reset();
+
 	//----------------------当たり判定----------------------
 	m_upCollisionDetection.reset();
 
@@ -364,7 +367,13 @@ void CGame::Update()
 
 					//キャッチされていなければ
 					if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
-						m_upEnemy[i]->Update(m_upBullet);
+						//カメラを基準とした範囲内にエネミーが存在しているなら
+						if (m_upEnemy[i]->GetCenterPosition().x <= m_upCamera->GetCameraPos().x + (WND_W * 2)) {
+							if (m_upEnemy[i]->GetCenterPosition().x >= m_upCamera->GetCameraPos().x - (WND_W * 2)) {
+								//横の距離だけ見て判断
+								m_upEnemy[i]->Update(m_upBullet);
+							}
+						}
 					}
 					else {
 						//投げられたら
@@ -634,21 +643,30 @@ void CGame::Update()
 		}
 
 		//エネミーの動作
-		//ある分回す
-		for (int i = 0; i < m_upEnemy.size(); i++) {
-			//生存中になっていれば動かす
-			if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
-				//プレイヤーの位置を取得する
-				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
+		//ボスフェーズ2から動くようにする
+		if (m_upBoss->m_BossPhase == CBoss::enBossPhase::Phase_2) {
+			//ある分回す
+			for (int i = 0; i < m_upEnemy.size(); i++) {
+				//生存中になっていれば動かす
+				if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
+					//プレイヤーの位置を取得する
+					m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 
-				//キャッチされていなければ
-				if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
-					m_upEnemy[i]->Update(m_upBullet);
-				}
-				else {
-					//投げられたら
-					if (m_upEnemy[i]->EnemyThrown == true) {
-						m_upEnemy[i]->ThrowEnemy();
+					//キャッチされていなければ
+					if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
+						//カメラを基準とした範囲内にエネミーが存在しているなら
+						if (m_upEnemy[i]->GetCenterPosition().x <= m_upCamera->GetCameraPos().x + (WND_W * 2)) {
+							if (m_upEnemy[i]->GetCenterPosition().x >= m_upCamera->GetCameraPos().x - (WND_W * 2)) {
+								//横の距離だけ見て判断
+								m_upEnemy[i]->Update(m_upBullet);
+							}
+						}
+					}
+					else {
+						//投げられたら
+						if (m_upEnemy[i]->EnemyThrown == true) {
+							m_upEnemy[i]->ThrowEnemy();
+						}
 					}
 				}
 			}
