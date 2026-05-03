@@ -245,7 +245,12 @@ double CPlayer::GetWireStartSpeed()
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
-
+	static int cnt = 0;
+	cnt++;
+	if(cnt == 10){
+		std::cout << m_Position.x << " , " << m_Position.y << std::endl;
+		cnt = 0;
+	}
 	if (m_State == enState::Living) {
 		//ƒ_ƒ[ƒW–Ñ‹Ê‚ÉG‚ê‚½‚È‚ç
 		if (DAMAGE_KEDAMA_HIT == true && m_AttackHit == false && AvoidanceCount < 0) {

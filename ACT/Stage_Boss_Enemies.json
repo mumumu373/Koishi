@@ -3,14 +3,126 @@
     {
       "Type": "Kedama",
       "Pos": {
-        "x": 0,
+        "x": 2300,
         "y": 200
       },
-      "Color": 4,
-      "Size": 30,
-      "Speed": 6,
-      "JumpPower": 6,
+      "Color": 1,
+      "Size": 90,
+      "Speed": 0,
+      "JumpPower": 30,
       "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 2400,
+        "y": 200
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 0,
+      "JumpPower": 25,
+      "JumpTime": 10
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 2500,
+        "y": 200
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 0,
+      "JumpPower": 20,
+      "JumpTime": 20
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 3595,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 180,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 3695,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 180,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 3895,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 180,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 2300,
+        "y": 297
+      },
+      "Color": 1,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 3905,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 1
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 3905,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 1,
+      "Speed_Y": 0,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 2600,
+        "y": 257
+      },
+      "Color": 1,
+      "Size": 300
     }
+
   ]
 }

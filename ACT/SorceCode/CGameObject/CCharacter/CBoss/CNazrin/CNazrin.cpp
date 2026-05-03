@@ -172,6 +172,11 @@ void CNazrin::Draw(std::unique_ptr<CCamera>& pCamera)
 void CNazrin::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
 	m_OldPosition = m_Position;
+	if (GetAsyncKeyState('P') & 0x0001)
+	{
+		//フェーズ2へ移行する
+		m_BossPhase = enBossPhase::Phase_2;
+	}
 
 	switch (m_State) {
 	case enState::Living:
