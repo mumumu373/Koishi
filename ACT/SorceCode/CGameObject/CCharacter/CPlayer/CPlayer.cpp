@@ -245,12 +245,6 @@ double CPlayer::GetWireStartSpeed()
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
-	static int cnt = 0;
-	cnt++;
-	if(cnt == 10) {
-		cnt = 0;
-		std::cout << "PlayerPos:" << m_Position.x << "," << m_Position.y << std::endl;
-	}
 
 	if (m_State == enState::Living) {
 		//ƒ_ƒ[ƒW–Ñ‹Ê‚ÉG‚ê‚½‚È‚ç
@@ -1144,7 +1138,7 @@ void CPlayer::MovePlayer()
 	case enMoveState::MoveLeft:
 
 		if (m_Ldash == true) {
-			m_Acceleration.x -= m_MoveSpeed*2;
+			m_Acceleration.x -= m_MoveSpeed*1.5;
 		}
 		else {
 			m_Acceleration.x -= m_MoveSpeed;
@@ -1152,7 +1146,7 @@ void CPlayer::MovePlayer()
 		break;
 	case enMoveState::MoveRight:
 		if (m_Rdash == true) {
-			m_Acceleration.x += m_MoveSpeed *2;
+			m_Acceleration.x += m_MoveSpeed *1.5;
 		}
 		else {
 			m_Acceleration.x += m_MoveSpeed;

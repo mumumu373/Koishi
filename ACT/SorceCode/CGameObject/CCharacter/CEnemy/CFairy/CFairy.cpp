@@ -22,6 +22,7 @@ CFairy::CFairy(int Kinds, VECTOR2_f SetPos, int Size, VECTOR2_f Speed, int MoveT
 	//バレットの初期設定
 	m_BulletShot = false;
 	m_BulletShotCo = 0;
+	m_BulletCo = 0;
 
 	//攻撃を受けたときに使う変数の初期化
 	m_HitBack = false;
@@ -58,27 +59,27 @@ void CFairy::StartSetting()
 	switch (m_Color) {
 	case enColor::NoColor:
 		//打ち出すタイミングを設定
-		m_BulletShotTiming = 2;
+		m_BulletShotTiming = 20;
 		//バレットの持続時間を設定
-		m_ShotReleaseTime = 60;
+		m_ShotReleaseTime = 120;
 		break;
 	case enColor::Red:
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 30;
 
-		m_ShotReleaseTime = 60;
+		m_ShotReleaseTime = 120;
 		break;
 	case enColor::Yellow:
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 40;
 
-		m_ShotReleaseTime = 60;
+		m_ShotReleaseTime = 120;
 		break;
 	case enColor::Green:
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 50;
 
-		m_ShotReleaseTime = 60;
+		m_ShotReleaseTime = 180;
 		break;
 	case enColor::Blue:
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 90;
 
 		m_ShotReleaseTime = 60;
 		break;
@@ -126,20 +127,74 @@ void CFairy::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			if (m_BulletShot == true) {
 				m_BulletShot = false;
 				m_BulletShotCo = 0;
-				//プレイヤーを狙うバレット
-				upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 24, m_PlayerPos, 64, 60, false));
+				//まっすぐ進むバレット
+				upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 10, 0, m_Delection.y, 64, m_ShotReleaseTime, 0, false));
 			}
 			if (m_BulletShotCo >= m_BulletShotTiming) {
 				m_BulletShot = true;
 			}
 			break;
 		case enColor::Red:
+			//バレットを撃ちだす動作
+			m_BulletShotCo++;
+			if (m_BulletShot == true) {
+				m_BulletShot = false;
+				m_BulletShotCo = 0;
+				//プレイヤーを狙うバレット
+				upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 7, m_PlayerPos, 64, m_ShotReleaseTime, false));
+			}
+			if (m_BulletShotCo >= m_BulletShotTiming) {
+				m_BulletShot = true;
+			}
 			break;
 		case enColor::Yellow:
+			//バレットを撃ちだす動作
+			m_BulletShotCo++;
+			if (m_BulletShot == true) {
+				m_BulletShot = false;
+				m_BulletShotCo = 0;
+				//3方向に打ち出す
+				for (int i = 0; i < 3; i++) {
+					upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 10, i * (360 / 3), 37 * m_BulletCo, 64, m_ShotReleaseTime, 0, false));
+				}
+
+				//撃った回数をカウント
+				m_BulletCo++;
+			}
+			if (m_BulletShotCo >= m_BulletShotTiming) {
+				m_BulletShot = true;
+			}
 			break;
 		case enColor::Green:
+			//バレットを撃ちだす動作
+			m_BulletShotCo++;
+			if (m_BulletShot == true) {
+				m_BulletShot = false;
+				m_BulletShotCo = 0;
+				//プレイヤーを狙うバレット
+				upBullet.push_back(CBulletFactory::CreateRockOnBullet(m_MyCamp, GetCenterPosition(), m_Color, 3, m_PlayerPos, 150, m_ShotReleaseTime, false));
+			}
+			if (m_BulletShotCo >= m_BulletShotTiming) {
+				m_BulletShot = true;
+			}
 			break;
 		case enColor::Blue:
+			//バレットを撃ちだす動作
+			m_BulletShotCo++;
+			if (m_BulletShot == true) {
+				m_BulletShot = false;
+				m_BulletShotCo = 0;
+				//まっすぐ進むバレット
+				for (int i = 0; i < 6; i++) {
+					upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 2, i * (360 / 6), 12 * m_BulletCo, 64, m_ShotReleaseTime, 4, false));
+				}
+
+				//撃った回数をカウント
+				m_BulletCo++;
+			}
+			if (m_BulletShotCo >= m_BulletShotTiming) {
+				m_BulletShot = true;
+			}
 			break;
 		}
 

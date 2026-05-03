@@ -62,11 +62,11 @@ void CYinYangBall::StartSetting()
 		m_Framesplit = { 0,64,0,0 };
 		m_Speed = { 0,0 };
 		//装飾の数
-		m_AmountDeco = 3;
+		m_AmountDeco = 6;
 		//打ち出すバレットの量
 		m_AmountBullet = 5;
 		//打ち出すタイミングを設定
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 50;
 		//バレットの持続時間を設定
 		m_ShotReleaseTime = 60;
 		break;
@@ -78,7 +78,7 @@ void CYinYangBall::StartSetting()
 
 		m_AmountBullet = 4;
 
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 40;
 
 		m_ShotReleaseTime = 60;
 		break;
@@ -86,11 +86,11 @@ void CYinYangBall::StartSetting()
 		m_Framesplit = { 128,64,0,0 };
 		m_Speed = { 0,0 };
 
-		m_AmountDeco = 5;
+		m_AmountDeco = 8;
 
-		m_AmountBullet = 3;
+		m_AmountBullet = 6;
 
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 40;
 
 		m_ShotReleaseTime = 60;
 		break;
@@ -102,7 +102,7 @@ void CYinYangBall::StartSetting()
 
 		m_AmountBullet = 7;
 
-		m_BulletShotTiming = 10;
+		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
