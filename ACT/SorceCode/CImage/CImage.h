@@ -58,7 +58,7 @@ public:
 
 	//‰æ‘œ‚ğ“§‰ß{”¼“§–¾‚É‚µ‚Ä•\¦‚·‚éŠÖ”(‰æ‘œ‚ğ‹l‚ß‚½‚è‚Å‚«‚é)
 	void TransAlBlendPlas(int xDest, int yDest, int wDest, int hDest,
-		int xSrc, int ySrc, int wSrc, int hSrc, int Alpha);
+		int xSrc, int ySrc, int wSrc, int hSrc, int Alpha = 255);
 
 	//‰æ‘œ‚ğ“§‰ß{”¼“§–¾{‰ñ“]‚Å‚«‚é•`‰æŠÖ”	
 	void TransAlBlendRotation(int xDest, int yDest, int wDest, int hDest,

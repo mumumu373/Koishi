@@ -44,8 +44,8 @@ void CHeart::Draw(int PlayerHP)
 		m_Framesplit.x,			//元画像x座標
 		m_Framesplit.y,			//元画像y座標
 		m_FrameSize.x,			//元画像xサイズ		
-		m_FrameSize.y,			//元画像yサイズ
-		255);					//透明度
+		m_FrameSize.y			//元画像yサイズ
+		);					//透明度
 
 	if (PlayerHP > 0) {
 		CImageManager::SelectImg(CImageManager::enImgList::IMG_BreakeHeart)->TransAlBlendPlas(
