@@ -249,11 +249,14 @@ double CPlayer::GetWireStartSpeed()
 
 void CPlayer::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 {
-	static int cnt = 0;
-	cnt++;
-	if(cnt == 10){
-		std::cout << m_Position.x << " , " << m_Position.y << std::endl;
-		cnt = 0;
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+		m_Position.x += 30;
+	}
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+		m_Position.x -= 30;
+	}
+	if (GetAsyncKeyState(VK_UP) & 0x8000) {
+		m_Position.y -= 30;
 	}
 	if (m_State == enState::Living) {
 		//ƒ_ƒ[ƒW–Ñ‹Ê‚ÉG‚ê‚½‚È‚ç

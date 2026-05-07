@@ -400,7 +400,7 @@ void CGame::Update()
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 
 		//当たり判定をまとめた関数
-		//CollisionUpdate();
+		CollisionUpdate();
 
 		//ステージの更新
 		m_upStageManager->Update();
@@ -685,7 +685,7 @@ void CGame::Update()
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
 
 		//当たり判定の関数
-		//CollisionUpdate();
+		CollisionUpdate();
 
 
 		//ワイヤーを撃つ処理
