@@ -16,12 +16,22 @@ public:
 		BGM_NoSound,		//無音
 
 		BGM_TitleStart,		//タイトルBGMの最初
-		BGM_Title,			//タイトルBGM
+		BGM_Title_1,		//タイトルBGM1
+		BGM_Title_2,		//タイトルBGM2
 
-		BGM_Stage1,			//ステージ1、2のステージBGM
+		BGM_Stage1_1,		//ステージ1、2のステージBGM
+		BGM_Stage1_2,		//ステージ1の2個目
 
-		BGM_Boss1,			//ナズーリンのBGM
-		BGM_Boss2,			//正邪のBGM
+		BGM_Boss1_1,		//ナズーリンのBGM
+		BGM_Boss1_2,		//ナズーリンのBGM2個目
+
+		SE_Decision,		//何かを決定する音
+
+		SE_PlayerHit,		//プレイヤーがダメージを受けた
+
+		SE_BossDead,		//ボスが死んだときの音
+		SE_Dead,			//プレイヤーがやられた時
+		SE_Clear,			//クリアした時
 
 		//音が増えたら「ここ」に追加
 		SingleSound_MAX,						//最大数
@@ -30,7 +40,20 @@ public:
 	//重複させる音
 	enum enMultiSoundList
 	{
-		SE_Select,				//カーソル選択
+		SE_TitleSelect,		//タイトルセレクト時の音
+
+		SE_PlayerAttack,	//プレイヤーの攻撃音
+		SE_AttackHit,		//攻撃をした
+		SE_AttackCritkal,	//クリティカル
+		SE_Jump,			//ジャンプ
+		SE_PlayerHeart,		//プレイヤーのハートの切り替え
+
+		SE_WireCatch,		//ワイヤーで捕まえた
+		SE_EnemyThrow,		//エネミーを投げた
+
+		SE_AvoidancePlayer,	//プレイヤーの回避音
+
+		SE_BulletShot,		//バレットの音
 
 		//音が増えたら「ここ」に追加
 		MultiSound_MAX,		//最大数
@@ -84,10 +107,20 @@ public:
 	{
 		CSoundManager::GetInstance()->m_pSound_BGM[list]->PlaySE();
 	}
-	//ループ再生する
-	static void PlayLoop(enSingleSoundList list)
+	//サウンドを再生する
+	static void Play(enSingleSoundList list, bool bNotify)
 	{
-		CSoundManager::GetInstance()->m_pSound_BGM[list]->PlayLoop();
+		CSoundManager::GetInstance()->m_pSound_BGM[list]->Play(bNotify);
+	}
+	//ループ再生する
+	static bool PlayLoop(enSingleSoundList list)
+	{
+		//ループして、いったんBGMが終わったなら
+		if (CSoundManager::GetInstance()->m_pSound_BGM[list]->PlayLoop() == true) {
+			return true;
+		}
+
+		return false;
 	}
 	//停止する
 	static void Stop(enSingleSoundList list)
@@ -95,10 +128,15 @@ public:
 		CSoundManager::GetInstance()->m_pSound_BGM[list]->Stop();
 	}
 	//音が止まっているならを返す
-	static bool SingleSoundIsStopped(enSingleSoundList List)
+	static bool SingleSoundIsStopped(enSingleSoundList list)
 	{
 		//曲が止まっているなら
-		return CSoundManager::GetInstance()->m_pSound_BGM[List]->IsStopped();
+		return CSoundManager::GetInstance()->m_pSound_BGM[list]->IsStopped();
+	}
+	//曲の最初から再生する
+	static void SingleSoundSeekToStart(enSingleSoundList list)
+	{
+		CSoundManager::GetInstance()->m_pSound_BGM[list]->SeekToStart();
 	}
 	//すべての音を止める
 	static void AllSoundStopped()

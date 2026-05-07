@@ -34,6 +34,8 @@ public:
 		IMG_Effect,			//エフェクト
 		IMG_Slash,			//斬撃
 		IMG_DeadEffect,		//死んだときのエフェクト(エネミー)
+		IMG_Emoji,			//絵文字
+		IMG_SpeechBubble,	//吹き出し
 
 		IMG_Clear,			//クリア
 
@@ -41,6 +43,10 @@ public:
 
 		IMG_Black,			//黒画面
 		IMG_White,			//白画面
+
+		IMG_Makasero,		//選択肢「まかせろ」
+		IMG_Kaerimasu,		//選択肢「かえります」
+		IMG_TitleLogo,		//タイトル画像
 	};
 public:
 	static CImageManager* GetInstance()

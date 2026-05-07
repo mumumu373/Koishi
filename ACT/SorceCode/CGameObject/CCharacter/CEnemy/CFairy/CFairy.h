@@ -44,6 +44,7 @@ private:
 	bool m_BulletShot;		//バレットを撃ったか
 	int m_BulletShotTiming;	//バレットを撃ちだすタイミング	
 	int m_BulletShotCo;		//バレットを撃つタイミングをカウント
+	int m_BulletCo;			//バレットを撃った数をカウントする
 	int m_ShotReleaseTime;	//バレットの持続時間
 
 	int m_MoveTypeOption_1;	//ムーブタイプそれぞれの設定項目

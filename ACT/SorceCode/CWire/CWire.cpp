@@ -67,36 +67,38 @@ void CWire::Update()
 void CWire::Draw(std::unique_ptr<CCamera>& pCamera)
 {
 	if (m_ShotState != ShotSteto::no) {
-	
+		if (m_DpPlayer!=nullptr) {
+			//ワイヤーの先端とプレイヤーの距離を測る
+			int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size - 1);
+			//ワイヤーの先端とプレイヤーの角度を測る
+			double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
+			for (int i = 0; i < pieces + 1; i++)
+			{
+				if (i == 0) {
+					m_Framesplit.x = IMGSize;
+				}
+				else {
+					m_Framesplit.x = 0;
+				}
+				VECTOR2_f pos;
+				pos.x = (m_Toptpoint.x) + (cos(Radian) * (size - 1) * i);
+				pos.y = (m_Toptpoint.y) + (sin(Radian) * (size - 1) * i);
 
-		//ワイヤーの先端とプレイヤーの距離を測る
-		int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(),{ m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 }) / (size-1);
-		//ワイヤーの先端とプレイヤーの角度を測る
-		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
-		for (int i = 0; i < pieces+1; i++)
-		{
-			if (i == 0) {
-				m_Framesplit.x = IMGSize;
+				VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
+				CImageManager::SelectImg(CImageManager::enImgList::IMG_String)->TransAlBlendRotation(
+					DispPos.x,				//表示位置x座標
+					DispPos.y,				//表示位置y座標
+					size,			//画像幅
+					size,			//高さ	<-拡大して表示するサイズ
+					m_Framesplit.x,			//元画像x座標
+					m_Framesplit.y,			//元画像y座標
+					IMGSize,			//元画像xサイズ		
+					IMGSize,			//元画像yサイズ
+					255, 180 + (Radian * 180 / M_PI));					//透明度、角度
 			}
-			else {
-				m_Framesplit.x = 0;
-			}
-			VECTOR2_f pos;
-			pos .x= (m_Toptpoint.x )+( cos(Radian)* (size-1)* i);
-			pos.y = (m_Toptpoint.y )+( sin(Radian) * (size-1 ) * i);
-			
-			VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
-			CImageManager::SelectImg(CImageManager::enImgList::IMG_String)->TransAlBlendRotation(
-				DispPos.x,				//表示位置x座標
-				DispPos.y,				//表示位置y座標
-				size,			//画像幅
-				size,			//高さ	<-拡大して表示するサイズ
-				m_Framesplit.x,			//元画像x座標
-				m_Framesplit.y,			//元画像y座標
-				IMGSize,			//元画像xサイズ		
-				IMGSize,			//元画像yサイズ
-				255, 180+(Radian*180/ M_PI));					//透明度、角度
-		}
+	}
+
+		
 
 		
 	
@@ -107,30 +109,33 @@ void CWire::WireHandDraw(std::unique_ptr<CCamera>& pCamera, CPlayer* m_DPlayer)
 {
 	if (m_ShotState != ShotSteto::no&& m_EnemiCatch==false&& m_DPlayer->GetStete()==CPlayer::enState::Living) {
 		//ワイヤーの先端とプレイヤーの距離を測る
-		int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
-		if (pieces<1) {
-			return;
+		if (m_DpPlayer!=nullptr) {
+			int pieces = GetHowToLong(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
+			if (pieces < 1) {
+				return;
+			}
+			//ワイヤーの先端とプレイヤーの角度を測る
+			double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
+
+			VECTOR2_f pos;
+			int Size = m_DpPlayer->GetFrameSplit().w - 55;
+			pos.x = m_DpPlayer->GetCenterPositionDawn().x - Size;
+			pos.y = m_DpPlayer->GetCenterPositionDawn().y - Size;
+
+			VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
+			CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation(
+				DispPos.x,				//表示位置x座標
+				DispPos.y,				//表示位置y座標
+				Size * 2,			//画像幅
+				Size * 2,			//高さ	<-拡大して表示するサイズ
+				64,			//元a画像x座標
+				64 * 4,			//元画像y座標
+				64,			//元画像xサイズ		
+				64,			//元画像yサイズ
+				m_DpPlayer->GetAlpha(), (Radian * 180 / M_PI));					//透明度、角度
 		}
-		//ワイヤーの先端とプレイヤーの角度を測る
-		double Radian = GetDelectionVect(m_DpPlayer->GetCenterPositionDawn(), { m_Toptpoint.x + size / 2,m_Toptpoint.y + size / 2 });
-
-		VECTOR2_f pos;
-		int Size = m_DpPlayer->GetFrameSplit().w-55;
-		pos.x = m_DpPlayer->GetCenterPositionDawn().x - Size;
-		pos.y = m_DpPlayer->GetCenterPositionDawn().y - Size;
-
-		VECTOR2_f DispPos = pCamera->CalcToPositionInCamera(pos);
-		CImageManager::SelectImg(CImageManager::enImgList::IMG_Koishi)->TransAlBlendRotation(
-			DispPos.x,				//表示位置x座標
-			DispPos.y,				//表示位置y座標
-			Size *2,			//画像幅
-			Size *2,			//高さ	<-拡大して表示するサイズ
-			64,			//元a画像x座標
-			64 * 4,			//元画像y座標
-			64,			//元画像xサイズ		
-			64,			//元画像yサイズ
-			m_DpPlayer->GetAlpha(),  (Radian * 180 / M_PI));					//透明度、角度
-	}
+		}
+	
 
 }
 

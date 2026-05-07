@@ -8,7 +8,7 @@ class CNormalAttack
 	static constexpr int CollisionMAX = 2;
 	static constexpr int imageW = 64;
 	static constexpr int imageH = 32;
-	static constexpr int Time = 6;//継続時間
+	static constexpr int Time = 4;//継続時間
 	static constexpr int AtakuSize = 120;
 
 public:

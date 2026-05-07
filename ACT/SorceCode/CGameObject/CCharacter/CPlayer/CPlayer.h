@@ -74,12 +74,12 @@ public:
 	~CPlayer();
 	void Turnaround(VECTOR2_f Pos);
 
-	void DrawH(HDC c, HWND h, std::unique_ptr<CCamera>& pCamera);//後で消す
-
 	void Initialization();//初期設定
 	//ワイヤーポイントを掴む状態にする
 	void StartWirePointCatch();
 	void StartSetting() override;
+	//持っているユニークポインターを削除する
+	void HaveInstanceDelete();
 
 	int GetStete() { return m_State; }
 	void Attackmove();
@@ -238,4 +238,6 @@ private:
 	double m_StegeUnder;		//ステージの下の位置
 
 	int m_DeathStop;
+
+	bool m_SoundPlay;			//サウンド再生
 };

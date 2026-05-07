@@ -26,6 +26,7 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_upTitleImage			(nullptr)
 , m_upClearImage			(nullptr)
 , m_upSceneChange			(nullptr)
+, m_upMovieScene			(nullptr)
 , m_upCollisionDetection	(nullptr)
 , m_upStageManager			(nullptr)
 , m_upPlayer				(nullptr)
@@ -39,6 +40,15 @@ CGame::CGame(GameWindow* pGameWnd)
 , m_OnePush					(false)
 , m_TitleSceneSet			(false)
 , m_GameStartCo				(0)
+, m_ClearCo					(0)
+, TitleStartSound			(false)
+, TitleStartSoundCo			(0)
+, TitleBGMSwitch			(false)
+, TitleBGMSwitchCo			(0)
+, StageBGMSwitch			(false)
+, StageBGMSwitchCo			(0)
+, BossBGMSwitch				(false)
+, BossBGMSwitchCo			(0)
 {
 	for (int i = 0; i < m_upEnemy.size(); i++) {
 		m_upEnemy[i] = nullptr;
@@ -46,8 +56,8 @@ CGame::CGame(GameWindow* pGameWnd)
 	for (int i = 0; i < m_upBullet.size(); i++) {
 		m_upBullet[i] = nullptr;
 	}
-	for (int i = 0; i < m_pCWirepoint.size(); i++) {
-		m_pCWirepoint[i] = nullptr;
+	for (int i = 0; i < m_upCWirepoint.size(); i++) {
+		m_upCWirepoint[i] = nullptr;
 	}
 }
 
@@ -110,6 +120,9 @@ bool CGame::Create()
 	//シーンチェンジのインスタンス生成
 	m_upSceneChange = std::make_unique<CSceneChange>();
 
+	//ムービーシーンのインスタンス生成
+	m_upMovieScene = std::make_unique<CMovieScene>();
+
 	//当たり判定のインスタンス生成
 	m_upCollisionDetection = std::make_unique<CCollisionDetection>();
 
@@ -133,6 +146,9 @@ bool CGame::Create()
 	m_upStageManager = std::make_unique<CStageManager>();
 	m_upStageManager->Create();
 
+	//初期状態でマップ1から始まる
+	m_PlayerInStage = enInMap::Map01;
+
 	//カメラのインスタンス生成
 	m_upCamera = std::make_unique<CCamera>();
 	//ステージの幅と高さをセットする<w.h>
@@ -142,14 +158,6 @@ bool CGame::Create()
 
 	//初期設定
 	CMouseInput::InitialSettings(m_pGameWnd->hWnd); 
-
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 300, 800 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 600, 700 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 900, 600 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 1500, 800 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 2000, 600 }));
-	m_pCWirepoint.push_back(std::make_unique<CWirepoint>(VECTOR2_f{ 2500, 400 }));
-
 
 	Nega =std::make_unique<NEGA>(); 
 	m_upWireActionSupporter = std::make_unique<CWireActionSupporter>();
@@ -175,6 +183,9 @@ void CGame::Destroy()
 	//----------------------シーンチェンジクラス------------
 	m_upSceneChange.reset();
 
+	//----------------------ムービーシーンクラス-------------
+	m_upMovieScene.reset();
+
 	//----------------------当たり判定----------------------
 	m_upCollisionDetection.reset();
 
@@ -182,7 +193,7 @@ void CGame::Destroy()
 	//----------------------プレイヤー-------------------
 	m_upPlayer.reset();
 	m_pWire.reset();
-	m_pCWirepoint.clear();
+	m_upCWirepoint.clear();
 
 	//----------------------エネミー---------------------
 	m_upEnemy.clear();
@@ -229,8 +240,6 @@ void CGame::Destroy()
 //更新関数(キー入力や動作処理を行う)
 void CGame::Update()
 {
-	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1);
-
 	//仮置き
 	CMouseInput::Update();
 
@@ -238,6 +247,9 @@ void CGame::Update()
 
 	switch (m_Scene) {
 	case enScene::Title:
+
+		//タイトルサウンドの動作
+		TitleSoundUpdate();
 
 		MoveCursor();
 
@@ -280,6 +292,15 @@ void CGame::Update()
 
 						//タイトルシーンのアップデートをするときの準備
 						m_upPlayer->TitleSceneSet();
+
+						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_TitleStart);
+						//BGM1をストップ
+						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_1);
+						//BGM2をストップ
+						CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Title_2);
+
+						//決定音を鳴らす
+						CSoundManager::PlaySE_NoDuplication(CSoundManager::enSingleSoundList::SE_Decision);
 					}
 				}
 
@@ -299,12 +320,21 @@ void CGame::Update()
 
 			//ステージ1のエネミーをセットする
 			CEnemySet::LoadEnemies_Stage1(m_upEnemy);
+			//ワイヤーポイント
+			CWirePointSet::LoadWirePoints_Stage1(m_upCWirepoint);
 
 			//プレイヤーを初期化
 			m_upPlayer->Initialization();
 
 			//ステージでのプレイヤーの配置
 			m_upPlayer->SetStagePos({ 100, 500 });
+
+			//タイトルサウンドの変数を初期化
+			InitializeTitleSound();
+			//曲のはじめから流すように
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_TitleStart);
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Title_1);
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Title_2);
 
 			//タイトルシーンの動作を完了
 			m_TitleSceneSet = false;
@@ -313,9 +343,8 @@ void CGame::Update()
 
 	case enScene::GameMain:
 
-		if (GetAsyncKeyState('T') & 0x0001) {
-			
-		}
+		//ステージサウンドの動作
+		StageMainSoundUpdate();
 
 		m_pWire->Update();
 
@@ -338,7 +367,13 @@ void CGame::Update()
 
 					//キャッチされていなければ
 					if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
-						m_upEnemy[i]->Update(m_upBullet);
+						//カメラを基準とした範囲内にエネミーが存在しているなら
+						if (m_upEnemy[i]->GetCenterPosition().x <= m_upCamera->GetCameraPos().x + (WND_W * 2)) {
+							if (m_upEnemy[i]->GetCenterPosition().x >= m_upCamera->GetCameraPos().x - (WND_W * 2)) {
+								//横の距離だけ見て判断
+								m_upEnemy[i]->Update(m_upBullet);
+							}
+						}
 					}
 					else {
 						//投げられたら
@@ -357,13 +392,13 @@ void CGame::Update()
 			}
 		}
 
-		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			if (m_pCWirepoint[i] != nullptr) {
-				m_pCWirepoint[i]->Update();
+		for (int i = 0; i < m_upCWirepoint.size(); i++) {
+			if (m_upCWirepoint[i] != nullptr) {
+				m_upCWirepoint[i]->Update();
 			}
 		}
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
-		
+
 		//当たり判定をまとめた関数
 		//CollisionUpdate();
 
@@ -412,12 +447,23 @@ void CGame::Update()
 				//ステージ切り替え時のプレイヤーの配置
 				m_upPlayer->SetStagePos({ 100,200 });
 
-				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				//現在存在するバレットとエネミーとワイヤーポイントのインスタンスをすべて空ける
 				DeleteInstance_Bullet();
 				DeleteInstance_Enemy();
+				DeleteInstance_WirePoint();
 
 				//ステージ2の時のエネミーを配置する
 				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage2(m_upCWirepoint);
+
+				//プレイヤーがいるところを更新
+				m_PlayerInStage = enInMap::Map02;
+
+				//ステージの幅と高さをセットする<w.h>
+				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
+				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
 
 				//ステージチェンジ終了
 				m_upPlayer->StageChangeTime = false;
@@ -426,6 +472,9 @@ void CGame::Update()
 
 		break;
 	case enScene::Movie:
+		//ステージサウンドの動作
+		StageMainSoundUpdate();
+
 		m_upWireActionSupporter->WireEnd();
 		//ワイヤーの動作
 		m_pWire->Update();
@@ -438,6 +487,20 @@ void CGame::Update()
 
 		//プレイヤーが地面についてからうごかしたい
 		if (m_MovieSceneCameraMoveCo >= 20 && m_upPlayer->GroundStand == true) {
+			//ボスとプレイヤーの位置を渡す
+			m_upMovieScene->SetPlayerPos(m_upPlayer->GetPosition());
+			m_upMovieScene->SetBossPos(m_upBoss->GetPosition());
+
+			//ムービーシーンをスタートさせる
+			if (m_upMovieScene->StartMovie == false) {
+				//ボスのムービーシーンスタート
+				m_upMovieScene->BossMovieSceneStart();
+			}
+			//ムービーシーンが始まったら
+			else {
+				//ムービーシーン(ボス用ムービー)の動作
+				m_upMovieScene->BossMovieSceneUpdate();
+			}
 			//ムービーシーン
 			m_upCamera->Update();
 
@@ -449,6 +512,34 @@ void CGame::Update()
 
 			//エンターキーまたはマウスで進行できる
 			if (GetAsyncKeyState(VK_RETURN) & 0x8000 || CMouseInput::GetMouseLeft(true, true)|| CMouseInput::GetMouseRight(true, true)|| CMouseInput::GetMouseWheel(true, true)) {
+				if (m_OnePush == false) {
+					//シーンのセットが完了したら
+					if (m_upMovieScene->SceneSetComp == true) {
+						//シーンチェンジが始まっていないなら
+						if (m_upSceneChange->SceneChangeStart == false) {
+							//シーンチェンジ
+							m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::Right, 80, 10, false);
+
+							//ステージBGM1をストップ
+							CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+							//ステージBGM2をストップ
+							CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_2);						
+						}					
+					}
+					else {
+						//次のシーンに
+						m_upMovieScene->NextMessage();
+					}
+				}
+
+				m_OnePush = true;
+			}
+			else {
+				m_OnePush = false;
+			}
+
+			//画面を覆ったらボス戦へ
+			if (m_upSceneChange->SceneSetComp == true) {
 				//ボスバトルに移行
 				m_Scene = enScene::BossBattle;
 
@@ -457,12 +548,18 @@ void CGame::Update()
 				//ボス用のステージに変更する
 				m_upStageManager->ChangeStage(CStageManager::enStage::MapBoss);
 
-				//現在存在するバレットとエネミーのインスタンスをすべて削除する
+				//現在存在するバレットとエネミーとワイヤーポイントのインスタンスをすべて空ける
 				DeleteInstance_Bullet();
 				DeleteInstance_Enemy();
+				DeleteInstance_WirePoint();
 
 				//ボスの時のエネミーを配置する
 				CEnemySet::LoadEnemies_Boss(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Boss(m_upCWirepoint);
+
+				//プレイヤーがいるところを更新
+				m_PlayerInStage = enInMap::MapBoss;
 
 				//カメラの場所を変更したところと同じ位置になるようにする
 				m_upCamera->SetChangeBossStageCamera(m_upPlayer->GetPositionadd(), m_upBoss->GetPositionadd());
@@ -470,6 +567,14 @@ void CGame::Update()
 				//ステージの幅と高さをセットする<w.h>
 				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
 				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
+				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
+
+				//ステージメインのサウンド変数初期化
+				InitializeStageMainSound();
+
+				//曲のはじめから流すように
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_2);
 			}
 		}
 		else {
@@ -477,6 +582,11 @@ void CGame::Update()
 		}
 		break;
 	case enScene::BossBattle:
+		//ボスが死亡したときの演出入っていないなら
+		if (m_upBoss->BossDeadEffect == false) {
+			//ボスのサウンド動作
+			BossSoundUpdate();
+		}
 
 		//カメラの動作
 		m_upCamera->Update();
@@ -517,33 +627,46 @@ void CGame::Update()
 				if (m_upSceneChange->SceneChangeStart == false) {
 					if (m_upBoss->BossDeadEffect == false) {
 						//ピカっと光るようにする
-						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeFinish, 30, 10, true);
+						m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeFinish, 20, 10, true);
 
 						//ボスが死亡したときの演出入りました
 						m_upBoss->BossDeadEffect = true;
 
-						m_upCamera->SnakeCamera(30, 30);
+						m_upCamera->SnakeCamera(50, 50);
+
+						//曲を止める
+						CSoundManager::Stop(CSoundManager::BGM_Boss1_1);
+						CSoundManager::Stop(CSoundManager::BGM_Boss1_2);
 					}
 				}
 			}
 		}
 
 		//エネミーの動作
-		//ある分回す
-		for (int i = 0; i < m_upEnemy.size(); i++) {
-			//生存中になっていれば動かす
-			if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
-				//プレイヤーの位置を取得する
-				m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
+		//ボスフェーズ2から動くようにする
+		if (m_upBoss->m_BossPhase == CBoss::enBossPhase::Phase_2) {
+			//ある分回す
+			for (int i = 0; i < m_upEnemy.size(); i++) {
+				//生存中になっていれば動かす
+				if (m_upEnemy[i]->m_State == CEnemy::enState::Living) {
+					//プレイヤーの位置を取得する
+					m_upEnemy[i]->SetPlayerPos(m_upPlayer->GetCenterPosition());
 
-				//キャッチされていなければ
-				if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
-					m_upEnemy[i]->Update(m_upBullet);
-				}
-				else {
-					//投げられたら
-					if (m_upEnemy[i]->EnemyThrown == true) {
-						m_upEnemy[i]->ThrowEnemy();
+					//キャッチされていなければ
+					if (m_upEnemy[i]->GetCatchWire() != CEnemy::enCatchWire::Catch) {
+						//カメラを基準とした範囲内にエネミーが存在しているなら
+						if (m_upEnemy[i]->GetCenterPosition().x <= m_upCamera->GetCameraPos().x + (WND_W * 2)) {
+							if (m_upEnemy[i]->GetCenterPosition().x >= m_upCamera->GetCameraPos().x - (WND_W * 2)) {
+								//横の距離だけ見て判断
+								m_upEnemy[i]->Update(m_upBullet);
+							}
+						}
+					}
+					else {
+						//投げられたら
+						if (m_upEnemy[i]->EnemyThrown == true) {
+							m_upEnemy[i]->ThrowEnemy();
+						}
 					}
 				}
 			}
@@ -555,8 +678,8 @@ void CGame::Update()
 		}
 
 		//ワイヤーポイントの動作
-		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			m_pCWirepoint[i]->Update();
+		for (int i = 0; i < m_upCWirepoint.size(); i++) {
+			m_upCWirepoint[i]->Update();
 		}
 		//ワイヤーのアクションの動作?
 		m_upWireActionSupporter->Update(m_upCamera->GetCameraPos());
@@ -564,34 +687,132 @@ void CGame::Update()
 		//当たり判定の関数
 		//CollisionUpdate();
 
+
 		//ワイヤーを撃つ処理
 		if (m_upPlayer->GetWireShot()) {
 			m_pWire->Shot(m_upPlayer, CMouseInput::GetMousePosCamera(m_upCamera.get()));
 		}
 
 		if (m_upPlayer->ClearGame == true) {
-			static int ClearCo = 0;
-			if (ClearCo >= 60) {
-				ClearCo = 60;
+			if (m_ClearCo >= 180) {
+				m_ClearCo = 180;
 
 				if (m_upSceneChange->SceneChangeStart == false) {
 					//シーンチェンジ
 					m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 4, 60, false);
 					//次の入力があるまで黒画面で待機するようにする
 					m_upSceneChange->StopScene(true);
+
+					//ボスサウンドの初期化
+					InitializeBossSound();
+					//曲のはじめから流すように
+					CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_1);
+					CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_2);
 				}
 			}
 			else {
-				ClearCo++;
+				m_ClearCo++;
 			}
 
 			//シーンが完全に覆いかぶさってから
 			if (m_upSceneChange->SceneSetComp == true) {
 				//シーンクリアに移動する
 				m_Scene = enScene::Clear;
+
+				//カウントを初期化
+				m_ClearCo = 0;
 			}
 		}
 
+		break;
+	case enScene::PlayerDeath:
+		//プレイヤーのみ動作させる
+		m_upPlayer->Update(m_upBullet);
+		m_pWire->DayEnd();
+		
+		//こいしが画面外にでたら
+		if (m_upPlayer->m_State == CPlayer::enState::Dead) {
+			if (m_upSceneChange->SceneChangeStart == false) {
+				//フェード開始
+				m_upSceneChange->SetSceneChangeType(CSceneChange::enSceneType::FadeStart, 5, 60, false);
+			}
+		}
+
+		//シーンが完全に覆いかぶさってから
+		if (m_upSceneChange->SceneSetComp == true) {
+			//復活処理
+
+			//現在存在するバレットとエネミーとワイヤーポイントのインスタンスをすべて空ける
+			DeleteInstance_Bullet();
+			DeleteInstance_Enemy();
+			DeleteInstance_WirePoint();
+
+			//プレイヤーの初期化
+			m_upPlayer->HaveInstanceDelete();	//ハートなどの持っているインスタンスを削除
+			m_upPlayer->StartSetting();
+			m_upPlayer->Initialization();
+
+			//どのマップにいたかを見る
+			switch (m_PlayerInStage) {
+			case enInMap::Map01:
+				//ステージ1の最初からプレイヤーを配置する
+				m_upPlayer->SetStagePos({ 100, 500 });
+
+				//ステージ1のエネミーをセットする
+				CEnemySet::LoadEnemies_Stage1(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage1(m_upCWirepoint);
+				break;
+			case enInMap::Map02:
+				//ステージ2の最初からプレイヤーを配置する
+				m_upPlayer->SetStagePos({ 100,200 });
+
+				//ステージ2の時のエネミーを配置する
+				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage2(m_upCWirepoint);
+				break;
+			case enInMap::MapBoss:
+				//ステージ2に戻すようにする
+				m_upStageManager->ChangeStage(CStageManager::enStage::Map02);
+
+				//ステージの幅と高さをセットする<w.h>
+				std::pair<float, float> MapSize = m_upStageManager->GetMapSize();
+				m_upCamera->SetStageSize(MapSize.first, MapSize.second);
+				m_upPlayer->SetStegeUnder(MapSize.second);//プレイヤーにステージの下の位置を教える
+
+				//ボスは、ボスの1つ前のステージの直前からはじまるようにする
+				m_upPlayer->SetStagePos({ 100,200 });
+
+				//ボスも初期化する
+				m_upBoss->StartSetting();
+
+				//ステージ2の時のエネミーを配置する
+				CEnemySet::LoadEnemies_Stage2(m_upEnemy);
+				//ワイヤーポイント
+				CWirePointSet::LoadWirePoints_Stage2(m_upCWirepoint);
+
+				//ボスサウンドの初期化
+				InitializeBossSound();
+				//曲のはじめから流すように
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_1);
+				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Boss1_2);
+				break;
+			}
+
+			//ムービーシーンの初期化
+			m_upMovieScene->StartSetting();
+
+			//ステージサウンドの変数初期化
+			InitializeStageMainSound();
+
+			//曲のはじめから流すように
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+			CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_2);
+
+			//ボスバトルには入らないのでメインでOK
+			m_Scene = enScene::GameMain;
+		}
 		break;
 	case enScene::Clear:
 		if (m_upClearImage->FadeCompleted == false) {
@@ -633,6 +854,22 @@ void CGame::Update()
 		}
 		break;
 	}
+
+	//スイッチの外にプレイヤーが死亡中になったかを入れる
+	if (m_upPlayer->m_State == CPlayer::enState::Dying) {
+		//プレイヤーが倒された動作をする
+		m_Scene = enScene::PlayerDeath;
+
+		//ステージBGM1をストップ
+		CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+		//ステージBGM2をストップ
+		CSoundManager::Stop(CSoundManager::enSingleSoundList::BGM_Stage1_2);
+
+		//曲を止める
+		CSoundManager::Stop(CSoundManager::BGM_Boss1_1);
+		CSoundManager::Stop(CSoundManager::BGM_Boss1_2);
+	}
+
 	//インスタンスを破棄する関数
 	DeleteInstance();
 }
@@ -650,16 +887,14 @@ void CGame::Draw()
 		//タイトルシーンようの描画
 		m_upPlayer->TitleSceneDraw();
 		
-		CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
-			m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
-			128, 128,
-			0, 0,
-			255);
+		//タイトル関連の画像を描画
+		DrawTitleImg();
 
 		break;
 	case enScene::GameMain:
 	case enScene::Movie:
 	case enScene::BossBattle:
+	case enScene::PlayerDeath:
 		
 		//ステージの描画
 		m_upStageManager->Draw(m_upCamera);
@@ -702,12 +937,17 @@ void CGame::Draw()
 			}
 		}
 
+		//ムービーシーン中の時だけ描画
+		if (m_upMovieScene->StartMovie == true) {
+			m_upMovieScene->Draw(m_upCamera);
+		}
+
+		for (int i = 0; i < m_upCWirepoint.size(); i++) {
+			m_upCWirepoint[i]->Draw(m_upCamera);
+		}
+
 		//プレイヤーのハートを描画する
 		m_upPlayer->PlayerHeartDraw();
-
-		for (int i = 0; i < m_pCWirepoint.size(); i++) {
-			m_pCWirepoint[i]->Draw(m_upCamera);
-		}
 		if (CMouseInput::GetMouseLeft(true, false)) {
 			//
 			//Nega->Draw(m_pGameWnd->hScreenDC);
@@ -727,6 +967,71 @@ void CGame::Draw()
 	if (m_Scene == enScene::Clear) {
 		m_upClearImage->Draw();
 	}
+}
+
+void CGame::InitializeTitleSound()
+{
+	//初期化
+	TitleStartSound = false;
+	TitleStartSoundCo = 0;
+
+	TitleBGMSwitch = false;
+	TitleBGMSwitchCo = 0;
+}
+
+void CGame::InitializeStageMainSound()
+{
+	//初期化
+	StageBGMSwitch = false;
+	StageBGMSwitchCo = 0;
+}
+
+void CGame::InitializeBossSound()
+{
+	//初期化
+	BossBGMSwitch = false;
+	BossBGMSwitchCo = 0;
+}
+
+void CGame::TitleSoundUpdate()
+{
+	//タイトルのBGMの開始BGMを流していないなら
+	if (TitleStartSound == false) {
+		CSoundManager::Play(CSoundManager::enSingleSoundList::BGM_TitleStart, true);
+
+		TitleStartSound = true;
+
+		TitleStartSoundCo = 0;
+	}
+	else {
+		//タイトルシーンがまだ開始していないなら
+		if (m_TitleSceneSet == false) {
+			//規定のフレームになったら
+			if (TitleStartSoundCo >= 150) {
+				//タイトルを流す
+				CSoundManager::PlayLoop(CSoundManager::BGM_Title_1);
+			}
+			else {
+				//タイトルカウント
+				TitleStartSoundCo++;
+			}
+		}
+	}
+}
+
+void CGame::StageMainSoundUpdate()
+{
+	//シーンチェンジが終わってから流すように
+	if (m_upSceneChange->SceneChangeStart == true) {
+		//BGM1を再生	
+		CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Stage1_1);
+	}
+}
+
+void CGame::BossSoundUpdate()
+{
+	//ボスBGM1を再生	
+	CSoundManager::PlayLoop(CSoundManager::enSingleSoundList::BGM_Boss1_1);
 }
 
 void CGame::DeleteInstance()
@@ -813,12 +1118,29 @@ void CGame::DeleteInstance_Enemy()
 	}
 }
 
+void CGame::DeleteInstance_WirePoint()
+{
+	//すべてのワイヤーポイントのインスタンスを削除
+	//インスタンスがあるワイヤーポイントのメモリを空ける
+	for (int i = 0; i < m_upCWirepoint.size(); i++) {
+		if (m_upCWirepoint[i] != nullptr) {
+			m_upCWirepoint.erase(
+				std::remove_if(m_upCWirepoint.begin(), m_upCWirepoint.end(),
+					[](const std::unique_ptr<CWirepoint>& upCWirepoint) {
+						return upCWirepoint != nullptr;
+					}),
+				m_upCWirepoint.end()
+			);
+		}
+	}
+}
+
 void CGame::CollisionUpdate()
 {
 	//マウスとエネミーの当たり判定処理
 	m_upCollisionDetection->MouseToEnemyCollision(m_upEnemy, m_upCamera);
 	//マウスとワイヤーポイント
-	m_upCollisionDetection->MouseToWirePoint(m_pCWirepoint, m_upCamera);
+	m_upCollisionDetection->MouseToWirePoint(m_upCWirepoint, m_upCamera);
 
 	//プレイヤーとエネミーの当たり判定処理
 	m_upCollisionDetection->PlayerToEnemyCollision(m_upPlayer, m_upEnemy);
@@ -830,7 +1152,7 @@ void CGame::CollisionUpdate()
 	m_upCollisionDetection->PlayerToBulletCollision(m_upPlayer, m_upBullet);
 
 	//ワイヤーとワイヤーポイントの当たり判定処理
-	m_upCollisionDetection->WireToWirepointCollision(m_pCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
+	m_upCollisionDetection->WireToWirepointCollision(m_upCWirepoint, m_pWire, m_upPlayer, m_upWireActionSupporter);
 
 	//プレイヤーのアタックとエネミーの当たり判定
 	m_upCollisionDetection->PlayerAttackToEnemyCollision(m_upPlayer->GetNormalAttack_p(), m_upEnemy);
@@ -869,12 +1191,18 @@ void CGame::MoveCursor()
 	{
 		m_CursorAction--;
 		if (m_CursorAction < 0) m_CursorAction = m_Action.size() - 1;
+
+		//タイトルセレクト音を出す
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_TitleSelect);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x0001)
 	{
 		m_CursorAction++;
 		if (m_CursorAction >= m_Action.size()) m_CursorAction = 0;
+
+		//タイトルセレクト音を出す
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_TitleSelect);
 	}
 }
 
@@ -888,8 +1216,39 @@ void CGame::SetTitleInfo()
 	};
 
 	//タイトルでのカーソルの位置
-	m_CursorPosition.push_back({ 400,300 });
-	m_CursorPosition.push_back({ 400,500 });
+	m_CursorPosition.push_back({ 150, 430, });
+	m_CursorPosition.push_back({ 150, 555, });
 
+}
+
+void CGame::DrawTitleImg()
+{
+	VECTOR2_f StagePos = m_upTitleImage->GetPosition();
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Cursor)->TransAlBlend(
+		StagePos.x + m_CursorPosition[m_CursorAction].x, m_CursorPosition[m_CursorAction].y,
+		128, 128,
+		0, 0,
+		255);
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Makasero)->TransAlBlend(
+		StagePos.x + 305, 457,
+		307, 75,
+		0, 0,
+		255);
+
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_Kaerimasu)->TransAlBlend(
+		StagePos.x + 300, 585,
+		340, 75,
+		0, 0,
+		255);
+
+	//====================タイトル=======================
+	CImageManager::SelectImg(CImageManager::enImgList::IMG_TitleLogo)->TransAlBlend(
+		StagePos.x + 600, 50,
+		640, 360,
+		0, 0,
+		255);
+	//====================================================
 }
 //----------------------------------------

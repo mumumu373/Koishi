@@ -62,11 +62,11 @@ void CYinYangBall::StartSetting()
 		m_Framesplit = { 0,64,0,0 };
 		m_Speed = { 0,0 };
 		//装飾の数
-		m_AmountDeco = 3;
+		m_AmountDeco = 6;
 		//打ち出すバレットの量
 		m_AmountBullet = 5;
 		//打ち出すタイミングを設定
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 50;
 		//バレットの持続時間を設定
 		m_ShotReleaseTime = 60;
 		break;
@@ -78,7 +78,7 @@ void CYinYangBall::StartSetting()
 
 		m_AmountBullet = 4;
 
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 40;
 
 		m_ShotReleaseTime = 60;
 		break;
@@ -86,11 +86,11 @@ void CYinYangBall::StartSetting()
 		m_Framesplit = { 128,64,0,0 };
 		m_Speed = { 0,0 };
 
-		m_AmountDeco = 5;
+		m_AmountDeco = 8;
 
-		m_AmountBullet = 3;
+		m_AmountBullet = 6;
 
-		m_BulletShotTiming = 60;
+		m_BulletShotTiming = 40;
 
 		m_ShotReleaseTime = 60;
 		break;
@@ -102,7 +102,7 @@ void CYinYangBall::StartSetting()
 
 		m_AmountBullet = 7;
 
-		m_BulletShotTiming = 10;
+		m_BulletShotTiming = 60;
 
 		m_ShotReleaseTime = 60;
 		break;
@@ -153,6 +153,9 @@ void CYinYangBall::Update(std::vector<std::unique_ptr<CBullet>>& upBullet)
 			for (int i = 0; i < m_AmountBullet; i++) {
 				upBullet.push_back(CBulletFactory::CreateCircularBullet(m_MyCamp, GetCenterPosition(), m_Color, 5, i * (360 / m_AmountBullet), m_ShotBulletAngle, 64, 180, 0, false));
 			}
+
+			//バレット効果音
+			CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_BulletShot);
 		}
 		if (m_BulletShotCo >= m_BulletShotTiming) {
 			m_BulletShot = true;
@@ -253,6 +256,9 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 
 		//属性が合っていたらめっちゃぶっ飛ばすように
 		Speed = m_HitBackSpeed.x * 5;
+
+		//クリティカルヒット音をだす
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackCritkal);
 	}
 	else {
 		//HPを減らす
@@ -260,6 +266,9 @@ void CYinYangBall::PlayerAttackHit(int Damage, int Color)
 
 		//普通のスピード
 		Speed = m_HitBackSpeed.x;
+
+		//ヒット音をだす
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_AttackHit);
 	}
 	//攻撃が当たらない時間のカウントをセット
 	NoHitAttackCo = 0;

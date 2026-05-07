@@ -18,34 +18,41 @@ bool CImageManager::Load(HWND hWnd, HDC hScreenDC, HDC hMemDC, HDC hWorkDC, HDC 
 	};
 	ImgList Img_List[]
 	{ 
-		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMain.bmp","MainStage"} ,
-		{enImgList::IMG_Koishi		,"Data\\Image\\Koishi.bmp","Koishi"} ,
-		{enImgList::IMG_Heart		,"Data\\Image\\Heart.bmp","Heart"} ,
-		{enImgList::IMG_BreakeHeart	,"Data\\Image\\BreakeHeart.bmp","BreakeHeart"} ,
-		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp","Enemy"} ,
-		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"				,"Mouse"} ,
-		{enImgList::IMG_String		,"Data\\Image\\String.bmp"				,"String"} ,
-		{enImgList::IMG_Wirepoint	,"Data\\Image\\WirePoint.bmp"			,"WirePoint"} ,
+		{enImgList::IMG_StageMain	,"Data\\MapImage\\StageMain.bmp"	,"MainStage"} ,
+		{enImgList::IMG_Koishi		,"Data\\Image\\Koishi.bmp"			,"Koishi"} ,
+		{enImgList::IMG_Heart		,"Data\\Image\\Heart.bmp"			,"Heart"} ,
+		{enImgList::IMG_BreakeHeart	,"Data\\Image\\BreakeHeart.bmp"		,"BreakeHeart"} ,
+		{enImgList::IMG_Enemy		,"Data\\Image\\Enemy.bmp"			,"Enemy"} ,
+		{enImgList::IMG_Mouse		,"Data\\Image\\Mouse.bmp"			,"Mouse"} ,
+		{enImgList::IMG_String		,"Data\\Image\\String.bmp"			,"String"} ,
+		{enImgList::IMG_Wirepoint	,"Data\\Image\\WirePoint.bmp"		,"WirePoint"} ,
 		{enImgList::IMG_BackGround	,"Data\\Image\\BackImage\\Back_Ground.bmp"	,"BackGround"} ,
 		{enImgList::IMG_BackSky		,"Data\\Image\\BackImage\\Back_Sky.bmp"		,"BackSky"} ,
 		{enImgList::IMG_Nazrin		,"Data\\Image\\Nazrina.bmp","Nazrin"} ,
 		{enImgList::IMG_Apple		,"Data\\Image\\Apple.bmp","Apple"} ,
 		{enImgList::IMG_Banana		,"Data\\Image\\Banana.bmp","Banana"} ,
 
-		{enImgList::IMG_Title_BackSky		,"Data\\Image\\TitleImage\\Title_BackSky.bmp","Title_BackSky"} ,
-		{enImgList::IMG_Title_Ground		,"Data\\Image\\TitleImage\\Title_Ground.bmp","Title_Ground"} ,
+		{enImgList::IMG_Title_BackSky		,"Data\\Image\\TitleImage\\Title_BackSky.bmp"	,"Title_BackSky"} ,
+		{enImgList::IMG_Title_Ground		,"Data\\Image\\TitleImage\\Title_Ground.bmp"	,"Title_Ground"} ,
 
-		{enImgList::IMG_Bullet		,"Data\\Image\\Bullet.bmp","Bullet"} ,
-		{enImgList::IMG_Effect		,"Data\\Image\\Effect.bmp","Effect"} ,
-		{enImgList::IMG_Slash		,"Data\\Image\\PlayerAttack.bmp"		,"Slash"} ,
-		{enImgList::IMG_DeadEffect	,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
+		{enImgList::IMG_Bullet			,"Data\\Image\\Bullet.bmp","Bullet"} ,
+		{enImgList::IMG_Effect			,"Data\\Image\\Effect.bmp","Effect"} ,
+		{enImgList::IMG_Slash			,"Data\\Image\\PlayerAttack.bmp"		,"Slash"} ,
+		{enImgList::IMG_DeadEffect		,"Data\\Image\\EnemyDeadEffect.bmp"		,"DeadEffect"} ,
+		{enImgList::IMG_Emoji			,"Data\\Image\\Emoji.bmp"				,"Emoji"} ,
+		{enImgList::IMG_SpeechBubble	,"Data\\Image\\SpeechBubble.bmp"		,"SpeechBubble"} ,
 
-		{enImgList::IMG_Clear	,"Data\\Image\\Clear.bmp"		,"Clear"} ,
+		{enImgList::IMG_Clear		,"Data\\Image\\Clear.bmp"	,"Clear"} ,
 
-		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"			,"Cursor"} ,
+		{enImgList::IMG_Cursor		,"Data\\Image\\Cursor.bmp"	,"Cursor"} ,
 
-		{enImgList::IMG_Black		,"Data\\Image\\Black.bmp"			,"Black"} ,
-		{enImgList::IMG_White		,"Data\\Image\\White.bmp"			,"White"} ,
+		{enImgList::IMG_Black		,"Data\\Image\\Black.bmp"	,"Black"} ,
+		{enImgList::IMG_White		,"Data\\Image\\White.bmp"	,"White"} ,
+
+		{enImgList::IMG_Makasero	,"Data\\Image\\TitleImage\\Makasero.bmp"	,"Makasero"} ,
+		{enImgList::IMG_Kaerimasu	,"Data\\Image\\TitleImage\\Kaerimasu.bmp"	,"Kaerimasu"} ,
+		{enImgList::IMG_TitleLogo		,"Data\\Image\\TitleImage\\TitleLogo2.bmp"	,"TitleLogo"} ,
+
 	};
 	int Img_List_max = sizeof(Img_List) / sizeof(Img_List[0]);
 	

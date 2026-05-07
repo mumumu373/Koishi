@@ -24,6 +24,7 @@ void CWireActionSupporter::StartWireAction(CPlayer*m_DPlayer,CWire* m_DPWire, CW
 	if (WireActioning == false) {
 	
 		//**音	ワイヤーキャッチ
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_WireCatch);
 
 		WireActioning = true;
 		AllNullptr();
@@ -66,6 +67,8 @@ void CWireActionSupporter::StartWireActionEnemi(CPlayer* m_DPlayer, CWire* m_DPW
 {
 	if (WireActioning == false) {
 		//**音	ワイヤーキャッチ
+		CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_WireCatch);
+
 		WireActioning = true;
 		AllNullptr();
 		pos[0] = m_DPlayer->GetCenterPosition();
@@ -382,6 +385,7 @@ void CWireActionSupporter::EnemitoAction()
 		double x = (m_dpPlayer->GetCenterPosition().x) + (-cos(Radian) * Long) - m_pEnemy->GetFrameSplit().w / 2;
 		double y = (m_dpPlayer->GetCenterPosition().y) + (-sin(Radian) * Long) - m_pEnemy->GetFrameSplit().h / 2;
 		m_pEnemy->SetPosition({ x,y });
+		m_pEnemy->SetAlpha(255);
 
 		if (Long < AttackEria) {
 			m_dpPlayer->StaratEnemiWire();
@@ -432,6 +436,9 @@ void CWireActionSupporter::EnemiActionEnd()
 		if (m_pEnemy->m_CatchWire == CEnemy::enCatchWire::Catch) {
 			//エネミーを飛ばします！
 			m_pEnemy->SetThrowEnemy();
+
+			//エネミーを投げる音
+			CSoundManager::PlaySE(CSoundManager::enMultiSoundList::SE_EnemyThrow);
 		}
 	}
 	///次にマウスを話すまで反応しない

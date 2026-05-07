@@ -3,37 +3,378 @@
     {
       "Type": "Kedama",
       "Pos": {
-        "x": 1500,
+        "x": 2300,
         "y": 200
       },
-      "Color": 4,
+      "Color": 1,
       "Size": 90,
-      "Speed": 6,
-      "JumpPower": 6,
+      "Speed": 0,
+      "JumpPower": 30,
       "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 2400,
+        "y": 200
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 0,
+      "JumpPower": 25,
+      "JumpTime": 10
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 2500,
+        "y": 200
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 0,
+      "JumpPower": 20,
+      "JumpTime": 20
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 3805,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 180,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 4205,
+        "y": 300
+      },
+      "Color": 2,
+      "Size": 100,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 6200,
+        "y": 500
+      },
+      "Color": 2,
+      "Size": 100,
+      "Speed": 10,
+      "JumpPower": 5,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 6200,
+        "y": 500
+      },
+      "Color": 2,
+      "Size": 100,
+      "Speed": 20,
+      "JumpPower": 5,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 8820,
+        "y": 550
+      },
+      "Color": 4,
+      "Size": 100,
+      "Speed": 20,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 8820,
+        "y": 550
+      },
+      "Color": 4,
+      "Size": 100,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 8820,
+        "y": 550
+      },
+      "Color": 4,
+      "Size": 100,
+      "Speed": 7,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 8820,
+        "y": 550
+      },
+      "Color": 4,
+      "Size": 100,
+      "Speed": 15,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10020,
+        "y": 350
+      },
+      "Color": 4,
+      "Size": 100,
+      "Speed": 15,
+      "JumpPower": 15,
+      "JumpTime": 5
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10020,
+        "y": 350
+      },
+      "Color": 4,
+      "Size": 100,
+      "Speed": 15,
+      "JumpPower": 15,
+      "JumpTime": 5
     },
     {
       "Type": "Fairy",
       "Pos": {
-        "x": 1600,
-        "y": 200
+        "x": 2300,
+        "y": 297
       },
-      "Color": 2,
+      "Color": 1,
       "Size": 150,
-      "Speed_X": 8,
-      "Speed_Y": 8,
+      "Speed_X": 0,
+      "Speed_Y": 3,
       "MoveType": 2,
       "MoveOption1": 0,
       "MoveOption2": 80
     },
     {
-      "Type": "YinYangBall",
+      "Type": "Fairy",
       "Pos": {
-        "x": 1800,
-        "y": 500
+        "x": 3805,
+        "y": 530
       },
       "Color": 2,
+      "Size": 150,
+      "Speed_X": 1,
+      "Speed_Y": 1,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 3905,
+        "y": 530
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 2,
+      "Speed_Y": 0,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 4455,
+        "y": 255
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 5,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 4355,
+        "y": 200
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 5,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 4555,
+        "y": 215
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 2,
+      "Speed_Y": 5,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 4655,
+        "y": 230
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 5220,
+        "y": 230
+      },
+      "Color": 3,
+      "Size": 150,
+      "Speed_X": 2,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 5400,
+        "y": 230
+      },
+      "Color": 3,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 5400,
+        "y": 230
+      },
+      "Color": 3,
+      "Size": 150,
+      "Speed_X": 0,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 10000,
+        "y": 280
+      },
+      "Color": 4,
+      "Size": 150,
+      "Speed_X": 3,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 10200,
+        "y": 330
+      },
+      "Color": 4,
+      "Size": 150,
+      "Speed_X": 1,
+      "Speed_Y": 2,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 10600,
+        "y": 330
+      },
+      "Color": 4,
+      "Size": 150,
+      "Speed_X": 5,
+      "Speed_Y": 2,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 2600,
+        "y": 257
+      },
+      "Color": 1,
+      "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 5600,
+        "y": 230
+      },
+      "Color": 3,
+      "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 7100,
+        "y": 230
+      },
+      "Color": 3,
+      "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 10800,
+        "y": 230
+      },
+      "Color": 4,
       "Size": 300
     }
+
   ]
 }

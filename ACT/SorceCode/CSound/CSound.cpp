@@ -123,7 +123,6 @@ bool CSound::PlayLoop()
 		if (Play(true) == true) {
 			return true;
 		}
-
 	}
 
 	return false;

@@ -8,6 +8,7 @@
 #include "CGame/CTitleImage/CTitleImage.h"					//タイトルイメージクラス
 #include "CGame/CClearImage/CClearImage.h"					//クリアイメージクラス
 #include "CGame/CSceneChange/CSceneChange.h"				//シーンチェンジクラス
+#include "CGame/CMovieScene/CMovieScene.h"					//ムービーシーン動作クラス
 #include "CGame/CCollisionDetection/CCollisionDetection.h"	//当たり判定クラス
 //----------------------------------------------------------
 #include "CGame/Factory/CEnemyFactory/CEnemyFactory.h"		//エネミーを作るクラス
@@ -19,7 +20,9 @@
 #include "CGameObject/CCharacter/CBoss/CBoss.h"				//ボスクラス
 #include "CGameObject/CBullet/CBullet.h"					//バレットクラス
 
-#include "CEnemySet/CEnemySet.h"
+#include "CEnemySet/CEnemySet.h"							//エネミーセットクラス
+#include "CWirePointSet/CWirePointSet.h"					//ワイヤーポイントセットクラス
+
 #include "CGameObject/CStage/CStageManager/CStageManager.h"		//ステージクラス
 
 #include "CMouseInput//CMouseInput.h"//マウス入力クラス
@@ -43,9 +46,9 @@ enum enScene
 {
 	Title,		//タイトル
 	GameMain,	//ゲーム中
-	Death,		//デス中
 	Movie,		//ムービーシーン
 	BossBattle,	//ボスバトルシーン(カメラの制御などを変更するので専用のシーンを用意する)
+	PlayerDeath,//デス中
 	Clear,		//ゲームクリアシーン
 };
 
@@ -60,6 +63,15 @@ enum enWorldState
 
 int m_WorldState = enWorldState::Normal;
 
+//プレイヤーがどのマップにいるかを見る
+enum enInMap
+{
+	Map01,
+	Map02,
+	MapBoss,
+};
+
+	int m_PlayerInStage = 0;					//プレイヤーはどのマップにいるか
 public:
 	bool NoCreateInstance = false;	//作りたくないものは作らない
 	bool NoDeleteInstance = false;	//消したくないものは消さない
@@ -95,6 +107,19 @@ public:
 	HWND GetWnd() const { return m_pGameWnd->hWnd; }
 
 private:
+	//タイトルサウンド初期化
+	void InitializeTitleSound();
+	//ステージメインサウンドの初期化
+	void InitializeStageMainSound();
+	//ボスサウンドの初期化
+	void InitializeBossSound();
+
+	//タイトルサウンド処理
+	void TitleSoundUpdate();
+	//ステージメインの処理
+	void StageMainSoundUpdate();
+	//ボスサウンドの処理
+	void BossSoundUpdate();
 
 	//インスタンスを破棄する関数
 	void DeleteInstance();
@@ -107,6 +132,8 @@ private:
 	void DeleteInstance_Bullet();
 	//エネミーのインスタンスを強制削除
 	void DeleteInstance_Enemy();
+	//ワイヤーポイントのインスタンスを強制削除
+	void DeleteInstance_WirePoint();
 
 	//当たり判定をまとめる関数
 	void CollisionUpdate();
@@ -123,6 +150,8 @@ private:
 	//タイトルの色々を設定する関数
 	void SetTitleInfo();	
 
+	//タイトルの画像関連を描画する関数
+	void DrawTitleImg();
 private:
 	GameWindow* m_pGameWnd;	//ゲームウィンドウ構造体.
 
@@ -143,8 +172,11 @@ private:
 	//----------------------クリアイメージ------------------
 	std::unique_ptr< CClearImage> m_upClearImage;
 
-	//----------------------シーンチェンジクラス------------
+	//----------------------シーンチェンジクラス-------------
 	std::unique_ptr<CSceneChange> m_upSceneChange;
+
+	//----------------------ムービーシーンクラス-------------
+	std::unique_ptr<CMovieScene> m_upMovieScene;
 	
 	//----------------------当たり判定----------------------
 	std::unique_ptr<CCollisionDetection> m_upCollisionDetection;	//当たり判定クラス
@@ -153,7 +185,7 @@ private:
 	//----------------------プレイヤー-------------------
 	std::unique_ptr<CPlayer> m_upPlayer; 
 	std::unique_ptr<CWire >m_pWire;
-	std::vector<std::unique_ptr<CWirepoint>> m_pCWirepoint;
+	std::vector<std::unique_ptr<CWirepoint>> m_upCWirepoint;
 
 	//----------------------エネミー---------------------
 	std::vector<std::unique_ptr<CEnemy>> m_upEnemy;		//エネミークラスを継承した敵を作っていく
@@ -183,4 +215,22 @@ private:
 
 	bool m_TitleSceneSet;	//タイトルシーンの切り替えタイミングなどのセットを行うか
 	int m_GameStartCo;		//ゲームが始まる時間をカウント
+
+	int m_ClearCo;			//ゲームをクリアした時の遷移の時間を図る
+
+	//サウンド関連の制御
+	//タイトル
+	bool TitleStartSound;		//タイトルのBGMが始まったか
+	int TitleStartSoundCo;		//タイトルのBGMの流した時間を計測
+
+	bool TitleBGMSwitch;		//タイトルのBGMをもう一つのBGMに切り替え
+	int TitleBGMSwitchCo;		//タイトルのBGMを切り替える時をカウント
+
+	//ステージ
+	bool StageBGMSwitch;		//ステージのBGMをもう一つのBGMに切り替え
+	int StageBGMSwitchCo;		//ステージのBGMを切り替える時をカウント
+
+	//ボス
+	bool BossBGMSwitch;		//ボスのBGMをもう一つのBGMに切り替え
+	int BossBGMSwitchCo;		//ボスのBGMを切り替える時をカウント
 };

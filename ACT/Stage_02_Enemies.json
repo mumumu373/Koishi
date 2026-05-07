@@ -3,7 +3,7 @@
     {
       "Type": "Kedama",
       "Pos": {
-        "x": 500,
+        "x": 1000,
         "y": 400
       },
       "Color": 4,
@@ -13,15 +13,408 @@
       "JumpTime": 40
     },
     {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 2500,
+        "y": 920
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 2700,
+        "y": 920
+      },
+      "Color": 2,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 4800,
+        "y": 1150
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10500,
+        "y": 500
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10900,
+        "y": 500
+      },
+      "Color": 2,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 13000,
+        "y": 500
+      },
+      "Color": 3,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10500,
+        "y": 1100
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 9,
+      "JumpPower": 9,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10600,
+        "y": 1100
+      },
+      "Color": 2,
+      "Size": 90,
+      "Speed": 10,
+      "JumpPower": 15,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10700,
+        "y": 1100
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10800,
+        "y": 1100
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 10900,
+        "y": 1100
+      },
+      "Color": 3,
+      "Size": 90,
+      "Speed": 8,
+      "JumpPower": 8,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11000,
+        "y": 1100
+      },
+      "Color": 2,
+      "Size": 90,
+      "Speed": 7,
+      "JumpPower": 7,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11100,
+        "y": 1100
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 13,
+      "JumpPower": 15,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11200,
+        "y": 1100
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 4,
+      "JumpPower": 4,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11300,
+        "y": 1100
+      },
+      "Color": 2,
+      "Size": 90,
+      "Speed": 3,
+      "JumpPower": 3,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11400,
+        "y": 1100
+      },
+      "Color": 4,
+      "Size": 90,
+      "Speed": 15,
+      "JumpPower": 10,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11500,
+        "y": 1100
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 2,
+      "JumpPower": 9,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11600,
+        "y": 1100
+      },
+      "Color": 3,
+      "Size": 90,
+      "Speed": 6,
+      "JumpPower": 6,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11700,
+        "y": 1100
+      },
+      "Color": 5,
+      "Size": 90,
+      "Speed": 20,
+      "JumpPower": 10,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11800,
+        "y": 1100
+      },
+      "Color": 1,
+      "Size": 90,
+      "Speed": 3,
+      "JumpPower": 1,
+      "JumpTime": 40
+    },
+    {
+      "Type": "Kedama",
+      "Pos": {
+        "x": 11900,
+        "y": 1100
+      },
+      "Color": 3,
+      "Size": 70,
+      "Speed": 10,
+      "JumpPower": 20,
+      "JumpTime": 40
+    },
+
+    {
       "Type": "Fairy",
       "Pos": {
-        "x": 800,
+        "x": 2700,
         "y": 600
       },
       "Color": 2,
       "Size": 150,
       "Speed_X": 8,
-      "Speed_Y": 8,
+      "Speed_Y": 2,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 7000,
+        "y": 800
+      },
+      "Color": 1,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 1,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 7250,
+        "y": 800
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 7500,
+        "y": 800
+      },
+      "Color": 3,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 2,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 7750,
+        "y": 800
+      },
+      "Color": 4,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 1,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 10500,
+        "y": 300
+      },
+      "Color": 1,
+      "Size": 150,
+      "Speed_X": 15,
+      "Speed_Y": 1,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 10750,
+        "y": 300
+      },
+      "Color": 2,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 3,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 11000,
+        "y": 300
+      },
+      "Color": 3,
+      "Size": 150,
+      "Speed_X": 4,
+      "Speed_Y": 1,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 11250,
+        "y": 300
+      },
+      "Color": 4,
+      "Size": 150,
+      "Speed_X": 15,
+      "Speed_Y": 1,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 11500,
+        "y": 300
+      },
+      "Color": 5,
+      "Size": 150,
+      "Speed_X": 8,
+      "Speed_Y": 2,
+      "MoveType": 2,
+      "MoveOption1": 0,
+      "MoveOption2": 80
+    },
+    {
+      "Type": "Fairy",
+      "Pos": {
+        "x": 20100,
+        "y": 300
+      },
+      "Color": 1,
+      "Size": 150,
+      "Speed_X": 20,
+      "Speed_Y": 2,
       "MoveType": 2,
       "MoveOption1": 0,
       "MoveOption2": 80
@@ -29,11 +422,48 @@
     {
       "Type": "YinYangBall",
       "Pos": {
-        "x": 900,
-        "y": 800
+        "x": 4450,
+        "y": 1100
       },
       "Color": 2,
       "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 5700,
+        "y": 1100
+      },
+      "Color": 1,
+      "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 17800,
+        "y": 1000
+      },
+      "Color": 2,
+      "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 17500,
+        "y": 1000
+      },
+      "Color": 4,
+      "Size": 300
+    },
+    {
+      "Type": "YinYangBall",
+      "Pos": {
+        "x": 18100,
+        "y": 1000
+      },
+      "Color": 1,
+      "Size": 300
     }
+
   ]
 }
