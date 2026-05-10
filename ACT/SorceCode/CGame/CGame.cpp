@@ -939,13 +939,18 @@ void CGame::Draw()
 			m_upBoss->Draw(m_upCamera);
 		}
 
-		//バレットの描画
-		for (int i = 0; i < m_upBullet.size(); i++) {
-			if (m_upBullet[i] != nullptr) {
+		for (int i = 0; i < m_upBullet.size(); i++)
+		{
+			// 弾のステージ座標を画面座標に変換
+			VECTOR2_f screenPos = m_upCamera->CalcToPositionInCamera(m_upBullet[i]->GetPosition());
+
+			if (screenPos.x >= -DRAW_MARGIN && screenPos.x <= WND_W + DRAW_MARGIN &&
+				screenPos.y >= -DRAW_MARGIN && screenPos.y <= WND_H + DRAW_MARGIN) {
+
+				// 画面内にいる場合のみ描画
 				m_upBullet[i]->Draw(m_upCamera);
 			}
 		}
-
 		//ムービーシーン中の時だけ描画
 		if (m_upMovieScene->StartMovie == true) {
 			m_upMovieScene->Draw(m_upCamera);
