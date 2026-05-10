@@ -17,7 +17,7 @@ int WINAPI WinMain(
 
 	//ウィンドウの作成
 	pWinInit->MakeWindow(&hWnd, hInstance);
-#ifdef DEBUG
+//#ifdef DEBUG
 	// コンソールを作成・coutを設定
 	AllocConsole();
 	FILE* fp;
@@ -34,7 +34,7 @@ int WINAPI WinMain(
 			SWP_NOZORDER);
 	}
 
-#endif // DEBUG
+//#endif // DEBUG
 
 
 	//メッセージループ.
@@ -47,11 +47,11 @@ int WINAPI WinMain(
 	if (pWinInit != nullptr) {
 		delete pWinInit;
 		pWinInit = nullptr;
-#ifdef DEBUG
+//#ifdef DEBUG
 
 		//コンソールの開放
 		FreeConsole();
-#endif // DEBUG
+//#endif // DEBUG
 
 	}
 

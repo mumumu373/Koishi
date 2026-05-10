@@ -73,7 +73,9 @@ DWORD WINAPI ThreadFunc( LPVOID vdParam )
 
 		if( progress >= 1000 )	//1秒経過.
 		{
-			
+			wsprintf(MsgFPS, "FPS[%03d]", frames);
+			beforeTime = nowTime;	//現在の時間に更新.
+			frames = 0;
 		}
 		frames++;	//フレーム数UP.
 
@@ -132,17 +134,17 @@ LRESULT CALLBACK WindowProc(
 			//ウィンドウスタイル変更
 			SetWindowLong(hWnd, GWL_STYLE, WS_POPUP);
 			//フルスクリーン化
-			DEVMODE changWinSize;
-			ZeroMemory(&changWinSize, sizeof(changWinSize));//構造体はゼロクリア
-			changWinSize.dmSize = sizeof(changWinSize);//
-			changWinSize.dmPelsWidth = WND_W;
-			changWinSize.dmPelsHeight = WND_H;//dmPanningHeight
-			changWinSize.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
-			LONG Result = ChangeDisplaySettingsEx(NULL, &changWinSize, NULL, 0, NULL);
-			SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
-			SWP_FRAMECHANGED | SWP_SHOWWINDOW| SWP_NOACTIVATE);
-			//画面フルスクリーン化したらマウスを消す処理
-			if (ShowCursor(false) >= 0) {while (1){if (ShowCursor(false) < 0) { break; }}}
+			//DEVMODE changWinSize;
+			//ZeroMemory(&changWinSize, sizeof(changWinSize));//構造体はゼロクリア
+			//changWinSize.dmSize = sizeof(changWinSize);//
+			//changWinSize.dmPelsWidth = WND_W;
+			//changWinSize.dmPelsHeight = WND_H;//dmPanningHeight
+			//changWinSize.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+			//LONG Result = ChangeDisplaySettingsEx(NULL, &changWinSize, NULL, 0, NULL);
+			//SetWindowPos(hWnd, NULL, 0, 0, WND_W, WND_H,
+			//SWP_FRAMECHANGED | SWP_SHOWWINDOW| SWP_NOACTIVATE);
+			////画面フルスクリーン化したらマウスを消す処理
+			//if (ShowCursor(false) >= 0) {while (1){if (ShowCursor(false) < 0) { break; }}}
 
 		}
 

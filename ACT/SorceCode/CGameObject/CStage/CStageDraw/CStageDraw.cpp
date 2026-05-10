@@ -20,14 +20,26 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
     // 背景の切り取り範囲設定（スクロール等の処理があればここで拡張）
     m_Framesplit = { 0, 0, WND_W, WND_H };
 
-    //背景の描画
+    // 背景の描画
     VECTOR2_f StagePos = pCamera->CalcToStagePosition();
     BackGroundDraw(StagePos);
 
+    // StagePosをチップサイズで割り、左上に描画されるべきブロックを求める
+    int startX = static_cast<int>(-StagePos.x / m_Chip.w);
+    int startY = static_cast<int>(-StagePos.y / m_Chip.h);
+
+	int endX = startX + (WND_W / m_Chip.w) + 2; //+2は、画面外に少しはみ出る分も描画するための余裕
+    int endY = startY + (WND_H / m_Chip.h) + 2;
+
+    if (startX < 0) startX = 0;
+    if (startY < 0) startY = 0;
+    if (endX > m_MapMax.x) endX = m_MapMax.x;
+    if (endY > m_MapMax.y) endY = m_MapMax.y;
+
     // チップ描画
-    for (int y = 0; y < m_MapMax.y; y++)
+    for (int y = startY; y < endY; y++)
     {
-        for (int x = 0; x < m_MapMax.x; x++)
+        for (int x = startX; x < endX; x++)
         {
             // 15番目の画像は透過用
             if (m_mapData[y][x] == 15) continue;
@@ -41,9 +53,7 @@ void CStageDraw::Draw(std::unique_ptr<CCamera>& pCamera)
                 0);                               // 元画像y座標
         }
     }
-
 }
-
 //--------------------------------------------------------------------------------------------------------------
 
 void CStageDraw::BackGroundDraw(VECTOR2_f& CurrentStagePos)
