@@ -73,9 +73,6 @@ DWORD WINAPI ThreadFunc( LPVOID vdParam )
 
 		if( progress >= 1000 )	//1秒経過.
 		{
-			wsprintf(MsgFPS, "FPS[%03d]", frames);
-			beforeTime = nowTime;	//現在の時間に更新.
-			frames = 0;
 		}
 		frames++;	//フレーム数UP.
 
