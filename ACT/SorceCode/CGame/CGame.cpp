@@ -3,6 +3,9 @@
 #include <time.h>	//time関数を使うための宣言
 #include <iostream>	
 
+//描画中にに消えないようにある程度のマージンを
+const float DRAW_MARGIN = 100.0f;
+
 //コンストラクタ(引数なし)
 CGame::CGame()
 	:	CGame(nullptr)
@@ -911,20 +914,26 @@ void CGame::Draw()
 		//ワイヤーの手の描画
 		m_pWire->WireHandDraw(m_upCamera, m_upPlayer.get());
 
-		//エネミー描画
-		for (int i = 0; i < m_upEnemy.size(); i++) {
-			if (m_upEnemy[i] != nullptr) {
-				//エネミーが死亡中になっていなければ
-				if (m_upEnemy[i]->m_State != CEnemy::enState::Dying) {
+
+		for (int i = 0; i < m_upEnemy.size(); i++) 
+		{
+			VECTOR2_f screenPos = m_upCamera->CalcToPositionInCamera(m_upEnemy[i]->GetPosition());
+
+			if (screenPos.x >= -DRAW_MARGIN && screenPos.x <= WND_W + DRAW_MARGIN &&
+				screenPos.y >= -DRAW_MARGIN && screenPos.y <= WND_H + DRAW_MARGIN) {
+
+				// 画面内にいる場合のみ描画処理を呼ぶ
+				if (m_upEnemy[i]->m_State != CEnemy::enState::Dying) 
+				{
 					m_upEnemy[i]->Draw(m_upCamera);
 				}
-				else {
+				else 
+				{
 					//死んだとき用の描画にする
 					m_upEnemy[i]->DeadAnimationDraw(m_upCamera);
 				}
 			}
 		}
-
 		//ボスの描画
 		if (m_upBoss != nullptr) {
 			m_upBoss->Draw(m_upCamera);
