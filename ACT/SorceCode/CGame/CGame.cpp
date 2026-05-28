@@ -575,7 +575,7 @@ void CGame::Update()
 				//ステージメインのサウンド変数初期化
 				InitializeStageMainSound();
 
-				//曲のはじめから流すように
+				//曲のはじめから流すように	(初期化しているだけ)
 				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_1);
 				CSoundManager::SingleSoundSeekToStart(CSoundManager::enSingleSoundList::BGM_Stage1_2);
 			}
@@ -1176,7 +1176,7 @@ void CGame::CollisionUpdate()
 		//プレイヤーとボスの当たり判定
 		m_upCollisionDetection->PlayerToBossCollision(m_upPlayer, m_upBoss);
 
-		//プレイヤーのアタックとボスの当たり判定	これはボス戦のみ動かす
+		//プレイヤーのアタックとボスの当たり判定
 		m_upCollisionDetection->PlayerAttackToBossCollision(m_upPlayer->GetNormalAttack_p(), m_upBoss);
 
 		//飛ばされたエネミーとボスの当たり判定
